@@ -26,6 +26,9 @@
     <NuxtLink to="/goals">
       <TButton>Vue Course - Goals</TButton>
     </NuxtLink>
+    <NuxtLink to="/tasks">
+      <TButton>Vue Course - Tasks Assignment</TButton>
+    </NuxtLink>
   </div>
 </template>
 
