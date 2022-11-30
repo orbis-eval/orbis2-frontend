@@ -29,6 +29,9 @@
     <NuxtLink to="/tasks">
       <TButton>Vue Course - Tasks Assignment</TButton>
     </NuxtLink>
+    <NuxtLink to="/monster">
+      <TButton>Vue Course - Monster</TButton>
+    </NuxtLink>
   </div>
 </template>
 
