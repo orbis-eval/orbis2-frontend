@@ -1,6 +1,16 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ['@nuxtjs/tailwindcss'],
+  /*
+   ** Nuxt modules
+   */
+  modules: [
+    // https://tailwindcsss.nuxtjs.org
+    "@nuxtjs/tailwindcss"
+  ],
+  tailwindcss: {
+    // add '~tailwind.config` alias
+    exposeConfig: true
+  },
   app: {
     head: {
       meta: [
