@@ -3,13 +3,13 @@
     <section id="monster" class="container">
       <h2>Monster Health</h2>
       <div class="healthbar">
-        <div class="healthbar__value" :style="{width: monsterHealth+'%'}"></div>
+        <div class="healthbar__value" :style="monsterStyleBar"></div>
       </div>
     </section>
     <section id="player" class="container">
       <h2>Your Health</h2>
       <div class="healthbar">
-        <div class="healthbar__value" :style="{width: playerHealth+'%'}"></div>
+        <div class="healthbar__value" :style="playerStyleBar"></div>
       </div>
     </section>
     <section id="controls">
@@ -45,5 +45,21 @@ const attackPlayer = () => {
 let randomAttackValue = (max, min) => {
   return Math.floor(Math.random() * (max - min)) + min
 }
+
+const monsterStyleBar = computed(
+    () => {
+      return {
+        width: monsterHealth.value + '%'
+      }
+    }
+)
+
+const playerStyleBar = computed(
+    () => {
+      return {
+        width: playerHealth.value + '%'
+      }
+    }
+)
 
 </script>
