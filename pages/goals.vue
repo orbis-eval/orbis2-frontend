@@ -21,7 +21,7 @@
   </div>
 </template>
 <script setup>
-let enteredGoalValue = ref('');
+const enteredGoalValue = ref('');
 const goals = ref([])
 const addGoal = () => {
   if(enteredGoalValue.value) {
