@@ -14,7 +14,10 @@
       <div v-else>
         Goals:
         <ul  class="list-disc">
-          <li v-for="(goal, index) in goals" @click="removeGoal(index)">{{goal}} - {{index}}</li>
+          <li v-for="(goal, index) in goals" :key="goal" @click="removeGoal(index)">
+            {{goal}} - {{index}}
+            <input type="text" @click.stop/>
+          </li>
         </ul>
       </div>
     </div>
