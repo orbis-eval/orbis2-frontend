@@ -23,6 +23,9 @@
     <NuxtLink to="/about">
       <TButton>About</TButton>
     </NuxtLink>
+    <NuxtLink to="/goals">
+      <TButton>Vue Course - Goals</TButton>
+    </NuxtLink>
   </div>
 </template>
 
@@ -34,6 +37,3 @@
  }
 }
 </style>
-<script setup>
-const goals = []
-</script>
