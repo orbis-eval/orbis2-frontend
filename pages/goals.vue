@@ -14,7 +14,7 @@
       <div v-else>
         Goals:
         <ul  class="list-disc">
-          <li v-for="goal in goals">{{goal}}</li>
+          <li v-for="(goal, index) in goals" @click="removeGoal(index)">{{goal}} - {{index}}</li>
         </ul>
       </div>
     </div>
@@ -26,6 +26,10 @@ const goals = ref([])
 const addGoal = () => {
   if(enteredGoalValue.value) {
     goals.value.push(enteredGoalValue.value)
+    enteredGoalValue.value = ''
   }
+}
+const removeGoal = (idx) => {
+  goals.value.splice(idx, 1)
 }
 </script>
