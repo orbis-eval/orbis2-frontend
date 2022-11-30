@@ -24,7 +24,8 @@
 let enteredGoalValue = ref('');
 const goals = ref([])
 const addGoal = () => {
-  console.log(enteredGoalValue.value)
-  goals.value.push(enteredGoalValue.value)
+  if(enteredGoalValue.value) {
+    goals.value.push(enteredGoalValue.value)
+  }
 }
 </script>
