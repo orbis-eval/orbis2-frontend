@@ -27,7 +27,18 @@
     </section>
     <section id="log" class="container">
       <h2>Battle Log</h2>
-      <ul></ul>
+      <ul>
+        <li v-for="log in logs">
+          <span :class="{'log--player':log.actionBy === 'player','log--monster':log.actionBy === 'monster'}">
+            {{log.actionBy === 'player' ? 'Player':'Monster'}}
+          </span>
+          <span v-if="log.actionType === 'heal'" class="log--heal"> heals himself for <span class="log--heal">{{log.actionValue}}</span>
+          </span>
+          <span v-else>
+            attacks and deals <span class="log--damage">{{log.actionValue}}</span>
+          </span>
+        </li>
+      </ul>
     </section>
   </div>
 </template>
@@ -40,24 +51,33 @@ const monsterHealth = ref(100)
 const rounds = ref(0)
 const winner = ref(null)
 
+const logs = ref([])
+
 const attackMonster = () => {
-  monsterHealth.value -= randomValue(12, 5)
+  let randomAttackValue = randomValue(12, 5);
+  monsterHealth.value -= randomAttackValue
+  addLogMessage('player', 'attack', randomAttackValue)
   attackPlayer()
   rounds.value++
 }
 
 const specialAttackMonster = () => {
   rounds.value++
-  monsterHealth.value -= randomValue(25, 10)
+  let randomAttackValue = randomValue(25, 10);
+  monsterHealth.value -= randomAttackValue
+  addLogMessage('player', 'special-attack', randomAttackValue)
   attackPlayer()
 }
 
 const attackPlayer = () => {
-  playerHealth.value -= randomValue(18, 8)
+  let randomAttackValue = randomValue(18, 8);
+  addLogMessage('monster', 'attack', randomAttackValue)
+  playerHealth.value -= randomAttackValue
 }
 
 const healPlayer = () => {
   const healValue = randomValue(20, 8)
+  addLogMessage('player', 'heal', healValue)
   if (playerHealth.value + healValue > 100 ) {
     playerHealth.value = 100
   }
@@ -79,6 +99,15 @@ const startGame =  () => {
   monsterHealth.value = 100
   rounds.value = 0
   winner.value = null
+  logs.value = []
+}
+
+const addLogMessage = (who, what, value) => {
+  logs.value.unshift({
+    actionBy: who,
+    actionType: what,
+    actionValue: value
+  })
 }
 
 watch(playerHealth, (newPlayerHealth, oldPlayerHealth) => {
