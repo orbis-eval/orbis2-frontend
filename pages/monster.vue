@@ -18,11 +18,11 @@
       <h3 v-else-if="winner === 'player'">You win!</h3>
       <h3 v-else>draw</h3>
     </section>
-    <section id="controls">
+    <section id="controls" v-else>
       <button @click="attackMonster">ATTACK</button>
       <button :disabled="canUseSpecialAttack" @click="specialAttackMonster">SPECIAL ATTACK</button>
       <button @click="healPlayer">HEAL</button>
-      <button>SURRENDER</button>
+      <button @click="surrender">SURRENDER</button>
       <button @click="startGame">Restart Game</button>
     </section>
     <section id="log" class="container">
@@ -64,6 +64,10 @@ const healPlayer = () => {
   else {
     playerHealth.value += healValue
   }
+}
+
+const surrender = () => {
+  winner.value = 'monster'
 }
 
 const randomValue = (max, min) => {
