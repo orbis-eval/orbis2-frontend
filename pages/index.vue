@@ -32,6 +32,9 @@
     <NuxtLink to="/monster">
       <TButton>Vue Course - Monster</TButton>
     </NuxtLink>
+    <NuxtLink to="/vue-behind-the-scenes">
+      <TButton>Vue Course - Behind the scenes</TButton>
+    </NuxtLink>
   </div>
 </template>
 
