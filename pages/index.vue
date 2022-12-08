@@ -35,6 +35,9 @@
     <NuxtLink to="/vue-behind-the-scenes">
       <TButton>Vue Course - Behind the scenes</TButton>
     </NuxtLink>
+    <NuxtLink to="/components-startup">
+      <TButton>Vue Course - Components - Startup</TButton>
+    </NuxtLink>
   </div>
 </template>
 
