@@ -4,20 +4,12 @@
   </header>
   <section id="app">
     <ul>
-      <li>
-        <h2>Manuel Lorenz</h2>
+      <li v-for="friend in friends">
+        <h2>{{ friend.name }}</h2>
         <button>Show Details</button>
         <ul>
-          <li><strong>Phone:</strong> 01234 5678 991</li>
-          <li><strong>Email:</strong> manuel@localhost.com</li>
-        </ul>
-      </li>
-      <li>
-        <h2>Julie Jones</h2>
-        <button>Show Details</button>
-        <ul>
-          <li><strong>Phone:</strong> 09876 543 221</li>
-          <li><strong>Email:</strong> julie@localhost.com</li>
+          <li><strong>Phone:</strong> {{ friend.phone }}</li>
+          <li><strong>Email:</strong> {{ friend.email }}</li>
         </ul>
       </li>
     </ul>
@@ -26,5 +18,19 @@
 
 <script setup>
 import "@/assets/css/components-startup.css";
+
+const friends = ref([
+  {
+    id: 'manuel',
+    name: 'Manuel Lorenz',
+    phone: '01234 5678 991',
+    email: 'manuel@localhost.com'
+  }, {
+    id: 'juli',
+    name: 'Julie Jones',
+    phone: '09876 543 221',
+    email: 'julie@localhost.com'
+  }
+])
 
 </script>
