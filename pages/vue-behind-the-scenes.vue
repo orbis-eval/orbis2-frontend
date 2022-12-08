@@ -4,7 +4,7 @@
   </header>
   <section id="app">
     <h2>How Vue Works</h2>
-    <input type="text" @input="saveInput">
+    <input type="text" ref="userTextInput">
     <button @click="setText">Set Text</button>
     <p>{{ message }}</p>
   </section>
@@ -13,14 +13,20 @@
 <script setup>
 import "@/assets/css/styles-behind-the-scenes.css";
 
-const currentUserInput = ref('')
 const message = ref('Vue is great!')
+const userTextInput = ref(null)
+const mountedElement = ref()
 
-const saveInput = (event) => {
-  currentUserInput.value = event.target.value;
-}
 
 const setText = () => {
-  message.value = currentUserInput.value
+  message.value = userTextInput.value.value
 }
+onMounted(() => {
+  console.log('onMounted()')
+})
+
+onBeforeMount(()=> {
+  console.log('onBeforeMount()')
+})
+
 </script>
