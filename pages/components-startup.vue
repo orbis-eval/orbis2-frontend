@@ -4,7 +4,7 @@
   </header>
   <section id="app">
     <ul>
-      <li v-for="friend in friends">
+      <li v-for="friend in friends" :key="friend.key">
         <h2>{{ friend.name }}</h2>
         <button>Show Details</button>
         <ul>
