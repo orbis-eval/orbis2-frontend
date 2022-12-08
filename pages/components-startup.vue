@@ -6,8 +6,8 @@
     <ul>
       <li v-for="friend in friends" :key="friend.key">
         <h2>{{ friend.name }}</h2>
-        <button>Show Details</button>
-        <ul>
+        <button @click="toggleDetails">{{ buttonText }} Details</button>
+        <ul v-if="detailsAreVisible">
           <li><strong>Phone:</strong> {{ friend.phone }}</li>
           <li><strong>Email:</strong> {{ friend.email }}</li>
         </ul>
@@ -18,6 +18,8 @@
 
 <script setup>
 import "@/assets/css/components-startup.css";
+
+const detailsAreVisible = ref(false)
 
 const friends = ref([
   {
@@ -33,4 +35,11 @@ const friends = ref([
   }
 ])
 
+const toggleDetails = () => {
+  detailsAreVisible.value = !detailsAreVisible.value
+}
+
+const buttonText = computed(() => {
+  return detailsAreVisible.value ? 'Hide':'Show'
+})
 </script>
