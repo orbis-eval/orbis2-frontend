@@ -6,14 +6,13 @@
     <ul>
       <FriendContact
           name="Manuel Lorenz"
-          phone="081 302 78 28"
+          :phone="813027828"
           email="manuel@google.com"
-          isFavorite="1"/>
+          :isFavorite="1"/>
       <FriendContact
           name="Sophia Krütter"
-          phone="081 378 26 28"
-          email="sophia@hotmail.com"
-          isFavorite="0"/>
+          :phone="813782628"
+          email="sophia@hotmail.com"/>
     </ul>
   </section>
 </template>
