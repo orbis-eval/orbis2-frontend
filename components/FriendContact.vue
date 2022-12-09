@@ -21,7 +21,10 @@ const props = defineProps({
   isFavorite: {
     type:Number,
     required: false,
-    default: 0
+    default: 0,
+    validator(value) {
+      return value === 1 || value === 0;
+    }
   }
 })
 
