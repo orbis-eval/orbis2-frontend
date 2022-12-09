@@ -1,6 +1,6 @@
 <template>
   <li>
-    <h2>{{ props.name }} {{ isFavoriteComp === 1 ? '(Favorite)' : '' }}</h2>
+    <h2>{{ props.name }} {{ isFavoriteComp ? '(Favorite)' : '' }}</h2>
     <button @click="toggleDetails">{{ buttonText }} Details</button>
     <button @click="toggleFavorite">Toggle Favorite</button>
     <ul v-if="detailsAreVisible">
@@ -19,12 +19,9 @@ const props = defineProps({
   phone: Number,
   mail: {type: String, required: false},
   isFavorite: {
-    type:Number,
+    type:Boolean,
     required: false,
-    default: 0,
-    validator(value) {
-      return value === 1 || value === 0;
-    }
+    default: false,
   }
 })
 
@@ -36,7 +33,8 @@ const toggleDetails = () => {
 }
 
 const toggleFavorite = () => {
-  isFavoriteComp.value = isFavoriteComp.value === 1 ? 0 : 1
+  console.log(isFavoriteComp.value)
+  isFavoriteComp.value = isFavoriteComp.value ? false : true
 }
 
 const buttonText = computed(() => {

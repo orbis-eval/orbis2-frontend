@@ -8,7 +8,7 @@
           name="Manuel Lorenz"
           :phone="813027828"
           email="manuel@google.com"
-          :isFavorite="1"/>
+          :isFavorite="true"/>
       <FriendContact
           name="Sophia Krütter"
           :phone="813782628"
