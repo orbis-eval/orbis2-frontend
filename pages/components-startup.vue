@@ -4,14 +4,7 @@
   </header>
   <section id="app">
     <ul>
-      <li v-for="friend in friends" :key="friend.key">
-        <h2>{{ friend.name }}</h2>
-        <button @click="toggleDetails">{{ buttonText }} Details</button>
-        <ul v-if="detailsAreVisible">
-          <li><strong>Phone:</strong> {{ friend.phone }}</li>
-          <li><strong>Email:</strong> {{ friend.email }}</li>
-        </ul>
-      </li>
+      <FriendContact/>
     </ul>
   </section>
 </template>
