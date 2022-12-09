@@ -1,10 +1,10 @@
 <template>
   <li>
-    <h2>{{ friend.name}}</h2>
-    <button @click="toggleDetails">{{buttonText}} Details</button>
+    <h2>{{ props.name }}</h2>
+    <button @click="toggleDetails">{{ buttonText }} Details</button>
     <ul v-if="detailsAreVisible">
-      <li><strong>phone: </strong>{{friend.phone}}</li>
-      <li><strong>email: </strong>{{friend.email}}</li>
+      <li><strong>phone: </strong>{{ props.phone }}</li>
+      <li><strong>email: </strong>{{ props.email }}</li>
     </ul>
   </li>
 </template>
@@ -13,19 +13,18 @@
 
 const detailsAreVisible = ref(false);
 
-const friend = ref({
-  id: 'manuel',
-  name: 'Manuel Lorenz',
-  phone: '01234 5678 991',
-  email: 'manuel@localhost.com'
-})
+const props = defineProps([
+  'name',
+  'phone',
+  'email'
+])
 
 const toggleDetails = () => {
   detailsAreVisible.value = !detailsAreVisible.value
 }
 
 const buttonText = computed(() => {
-  return detailsAreVisible.value ? 'Hide':'Show'
+  return detailsAreVisible.value ? 'Hide' : 'Show'
 })
 
 </script>
