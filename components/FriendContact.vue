@@ -17,7 +17,7 @@ const detailsAreVisible = ref(false);
 const props = defineProps({
   name: { type: String, required: true },
   phone: Number,
-  mail: {type: String, required: false},
+  email: {type: String, required: false},
   isFavorite: {
     type:Boolean,
     required: false,
