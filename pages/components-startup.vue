@@ -7,11 +7,13 @@
       <FriendContact
           name="Manuel Lorenz"
           phone="081 302 78 28"
-          email="manuel@google.com"/>
+          email="manuel@google.com"
+          isFavorite="1"/>
       <FriendContact
           name="Sophia Krütter"
           phone="081 378 26 28"
-          email="sophia@hotmail.com"/>
+          email="sophia@hotmail.com"
+          isFavorite="0"/>
     </ul>
   </section>
 </template>
