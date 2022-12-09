@@ -1,6 +1,6 @@
 <template>
   <li>
-    <h2>{{ props.name }} {{ isFavoriteComp ? '(Favorite)' : '' }}</h2>
+    <h2>{{ props.name }} {{ props.isFavorite ? '(Favorite)' : '' }}</h2>
     <button @click="toggleDetails">{{ buttonText }} Details</button>
     <button @click="toggleFavorite">Toggle Favorite</button>
     <ul v-if="detailsAreVisible">
@@ -15,6 +15,7 @@
 const detailsAreVisible = ref(false);
 
 const props = defineProps({
+  id: String,
   name: { type: String, required: true },
   phone: Number,
   email: {type: String, required: false},
@@ -32,9 +33,10 @@ const toggleDetails = () => {
   detailsAreVisible.value = !detailsAreVisible.value
 }
 
+const emit = defineEmits(['toggle-favorite'])
+
 const toggleFavorite = () => {
-  console.log(isFavoriteComp.value)
-  isFavoriteComp.value = isFavoriteComp.value ? false : true
+  emit('toggle-favorite', props.id)
 }
 
 const buttonText = computed(() => {
