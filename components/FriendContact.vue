@@ -2,12 +2,12 @@
   <li>
     <h2>{{ props.name }} {{ props.isFavorite ? '(Favorite)' : '' }}</h2>
     <button @click="toggleDetails">{{ buttonText }} Details</button>
-    <button @click="toggleFavorite">Toggle Favorite</button>
+    <button @click="$emit('toggle-favorite', props.id)">Toggle Favorite</button>
     <ul v-if="detailsAreVisible">
       <li><strong>phone: </strong>{{ props.phone }}</li>
       <li><strong>email: </strong>{{ props.email }}</li>
     </ul>
-    <button @click="deleteFriend">Delete</button>
+    <button @click="$emit('delete-friend', props.id)">Delete</button>
   </li>
 </template>
 
@@ -35,15 +35,6 @@ const toggleDetails = () => {
 }
 
 const emit = defineEmits(['toggle-favorite', 'delete-friend'])
-
-const toggleFavorite = () => {
-  emit('toggle-favorite', props.id)
-}
-
-const deleteFriend = () => {
-  emit('delete-friend', props.id)
-}
-
 
 const buttonText = computed(() => {
   return detailsAreVisible.value ? 'Hide' : 'Show'
