@@ -14,6 +14,7 @@
                      :email="friend.email"
                      :isFavorite="friend.isFavorite"
                      @toggle-favorite = "toggleFavoriteStatus"
+                     @delete-friend = "deleteFriend"
       />
     </ul>
   </section>
@@ -52,5 +53,11 @@ const addFriend = (name, phone, email) => {
     isFavorite: false
   })
 }
+
+const deleteFriend = (friendId) => {
+  console.log(`deleting friend with id: ${friendId}`)
+  friends.value = friends.value.filter((friend) => friend.id !== friendId)
+}
+
 
 </script>
