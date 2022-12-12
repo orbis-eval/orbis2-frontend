@@ -1,33 +1,42 @@
-# ORBIS2 Frontend 
+# Nuxt 3 Minimal Starter
 
-## dev environment
+Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
 
-bootstrap a vue-application with typescript: https://v2.vuejs.org/v2/guide/typescript.html#Project-Creation
+## Setup
 
-```aidl
-vue create orbis2-frontend
-```
+Make sure to install the dependencies:
 
-
-## Project setup
-```
+```bash
+# yarn
 yarn install
+
+# npm
+npm install
+
+# pnpm
+pnpm install --shamefully-hoist
 ```
 
-### Compiles and hot-reloads for development
-```
-yarn serve
+## Development Server
+
+Start the development server on http://localhost:3000
+
+```bash
+npm run dev
 ```
 
-### Compiles and minifies for production
-```
-yarn build
+## Production
+
+Build the application for production:
+
+```bash
+npm run build
 ```
 
-### Lints and fixes files
-```
-yarn lint
+Locally preview production build:
+
+```bash
+npm run preview
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
