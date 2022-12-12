@@ -3,6 +3,8 @@
     <h1>FriendList</h1>
   </header>
   <section id="app">
+    <AddFriend @add-friend = "addFriend"
+    />
     <ul>
       <FriendContact v-for="friend in friends"
                      :id="friend.id"
@@ -39,6 +41,16 @@ const friends = ref([
 const toggleFavoriteStatus = (friendId) => {
   const identifiedFriend = friends.value.find(friend => friend.id === friendId)
   identifiedFriend.isFavorite = !identifiedFriend.isFavorite
+}
+
+const addFriend = (name, phone, email) => {
+  friends.value.push({
+    id: 'myId', //TODO: hard-coded id
+    name: name,
+    phone: phone,
+    email: email,
+    isFavorite: false
+  })
 }
 
 </script>
