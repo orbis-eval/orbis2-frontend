@@ -45,7 +45,7 @@ const toggleFavoriteStatus = (friendId) => {
 
 const addFriend = (name, phone, email) => {
   friends.value.push({
-    id: 'myId', //TODO: hard-coded id
+    id: new Date().toISOString(),
     name: name,
     phone: phone,
     email: email,

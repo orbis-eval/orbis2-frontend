@@ -1,11 +1,16 @@
 <template>
   <div id="friend-form">
-    Name: <input v-model="name" type="text"/>
-    <br/>
-    Phone: <input v-model="phone" type="text"/>
-    <br/>
-    Email: <input v-model="email" type="text">
-    <br/>
+    <div>
+      <label>Name</label>
+      <input v-model="name" type="text"/>
+    </div>
+    <div>
+      <label>Phone:</label>
+      <input v-model="phone" type="text"/></div>
+    <div>
+      <label>Email:</label>
+      <input v-model="email" type="text">
+    </div>
     <button @click="addFriend" :disabled="buttonDisabled">Add Friend</button>
   </div>
 </template>

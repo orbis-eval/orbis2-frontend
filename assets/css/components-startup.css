@@ -32,6 +32,20 @@ header {
     text-align: center;
 }
 
+#friend-form input {
+    font: inherit;
+    padding: 0.15rem;
+}
+#friend-form label {
+    font-weight: bold;
+    margin-right: 1rem;
+    width: 7rem;
+    display: inline-block;
+}
+#friend-form div {
+    margin: 1rem 0;
+}
+
 #app li {
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.26);
     margin: 1rem auto;
