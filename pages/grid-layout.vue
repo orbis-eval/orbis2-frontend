@@ -6,7 +6,11 @@
         Header
       </header>
       <nav class="tile border border-gray-600">
-        <!-- Nav Bar -->
+
+        <!-- Dropdown for Run-Select -->
+        <RunSelect/>
+
+        <!-- Menu Entries -->
         <div class="flex flex-col justify-start items-center w-full">
           <div id="menu1" class="flex justify-start  flex-col w-full md:w-auto items-start pb-1 ">
             <!-- Documents -->
