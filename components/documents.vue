@@ -1,15 +1,15 @@
 <script setup lang="ts">
 
-const title = ref('Corpus Name')
-const { data, refresh, pending, error } = await useAsyncData(() => $fetch('http://localhost:63019/getDocuments'))
+  const title = ref('Corpus Name')
+  const { data, refresh, pending, error } = await useAsyncData(() => $fetch('http://localhost:63019/getDocuments'))
 
-const documents = data
+  const documents = data
 
-const emit = defineEmits(['clickedDocumentId'])
+  const emit = defineEmits(['clickedDocumentId'])
 
-function changePage(id: number): void {
-  emit('clickedDocumentId', id)
-}
+  function changePage(id: number): void {
+    emit('clickedDocumentId', id)
+  }
 </script>
 
 

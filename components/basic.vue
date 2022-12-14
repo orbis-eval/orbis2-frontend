@@ -1,17 +1,21 @@
 <script setup lang="ts">
-import documents from "~/components/documents.vue";
-import document from "~/components/document.vue";
+  import documents from "~/components/documents.vue";
+  import document from "~/components/document.vue";
 
 
-const currentComponent = ref(documents)
-const items = ["run1", "run2", "run3"]
-const clickedDocumentId = ref(0)
+  const currentComponent = ref(documents)
+  const items = ["run1", "run2", "run3"]
+  const clickedDocumentId = ref(0)
 
-watch(clickedDocumentId, (newDocumentId) => {
-  console.log(`document ${newDocumentId} has been clicked on`)
-  clickedDocumentId.value = newDocumentId
-  currentComponent.value = document
-})
+  function goToDocument(documentId: number) {
+    console.log(`document ${documentId} has been clicked on`)
+    clickedDocumentId.value = documentId
+    currentComponent.value = document
+  }
+
+  function goBack() {
+    currentComponent.value = documents
+  }
 
 </script>
 
@@ -43,7 +47,9 @@ watch(clickedDocumentId, (newDocumentId) => {
           <v-main>
             <v-card style="padding: 20px; height: 100%" outlined border >
                 <v-layout>
-                  <component :is="currentComponent" @clickedDocumentId="(id) => clickedDocumentId = id"
+                  <component :is="currentComponent"
+                             @clickedDocumentId="(id) => goToDocument(id)"
+                             @backClicked="goBack"
                              :documentId="clickedDocumentId"/>
                 </v-layout>
             </v-card>
