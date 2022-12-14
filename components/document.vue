@@ -20,6 +20,6 @@
     <v-container>
       {{ data.content }}
     </v-container>
-    {{ documentId }}
+    {{ props.documentId }}
   </v-container>
 </template>
