@@ -411,7 +411,7 @@ const getDocumentsByRunId = (run) => {
 
 const currentDocuments = ref(getDocumentsByRunId(selectedRun.value))
 
-const currentComponent = ref(DocumentList)
+const currentComponent = shallowRef(DocumentList)
 
 const runSelect = (run) => {
   selectedRun.value = run

@@ -53,7 +53,10 @@ import { CheckIcon, ChevronUpDownIcon, PlayIcon } from '@heroicons/vue/20/solid'
 
 const props = defineProps(
     {
-      runs: []
+      runs: {
+        type: Array,
+        default: []
+      }
     }
 )
 

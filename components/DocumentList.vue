@@ -1,15 +1,16 @@
 <template>
-
   <div v-for="document in props.documents">
-    {{document.name}}
+    {{ document.name }}
   </div>
-
 </template>
 
 <script setup>
 
 const props = defineProps({
-  documents: []
+  documents: {
+    type: Array,
+    default: []
+  }
 })
 
 </script>
