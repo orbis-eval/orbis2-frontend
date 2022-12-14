@@ -28,7 +28,7 @@
       </ListboxButton>
       <transition leave-active-class="transition ease-in duration-100" leave-from-class="opacity-100" leave-to-class="opacity-0">
         <ListboxOptions class="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-          <ListboxOption as="template" v-for="run in runs" :key="run.id" :value="run" v-slot="{ active, selected }">
+          <ListboxOption as="template" v-for="run in props.runs" :key="run.id" :value="run" v-slot="{ active, selected }" @click="$emit('runSelect', run)">
             <li :class="[active ? 'text-white bg-indigo-600' : 'text-gray-900', 'relative cursor-default select-none py-2 pl-3 pr-9']">
               <div class="flex items-center">
                 <PlayIcon class="h-6 w-6 flex-shrink-0 rounded-full" />
@@ -50,21 +50,17 @@
 import { Listbox, ListboxButton, ListboxOption, ListboxOptions } from '@headlessui/vue'
 import { CheckIcon, ChevronUpDownIcon, PlayIcon } from '@heroicons/vue/20/solid'
 
-const runs = [
-  {
-    id: 1,
-    name: 'Run 1'
-  },
-  {
-    id: 2,
-    name: 'Run 2'
-  },
-  {
-    id: 3,
-    name: 'Run 3'
-  },
-]
 
-const selected = ref(runs[2])
+const props = defineProps(
+    {
+      runs: []
+    }
+)
+
+defineEmits(['runSelect'])
+
+const selected = ref(props.runs[2])
+
+
 
 </script>
