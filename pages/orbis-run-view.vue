@@ -428,12 +428,13 @@ const currentDocument = ref(null)
 const documentSelect = (document) => {
   console.log(`selected document ${document.id}`)
   currentDocument.value = document
-  currentComponent.value = documentComponent.value
+  currentComponent.value = Document
 }
 
 const runSelect = (run) => {
   selectedRun.value = run
   currentDocuments.value = getDocumentsByRunId(run)
+  currentComponent.value = DocumentList
 }
 
 const currentProps = computed(() => {
