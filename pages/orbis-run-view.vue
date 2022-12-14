@@ -406,10 +406,7 @@ const runs = ref(getRuns())
 const selectedRun = ref(runs.value[0])
 
 const getDocumentsByRunId = (run) => {
-  // console.log(run.id)
-  let filteredRuns = getRuns().filter(runTmp => runTmp.id === run.id);
-  var documents = filteredRuns[0].documents;
-  return documents;
+  return (getRuns().filter(runTmp => runTmp.id === run.id))[0].documents;
 }
 
 const currentDocuments = ref(getDocumentsByRunId(selectedRun.value))
