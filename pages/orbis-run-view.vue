@@ -18,9 +18,13 @@
         Main-Content
 
         <component :is="currentComponent"
-            :documents="currentDocuments"
-            :document = "currentDocument"
-            @documentSelect = "documentSelect"
+                   v-bind = "{
+                      documents: currentDocuments,
+                      document: currentDocument,
+                   }"
+                   v-on="{
+                      documentSelect: documentSelect
+                   }"
         />
 
       </main>
@@ -431,6 +435,12 @@ const runSelect = (run) => {
   selectedRun.value = run
   currentDocuments.value = getDocumentsByRunId(run)
 }
+
+const currentProps = computed(() => {
+  if (currentComponent.value === documentListComponent) {
+    return {foo: 'bar'}
+  }
+})
 
 </script>
 
