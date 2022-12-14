@@ -19,6 +19,8 @@
 
         <component :is="currentComponent"
             :documents="currentDocuments"
+            :document = "currentDocument"
+            @documentSelect = "documentSelect"
         />
 
       </main>
@@ -37,6 +39,7 @@
 <script setup>
 
 import DocumentList from '@/components/DocumentList.vue'
+import Document from '@/components/Document.vue'
 
 // dummy functions that simulates returning all runs and its documents for a corpus
 const getRuns = () => {
@@ -411,7 +414,18 @@ const getDocumentsByRunId = (run) => {
 
 const currentDocuments = ref(getDocumentsByRunId(selectedRun.value))
 
-const currentComponent = shallowRef(DocumentList)
+
+const documentListComponent = shallowRef(DocumentList)
+const documentComponent = shallowRef(Document)
+const currentComponent = ref(documentListComponent)
+
+const currentDocument = ref(null)
+
+const documentSelect = (document) => {
+  console.log(`selected document ${document.id}`)
+  currentDocument.value = document
+  currentComponent.value = documentComponent.value
+}
 
 const runSelect = (run) => {
   selectedRun.value = run
