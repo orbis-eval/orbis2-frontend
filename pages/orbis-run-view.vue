@@ -15,18 +15,10 @@
       </nav>
       <main class="tile p-4 border border-gray-600">
         <!-- Main Content -->
-        Main-Content
-
         <component :is="currentComponent"
-                   v-bind = "{
-                      documents: currentDocuments,
-                      document: currentDocument,
-                   }"
-                   v-on="{
-                      documentSelect: documentSelect
-                   }"
+                   v-bind="currentCompBindProps"
+                   v-on="currentCompOnProps"
         />
-
       </main>
       <aside class="tile p-4 border border-gray-600">
         <!-- Sidebar -->
@@ -418,15 +410,11 @@ const getDocumentsByRunId = (run) => {
 
 const currentDocuments = ref(getDocumentsByRunId(selectedRun.value))
 
-
-const documentListComponent = shallowRef(DocumentList)
-const documentComponent = shallowRef(Document)
-const currentComponent = ref(documentListComponent)
+const currentComponent = shallowRef(DocumentList)
 
 const currentDocument = ref(null)
 
 const documentSelect = (document) => {
-  console.log(`selected document ${document.id}`)
   currentDocument.value = document
   currentComponent.value = Document
 }
@@ -437,11 +425,26 @@ const runSelect = (run) => {
   currentComponent.value = DocumentList
 }
 
-const currentProps = computed(() => {
-  if (currentComponent.value === documentListComponent) {
-    return {foo: 'bar'}
+const currentCompBindProps = computed(() => {
+  if (currentComponent.value.__name === DocumentList.__name) {
+    return {
+      documents: currentDocuments.value
+    }
+  }
+  return {
+    document: currentDocument.value
   }
 })
+
+const currentCompOnProps = computed(() => {
+      if (currentComponent.value.__name === DocumentList.__name) {
+        return {
+          documentSelect: documentSelect
+        }
+      }
+      return {}
+    }
+)
 
 </script>
 
