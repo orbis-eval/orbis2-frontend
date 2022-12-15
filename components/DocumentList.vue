@@ -1,6 +1,7 @@
 <template>
+  <h1>Run: {{props.run.name}}</h1>
   <div v-for="document in props.documents" @click="$emit('documentSelect', document)">
-    {{ document.name }}
+    Document {{ document._id }}
   </div>
 </template>
 
@@ -12,6 +13,10 @@ const props = defineProps({
   documents: {
     type: Array,
     default: []
+  },
+  run: {
+    type: Object,
+    default: null
   }
 })
 
