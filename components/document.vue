@@ -18,7 +18,9 @@
   <v-container>
     <v-btn variant="plain" @click="goBack">back</v-btn>
     <v-container>
-      {{ data.content }}
+      <pre>
+        {{ data.content }}
+      </pre>
     </v-container>
     {{ props.documentId }}
   </v-container>

@@ -2,10 +2,12 @@
   import documents from "~/components/documents.vue";
   import document from "~/components/document.vue";
 
-
-  const currentComponent = ref(documents)
-  const items = ["run1", "run2", "run3"]
+  const currentComponent = shallowRef(documents)
+  const { data, refresh, pending, error } = await useAsyncData(() => $fetch('http://localhost:63019/getRuns'))
   const clickedDocumentId = ref(0)
+  const selectedRun = ref(null)
+
+  console.log(data)
 
   function goToDocument(documentId: number) {
     console.log(`document ${documentId} has been clicked on`)
@@ -29,6 +31,7 @@
         </v-item-group>
       </v-toolbar>
       <v-container style="height: 100%;">
+        <div></div>
         <v-layout justify-center align-center style="height: 100%">
           <v-navigation-drawer absolute border style="height: 100%">
             <v-list>
@@ -37,7 +40,16 @@
             <v-divider></v-divider>
             <v-list density="compact" nav >
               <v-list-item prepend-icon="mdi-run-fast" value="runs">
-                <v-select :items="items" label="Runs"/>
+                <v-select clearable
+                          v-model="selectedRun"
+                          :items="data"
+                          item-title="name"
+                          label="Runs"
+                          variant="underlined"
+                          return-object
+                          single-line
+                          style=".v-input__details { display: none; }">
+                </v-select>
               </v-list-item>
               <v-list-item prepend-icon="mdi-file-document-outline" title="Documents" value="document" />
               <v-list-item prepend-icon="mdi-account-group-outline" title="Members" value="members" />
