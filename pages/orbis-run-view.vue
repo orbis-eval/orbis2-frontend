@@ -62,7 +62,7 @@ const runSelect = (run) => {
 }
 
 const currentCompBindProps = computed(() => {
-  return isDocumentListComponent() ? {documents: currentDocuments.value, run: selectedRun.value} : {document: currentDocument.value}
+  return isDocumentListComponent() ? {documents: currentDocuments.value, run: selectedRun.value} : {document: currentDocument.value, run: selectedRun.value}
 })
 
 const currentCompOnProps = computed(() => {

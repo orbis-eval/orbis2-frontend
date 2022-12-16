@@ -1,5 +1,5 @@
 <template>
-  <h2>{{props.document.name}} - {{props.document.id}}</h2>
+  <h2>Document {{props.document._id}} (Run: {{props.run.name}})</h2>
   <pre>
   {{props.document.content}}
   </pre>
@@ -7,6 +7,7 @@
 
 <script setup>
 const props = defineProps({
-  document: null
+  document: null,
+  run: null
 })
 </script>
