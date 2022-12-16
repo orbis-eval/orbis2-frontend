@@ -5,7 +5,6 @@ class ApplicationService {
     }
 
     static async loadDocumentsByRunId(runId: Number) {
-        console.log(`loading documents for run-id ${runId}`)
         return await useAsyncData(() => $fetch(`http://localhost:63019/getDocuments?run_id=${runId}`))
     }
 }
