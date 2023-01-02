@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-start items-center w-full">
-    <div id="menu1" class="flex justify-start  flex-col w-full md:w-auto items-start pb-1 ">
+    <div id="menu1" class="flex justify-start  flex-col w-full md:w-auto items-start">
       <!-- Documents -->
       <button
           class="menu-button">
