@@ -40,3 +40,12 @@ npm run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+
+
+# Vue Hero Icons
+Installed with 
+```
+npm install @heroicons/vue
+```
+
+
