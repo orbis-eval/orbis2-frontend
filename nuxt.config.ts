@@ -19,5 +19,8 @@ export default defineNuxtConfig({
                 class: 'h-full bg-gray-100'
             }
         }
-    }
+    },
+    css: [
+        '@/assets/css/main.scss'
+    ]
 })
