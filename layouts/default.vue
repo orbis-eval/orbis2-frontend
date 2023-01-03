@@ -14,7 +14,7 @@
         <!-- Menu Entries -->
         <LeftMenu/>
       </nav>
-      <main class="tile p-4 ">
+      <main class="tile p-4 overflow-auto">
         <slot />
       </main>
       <aside class="tile p-4">
