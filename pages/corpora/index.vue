@@ -11,5 +11,6 @@
 </template>
 
 <script setup lang="ts">
-const { data, refresh, pending, error } = await useAsyncData(() => $fetch('http://localhost:63019/getCorpora'))
+const {$orbisRepositoryService} = useNuxtApp()
+const { data, refresh, pending, error } = await $orbisRepositoryService.getCorpora()
 </script>
