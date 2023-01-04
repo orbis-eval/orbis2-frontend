@@ -44,5 +44,6 @@
 
 <script setup lang="ts">
 const route = useRoute()
-const { data, refresh, pending, error } = await useAsyncData(() => $fetch(`http://localhost:63019/getDocuments?corpus_id=${route.params.corpusId}`))
+const {$orbisRepositoryService} = useNuxtApp()
+const { data, refresh, pending, error } = await $orbisRepositoryService.getDocuments(route.params.corpusId)
 </script>
