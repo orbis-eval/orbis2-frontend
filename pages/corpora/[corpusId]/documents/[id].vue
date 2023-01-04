@@ -1,8 +1,7 @@
 <template>
-  <h1>Content</h1>
-  <div>
-    {{data.content}}
-  </div>
+  <TextAnnotation
+      :textContent = data.content
+  />
 </template>
 
 <script setup>
