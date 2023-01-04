@@ -6,5 +6,6 @@
 
 <script setup>
 const {$orbisRepositoryService} = useNuxtApp()
-const { data, refresh, pending, error } = await $orbisRepositoryService.getDocument('3163909713')
+const route = useRoute()
+const { data, refresh, pending, error } = await $orbisRepositoryService.getDocument(route.params.id)
 </script>
