@@ -1,3 +1,3 @@
 <template>
-  Main
+  <NuxtLink :to="'corpora'">Corpora</NuxtLink>
 </template>

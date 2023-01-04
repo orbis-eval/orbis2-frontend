@@ -22,5 +22,10 @@ export default defineNuxtConfig({
     },
     css: [
         '@/assets/css/main.scss'
-    ]
+    ],
+    runtimeConfig: {
+        public: {
+            orbisApiBase: 'http://localhost:63019/'
+        }
+    }
 })

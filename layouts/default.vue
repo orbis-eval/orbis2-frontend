@@ -4,7 +4,9 @@
       <header class="col-span-full tile bg-gray-700 p-4 text-gray-200 rounded-t-lg">
         <div class="flex flex-row">
           <div class="basis-1/12 ">
+            <NuxtLink :to="'/'">
             <img src="~/assets/img/Orbis-Logo-Transparent.png" class="w-20 h-20 rounded-full border border-gray-600 bg-white"/>
+            </NuxtLink>
           </div>
           <div class="basis-1/12 pt-6 ">Orbis NG</div>
           <div class="basis-10/12 " ></div>
