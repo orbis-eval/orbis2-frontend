@@ -13,3 +13,19 @@
 .menu-button-text {
   @apply text-base leading-4;
 }
+
+/**
+ * styles for annotations
+ */
+
+.annotation {
+  @apply border-b-4 border-gray-600  pl-1 pr-1 inline-block;
+}
+
+.line {
+  @apply mt-5
+}
+
+.line span {
+  @apply mt-1
+}
