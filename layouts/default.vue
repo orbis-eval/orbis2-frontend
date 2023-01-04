@@ -17,6 +17,7 @@
         <LeftMenu/>
       </nav>
       <main class="tile p-4 overflow-auto">
+        <NuxtLoadingIndicator color="#a1a1a1" />
         <slot />
       </main>
       <aside class="tile p-4">
