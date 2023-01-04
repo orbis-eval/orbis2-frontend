@@ -1,6 +1,6 @@
-import IDocument from "~/lib/model/idocument";
+import {IDocument} from "~/lib/model/idocument";
 
-class Document implements IDocument {
+export class Document implements IDocument {
     content: string;
     key: string;
     run_id: number;
@@ -15,5 +15,3 @@ class Document implements IDocument {
         this._id = document._id;
     }
 }
-
-export default Document;
