@@ -1,3 +1,6 @@
+import {Document} from "~/lib/model/document";
+import {Error} from "~/lib/model/error";
+
 export class OrbisRepositoryService {
 
     private readonly orbisapibase: string
@@ -18,7 +21,16 @@ export class OrbisRepositoryService {
         return (await useAsyncData(() => $fetch(`${this.orbisapibase}getDocuments?corpus_id=${corpusId}`)))
     }
 
-    async getDocument(documentId: string) {
-        return (await useAsyncData(() => $fetch(`${this.orbisapibase}getDocument?document_id=${documentId}`)))
+    async getDocument(documentId: string): Promise<Document|Error> {
+        return fetch(`${this.orbisapibase}getDocument?document_id=${documentId}`)
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                return new Document(data);
+            })
+            .catch(error => {
+                return new Error(error);
+            })
     }
 }
