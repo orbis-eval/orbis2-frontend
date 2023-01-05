@@ -7,7 +7,7 @@
         <th>Content</th>
       </tr>
       </thead>
-      <tbody v-for="document in data" :key="document._id">
+      <tbody v-for="document in documents" :key="document._id">
         <tr>
           <td class="pr-5 py-1">
             <NuxtLink :to="`documents/${document._id}`">
@@ -43,7 +43,17 @@
 </template>
 
 <script setup lang="ts">
-const route = useRoute()
+
 const {$orbisRepositoryService} = useNuxtApp()
-const { data, refresh, pending, error } = await $orbisRepositoryService.getDocuments(route.params.corpusId)
+const route = useRoute()
+const documents = ref(null)
+// const { data, refresh, pending, error } = await $orbisRepositoryService.getDocuments(route.params.corpusId)
+$orbisRepositoryService.getDocuments(route.params.corpusId)
+    .then(result => {
+      if (Array.isArray(result)) {
+        documents.value = result;
+      } else {
+        console.error(result.errorMessage);
+      }
+    })
 </script>
