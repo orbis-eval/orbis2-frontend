@@ -2,24 +2,24 @@
   <LoadingSpinner v-if="!content" />
   <div v-else>
     <h1>Content</h1>
-    <div>
+    <pre>
       {{content}}
-    </div>
+    </pre>
   </div>
 </template>
 
 <script setup>
-import {Error} from "~/lib/model/error";
+import {Document} from "~/lib/model/document";
 
 const {$orbisRepositoryService} = useNuxtApp()
 const route = useRoute()
 const content = ref(null)
 $orbisRepositoryService.getDocument(route.params.id)
     .then(document => {
-      if (document instanceof Error) {
-        console.error(document.errorMessage);
-      } else {
+      if (document instanceof Document) {
         content.value = document.content
+      } else {
+        console.error(document.errorMessage);
       }
     })
 </script>
