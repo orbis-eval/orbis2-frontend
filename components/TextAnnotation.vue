@@ -1,15 +1,5 @@
 <template>
 
-  <div class="p-4">
-    selected: {{ selectedText }}
-    <br/>
-    calculated: {{ calculatedText }}
-    <br/>
-    relativeStart: {{selectionRelativeStart}} - relativeEnd: {{selectionRelativeEnd}}
-    <br/>
-    start: {{ selectionStart }} - end: {{ selectionEnd }}
-  </div>
-
   <div>
     <div v-for="chunk in chunks" class="line" v-on:mouseup="onMouseUp(chunk.index)">
       <div v-if="chunk.content">
@@ -27,8 +17,11 @@
 
 <script setup>
 const props = defineProps({
-  textContent: null
+  textContent: null,
+  annotations: []
 })
+
+const emit = defineEmits(['updateannotations'])
 
 const selectedText = ref('')
 const calculatedText = ref(null)
@@ -68,20 +61,32 @@ const onMouseUp = (chunkIndex) => {
   // get the word string
   let word = selection.toString();
 
-  const range = selection.getRangeAt(0).cloneRange();
+  // only run if more than on character was selected
+  if(word) {
+    const range = selection.getRangeAt(0).cloneRange();
 
-  selectionRelativeStart.value = range.startOffset
-  selectionRelativeEnd.value = range.endOffset
+    selectionRelativeStart.value = range.startOffset
+    selectionRelativeEnd.value = range.endOffset
 
-  // get start/end index of selected text
-  selectionStart.value = selectionRelativeStart.value + chunks.value[chunkIndex].start
-  selectionEnd.value = selectionRelativeEnd.value + chunks.value[chunkIndex].start
+    // get start/end index of selected text
+    selectionStart.value = selectionRelativeStart.value + chunks.value[chunkIndex].start
+    selectionEnd.value = selectionRelativeEnd.value + chunks.value[chunkIndex].start
 
-  // check start / end index with passed plain content
-  calculatedText.value = props.textContent.substring(selectionStart.value, selectionEnd.value)
+    // check start / end index with passed plain content
+    calculatedText.value = props.textContent.substring(selectionStart.value, selectionEnd.value)
 
-  selectedText.value = word.length > 0 ? word : null;
+    selectedText.value = word.length > 0 ? word : null;
+
+    // emit the annotation to the parent
+    emit('updateannotations', {
+      start: selectionStart.value,
+      end: selectionEnd.value,
+      word:  selectedText.value,
+      relativeStart: selectionRelativeStart.value,
+      relativeEnd: selectionRelativeEnd.value,
+      calculatedSurface: calculatedText.value
+    })
+  }
 }
-
 </script>
 
