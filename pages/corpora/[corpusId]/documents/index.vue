@@ -1,5 +1,6 @@
 <template>
-  <div>
+  <LoadingSpinner v-if="!documents" />
+  <div v-else>
     <table>
       <thead class="text-left">
       <tr>
@@ -47,7 +48,6 @@
 const {$orbisRepositoryService} = useNuxtApp()
 const route = useRoute()
 const documents = ref(null)
-// const { data, refresh, pending, error } = await $orbisRepositoryService.getDocuments(route.params.corpusId)
 $orbisRepositoryService.getDocuments(route.params.corpusId)
     .then(result => {
       if (Array.isArray(result)) {
