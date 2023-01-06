@@ -1,6 +1,7 @@
 import {Document} from "~/lib/model/document";
 import {Error} from "~/lib/model/error";
 import {Parser} from "~/lib/parser";
+import {Corpus} from "~/lib/model/corpus";
 
 export class OrbisRepositoryService {
 
@@ -14,8 +15,9 @@ export class OrbisRepositoryService {
         return (await useAsyncData(() => $fetch(`${this.orbisapibase}getRuns?corpus_id=${corpusId}`))).data
     }
 
-    async getCorpora() {
-        return (await useAsyncData(() => $fetch(`${this.orbisapibase}getCorpora`)))
+    async getCorpora(): Promise<Corpus[] | Error> {
+        return Parser.parseList(Corpus,
+            fetch(`${this.orbisapibase}getCorpora`));
     }
 
     async getDocuments(corpusId: string): Promise<Document[] | Error> {
