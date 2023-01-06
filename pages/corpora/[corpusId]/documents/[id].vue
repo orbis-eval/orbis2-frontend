@@ -20,6 +20,8 @@ $orbisRepositoryService.getDocument(route.params.id)
         content.value = document.content
       } else {
         console.error(document.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        content.value = 'ERROR'
       }
     })
 </script>

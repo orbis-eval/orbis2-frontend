@@ -54,6 +54,8 @@ $orbisRepositoryService.getDocuments(route.params.corpusId)
         documents.value = result;
       } else {
         console.error(result.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        documents.value = [{_id: 'ERROR', content: 'ERROR'}]
       }
     })
 </script>

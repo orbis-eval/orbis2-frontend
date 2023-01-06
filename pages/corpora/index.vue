@@ -22,6 +22,8 @@ $orbisRepositoryService.getCorpora()
         corpora.value = result;
       } else {
         console.error(result.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        corpora.value = [{_id: 'ERROR'}]
       }
     })
 </script>
