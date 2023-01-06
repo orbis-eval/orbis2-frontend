@@ -11,10 +11,6 @@ export class OrbisRepositoryService {
         this.orbisapibase = orbisapibase
     }
 
-    async getRuns(corpusId: string) {
-        return (await useAsyncData(() => $fetch(`${this.orbisapibase}getRuns?corpus_id=${corpusId}`))).data
-    }
-
     async getCorpora(): Promise<Corpus[] | Error> {
         return Parser.parseList(Corpus,
             fetch(`${this.orbisapibase}getCorpora`));
