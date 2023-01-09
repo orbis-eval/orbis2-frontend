@@ -35,7 +35,7 @@
   </NuxtLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {Document} from "~/lib/model/document";
 
 const {$orbisRepositoryService} = useNuxtApp()

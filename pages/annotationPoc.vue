@@ -34,7 +34,7 @@
   </NuxtLayout>
 </template>
 
-<script setup>
+<script setup lang="ts">
 
 const selectedText = ref('')
 const selectionStart = ref(null)
