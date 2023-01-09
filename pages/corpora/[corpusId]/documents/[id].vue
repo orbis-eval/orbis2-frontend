@@ -38,13 +38,13 @@
 <script setup lang="ts">
 import {Document} from "~/lib/model/document";
 
-const {$orbisRepositoryService} = useNuxtApp();
+const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
 const annotations = ref(null);
 
-$orbisRepositoryService.getDocument(route.params.id)
+$orbisApiService.getDocument(route.params.id)
     .then(document => {
       if (document instanceof Document) {
         content.value = document.content;

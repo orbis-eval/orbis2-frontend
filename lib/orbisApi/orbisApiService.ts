@@ -5,25 +5,25 @@ import {Corpus} from "~/lib/model/corpus";
 
 export class OrbisApiService {
 
-    private readonly orbisapibase: string;
+    private readonly orbisApiBase: string;
 
-    constructor(orbisapibase: string) {
-        this.orbisapibase = orbisapibase;
+    constructor(orbisApiBase: string) {
+        this.orbisApiBase = orbisApiBase;
     }
 
     async getCorpora(): Promise<Corpus[] | Error> {
         return Parser.parseList(Corpus,
-            fetch(`${this.orbisapibase}getCorpora`));
+            fetch(`${this.orbisApiBase}getCorpora`));
     }
 
     async getDocuments(corpusId: string): Promise<Document[] | Error> {
         return Parser.parseList(Document,
-            fetch(`${this.orbisapibase}getDocuments?corpus_id=${corpusId}`));
+            fetch(`${this.orbisApiBase}getDocuments?corpus_id=${corpusId}`));
     }
 
     async getDocument(documentId: string): Promise<Document | Error> {
         return Parser.parse(Document,
-            fetch(`${this.orbisapibase}getDocument?document_id=${documentId}`));
+            fetch(`${this.orbisApiBase}getDocument?document_id=${documentId}`));
     }
 
 

@@ -30,10 +30,10 @@
 
 <script setup lang="ts">
 const route = useRoute();
-const {$orbisRepositoryService} = useNuxtApp();
+const {$orbisApiService} = useNuxtApp();
 const documents = ref(null);
 
-$orbisRepositoryService.getDocuments(route.params.corpusId)
+$orbisApiService.getDocuments(route.params.corpusId)
     .then(result => {
       if (Array.isArray(result)) {
         documents.value = result;
