@@ -1,14 +1,16 @@
 <template>
-  <LoadingSpinner v-if="!corpora" />
-  <div v-else>
-    <ul>
-      <li v-for="corpus in corpora" :key="corpus._id">
-        <NuxtLink :to="`corpora/${corpus._id}/documents`">
-          {{ corpus._id }}
-        </NuxtLink>
-      </li>
-    </ul>
-  </div>
+  <NuxtLayout name="menumainsidebar">
+    <LoadingSpinner v-if="!corpora" />
+    <div v-else>
+        <ul>
+          <li v-for="corpus in corpora" :key="corpus._id">
+            <NuxtLink :to="`corpora/${corpus._id}/documents`">
+              {{ corpus._id }}
+            </NuxtLink>
+          </li>
+        </ul>
+      </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">

@@ -5,7 +5,7 @@
         <div class="flex flex-row">
           <div class="basis-1/12 ">
             <NuxtLink :to="'/'">
-            <img src="~/assets/img/Orbis-Logo-Transparent.png" class="w-20 h-20 rounded-full border border-gray-600 bg-white"/>
+              <img src="~/assets/img/Orbis-Logo-Transparent.png" class="w-20 h-20 rounded-full border border-gray-600 bg-white"/>
             </NuxtLink>
           </div>
           <div class="basis-1/12 pt-6 ">Orbis NG</div>
@@ -16,13 +16,12 @@
         <!-- Menu Entries -->
         <LeftMenu/>
       </nav>
-      <main class="tile p-4 overflow-auto scrollbar">
-        <NuxtLoadingIndicator color="#a1a1a1" />
-        <slot />
+      <main class="tile p-4 overflow-auto">
+        <slot/>
       </main>
       <aside class="tile p-4">
         <!-- Sidebar -->
-        Side-Bar
+        <slot name="sidebar"/>
       </aside>
       <footer class="col-span-full tile p-6 rounded-b-lg text-center bg-gray-700">
         <!-- Footer -->
@@ -31,26 +30,3 @@
     </div>
   </div>
 </template>
-
-<style>
-.scrollbar::-webkit-scrollbar {
-  width: 7px;
-  height: 7px;
-}
-
-.scrollbar::-webkit-scrollbar-track {
-  border-radius: 100vh;
-  /*background: #f7f4ed;*/
-  background: #444;
-}
-
-.scrollbar::-webkit-scrollbar-thumb {
-  background: #777;
-  border-radius: 100vh;
-  border: 1px solid #777;
-}
-
-.scrollbar::-webkit-scrollbar-thumb:hover {
-  background: #777;
-}
-</style>
