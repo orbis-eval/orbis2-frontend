@@ -5,10 +5,10 @@ import {Corpus} from "~/lib/model/corpus";
 
 export class OrbisApiService {
 
-    private readonly orbisapibase: string
+    private readonly orbisapibase: string;
 
-    constructor (orbisapibase: string) {
-        this.orbisapibase = orbisapibase
+    constructor(orbisapibase: string) {
+        this.orbisapibase = orbisapibase;
     }
 
     async getCorpora(): Promise<Corpus[] | Error> {
