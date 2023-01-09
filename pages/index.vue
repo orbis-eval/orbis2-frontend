@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="menumainsidebar">
+  <NuxtLayout name="sidebar">
       <NuxtLink :to="'corpora'">Corpora</NuxtLink>
   </NuxtLayout>
 </template>

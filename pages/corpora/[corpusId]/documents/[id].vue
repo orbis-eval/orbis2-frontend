@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="menumainsidebar">
+  <NuxtLayout name="sidebar">
     <LoadingSpinner v-if="!content"/>
     <TextAnnotation v-else
           :textContent=content

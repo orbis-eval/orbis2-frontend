@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="menumainsidebar">
+  <NuxtLayout name="sidebar">
       <div v-on:mouseup="onMouseUp" class="p-4">
         <div class="line">
       <span>

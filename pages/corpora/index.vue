@@ -1,5 +1,5 @@
 <template>
-  <NuxtLayout name="menumainsidebar">
+  <NuxtLayout name="sidebar">
     <LoadingSpinner v-if="!corpora" />
     <div v-else>
         <ul>
