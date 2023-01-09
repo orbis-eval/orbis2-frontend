@@ -14,11 +14,10 @@
 </template>
 
 <script setup lang="ts">
-const {$orbisRepositoryService} = useNuxtApp();
+const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 const corpora = ref(null);
-// const { data, refresh, pending, error } = await $orbisRepositoryService.getCorpora()
-$orbisRepositoryService.getCorpora()
+$orbisApiService.getCorpora()
     .then(result => {
       if (Array.isArray(result)) {
         corpora.value = result;
