@@ -1,12 +1,13 @@
 <template>
   <NuxtLayout name="menumainsidebar">
-      <TextAnnotation
-          :textContent=data.content
+    <LoadingSpinner v-if="!content"/>
+    <TextAnnotation v-else
+          :textContent=content
           :annotations=annotations
           @updateannotations = "updatedannotations"
       />
     <template #sidebar>
-      <div>
+      <div v-if="annotations">
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -35,13 +36,29 @@
 </template>
 
 <script setup>
+import {Document} from "~/lib/model/document";
+
 const {$orbisRepositoryService} = useNuxtApp()
 const route = useRoute()
-const { data, refresh, pending, error } = await $orbisRepositoryService.getDocument(route.params.id)
 
-const annotations = ref([])
+const content = ref(null)
+const annotations = ref(null)
+
+$orbisRepositoryService.getDocument(route.params.id)
+    .then(document => {
+      if (document instanceof Document) {
+        content.value = document.content;
+      } else {
+        console.error(document.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        content.value = 'ERROR';
+      }
+    })
 
 const updatedannotations = (annotation) => {
+  if (!annotations.value) {
+    annotations.value = []
+  }
   annotations.value.push(annotation)
 }
 
