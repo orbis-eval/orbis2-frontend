@@ -3,7 +3,7 @@ import {ICorpus} from "~/lib/model/icorpus";
 
 export class Corpus {
     name: string;
-    supported_annotation_types: AnnotationType[]
+    supported_annotation_types: AnnotationType[];
     _id: number;
 
     constructor(corpus: ICorpus) {

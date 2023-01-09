@@ -15,7 +15,7 @@
 
 </template>
 
-<script setup>
+<script setup lang="ts">
 const props = defineProps({
   textContent: null,
   annotations: []

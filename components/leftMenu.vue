@@ -23,7 +23,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {UserIcon, CircleStackIcon, TagIcon} from '@heroicons/vue/24/outline'
 </script>
 

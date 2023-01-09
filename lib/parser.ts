@@ -21,7 +21,7 @@ export class Parser {
             })
             .catch(error => {
                 return new Error(error);
-            })
+            });
     }
 
     /**
@@ -33,7 +33,7 @@ export class Parser {
      * @return Returns a promise containing a list of the data (U) or an error if something went wrong.
      */
     static parseList<T, U extends T>(constructor: new (data: T) => U,
-                                                     promise: Promise<Response>): Promise<U[] | Error> {
+                                     promise: Promise<Response>): Promise<U[] | Error> {
         return promise
             .then(response => {
                 return response.json();
@@ -46,10 +46,10 @@ export class Parser {
                     }
                     return result;
                 }
-                return new Error('Response in Promise is expected to be a list.')
+                return new Error('Response in Promise is expected to be a list.');
             })
             .catch(error => {
                 return new Error(error);
-            })
+            });
     }
 }

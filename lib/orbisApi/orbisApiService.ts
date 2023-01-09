@@ -3,12 +3,12 @@ import {Error} from "~/lib/model/error";
 import {Parser} from "~/lib/parser";
 import {Corpus} from "~/lib/model/corpus";
 
-export class OrbisRepositoryService {
+export class OrbisApiService {
 
-    private readonly orbisapibase: string
+    private readonly orbisapibase: string;
 
-    constructor (orbisapibase: string) {
-        this.orbisapibase = orbisapibase
+    constructor(orbisapibase: string) {
+        this.orbisapibase = orbisapibase;
     }
 
     async getCorpora(): Promise<Corpus[] | Error> {
