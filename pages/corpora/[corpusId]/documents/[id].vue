@@ -7,7 +7,7 @@
           @updateannotations = "updatedannotations"
       />
     <template #sidebar>
-      <div>
+      <div v-if="annotations">
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
           <tr>
@@ -42,7 +42,7 @@ const {$orbisRepositoryService} = useNuxtApp()
 const route = useRoute()
 
 const content = ref(null)
-const annotations = ref([])
+const annotations = ref(null)
 
 $orbisRepositoryService.getDocument(route.params.id)
     .then(document => {
@@ -56,6 +56,9 @@ $orbisRepositoryService.getDocument(route.params.id)
     })
 
 const updatedannotations = (annotation) => {
+  if (!annotations.value) {
+    annotations.value = []
+  }
   annotations.value.push(annotation)
 }
 
