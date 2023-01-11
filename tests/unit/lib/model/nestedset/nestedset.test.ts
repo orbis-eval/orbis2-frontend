@@ -70,12 +70,9 @@ describe('Nested Set', () => {
         let rootNode = NestedSet.toTree(
             mockAnnotations,
             documentContent,
-            annotationType,
-            annotator,
             1,
             1,
-            new Date(),
-            1);
+            new Date());
 
         expect(rootNode.children.length).toEqual(6);
         expect(rootNode.children[0]._id).toEqual(1);
@@ -124,12 +121,9 @@ describe('Nested Set', () => {
         let rootNode = NestedSet.toTree(
             mockAnnotations,
             documentContent,
-            annotationType,
-            annotator,
             1,
             1,
-            new Date(),
-            1);
+            new Date());
 
         expect(rootNode.children.length).toEqual(3);
     });
