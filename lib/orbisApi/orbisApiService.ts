@@ -13,18 +13,21 @@ export class OrbisApiService {
 
     async getCorpora(): Promise<Corpus[] | Error> {
         return Parser.parseList(Corpus,
-            fetch(`${this.orbisApiBase}getCorpora`));
+            this.apiCall(`getCorpora`));
     }
 
     async getDocuments(corpusId: string): Promise<Document[] | Error> {
         return Parser.parseList(Document,
-            fetch(`${this.orbisApiBase}getDocuments?corpus_id=${corpusId}`));
+            this.apiCall(`getDocuments?corpus_id=${corpusId}`));
     }
 
     async getDocument(documentId: string): Promise<Document | Error> {
         return Parser.parse(Document,
-            fetch(`${this.orbisApiBase}getDocument?document_id=${documentId}`));
+            this.apiCall(`getDocument?document_id=${documentId}`));
     }
 
+    async apiCall(query: string): Promise<Response> {
+        return fetch(`${this.orbisApiBase}${query}`);
+    }
 
 }

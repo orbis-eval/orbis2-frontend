@@ -1,4 +1,4 @@
-import {Document} from "~/../../lib/model/document";
+import {Document} from "~/lib/model/document";
 import {describe, test, expect} from "@jest/globals";
 
 describe('Document.constructor()', () => {
