@@ -71,35 +71,6 @@ export class NestedSet {
         for (let annotation of annotations) {
             let currentNode = new NestedSetNode(annotation);
             let parentNode = this.getParent(previousNode, currentNode);
-
-            // // determine if we have a gap to the next annotation.
-            // // if yes, generate an annotation of type "GAP"
-            // if (parentNode === rootNode && currentNode.start_indices[0] > gapStart) {
-            //     let surfaceForm = documentString.substring(gapStart, currentNode.start_indices[0])
-            //         .trim(); // trim whitespaces
-            //     // only add gap-annotation if it is not an empty string after trimming
-            //     if (surfaceForm) {
-            //         let gapAnnotation = new NestedSetNode({
-            //             key: this.GAP_ANNOTATION_KEY,
-            //             surface_forms: [surfaceForm],
-            //             start_indices: [gapStart],
-            //             end_indices: [currentNode.start_indices[0]],
-            //             annotation_type: this.GAP_ANNOTATION_TYPE,
-            //             annotator: this.NESTED_SET_ANNOTATOR,
-            //             run_id: annotation.run_id,
-            //             document_id: annotation.document_id,
-            //             metadata: [],
-            //             timestamp: annotation.timestamp,
-            //             _id: 2000
-            //         });
-            //         // add the gap-annotation to the root-node
-            //         rootNode.append(gapAnnotation);
-            //     }
-            //     gapStart = currentNode.start_indices[0];
-            // } else {
-            //     gapStart = currentNode.end_indices[0];
-            // }
-            // at the node to its parent
             if (parentNode) {
                 parentNode.append(currentNode);
             } else {
@@ -121,37 +92,35 @@ export class NestedSet {
         return (potentialParent.parent) ? this.getParent(potentialParent.parent, nodeUnderCheck) : null;
     };
 
-    static calculateGapAnnotations = (parentNode: NestedSetNode) => {
+    static calculateGapAnnotations = (node: NestedSetNode) => {
         let gapStart = 0;
         let gapAnnotations: NestedSetNode[] = [];
-        for (let childNode of parentNode.children) {
+        for (let childNode of node.children) {
             // determine if we have a gap to the next annotation.
             // if yes, generate an annotation of type "GAP"
             if (childNode.start_indices[0] > gapStart) {
-                let surfaceForm = parentNode.surface_forms[0].substring(gapStart, childNode.start_indices[0]);
-                let gapAnnotation = this.addGapAnnotation(surfaceForm, gapStart, childNode.start_indices[0], childNode);
+                let surfaceForm = node.surface_forms[0].substring(gapStart, childNode.start_indices[0]-node.start_indices[0]);
+                let gapAnnotation = this.addGapAnnotation(surfaceForm, gapStart+node.start_indices[0], childNode.start_indices[0], childNode);
                 // add the gap-annotation to the root-node
                 gapAnnotations.push(gapAnnotation);
-                gapStart = childNode.end_indices[0];
+                gapStart = childNode.end_indices[0]-node.start_indices[0];
             } else {
-                gapStart = childNode.end_indices[0];
+                gapStart = childNode.end_indices[0]-node.start_indices[0];
             }
             // call function for the child
             this.calculateGapAnnotations(childNode);
         }
-
-        if ((parentNode.children.length>0) && (gapStart < parentNode.end_indices[0])) {
-            let surfaceForm = parentNode.surface_forms[0].substring(gapStart, parentNode.end_indices[0]);
-            let gapAnnotation = this.addGapAnnotation(surfaceForm, gapStart, parentNode.end_indices[0], parentNode);
+        if ((node.children.length>0) && (gapStart < node.end_indices[0])) {
+            let surfaceForm = node.surface_forms[0].substring(gapStart, node.end_indices[0]);
+            let gapAnnotation = this.addGapAnnotation(surfaceForm, gapStart+node.start_indices[0], node.end_indices[0], node);
             gapAnnotations.push(gapAnnotation);
         }
-
         // add all new gap-annotations to the parent
         for (let gapAnnotation of gapAnnotations) {
-            parentNode.append(gapAnnotation);
+            node.append(gapAnnotation);
         }
         // sort the children
-        parentNode.children.sort(this.annotationCompare);
+        node.children.sort(this.annotationCompare);
     };
 
     private static addGapAnnotation(

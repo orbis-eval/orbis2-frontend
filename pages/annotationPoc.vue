@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="sidebar">
-    <div v-on:mouseup="onMouseUp" class="p-4">
+<!--    <div v-on:mouseup="onMouseUp" class="p-4">
       <div class="line">
       <span>
       DEIN KARRIERESCHRITT BEI DEN FINANCIAL SERVICES IN ZÜRICH
@@ -31,9 +31,22 @@
     <div class="p-4">
       selected content: {{ selectedText }} ({{ selectionStart }}/{{ selectionEnd }})
     </div>
-    <div>
-      <AnnotationNode :nestedSetNode="nestedSetRootNode"/>
-    </div>
+    -->
+
+    <h2 class="text-4xl p-4">Annotations</h2>
+    <ul>
+      <li v-for="annotation in annotations">
+        {{annotation.surface_forms[0]}} ({{annotation.start_indices[0]}}:{{annotation.end_indices[0]}}) - {{annotation.annotation_type.name}}
+      </li>
+    </ul>
+
+    <h2 class="text-4xl p-4">Document</h2>
+    {{nestedSetRootNode.surface_forms[0]}}
+
+    <h2 class="text-4xl p-4">Rendered Tree</h2>
+    <span v-for="nestedSetChildNode in nestedSetRootNode.children">
+      <AnnotationNode :nestedSetNode="nestedSetChildNode"/>
+    </span>
   </NuxtLayout>
 </template>
 
@@ -43,7 +56,6 @@ import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {Annotation} from "~/lib/model/annotation";
-import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
 const selectedText = ref('');
 const selectionStart = ref(null);
@@ -82,77 +94,19 @@ let annotator: Annotator = new Annotator({
   _id: 1
 });
 
+const annotations = ref([
+  mockAnnotation('AA', 0, 2, 1, annotationType, annotator),
+  mockAnnotation('CC DD EE', 6, 14, 2, annotationType, annotator),
+  mockAnnotation('DD', 9, 11, 3, annotationType, annotator)
+]);
+
 const nestedSetRootNode = ref(NestedSet.toTree(
-    [
-      mockAnnotation(
-          'HH',
-          21,
-          23,
-          6,
-          annotationType,
-          annotator,
-      ),
-      mockAnnotation(
-          'AA',
-          0,
-          2,
-          1,
-          annotationType,
-          annotator,
-      ),
-      mockAnnotation(
-          'CC DD EE',
-          6,
-          14,
-          2,
-          annotationType,
-          annotator
-      ),
-      mockAnnotation(
-          'DD',
-          9,
-          11,
-          3,
-          annotationType,
-          annotator,
-      ),
-      mockAnnotation(
-          'FF GG',
-          15,
-          20,
-          4,
-          annotationType,
-          annotator,
-      ),
-      mockAnnotation(
-          'GG',
-          18,
-          20,
-          5,
-          annotationType,
-          annotator
-      ),
-      mockAnnotation(
-          'HH II',
-          21,
-          26,
-          7,
-          annotationType,
-          annotator,
-      )
-    ],
-    'AA BB CC DD EE FF GG HH II',
+    annotations.value,
+    'AA BB CC DD EE',
     1,
     1,
     new Date()
 ))
-
-
-
-
-
-
-
 
 /**
  * mouse up event handler on

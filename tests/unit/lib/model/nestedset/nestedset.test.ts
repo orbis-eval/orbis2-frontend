@@ -3,8 +3,6 @@ import {Annotation} from "~/lib/model/annotation";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
-import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-
 describe('NestedSet.toTree(...)', () => {
     test('test calculating the tree', () => {
 
@@ -56,20 +54,21 @@ describe('NestedSet.toTree(...)', () => {
             mockAnnotation('CC DD EE', 6, 14, 2, annotationType, annotator),
             mockAnnotation('DD', 9, 11, 3, annotationType, annotator)
         ]
-
         let rootNode = NestedSet.toTree(
             mockAnnotations,
             'AA BB CC DD EE',
             1,
             1,
             new Date());
-
         expect(rootNode.children.length).toEqual(3);
-
         // gap-annotation "CC"
-        // expect(rootNode.children[2].children[0].surface_forms[0]).toEqual("CC ");
+        expect(rootNode.children[2].children[0].surface_forms[0]).toEqual("CC ");
+        expect(rootNode.children[2].children[0].start_indices[0]).toEqual(6);
+        expect(rootNode.children[2].children[0].end_indices[0]).toEqual(9);
         expect(rootNode.children[2].children[1]._id).toEqual(mockAnnotations[2]._id);
-        // expect(rootNode.children[2].children[2].surface_forms[0]).toEqual(" EE");
+        expect(rootNode.children[2].children[2].surface_forms[0]).toEqual(" EE");
+        expect(rootNode.children[2].children[2].start_indices[0]).toEqual(11);
+        expect(rootNode.children[2].children[2].end_indices[0]).toEqual(14);
 
     });
 });
