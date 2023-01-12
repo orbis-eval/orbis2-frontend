@@ -9,6 +9,11 @@ cache:
     paths:
         - node_modules/
 
+variables:
+  # to be defined in specific pipeline
+  coverage_path: "./coverage/lcov.info"
+
+
 build:
     stage: build
     script:
@@ -24,6 +29,10 @@ test:
         - npx jest
     tags:
         - nlp-runner
+    artifacts:
+        paths:
+            - $coverage_path
+
 
 sonar:
     stage: sonar
@@ -39,6 +48,7 @@ sonar:
                         -D sonar.login=$SONAR_TOKEN
                         -D sonar.sources='.'
                         -D sonar.exclusions='**/*.spec.ts,**/*.test.ts'
+                        -D sonar.javascript.lcov.reportPaths=$coverage_path
     tags:
         - nlp-runner
 
