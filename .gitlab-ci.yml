@@ -46,7 +46,6 @@ sonar:
         - sonar-scanner -D sonar.projectKey=$SONAR_PROJECT_KEY
                         -D sonar.host.url=$SONAR_URL
                         -D sonar.login=$SONAR_TOKEN
-                        -D sonar.tests='tests'
                         -D sonar.exclusions='**/*.spec.ts,**/*.test.ts,**/coverage/**'
                         -D sonar.javascript.lcov.reportPaths=$coverage_path
     tags:
