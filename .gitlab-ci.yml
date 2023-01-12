@@ -26,7 +26,7 @@ test:
     stage: test
     script:
         - npm ci
-        - npx jest
+        - npx jest --coverage --coverageDirectory=$coverage_path
     tags:
         - nlp-runner
     artifacts:
