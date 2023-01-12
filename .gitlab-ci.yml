@@ -47,7 +47,7 @@ sonar:
                         -D sonar.host.url=$SONAR_URL
                         -D sonar.login=$SONAR_TOKEN
                         -D sonar.sources='.'
-                        -D sonar.exclusions='**/*.spec.ts,**/*.test.ts,**/*.vue,**/coverage/**,**/*.config.js'
+                        -D sonar.exclusions='**/*.spec.ts,**/*.test.ts,**/coverage/**,**/*.config.js'
                         -D sonar.javascript.lcov.reportPaths=$coverage_path
     tags:
         - nlp-runner
