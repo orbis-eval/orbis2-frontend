@@ -11,7 +11,7 @@ cache:
 
 variables:
   # to be defined in specific pipeline
-  coverage_path: "./coverage/lcov.info"
+  coverage_path: "$CI_PROJECT_DIR/coverage/lcov.info"
 
 
 build:
@@ -25,6 +25,7 @@ build:
 test:
     stage: test
     script:
+        - echo $coverage_path
         - npm ci
         - npx jest --coverage --coverageDirectory=$coverage_path
     tags:
@@ -41,6 +42,7 @@ sonar:
         name: sonarsource/sonar-scanner-cli:latest
         entrypoint: [ "" ]
     script:
+        - echo $coverage_path
         - sonar-scanner -h
         - sonar-scanner -D sonar.projectKey=$SONAR_PROJECT_KEY
                         -D sonar.sources=.
