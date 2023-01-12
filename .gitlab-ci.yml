@@ -46,7 +46,7 @@ sonar:
         - sonar-scanner -D sonar.projectKey=$SONAR_PROJECT_KEY
                         -D sonar.host.url=$SONAR_URL
                         -D sonar.login=$SONAR_TOKEN
-                        -D sonar.sources='comopnents/,layouts/,lib/,pages/,plugins/'
+                        -D sonar.sources='components/,layouts/,lib/,pages/,plugins/'
                         -D sonar.javascript.lcov.reportPaths=$coverage_path
     tags:
         - nlp-runner
