@@ -44,11 +44,10 @@ sonar:
     script:
         - sonar-scanner -h
         - sonar-scanner -D sonar.projectKey=$SONAR_PROJECT_KEY
-                        -D sonar.sources=.
                         -D sonar.host.url=$SONAR_URL
                         -D sonar.login=$SONAR_TOKEN
                         -D sonar.sources='.'
-                        -D sonar.exclusions='**/*.spec.ts,**/*.test.ts'
+                        -D sonar.exclusions='**/*.spec.ts,**/*.test.ts,**/*.vue,**/coverage/**,**/*.config.js'
                         -D sonar.javascript.lcov.reportPaths=$coverage_path
     tags:
         - nlp-runner
