@@ -14,9 +14,6 @@ build:
     script:
         - npm ci
         - npm run build
-    artifacts:
-        paths:
-            - dist/
     tags:
         - nlp-runner
 
