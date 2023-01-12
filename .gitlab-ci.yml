@@ -1,0 +1,47 @@
+image: node:19
+
+stages:
+    - build
+    - test
+    - sonar
+
+cache:
+    paths:
+        - node_modules/
+
+build:
+    stage: build
+    script:
+        - npm ci
+        - npm run build
+    artifacts:
+        paths:
+            - dist/
+    tags:
+        - nlp-runner
+
+test:
+    stage: test
+    script:
+        - npm ci
+        - npx jest
+    tags:
+        - nlp-runner
+
+sonar:
+    stage: sonar
+    allow_failure: true
+    image:
+        name: sonarsource/sonar-scanner-cli:latest
+        entrypoint: [ "" ]
+    script:
+        - sonar-scanner -h
+        - sonar-scanner -D sonar.projectKey=$SONAR_PROJECT_KEY
+                        -D sonar.sources=.
+                        -D sonar.host.url=$SONAR_URL
+                        -D sonar.login=$SONAR_TOKEN
+                        -D sonar.sources='.'
+                        -D sonar.exclusions='**/*.spec.ts,**/*.test.ts'
+    tags:
+        - nlp-runner
+
