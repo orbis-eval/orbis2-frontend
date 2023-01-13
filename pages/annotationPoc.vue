@@ -44,9 +44,8 @@
     {{nestedSetRootNode.surface_forms[0]}}
 
     <h2 class="text-4xl p-4">Rendered Tree</h2>
-    <span v-for="nestedSetChildNode in nestedSetRootNode.children">
-      <AnnotationNode :nestedSetNode="nestedSetChildNode"/>
-    </span>
+    <AnnotationNode v-for="nestedSetChildNode in nestedSetRootNode.children"
+                    :nestedSetNode="nestedSetChildNode"/>
   </NuxtLayout>
 </template>
 
@@ -95,14 +94,15 @@ let annotator: Annotator = new Annotator({
 });
 
 const annotations = ref([
-  mockAnnotation('AA', 0, 2, 1, annotationType, annotator),
-  mockAnnotation('CC DD EE', 6, 14, 2, annotationType, annotator),
-  mockAnnotation('DD', 9, 11, 3, annotationType, annotator)
+  mockAnnotation('AABB', 0, 4, 1, annotationType, annotator),
+  mockAnnotation('AA', 0, 2, 2, annotationType, annotator),
+  mockAnnotation('A', 0, 1, 3, annotationType, annotator),
+  mockAnnotation('DD', 6, 8, 4, annotationType, annotator)
 ]);
 
 const nestedSetRootNode = ref(NestedSet.toTree(
     annotations.value,
-    'AA BB CC DD EE',
+    'AABBCCDDEE',
     1,
     1,
     new Date()
