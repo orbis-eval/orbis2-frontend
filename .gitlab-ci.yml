@@ -82,7 +82,7 @@ publish-k8s:
     image: dtzar/helm-kubectl:latest
     script:
         - echo "add helm repository"
-        - helm repo add fhgr https://fh-gr.github.io/common-charts
+        - helm repo add fhgr https://fhgr.github.io/common-charts
         - CI_VERSION="${VERSION}.${CI_PIPELINE_ID}"
         - helm upgrade --install $CI_PROJECT_NAME fhgr/app-template
           --kubeconfig "$KUBECONFIG"
