@@ -2,7 +2,6 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Annotation} from "~/lib/model/annotation";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
-import AnnotationNode from "~/components/annotationNode.vue";
 
 export class NestedSet {
 
@@ -72,7 +71,7 @@ export class NestedSet {
             let currentNode = new NestedSetNode(annotation);
             let parentNode = this.getParent(previousNode, currentNode);
             if (parentNode) {
-                parentNode.append(currentNode);
+                parentNode.addChild(currentNode);
             } else {
                 // TODO: handle exception, this should not occur with proper annotation data
             }
@@ -101,7 +100,6 @@ export class NestedSet {
             if (childNode.start_indices[0] > gapStart) {
                 let surfaceForm = node.surface_forms[0].substring(gapStart, childNode.start_indices[0]-node.start_indices[0]);
                 let gapAnnotation = this.addGapAnnotation(surfaceForm, gapStart+node.start_indices[0], childNode.start_indices[0], childNode);
-                // add the gap-annotation to the root-node
                 gapAnnotations.push(gapAnnotation);
                 gapStart = childNode.end_indices[0]-node.start_indices[0];
             } else {
@@ -117,7 +115,7 @@ export class NestedSet {
         }
         // add all new gap-annotations to the parent
         for (let gapAnnotation of gapAnnotations) {
-            node.append(gapAnnotation);
+            node.addChild(gapAnnotation);
         }
         // sort the children
         node.children.sort(this.annotationCompare);
