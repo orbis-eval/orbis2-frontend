@@ -1,0 +1,52 @@
+# Values for orbis2-frontend
+
+replicaCount: 1
+
+deployment:
+  restartPolicy: Always
+  rollingUpdate:
+    maxSurge: 2
+    maxUnavailable: 1
+
+gitlab:
+  env: default-environment
+  app: default-app
+
+image:
+  repository: davos.fhgr.ch/nlp/orbis2/orbis2-frontend
+  tag: 1.0.0
+  pullPolicy: Always
+
+imagePullSecrets: [name: regcred]
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  main:
+    type: ClusterIP
+    ports:
+      http:
+        enabled: true
+        port: 63013
+        protocol: HTTP
+        targetPort: 63013
+
+
+ingress:
+  enabled: true
+  annotations: {kubernetes.io/ingress.class: nginx, nginx.ingress.kubernetes.io/use-regex: "true" }
+  # kubernetes.io/ingress.class: nginx
+  # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: orbis2.prod.semanticlab.net
+      paths:
+        - path: /
+          pathType: ImplementationSpecific
+        - path: /api
+          backend:
+            serviceName: orbis2-backend
+            servicePort: 63012
+  tls:
+    - hosts:
+        - orbis2.prod.semanticlab.net
+      secretName: orbis2.prod-secret
