@@ -38,11 +38,11 @@ ingress:
   # kubernetes.io/ingress.class: nginx
   # kubernetes.io/tls-acme: "true"
   hosts:
-    - host: orbis2.prod.semanticlab.net
+    - host: orbis2-ng.prod.semanticlab.net
       paths:
         - path: /
           pathType: Prefix
   tls:
     - hosts:
-        - orbis2.prod.semanticlab.net
-      secretName: orbis2.prod-secret
+        - orbis2-ng.prod.semanticlab.net
+      secretName: orbis2-ng.prod-secret
