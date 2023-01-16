@@ -42,10 +42,6 @@ ingress:
       paths:
         - path: /
           pathType: ImplementationSpecific
-        - path: /api
-          backend:
-            serviceName: orbis2-backend
-            servicePort: 63012
   tls:
     - hosts:
         - orbis2.prod.semanticlab.net
