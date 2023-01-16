@@ -25,7 +25,7 @@ export default defineNuxtConfig({
     ],
     runtimeConfig: {
         public: {
-            orbisApiBase: 'http://localhost:63019/'
+            orbisApiBase: 'http://localhost:63012/'
         }
     }
 })
