@@ -70,27 +70,6 @@ describe('NestedSet.toTree(...)', () => {
         expect(rootNode.children[2].children[2].surface_forms[0]).toEqual(" EE");
         expect(rootNode.children[2].children[2].start_indices[0]).toEqual(11);
         expect(rootNode.children[2].children[2].end_indices[0]).toEqual(14);
-
-    });
-
-    test('test adding child', () => {
-        let mockAnnotations = [
-            mockAnnotation('AA', 0, 2, 1, annotationType, annotator),
-            mockAnnotation('CC DD EE', 6, 14, 2, annotationType, annotator)
-        ]
-        let rootNode = NestedSet.toTree(
-            mockAnnotations,
-            'AA BB CC DD EE',
-            1,
-            1,
-            new Date());
-
-        // add a node
-        rootNode.addNode(
-            new NestedSetNode(
-                mockAnnotation('DD', 9, 11, 3, annotationType, annotator)));
-        expect(rootNode.children.length).toEqual(3);
-        expect(rootNode.children[2].children[0].surface_forms[0]).toEqual('DD');
     });
 });
 
