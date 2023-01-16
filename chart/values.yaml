@@ -41,7 +41,7 @@ ingress:
     - host: orbis2.prod.semanticlab.net
       paths:
         - path: /
-          pathType: ImplementationSpecific
+          pathType: Prefix
   tls:
     - hosts:
         - orbis2.prod.semanticlab.net
