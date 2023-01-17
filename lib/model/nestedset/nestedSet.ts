@@ -2,6 +2,7 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Annotation} from "~/lib/model/annotation";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
+import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 
 export class NestedSet {
 
@@ -43,7 +44,8 @@ export class NestedSet {
         documentString: string,
         runId: number,
         documentId: number,
-        timestamp: Date): NestedSetNode {
+        timestamp: Date,
+        errorCallback: (parseError: NestedSetParseError) => void): NestedSetNode | null {
 
         // sort annotations start-index and then smaller end-indexes first if start-index is the same
         annotations.sort(this.annotationCompare);
@@ -69,26 +71,33 @@ export class NestedSet {
         // iterate all annotations
         for (let annotation of annotations) {
             let currentNode = new NestedSetNode(annotation);
-            let parentNode = this.getParent(previousNode, currentNode);
+            let parentNode = this.getParent(previousNode, currentNode, errorCallback);
             if (parentNode) {
                 parentNode.addChild(currentNode);
             } else {
-                // TODO: handle exception, this should not occur with proper annotation data
+                // tree could not be constructed, so return null
+                return null;
             }
             previousNode = currentNode;
         }
-
         this.calculateGapAnnotations(rootNode);
-
         return rootNode;
     }
 
-    static getParent = (potentialParent: NestedSetNode, nodeUnderCheck: NestedSetNode): NestedSetNode | null => {
-        if (nodeUnderCheck.start_indices[0] >= potentialParent.start_indices[0]
-            && nodeUnderCheck.end_indices[0] <= potentialParent.end_indices[0]) {
-            return potentialParent;
+    static getParent = (
+        potentialParent: NestedSetNode,
+        nodeUnderCheck: NestedSetNode,
+        errorCallback: (parseError: NestedSetParseError) => void): NestedSetNode | null => {
+        if(nodeUnderCheck.start_indices[0] >= potentialParent.start_indices[0]) {
+            if(nodeUnderCheck.end_indices[0] <= potentialParent.end_indices[0]) {
+                return potentialParent;
+            }
+            else {
+                errorCallback(new NestedSetParseError([potentialParent, nodeUnderCheck], 'detected invalid annotations while creating tree'));
+                return null;
+            }
         }
-        return (potentialParent.parent) ? this.getParent(potentialParent.parent, nodeUnderCheck) : null;
+        return (potentialParent.parent) ? this.getParent(potentialParent.parent, nodeUnderCheck,errorCallback) : null;
     };
 
     static calculateGapAnnotations = (node: NestedSetNode) => {
