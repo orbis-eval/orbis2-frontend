@@ -50,6 +50,10 @@ ingress:
         paths:
           - path: /
             pathType: Prefix
+          - path: /api
+            backend:
+              serviceName: orbis2-backend
+              servicePort: 63012
     tls:
       - hosts:
           - orbis2-ng.prod.semanticlab.net
@@ -58,5 +62,5 @@ ingress:
 env:
   # port under which the application is started
   PORT: 63013
-  NUXT_PUBLIC_ORBIS_API_BASE: https://orbis2-backend.orbis2:63012/
+  NUXT_PUBLIC_ORBIS_API_BASE: /api/
 
