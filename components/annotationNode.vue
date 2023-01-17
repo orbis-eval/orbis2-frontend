@@ -35,6 +35,8 @@ const onMouseUp = () => {
     if (word // only run if more than on character was selected
         &&
         selection.anchorNode.isEqualNode(selection.focusNode) // only allow selections if they are embedded in the same element!
+        &&
+        props.nestedSetNode
     ) {
       // get start/end index of selected text, correct with offset of selected node
       let selectionStartIndex = range.startOffset + props.nestedSetNode.start_indices[0];
