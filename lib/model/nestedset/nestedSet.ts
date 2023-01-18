@@ -176,24 +176,23 @@ export class NestedSet {
         return lineNodes;
     }
 
-    public static trimWithSpaces(node: NestedSetNode): NestedSetNode {
-        let surfaceForm = node.surface_forms[0];
+    public static trimWithSpaces(annotation: Annotation): Annotation {
+        let surfaceForm = annotation.surface_forms[0];
         let endChar = surfaceForm.charAt(surfaceForm.length-1);
-
         if(endChar===' ') {
             surfaceForm = surfaceForm.substring(0, surfaceForm.length-1);
-            node.end_indices[0] = node.end_indices[0]-1;
-            node.surface_forms[0] = surfaceForm;
-            return (this.trimWithSpaces(node));
+            annotation.end_indices[0] = annotation.end_indices[0]-1;
+            annotation.surface_forms[0] = surfaceForm;
+            return (this.trimWithSpaces(annotation));
         }
         let startChar = surfaceForm.charAt(0);
         if(startChar===' ') {
             surfaceForm = surfaceForm.substring(1, surfaceForm.length);
-            node.start_indices[0] = node.start_indices[0]+1;
-            node.surface_forms[0] = surfaceForm;
-            return (this.trimWithSpaces(node));
+            annotation.start_indices[0] = annotation.start_indices[0]+1;
+            annotation.surface_forms[0] = surfaceForm;
+            return (this.trimWithSpaces(annotation));
         }
-        return node;
+        return annotation;
     }
 
     private static addGapAnnotation(

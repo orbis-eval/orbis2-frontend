@@ -1,7 +1,10 @@
 <template>
     <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME"
          v-on:mouseup="onMouseUp()"
-         class="border border-gray-600 p-4 m-4">
+         class="p-2">
+      <span v-if="nestedSetNode.children.length===0">
+        {{ nestedSetNode.surface_forms[0] }}
+      </span>
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
@@ -48,7 +51,9 @@ const onMouseUp = () => {
     let word = selection.toString();
     const range = selection.getRangeAt(0).cloneRange();
     //console.log(`selected word="${word}", range=(${range.startOffset}:${range.endOffset}), node=(${props.nestedSetNode.start_indices[0]}:${props.nestedSetNode.end_indices[0]}), calculated start/end=(${range.startOffset+props.nestedSetNode.start_indices[0]}/${range.endOffset+props.nestedSetNode.start_indices[0]}), selected nodes equals: ${selection.anchorNode.isEqualNode(selection.focusNode)}`);
-    if (word // only run if more than on character was selected
+    if (word
+        &&
+        word.trim().length>0 // only run if more than on character was selected
         &&
         selection.anchorNode.isEqualNode(selection.focusNode) // only allow selections if they are embedded in the same element!
         &&
