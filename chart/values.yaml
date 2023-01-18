@@ -56,6 +56,14 @@ ingress:
             service:
               name: orbis2-backend
               port: 63012
+          # the following redirect is necessary since the api description of the backend is available under /api/docs,
+          #  and it forces the browser to query the url /openapi.json, but by default this would be sent to the frontend
+          #  since it's not queried like /api/openapi.json, that's why we redirect openapi.json to the backend
+          - path: /(openapi.json)
+            pathType: Prefix
+            service:
+              name: orbis2-backend
+              port: 63012
     tls:
       - hosts:
           - orbis2-ng.prod.semanticlab.net
