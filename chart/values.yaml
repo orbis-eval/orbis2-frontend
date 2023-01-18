@@ -1,17 +1,5 @@
 # Values for orbis2-frontend
 
-replicaCount: 1
-
-deployment:
-  restartPolicy: Always
-  rollingUpdate:
-    maxSurge: 2
-    maxUnavailable: 1
-
-gitlab:
-  env: default-environment
-  app: default-app
-
 image:
   repository: davos.fhgr.ch/nlp/orbis2/orbis2-frontend
   tag: 1.0.0
@@ -20,6 +8,11 @@ image:
 imagePullSecrets: [name: regcred]
 nameOverride: ""
 fullnameOverride: ""
+
+controller:
+  enabled: true
+  type: deployment
+  replicas: 1
 
 service:
   main:
@@ -31,6 +24,10 @@ service:
         protocol: HTTP
         targetPort: 63013
 
+env:
+  # port under which the application is started
+  PORT: 63013
+  NUXT_PUBLIC_ORBIS_API_BASE: /api/
 
 ingress:
   main:
@@ -38,10 +35,11 @@ ingress:
     annotations: {
       cert-manager.io/cluster-issuer: "letsencrypt-issuer",
       kubernetes.io/ingress.class: nginx,
-      nginx.ingress.kubernetes.io/use-regex: "true" ,
+      nginx.ingress.kubernetes.io/use-regex: "true",
       nginx.ingress.kubernetes.io/auth-type: basic,
       nginx.ingress.kubernetes.io/auth-secret: orbis2ng-httpbasicauth,
-      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required'
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required',
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
     }
     # kubernetes.io/ingress.class: nginx
     # kubernetes.io/tls-acme: "true"
@@ -50,17 +48,19 @@ ingress:
         paths:
           - path: /
             pathType: Prefix
-          - path: /api
             backend:
-              serviceName: orbis2-backend
-              servicePort: 63012
+              service:
+                name: orbis2-frontend
+                port:
+                  number: 63013
+          - path: /api/(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: orbis2-backend
+                port:
+                  number: 63012
     tls:
       - hosts:
           - orbis2-ng.prod.semanticlab.net
         secretName: orbis2-ng.prod-secret
-
-env:
-  # port under which the application is started
-  PORT: 63013
-  NUXT_PUBLIC_ORBIS_API_BASE: /api/
-
