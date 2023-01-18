@@ -48,18 +48,14 @@ ingress:
         paths:
           - path: /(.*)
             pathType: Prefix
-            backend:
-              service:
-                name: orbis2-frontend
-                port:
-                  number: 63013
+            service:
+              name: orbis2-frontend
+              port: 63013
           - path: /api/(.*)
             pathType: Prefix
-            backend:
-              service:
-                name: orbis2-backend
-                port:
-                  number: 63012
+            service:
+              name: orbis2-backend
+              port: 63012
     tls:
       - hosts:
           - orbis2-ng.prod.semanticlab.net
