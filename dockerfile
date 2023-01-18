@@ -1,5 +1,4 @@
-FROM node:19
-
+FROM node:18-alpine
 WORKDIR /nuxt-app
 
 COPY . .
