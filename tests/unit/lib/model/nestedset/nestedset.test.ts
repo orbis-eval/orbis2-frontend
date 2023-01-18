@@ -113,7 +113,31 @@ describe('NestedSet.toTree(...)', () => {
         expect(currentParseError.nodes[1].end_indices[0]).toEqual(3);
     });
 
-
+    test('test creating tree from annotations without space between', () => {
+        let documentString = 'AB';
+        let mockAnnotations = [
+            mockAnnotation('A', 0, 1, 1, annotationType, annotator),
+            mockAnnotation('B', 1, 2, 2, annotationType, annotator)
+        ];
+        let rootNode = NestedSet.toTree(
+            mockAnnotations,
+            documentString,
+            1,
+            1,
+            new Date(),
+            errorCallBack);
+        expect(rootNode).not.toBeNull();
+        if(rootNode) {
+            expect(rootNode.children.length).toEqual(1);
+            // first node should be a line annotation
+            let lineAnnotationNode = rootNode.children[0];
+            expect(lineAnnotationNode.annotation_type.name).toEqual(NestedSet.LINE_ANNOTATION_TYPE_NAME);
+            expect(lineAnnotationNode.children[0].start_indices[0]).toEqual(0);
+            expect(lineAnnotationNode.children[0].end_indices[0]).toEqual(1);
+            expect(lineAnnotationNode.children[1].start_indices[0]).toEqual(1);
+            expect(lineAnnotationNode.children[1].end_indices[0]).toEqual(2);
+        }
+    });
 });
 
 describe('NestedSet.generateLineNodes(...)', () => {

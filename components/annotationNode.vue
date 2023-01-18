@@ -1,20 +1,21 @@
 <template>
-    <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME"
-         v-on:mouseup="onMouseUp()"
-         class="p-2">
-      <span v-if="nestedSetNode.children.length===0">
+  <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME"
+       v-on:mouseup="onMouseUp()">
+      <span v-if="nestedSetNode.children.length===0" class="p-1">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
-      <AnnotationNode
-          v-for="nestedSetChildNode in nestedSetNode.children"
-          :nestedSetNode="nestedSetChildNode"
-          @updateAnnotations="updateAnnotations"
-      />
-    </div>
-    <span v-else-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME" v-on:mouseup="onMouseUp()">
+    <AnnotationNode
+        v-for="nestedSetChildNode in nestedSetNode.children"
+        :nestedSetNode="nestedSetChildNode"
+        @updateAnnotations="updateAnnotations"
+    />
+  </div>
+  <span v-else-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME"
+        v-on:mouseup="onMouseUp()"
+        class="p-1">
       {{ nestedSetNode.surface_forms[0] }}
     </span>
-    <span v-else-if="nestedSetNode.parent"  class="annotation">
+  <span v-else-if="nestedSetNode.parent" class="annotation">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp()">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
@@ -24,7 +25,7 @@
           @updateAnnotations="updateAnnotations"
       />
     </span>
-    <span v-else>
+  <span v-else class="p-1">
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
@@ -53,7 +54,7 @@ const onMouseUp = () => {
     //console.log(`selected word="${word}", range=(${range.startOffset}:${range.endOffset}), node=(${props.nestedSetNode.start_indices[0]}:${props.nestedSetNode.end_indices[0]}), calculated start/end=(${range.startOffset+props.nestedSetNode.start_indices[0]}/${range.endOffset+props.nestedSetNode.start_indices[0]}), selected nodes equals: ${selection.anchorNode.isEqualNode(selection.focusNode)}`);
     if (word
         &&
-        word.trim().length>0 // only run if more than on character was selected
+        word.trim().length > 0 // only run if more than on character was selected
         &&
         selection.anchorNode.isEqualNode(selection.focusNode) // only allow selections if they are embedded in the same element!
         &&
