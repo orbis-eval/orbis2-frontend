@@ -157,7 +157,7 @@ export class NestedSet {
         const lines = document.split("\n");
         let offset = 0;
         let lineNodes: Annotation[] = [];
-        lines.forEach((line, index) => {
+        lines.forEach((line) => {
             lineNodes.push(new Annotation({
                 key: this.LINE_ANNOTATION_KEY,
                 surface_forms: [line],
@@ -174,6 +174,26 @@ export class NestedSet {
             offset = offset + line.length + 1
         });
         return lineNodes;
+    }
+
+    public static trimWithSpaces(node: NestedSetNode): NestedSetNode {
+        let surfaceForm = node.surface_forms[0];
+        let endChar = surfaceForm.charAt(surfaceForm.length-1);
+
+        if(endChar===' ') {
+            surfaceForm = surfaceForm.substring(0, surfaceForm.length-1);
+            node.end_indices[0] = node.end_indices[0]-1;
+            node.surface_forms[0] = surfaceForm;
+            return (this.trimWithSpaces(node));
+        }
+        let startChar = surfaceForm.charAt(0);
+        if(startChar===' ') {
+            surfaceForm = surfaceForm.substring(1, surfaceForm.length);
+            node.start_indices[0] = node.start_indices[0]+1;
+            node.surface_forms[0] = surfaceForm;
+            return (this.trimWithSpaces(node));
+        }
+        return node;
     }
 
     private static addGapAnnotation(

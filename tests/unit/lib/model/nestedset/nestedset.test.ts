@@ -4,6 +4,8 @@ import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
+import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
+
 describe('NestedSet.toTree(...)', () => {
     test('test calculating the tree', () => {
 
@@ -22,7 +24,7 @@ describe('NestedSet.toTree(...)', () => {
             new Date(),
             errorCallBack);
         expect(rootNode).not.toBeNull();
-        if(rootNode) {
+        if (rootNode) {
 
             // first child has to be a line annotation
             expect(rootNode.children.length).toEqual(1);
@@ -40,20 +42,20 @@ describe('NestedSet.toTree(...)', () => {
             expect(lineAnnotationNode.children[3].end_indices[0]).toEqual(10);
 
             // check the node "AABB"
-            expect(lineAnnotationNode.children[0]._id).toEqual(mockAnnotations[1]._id);
+            expect(lineAnnotationNode.children[0]._id).toEqual(mockAnnotations[0]._id);
             // check the childs of "AABB"
-            expect(lineAnnotationNode.children[0].children[0]._id).toEqual(mockAnnotations[2]._id);
+            expect(lineAnnotationNode.children[0].children[0]._id).toEqual(mockAnnotations[1]._id);
             expect(lineAnnotationNode.children[0].children[1].annotation_type.name).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
 
             // check the childs of "AA"
-            expect(lineAnnotationNode.children[0].children[0].children[0]._id).toEqual(mockAnnotations[3]._id);
+            expect(lineAnnotationNode.children[0].children[0].children[0]._id).toEqual(mockAnnotations[2]._id);
             expect(lineAnnotationNode.children[0].children[0].children[0].children.length).toEqual(0);
             // check the gap annotation
             expect(lineAnnotationNode.children[0].children[0].children[1].start_indices[0]).toEqual(1);
             expect(lineAnnotationNode.children[0].children[0].children[1].end_indices[0]).toEqual(2);
 
             // check annotation "DD"
-            expect(lineAnnotationNode.children[2]._id).toEqual(mockAnnotations[4]._id);
+            expect(lineAnnotationNode.children[2]._id).toEqual(mockAnnotations[3]._id);
             expect(lineAnnotationNode.children[2].children.length).toEqual(0);
         }
     });
@@ -63,7 +65,7 @@ describe('NestedSet.toTree(...)', () => {
             mockAnnotation('AA', 0, 2, 1, annotationType, annotator),
             mockAnnotation('CC DD EE', 6, 14, 2, annotationType, annotator),
             mockAnnotation('DD', 9, 11, 3, annotationType, annotator)
-        ]
+        ];
         let rootNode = NestedSet.toTree(
             mockAnnotations,
             'AA BB CC DD EE',
@@ -72,18 +74,17 @@ describe('NestedSet.toTree(...)', () => {
             new Date(),
             errorCallBack);
         expect(rootNode).not.toBeNull();
-        if(rootNode) {
+        if (rootNode) {
             expect(rootNode.children.length).toEqual(1);
 
             // first node should be a line annotation
             let lineAnnotationNode = rootNode.children[0];
             expect(lineAnnotationNode.annotation_type.name).toEqual(NestedSet.LINE_ANNOTATION_TYPE_NAME);
 
-            // gap-annotation "CC"
             expect(lineAnnotationNode.children[2].children[0].surface_forms[0]).toEqual("CC ");
             expect(lineAnnotationNode.children[2].children[0].start_indices[0]).toEqual(6);
             expect(lineAnnotationNode.children[2].children[0].end_indices[0]).toEqual(9);
-            expect(lineAnnotationNode.children[2].children[1]._id).toEqual(mockAnnotations[3]._id);
+            expect(lineAnnotationNode.children[2].children[1]._id).toEqual(mockAnnotations[2]._id);
             expect(lineAnnotationNode.children[2].children[2].surface_forms[0]).toEqual(" EE");
             expect(lineAnnotationNode.children[2].children[2].start_indices[0]).toEqual(11);
             expect(lineAnnotationNode.children[2].children[2].end_indices[0]).toEqual(14);
@@ -121,7 +122,7 @@ describe('NestedSet.generateLineNodes(...)', () => {
 line2
 line3`;
         let lineNodes = NestedSet.generateLineAnnotations(document, 1, 1, new Date());
-        expect(lineNodes.length).toEqual(3)
+        expect(lineNodes.length).toEqual(3);
         expect(lineNodes[0].start_indices[0]).toEqual(0);
         expect(lineNodes[0].end_indices[0]).toEqual(5);
         expect(lineNodes[1].start_indices[0]).toEqual(6);
@@ -129,7 +130,37 @@ line3`;
         expect(lineNodes[2].start_indices[0]).toEqual(12);
         expect(lineNodes[2].end_indices[0]).toEqual(17);
     });
-})
+});
+
+describe('NestedSet.trimWhiteSpaces(...)', () => {
+
+    test('mock with whitespaces in the beginning and end', () => {
+        let nodeWithWhiteSpace = new NestedSetNode(
+            mockAnnotation('  A  ', 0, 5, 1, annotationType, annotator)
+        );
+        NestedSet.trimWithSpaces(nodeWithWhiteSpace);
+        expect(nodeWithWhiteSpace.end_indices[0]).toEqual(3);
+        expect(nodeWithWhiteSpace.start_indices[0]).toEqual(2);
+    });
+
+    test('mock with whitespaces in the beginning', () => {
+        let nodeWithWhiteSpace = new NestedSetNode(
+            mockAnnotation('  A', 0, 3, 1, annotationType, annotator)
+        );
+        NestedSet.trimWithSpaces(nodeWithWhiteSpace);
+        expect(nodeWithWhiteSpace.start_indices[0]).toEqual(2);
+        expect(nodeWithWhiteSpace.end_indices[0]).toEqual(3);
+    });
+
+    test('mock with whitespaces in the end', () => {
+        let nodeWithWhiteSpace = new NestedSetNode(
+            mockAnnotation('A   ', 0, 4, 1, annotationType, annotator)
+        );
+        NestedSet.trimWithSpaces(nodeWithWhiteSpace);
+        expect(nodeWithWhiteSpace.start_indices[0]).toEqual(0);
+        expect(nodeWithWhiteSpace.end_indices[0]).toEqual(1);
+    });
+});
 
 let annotationType: AnnotationType = new AnnotationType({
     name: "A Type",
@@ -145,8 +176,8 @@ let annotator: Annotator = new Annotator({
 let currentParseError: NestedSetParseError;
 
 let errorCallBack = (parseError: NestedSetParseError) => {
-    console.warn('the following nodes could not be parsed:')
-    for(let node of parseError.nodes) {
+    console.warn('the following nodes could not be parsed:');
+    for (let node of parseError.nodes) {
         console.warn(`${node.surface_forms[0]}/(${node.start_indices[0]}:${node.end_indices[0]})`);
     }
     currentParseError = parseError;
