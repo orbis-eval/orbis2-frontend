@@ -1,17 +1,30 @@
 <template>
-  <span v-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME" v-on:mouseup="onMouseUp()">
+ <span v-if="!nestedSetNode.parent && nestedSetNode.children.length===0" v-on:mouseup="onMouseUp()">
+   Only Root Node:
+   {{ nestedSetNode.surface_forms[0] }}
+ </span>
+  <span v-else>
+    <span v-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME" v-on:mouseup="onMouseUp()">
     {{ nestedSetNode.surface_forms[0] }}
-  </span>
-  <span v-else class="annotation">
-                <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp()">
-                  {{ nestedSetNode.surface_forms[0] }}
-                </span>
-            <AnnotationNode
-                v-for="nestedSetChildNode in nestedSetNode.children"
-                :nestedSetNode="nestedSetChildNode"
-                @updateAnnotations="updateAnnotations"
-            />
     </span>
+    <span v-else-if="nestedSetNode.parent"  class="annotation">
+      <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp()">
+        {{ nestedSetNode.surface_forms[0] }}
+      </span>
+      <AnnotationNode
+          v-for="nestedSetChildNode in nestedSetNode.children"
+          :nestedSetNode="nestedSetChildNode"
+          @updateAnnotations="updateAnnotations"
+      />
+    </span>
+    <span v-else>
+      <AnnotationNode
+          v-for="nestedSetChildNode in nestedSetNode.children"
+          :nestedSetNode="nestedSetChildNode"
+          @updateAnnotations="updateAnnotations"
+      />
+    </span>
+  </span>
 </template>
 
 <script setup lang="ts">
@@ -53,8 +66,8 @@ const onMouseUp = () => {
   // }
 };
 
-const updateAnnotations=  (selection) => {
+const updateAnnotations = (selection) => {
   emit('updateAnnotations', selection);
-}
+};
 
 </script>

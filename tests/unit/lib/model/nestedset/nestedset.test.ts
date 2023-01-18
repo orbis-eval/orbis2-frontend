@@ -21,6 +21,7 @@ describe('NestedSet.toTree(...)', () => {
             1,
             new Date(),
             errorCallBack);
+        expect(rootNode).not.toBeNull();
         if(rootNode) {
             expect(rootNode.children.length).toEqual(4);
 
@@ -64,6 +65,7 @@ describe('NestedSet.toTree(...)', () => {
             1,
             new Date(),
             errorCallBack);
+        expect(rootNode).not.toBeNull();
         if(rootNode) {
             expect(rootNode.children.length).toEqual(3);
             // gap-annotation "CC"
@@ -91,7 +93,7 @@ describe('NestedSet.toTree(...)', () => {
             1,
             new Date(),
             errorCallBack);
-        expect(rootNode).toEqual(null);
+        expect(rootNode).toBeNull();
         expect(currentParseError.nodes.length).toEqual(2);
         expect(currentParseError.nodes[0].start_indices[0]).toEqual(0);
         expect(currentParseError.nodes[0].end_indices[0]).toEqual(2);

@@ -88,7 +88,10 @@ export class NestedSet {
         potentialParent: NestedSetNode,
         nodeUnderCheck: NestedSetNode,
         errorCallback: (parseError: NestedSetParseError) => void): NestedSetNode | null => {
-        if(nodeUnderCheck.start_indices[0] >= potentialParent.start_indices[0]) {
+        if(
+            nodeUnderCheck.start_indices[0] >= potentialParent.start_indices[0]
+            &&
+            nodeUnderCheck.start_indices[0] <= potentialParent.end_indices[0]) {
             if(nodeUnderCheck.end_indices[0] <= potentialParent.end_indices[0]) {
                 return potentialParent;
             }
