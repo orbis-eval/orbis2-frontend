@@ -56,9 +56,12 @@ export class NestedSet {
         errorCallback: (parseError: NestedSetParseError) => void): NestedSetNode | null {
 
         // remove all existing line-annotations and calculate the, then add them to the existing annotations
-        annotations.filter((node)=>{
+        annotations = annotations.filter((node)=>{
             return node.annotation_type.name!==NestedSet.LINE_ANNOTATION_TYPE_NAME
-        }).push(...this.generateLineAnnotations(documentString, runId, documentId, timestamp));
+        })
+
+        //push all line-annotations
+        annotations.push(...this.generateLineAnnotations(documentString, runId, documentId, timestamp));
 
         // sort the annotations
         annotations.sort(this.annotationCompare);

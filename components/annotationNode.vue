@@ -1,11 +1,15 @@
 <template>
- <span v-if="!nestedSetNode.parent && nestedSetNode.children.length===0" v-on:mouseup="onMouseUp()">
-   Only Root Node:
-   {{ nestedSetNode.surface_forms[0] }}
- </span>
-  <span v-else>
-    <span v-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME" v-on:mouseup="onMouseUp()">
-    {{ nestedSetNode.surface_forms[0] }}
+    <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME"
+         v-on:mouseup="onMouseUp()"
+         class="border border-gray-600 p-4 m-4">
+      <AnnotationNode
+          v-for="nestedSetChildNode in nestedSetNode.children"
+          :nestedSetNode="nestedSetChildNode"
+          @updateAnnotations="updateAnnotations"
+      />
+    </div>
+    <span v-else-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME" v-on:mouseup="onMouseUp()">
+      {{ nestedSetNode.surface_forms[0] }}
     </span>
     <span v-else-if="nestedSetNode.parent"  class="annotation">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp()">
@@ -24,7 +28,6 @@
           @updateAnnotations="updateAnnotations"
       />
     </span>
-  </span>
 </template>
 
 <script setup lang="ts">
