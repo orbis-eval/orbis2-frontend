@@ -69,16 +69,13 @@ let annotator: Annotator = new Annotator({
 const documentString = ref('AA BB CC DD EE');
 
 const annotations = ref([
-  // mockAnnotation('AA BB CC DD EE', 0, 14, 1, annotationType, annotator)
   mockAnnotation('AA BB', 0, 5, 1, annotationType, annotator),
   mockAnnotation('AA', 0, 2, 2, annotationType, annotator),
   mockAnnotation('A', 0, 1, 3, annotationType, annotator),
   mockAnnotation('DD', 9, 11, 4, annotationType, annotator)
-
   // faulty annotations
   // mockAnnotation('AB', 0, 2, 1, annotationType, annotator),
   // mockAnnotation('BC', 1, 3, 2, annotationType, annotator)
-
 ]);
 
 const errorNodes = ref([]);

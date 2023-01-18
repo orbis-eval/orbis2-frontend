@@ -75,9 +75,8 @@ describe('NestedSet.toTree(...)', () => {
         if(rootNode) {
             expect(rootNode.children.length).toEqual(1);
 
+            // first node should be a line annotation
             let lineAnnotationNode = rootNode.children[0];
-
-            //
             expect(lineAnnotationNode.annotation_type.name).toEqual(NestedSet.LINE_ANNOTATION_TYPE_NAME);
 
             // gap-annotation "CC"
