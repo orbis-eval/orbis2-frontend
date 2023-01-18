@@ -7,12 +7,20 @@ import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 export class NestedSet {
 
     public static readonly GAP_ANNOTATION_KEY = "GAP_ANNOTATION_KEY";
+    public static readonly LINE_ANNOTATION_KEY = "LINE_ANNOTATION_KEY";
     public static readonly NESTEDSET_ANNOTATOR_NAME = "NESTEDSET_ANNOTATOR";
     public static readonly GAP_ANNOTATION_TYPE_NAME = "GAP_ANNOTATION";
+
+    public static readonly LINE_ANNOTATION_TYPE_NAME = "LINE_ANNOTATION";
 
     public static GAP_ANNOTATION_TYPE = new AnnotationType({
         name: this.GAP_ANNOTATION_TYPE_NAME,
         _id: 1000
+    });
+
+    public static LINE_ANNOTATION_TYPE = new AnnotationType({
+        name: this.LINE_ANNOTATION_TYPE_NAME,
+        _id: 1001
     });
 
     public static NESTED_SET_ANNOTATOR = new Annotator({
@@ -47,7 +55,11 @@ export class NestedSet {
         timestamp: Date,
         errorCallback: (parseError: NestedSetParseError) => void): NestedSetNode | null {
 
-        // sort annotations start-index and then smaller end-indexes first if start-index is the same
+        // calculate line-annotations and add them to the existing annotations
+        annotations
+            .push(...this.generateLineAnnotations(documentString, runId, documentId, timestamp));
+
+        // sort the annotations
         annotations.sort(this.annotationCompare);
 
         let rootNode = new NestedSetNode(
@@ -132,6 +144,33 @@ export class NestedSet {
         // sort the children
         node.children.sort(this.annotationCompare);
     };
+
+    public static generateLineAnnotations = (
+        document: string,
+        runId: number,
+        documentId:number,
+        timeStamp: Date): Annotation[] => {
+        const lines = document.split("\n");
+        let offset = 0;
+        let lineNodes: Annotation[] = [];
+        lines.forEach((line, index) => {
+            lineNodes.push(new Annotation({
+                key: this.LINE_ANNOTATION_KEY,
+                surface_forms: [line],
+                start_indices: [offset],
+                end_indices: [line.length + offset],
+                annotation_type: this.LINE_ANNOTATION_TYPE,
+                annotator: this.NESTED_SET_ANNOTATOR,
+                run_id: runId,
+                document_id: documentId,
+                metadata: [],
+                timestamp: timeStamp,
+                _id: offset
+            }));
+            offset = offset + line.length + 1
+        });
+        return lineNodes;
+    }
 
     private static addGapAnnotation(
         surfaceForm: string,

@@ -23,32 +23,38 @@ describe('NestedSet.toTree(...)', () => {
             errorCallBack);
         expect(rootNode).not.toBeNull();
         if(rootNode) {
-            expect(rootNode.children.length).toEqual(4);
 
-            // check the gap-annotations in the rootnode
-            expect(rootNode.children[1].annotation_type.name).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
-            expect(rootNode.children[1].start_indices[0]).toEqual(4);
-            expect(rootNode.children[1].end_indices[0]).toEqual(6);
-            expect(rootNode.children[3].annotation_type.name).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
-            expect(rootNode.children[3].start_indices[0]).toEqual(8);
-            expect(rootNode.children[3].end_indices[0]).toEqual(10);
+            // first child has to be a line annotation
+            expect(rootNode.children.length).toEqual(1);
+
+            // the only children of root should be a line annotation
+            let lineAnnotationNode = rootNode.children[0];
+            expect(lineAnnotationNode.annotation_type.name).toEqual(NestedSet.LINE_ANNOTATION_TYPE_NAME);
+
+            // check the gap-annotations in the line-node
+            expect(lineAnnotationNode.children[1].annotation_type.name).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
+            expect(lineAnnotationNode.children[1].start_indices[0]).toEqual(4);
+            expect(lineAnnotationNode.children[1].end_indices[0]).toEqual(6);
+            expect(lineAnnotationNode.children[3].annotation_type.name).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
+            expect(lineAnnotationNode.children[3].start_indices[0]).toEqual(8);
+            expect(lineAnnotationNode.children[3].end_indices[0]).toEqual(10);
 
             // check the node "AABB"
-            expect(rootNode.children[0]._id).toEqual(mockAnnotations[0]._id);
+            expect(lineAnnotationNode.children[0]._id).toEqual(mockAnnotations[1]._id);
             // check the childs of "AABB"
-            expect(rootNode.children[0].children[0]._id).toEqual(mockAnnotations[1]._id);
-            expect(rootNode.children[0].children[1].annotation_type.name).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
+            expect(lineAnnotationNode.children[0].children[0]._id).toEqual(mockAnnotations[2]._id);
+            expect(lineAnnotationNode.children[0].children[1].annotation_type.name).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
 
             // check the childs of "AA"
-            expect(rootNode.children[0].children[0].children[0]._id).toEqual(mockAnnotations[2]._id);
-            expect(rootNode.children[0].children[0].children[0].children.length).toEqual(0);
+            expect(lineAnnotationNode.children[0].children[0].children[0]._id).toEqual(mockAnnotations[3]._id);
+            expect(lineAnnotationNode.children[0].children[0].children[0].children.length).toEqual(0);
             // check the gap annotation
-            expect(rootNode.children[0].children[0].children[1].start_indices[0]).toEqual(1);
-            expect(rootNode.children[0].children[0].children[1].end_indices[0]).toEqual(2);
+            expect(lineAnnotationNode.children[0].children[0].children[1].start_indices[0]).toEqual(1);
+            expect(lineAnnotationNode.children[0].children[0].children[1].end_indices[0]).toEqual(2);
 
             // check annotation "DD"
-            expect(rootNode.children[2]._id).toEqual(mockAnnotations[3]._id);
-            expect(rootNode.children[2].children.length).toEqual(0);
+            expect(lineAnnotationNode.children[2]._id).toEqual(mockAnnotations[4]._id);
+            expect(lineAnnotationNode.children[2].children.length).toEqual(0);
         }
     });
 
@@ -67,15 +73,21 @@ describe('NestedSet.toTree(...)', () => {
             errorCallBack);
         expect(rootNode).not.toBeNull();
         if(rootNode) {
-            expect(rootNode.children.length).toEqual(3);
+            expect(rootNode.children.length).toEqual(1);
+
+            let lineAnnotationNode = rootNode.children[0];
+
+            //
+            expect(lineAnnotationNode.annotation_type.name).toEqual(NestedSet.LINE_ANNOTATION_TYPE_NAME);
+
             // gap-annotation "CC"
-            expect(rootNode.children[2].children[0].surface_forms[0]).toEqual("CC ");
-            expect(rootNode.children[2].children[0].start_indices[0]).toEqual(6);
-            expect(rootNode.children[2].children[0].end_indices[0]).toEqual(9);
-            expect(rootNode.children[2].children[1]._id).toEqual(mockAnnotations[2]._id);
-            expect(rootNode.children[2].children[2].surface_forms[0]).toEqual(" EE");
-            expect(rootNode.children[2].children[2].start_indices[0]).toEqual(11);
-            expect(rootNode.children[2].children[2].end_indices[0]).toEqual(14);
+            expect(lineAnnotationNode.children[2].children[0].surface_forms[0]).toEqual("CC ");
+            expect(lineAnnotationNode.children[2].children[0].start_indices[0]).toEqual(6);
+            expect(lineAnnotationNode.children[2].children[0].end_indices[0]).toEqual(9);
+            expect(lineAnnotationNode.children[2].children[1]._id).toEqual(mockAnnotations[3]._id);
+            expect(lineAnnotationNode.children[2].children[2].surface_forms[0]).toEqual(" EE");
+            expect(lineAnnotationNode.children[2].children[2].start_indices[0]).toEqual(11);
+            expect(lineAnnotationNode.children[2].children[2].end_indices[0]).toEqual(14);
         }
     });
 
@@ -100,8 +112,25 @@ describe('NestedSet.toTree(...)', () => {
         expect(currentParseError.nodes[1].start_indices[0]).toEqual(1);
         expect(currentParseError.nodes[1].end_indices[0]).toEqual(3);
     });
+
+
 });
 
+describe('NestedSet.generateLineNodes(...)', () => {
+    test('NestedSet.generateLineNodes()', () => {
+        let document = `line1
+line2
+line3`;
+        let lineNodes = NestedSet.generateLineAnnotations(document, 1, 1, new Date());
+        expect(lineNodes.length).toEqual(3)
+        expect(lineNodes[0].start_indices[0]).toEqual(0);
+        expect(lineNodes[0].end_indices[0]).toEqual(5);
+        expect(lineNodes[1].start_indices[0]).toEqual(6);
+        expect(lineNodes[1].end_indices[0]).toEqual(11);
+        expect(lineNodes[2].start_indices[0]).toEqual(12);
+        expect(lineNodes[2].end_indices[0]).toEqual(17);
+    });
+})
 
 let annotationType: AnnotationType = new AnnotationType({
     name: "A Type",
