@@ -1,0 +1,70 @@
+# Values for orbis2-frontend
+
+image:
+  repository: davos.fhgr.ch/nlp/orbis2/orbis2-frontend
+  tag: 1.0.0
+  pullPolicy: Always
+
+imagePullSecrets: [name: regcred]
+nameOverride: ""
+fullnameOverride: ""
+
+controller:
+  enabled: true
+  type: deployment
+  replicas: 1
+
+service:
+  main:
+    type: ClusterIP
+    ports:
+      http:
+        enabled: true
+        port: 63013
+        protocol: HTTP
+        targetPort: 63013
+
+env:
+  # port under which the application is started
+  PORT: 63013
+  NUXT_PUBLIC_ORBIS_API_BASE: /api/
+
+ingress:
+  main:
+    enabled: true
+    annotations: {
+      cert-manager.io/cluster-issuer: "letsencrypt-issuer",
+      kubernetes.io/ingress.class: nginx,
+      nginx.ingress.kubernetes.io/use-regex: "true",
+      nginx.ingress.kubernetes.io/auth-type: basic,
+      nginx.ingress.kubernetes.io/auth-secret: orbis2ng-httpbasicauth,
+      nginx.ingress.kubernetes.io/auth-realm: 'Authentication Required',
+      nginx.ingress.kubernetes.io/rewrite-target: /$1
+    }
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+    hosts:
+      - host: orbis2-ng.prod.semanticlab.net
+        paths:
+          - path: /(.*)
+            pathType: Prefix
+            service:
+              name: orbis2-frontend
+              port: 63013
+          - path: /api/(.*)
+            pathType: Prefix
+            service:
+              name: orbis2-backend
+              port: 63012
+          # the following redirect is necessary since the api description of the backend is available under /api/docs,
+          #  and it forces the browser to query the url /openapi.json, but by default this would be sent to the frontend
+          #  since it's not queried like /api/openapi.json, that's why we redirect openapi.json to the backend
+          - path: /(openapi.json)
+            pathType: Prefix
+            service:
+              name: orbis2-backend
+              port: 63012
+    tls:
+      - hosts:
+          - orbis2-ng.prod.semanticlab.net
+        secretName: orbis2-ng.prod-secret
