@@ -16,7 +16,13 @@
       </ul>
     </div>
     <template #sidebar>
-      <div v-if="annotations">
+      <div>
+        <button @click="annotationStore.undoAnnotation(reload)">undo</button>
+      </div>
+      <div>
+        <button @click="annotationStore.redoAnnotation(reload)">redo</button>
+      </div>
+      <div v-if="annotationStore.annotations">
         <h2 class="text-4xl">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
@@ -27,7 +33,7 @@
             </tr>
           </thead>
           <tbody>
-          <tr v-for="annotation in annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+          <tr v-for="annotation in annotationStore.annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="p-1">{{ annotation.start_indices[0] }}</td>
             <td class="p-1">{{ annotation.end_indices[0] }}</td>
             <td class="p-1">{{ annotation.surface_forms[0] }}</td>
@@ -40,19 +46,26 @@
 </template>
 
 <script setup lang="ts">
+
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Annotation} from "~/lib/model/annotation";
+import {useAnnotationStore} from "~/stores/annotationStore";
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
 
-const annotations = ref([]);
+// const annotations = ref([]);
+const annotationStore = useAnnotationStore();
+
+onBeforeMount(() => {
+  annotationStore.loadAnnotationFromLocalStorage();
+})
 
 $orbisApiService.getDocument(route.params.id)
     .then(document => {
@@ -83,10 +96,20 @@ const parseErrorCallBack = (parseError: NestedSetParseError) => {
 
 const nestedSetRootNode = ref(null);
 
+function reload() {
+  nestedSetRootNode.value = NestedSet.toTree(
+      annotationStore.annotations,
+      content.value,
+      1,
+      1,
+      new Date(),
+      parseErrorCallBack
+  );
+}
 
 watch(content, async(newContent, oldContent) => {
   nestedSetRootNode.value = NestedSet.toTree(
-      annotations.value,
+      annotationStore.annotations,
       newContent,
       1,
       1,
@@ -119,11 +142,14 @@ function mockAnnotation(
 
 function updateAnnotations(selection) {
   console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
-  annotations.value.push(
+  annotationStore.addAnnotation(
       mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
   );
+  // annotations.value.push(
+  //     mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
+  // );
   nestedSetRootNode.value = NestedSet.toTree(
-      annotations.value,
+      annotationStore.annotations,
       content.value,
       1,
       1,
