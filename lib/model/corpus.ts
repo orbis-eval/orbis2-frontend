@@ -1,7 +1,7 @@
 import {AnnotationType} from "~/lib/model/annotationType";
 import {ICorpus} from "~/lib/model/icorpus";
 
-export class Corpus {
+export class Corpus implements ICorpus {
     name: string;
     supported_annotation_types: AnnotationType[];
     _id: number;

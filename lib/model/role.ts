@@ -1,6 +1,6 @@
 import {IRole} from "~/lib/model/irole";
 
-export class Role {
+export class Role implements IRole {
     name: string;
     _id: number;
 
