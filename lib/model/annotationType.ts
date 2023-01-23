@@ -1,6 +1,6 @@
 import {IAnnotationType} from "~/lib/model/iannotationType";
 
-export class AnnotationType {
+export class AnnotationType implements IAnnotationType {
     name: string;
     _id: number;
 

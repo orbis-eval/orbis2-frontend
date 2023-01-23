@@ -3,7 +3,7 @@ import {IAnnotation} from "~/lib/model/iannotation";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 
-export class Annotation {
+export class Annotation implements IAnnotation {
     key: string;
     surface_forms: string[];
     start_indices: number[];
