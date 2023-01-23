@@ -1,18 +1,21 @@
-image: node:19
-
-stages:
-    - build
-    - test
-    - sonar
-    - dockerbuild
-    - publish-k8s
+include:
+    - project: 'nlp/team/ci-templates'
+      file: 'node-js/.build.yaml'
+    - project: 'nlp/team/ci-templates'
+      file: 'node-js/.test.yaml'
+    - project: 'nlp/team/ci-templates'
+      file: 'node-js/.sonar.yaml'
+    - project: 'nlp/team/ci-templates'
+      file: 'node-js/.docker-build.yaml'
+    - project: 'nlp/team/ci-templates'
+      file: 'node-js/.publish-k8s.yaml'
 
 cache:
-    paths:
-        - node_modules/
+  # following paths are automatically cached and available for subsequent jobs
+  paths:
+    - node_modules/
 
 variables:
-  # to be defined in specific pipeline
   coverage_dir: "$CI_PROJECT_DIR/coverage"
   coverage_path: "$coverage_dir/lcov.info"
   REGISTRY_IMAGE: davos.fhgr.ch/nlp/orbis2/$CI_PROJECT_NAME
@@ -20,82 +23,9 @@ variables:
   VERSION: "$CI_COMMIT_TAG"
   DOCKERFILEPATH: dockerfile
 
-
-build:
-    stage: build
-    script:
-        - npm ci
-        - npm run build
-    tags:
-        - nlp-runner
-
-test:
-    stage: test
-    script:
-        - npm ci
-        - npx jest --coverage --coverageDirectory=$coverage_dir
-    tags:
-        - nlp-runner
-    artifacts:
-        paths:
-            - $coverage_dir
-
-
-sonar:
-    stage: sonar
-    allow_failure: true
-    image:
-        name: sonarsource/sonar-scanner-cli:latest
-        entrypoint: [ "" ]
-    script:
-        - sonar-scanner -h
-        - sonar-scanner -D sonar.projectKey=$SONAR_PROJECT_KEY
-                        -D sonar.host.url=$SONAR_URL
-                        -D sonar.login=$SONAR_TOKEN
-                        -D sonar.exclusions='**/*.spec.ts,**/*.test.ts,**/coverage/**'
-                        -D sonar.javascript.lcov.reportPaths=$coverage_path
-    tags:
-        - nlp-runner
-
-dockerbuild:
-    stage: dockerbuild
-    image:
-        name: gcr.io/kaniko-project/executor:debug
-        entrypoint: [""]
-    script:
-        - CI_VERSION="${VERSION}.${CI_PIPELINE_ID}"
-        - mkdir -p /kaniko/.docker
-        - echo "{\"auths\":{\"${CI_REGISTRY}\":{\"auth\":\"$(printf "%s:%s" "${CI_REGISTRY_USER}" "${CI_REGISTRY_PASSWORD}" | base64 -w 0)\"}}}" > /kaniko/.docker/config.json
-        - /kaniko/executor 
-          --context "${CI_PROJECT_DIR}" 
-          --dockerfile "${CI_PROJECT_DIR}/${DOCKERFILEPATH}" 
-          --destination "${CI_REGISTRY_IMAGE}:latest" 
-          --destination "${CI_REGISTRY_IMAGE}:$CI_VERSION"
-    only:
-        - tags
-    tags:
-        - nlp-runner
-    when: manual
-
-publish-k8s:
-    stage: publish-k8s
-    image: dtzar/helm-kubectl:latest
-    script:
-        - echo "add helm repository"
-        - helm repo add fhgr https://fhgr.github.io/common-charts
-        - CI_VERSION="${VERSION}.${CI_PIPELINE_ID}"
-        - helm upgrade --install $CI_PROJECT_NAME fhgr/app-template
-          --kubeconfig "$KUBECONFIG"
-          --set image.repository=$REGISTRY_IMAGE
-          --set image.tag=$CI_VERSION
-          --namespace $KUBE_NAMESPACE
-          --values=chart/values.yaml
-    only:
-        - tags
-    when: manual
-    needs:
-        - dockerbuild
-    tags:
-        - nlp-runner
-
-
+stages:
+    - build
+    - test
+    - sonar
+    - dockerbuild
+    - publish-k8s
