@@ -5,24 +5,19 @@ Look at the [Nuxt 3 documentation](https://nuxt.com/docs/getting-started/introdu
 ## Setup
 
 Make sure to install the dependencies:
-
 ```bash
 # yarn
-yarn install
-
-# npm
-npm install
-
-# pnpm
-pnpm install --shamefully-hoist
+yarn
 ```
+We use yarn instead of npm, its faster and has better security features. Further, the pinia framework could not be installed properly with npm.
+IMPORTANT: don't mix npm and yarn, since this could lead to wrong dependencies.
 
 ## Development Server
 
 Start the development server on http://localhost:3000
 
 ```bash
-npm run dev
+yarn run dev
 ```
 
 ## Production
@@ -30,13 +25,13 @@ npm run dev
 Build the application for production:
 
 ```bash
-npm run build
+yarn run build
 ```
 
 Locally preview production build:
 
 ```bash
-npm run preview
+yarn run preview
 ```
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
@@ -45,7 +40,7 @@ Check out the [deployment documentation](https://nuxt.com/docs/getting-started/d
 # Vue Hero Icons
 Installed with 
 ```
-npm install @heroicons/vue
+yarn add @heroicons/vue
 ```
 
 
