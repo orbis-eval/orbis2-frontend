@@ -59,24 +59,9 @@ const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
-
-// const annotations = ref([]);
+const errorNodes = ref([]);
+const nestedSetRootNode = ref(null);
 const annotationStore = useAnnotationStore();
-
-onBeforeMount(() => {
-  annotationStore.loadAnnotationFromLocalStorage();
-})
-
-$orbisApiService.getDocument(route.params.id)
-    .then(document => {
-      if (document instanceof Document) {
-        content.value = document.content;
-      } else {
-        console.error(document.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        content.value = 'ERROR';
-      }
-    });
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "A Type",
@@ -89,12 +74,42 @@ let annotator: Annotator = new Annotator({
   _id: 1
 });
 
-const errorNodes = ref([]);
 const parseErrorCallBack = (parseError: NestedSetParseError) => {
   errorNodes.value = parseError.nodes;
 };
 
-const nestedSetRootNode = ref(null);
+const undoEventListener = (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
+    annotationStore.redoAnnotation(reload);
+  } else if (event.ctrlKey && event.key === 'z') {
+    console.log('ctrl+z pressed');
+    annotationStore.undoAnnotation(reload);
+  }
+};
+
+onBeforeMount(() => {
+  window.addEventListener('keydown', undoEventListener);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', undoEventListener);
+  annotationStore.$reset();
+});
+
+watch(content, async() => {
+  reload();
+});
+
+$orbisApiService.getDocument(route.params.id)
+    .then(document => {
+      if (document instanceof Document) {
+        content.value = document.content;
+      } else {
+        console.error(document.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        content.value = 'ERROR';
+      }
+    });
 
 function reload() {
   nestedSetRootNode.value = NestedSet.toTree(
@@ -106,17 +121,6 @@ function reload() {
       parseErrorCallBack
   );
 }
-
-watch(content, async(newContent, oldContent) => {
-  nestedSetRootNode.value = NestedSet.toTree(
-      annotationStore.annotations,
-      newContent,
-      1,
-      1,
-      new Date(),
-      parseErrorCallBack
-  );
-});
 
 function mockAnnotation(
     surfaceForm: string,
@@ -145,16 +149,6 @@ function updateAnnotations(selection) {
   annotationStore.addAnnotation(
       mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
   );
-  // annotations.value.push(
-  //     mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
-  // );
-  nestedSetRootNode.value = NestedSet.toTree(
-      annotationStore.annotations,
-      content.value,
-      1,
-      1,
-      new Date(),
-      parseErrorCallBack
-  );
+  reload();
 }
 </script>
