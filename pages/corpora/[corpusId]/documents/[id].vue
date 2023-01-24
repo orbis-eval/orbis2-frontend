@@ -82,7 +82,6 @@ const undoEventListener = (event: KeyboardEvent) => {
   if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
     annotationStore.redoAnnotation(reload);
   } else if (event.ctrlKey && event.key === 'z') {
-    console.log('ctrl+z pressed');
     annotationStore.undoAnnotation(reload);
   }
 };
