@@ -22,6 +22,7 @@
   "dependencies": {
     "@heroicons/vue": "^2.0.13",
     "@pinia/nuxt": "^0.4.6",
+    "oh-vue-icons": "^1.0.0-rc3",
     "pinia": "^2.0.29"
   }
 }

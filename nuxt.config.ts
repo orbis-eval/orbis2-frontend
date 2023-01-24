@@ -4,6 +4,9 @@ export default defineNuxtConfig({
         "@nuxtjs/tailwindcss",
         "@pinia/nuxt",
     ],
+    build: {
+        transpile: ["oh-vue-icons"]
+    },
     tailwindcss: {
         // add '~tailwind.config` alias
         exposeConfig: true

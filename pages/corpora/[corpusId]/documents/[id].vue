@@ -17,10 +17,12 @@
     </div>
     <template #sidebar>
       <div>
-        <button @click="annotationStore.undoAnnotation(reload)">undo</button>
-      </div>
-      <div>
-        <button @click="annotationStore.redoAnnotation(reload)">redo</button>
+        <button @click="undoAnnotation" class="small-button" >
+          <OhVueIcon name="la-undo-alt-solid" />
+        </button>
+        <button @click="redoAnnotation" class="small-button">
+          <OhVueIcon name="la-redo-alt-solid" />
+        </button>
       </div>
       <div v-if="annotationStore.annotations">
         <h2 class="text-4xl">Annotations</h2>
@@ -47,6 +49,8 @@
 
 <script setup lang="ts">
 
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { LaUndoAltSolid, LaRedoAltSolid } from "oh-vue-icons/icons"
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
@@ -54,6 +58,8 @@ import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
+
+addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
@@ -80,9 +86,9 @@ const parseErrorCallBack = (parseError: NestedSetParseError) => {
 
 const undoEventListener = (event: KeyboardEvent) => {
   if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
-    annotationStore.redoAnnotation(reload);
+    redoAnnotation();
   } else if (event.ctrlKey && event.key === 'z') {
-    annotationStore.undoAnnotation(reload);
+    undoAnnotation();
   }
 };
 
@@ -119,6 +125,13 @@ function reload() {
       new Date(),
       parseErrorCallBack
   );
+}
+
+function undoAnnotation() {
+  annotationStore.undoAnnotation(reload);
+}
+function redoAnnotation() {
+  annotationStore.redoAnnotation(reload);
 }
 
 function mockAnnotation(
