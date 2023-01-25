@@ -1,10 +1,16 @@
 <template>
   <NuxtLayout name="sidebar">
     <LoadingSpinner v-if="!content"/>
-    <div v-if="nestedSetRootNode">
-      <h2 class="text-4xl p-4">Document</h2>
-      <AnnotationNode :nestedSetNode="nestedSetRootNode"
-                      @updateAnnotations="updateAnnotations"/>
+    <div
+        v-if="nestedSetRootNode">
+      <div class="relative" ref="relativeDiv">
+        <div class="absolute border-gray-600 border" :style="{left: mousePosX + 'px', top: mousePosY + 'px' }">
+          <p>Position:Absolute</p>
+        </div>
+        <h2 class="text-4xl p-4">Document Test</h2>
+        <AnnotationNode :nestedSetNode="nestedSetRootNode"
+                        @updateAnnotations="updateAnnotations"/>
+      </div>
     </div>
     <div v-else>
       <h2 class="text-4xl">Tree could not be rendered</h2>
@@ -54,6 +60,11 @@ const content = ref(null);
 
 const annotations = ref([]);
 
+
+const relativeDiv = ref(null);
+const mousePosX = ref(0);
+const mousePosY = ref(0);
+
 $orbisApiService.getDocument(route.params.id)
     .then(document => {
       if (document instanceof Document) {
@@ -84,7 +95,7 @@ const parseErrorCallBack = (parseError: NestedSetParseError) => {
 const nestedSetRootNode = ref(null);
 
 
-watch(content, async(newContent, oldContent) => {
+watch(content, async(newContent) => {
   nestedSetRootNode.value = NestedSet.toTree(
       annotations.value,
       newContent,
@@ -118,7 +129,13 @@ function mockAnnotation(
 }
 
 function updateAnnotations(selection) {
-  console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
+  var relativeDivRect = relativeDiv.value.getBoundingClientRect();
+  // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
+  var x = selection.left - relativeDivRect.left; //x position within the element.
+  var y = selection.top - relativeDivRect.top + 40;  //y position within the element, add 40px to position it under the selection
+  mousePosX.value = x;
+  mousePosY.value = y;
+  // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
   annotations.value.push(
       mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
   );
