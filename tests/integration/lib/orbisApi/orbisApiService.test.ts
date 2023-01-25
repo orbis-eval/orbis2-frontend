@@ -11,7 +11,7 @@ class OrbisApiServiceMock extends OrbisApiService {
         this.mockedApiCallResponse = mockedApiCallResponse;
     }
 
-    async apiCall(query: string): Promise<Response> {
+    async apiGet(query: string): Promise<Response> {
         return this.mockedApiCallResponse;
     }
 }
