@@ -6,18 +6,19 @@ export const useAnnotationStore = defineStore('annotation', {
         return {
             annotations: [] as Annotation[],
             undoneAnnotations: [] as Annotation[]
-        }
+        };
     },
     actions: {
         addAnnotation(annotation: Annotation) {
-            this.annotations.push(annotation)
+            this.undoneAnnotations = [];
+            this.annotations.push(annotation);
         },
         popAnnotation() {
             return this.annotations.pop();
         },
         undoAnnotation(callback: Function) {
             if (this.annotations.length > 0) {
-                const undoneAnnotation = this.popAnnotation();
+                const undoneAnnotation = this.annotations.pop();
                 if (undoneAnnotation) {
                     this.undoneAnnotations.push(undoneAnnotation);
                     callback();
@@ -28,10 +29,10 @@ export const useAnnotationStore = defineStore('annotation', {
             if (this.undoneAnnotations.length > 0) {
                 const redoAnnotation = this.undoneAnnotations.pop();
                 if (redoAnnotation) {
-                    this.addAnnotation(redoAnnotation);
+                    this.annotations.push(redoAnnotation);
                     callback();
                 }
             }
         }
     }
-})
+});
