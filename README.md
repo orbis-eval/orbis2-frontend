@@ -12,13 +12,15 @@ yarn
 We use yarn instead of npm, its faster and has better security features. Further, the pinia framework could not be installed properly with npm.
 IMPORTANT: don't mix npm and yarn, since this could lead to wrong dependencies.
 
-## Development Server
+## Development
 
 Start the development server on http://localhost:3000
 
 ```bash
 yarn run dev
 ```
+
+all used icons can be found under https://oh-vue-icons.js.org/
 
 ## Production
 

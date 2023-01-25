@@ -4,19 +4,19 @@
       <!-- Documents -->
       <button
           class="menu-button">
-        <CircleStackIcon class="menu-icon"/>
+        <OhVueIcon name="hi-database" class="menu-icon"/>
         <p class="menu-button-text">Documents</p>
       </button>
       <!-- Members -->
       <button
           class="menu-button">
-        <UserIcon class="menu-icon"/>
+        <OhVueIcon name="hi-user" class="menu-icon"/>
         <p class="menu-button-text">Members</p>
       </button>
       <!-- Labels -->
       <button
           class="menu-button">
-        <TagIcon class="menu-icon"/>
+        <OhVueIcon name="hi-tag" class="menu-icon"/>
         <p class="menu-button-text">Labels</p>
       </button>
     </div>
@@ -24,6 +24,9 @@
 </template>
 
 <script setup lang="ts">
-import {UserIcon, CircleStackIcon, TagIcon} from '@heroicons/vue/24/outline/index'
+import {OhVueIcon, addIcons} from "oh-vue-icons";
+import {HiUser, HiDatabase, HiTag} from 'oh-vue-icons/icons'
+
+addIcons(HiUser, HiDatabase, HiTag)
 </script>
 

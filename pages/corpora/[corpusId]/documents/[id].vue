@@ -16,7 +16,15 @@
       </ul>
     </div>
     <template #sidebar>
-      <div v-if="annotations">
+      <div>
+        <button @click="undoAnnotation" class="small-button" >
+          <OhVueIcon name="la-undo-alt-solid" />
+        </button>
+        <button @click="redoAnnotation" class="small-button">
+          <OhVueIcon name="la-redo-alt-solid" />
+        </button>
+      </div>
+      <div v-if="annotationStore.annotations">
         <h2 class="text-4xl">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
@@ -27,7 +35,7 @@
             </tr>
           </thead>
           <tbody>
-          <tr v-for="annotation in annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+          <tr v-for="annotation in annotationStore.annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="p-1">{{ annotation.start_indices[0] }}</td>
             <td class="p-1">{{ annotation.end_indices[0] }}</td>
             <td class="p-1">{{ annotation.surface_forms[0] }}</td>
@@ -40,30 +48,26 @@
 </template>
 
 <script setup lang="ts">
+
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { LaUndoAltSolid, LaRedoAltSolid } from "oh-vue-icons/icons"
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Annotation} from "~/lib/model/annotation";
+import {useAnnotationStore} from "~/stores/annotationStore";
+
+addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
-
-const annotations = ref([]);
-
-$orbisApiService.getDocument(route.params.id)
-    .then(document => {
-      if (document instanceof Document) {
-        content.value = document.content;
-      } else {
-        console.error(document.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        content.value = 'ERROR';
-      }
-    });
+const errorNodes = ref([]);
+const nestedSetRootNode = ref(null);
+const annotationStore = useAnnotationStore();
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "A Type",
@@ -76,24 +80,59 @@ let annotator: Annotator = new Annotator({
   _id: 1
 });
 
-const errorNodes = ref([]);
 const parseErrorCallBack = (parseError: NestedSetParseError) => {
   errorNodes.value = parseError.nodes;
 };
 
-const nestedSetRootNode = ref(null);
+const undoEventListener = (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
+    redoAnnotation();
+  } else if (event.ctrlKey && event.key === 'z') {
+    undoAnnotation();
+  }
+};
 
+onBeforeMount(() => {
+  window.addEventListener('keydown', undoEventListener);
+});
 
-watch(content, async(newContent, oldContent) => {
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', undoEventListener);
+  annotationStore.$reset();
+});
+
+watch(content, async() => {
+  reload();
+});
+
+$orbisApiService.getDocument(route.params.id)
+    .then(document => {
+      if (document instanceof Document) {
+        content.value = document.content;
+      } else {
+        console.error(document.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        content.value = 'ERROR';
+      }
+    });
+
+function reload() {
   nestedSetRootNode.value = NestedSet.toTree(
-      annotations.value,
-      newContent,
+      annotationStore.annotations,
+      content.value,
       1,
       1,
       new Date(),
       parseErrorCallBack
   );
-});
+}
+
+function undoAnnotation() {
+  annotationStore.undoAnnotation(reload);
+}
+function redoAnnotation() {
+  annotationStore.redoAnnotation(reload);
+}
 
 function mockAnnotation(
     surfaceForm: string,
@@ -119,16 +158,9 @@ function mockAnnotation(
 
 function updateAnnotations(selection) {
   console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
-  annotations.value.push(
+  annotationStore.addAnnotation(
       mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
   );
-  nestedSetRootNode.value = NestedSet.toTree(
-      annotations.value,
-      content.value,
-      1,
-      1,
-      new Date(),
-      parseErrorCallBack
-  );
+  reload();
 }
 </script>
