@@ -1,11 +1,12 @@
 <template>
   <div class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
-       :style="{left: leftPosition + 'px', top: topPosition + 'px' }"
-       @keyup.enter="addSelectedAnnotation">
+       :style="{left: leftPosition + 'px', top: topPosition + 'px' }">
     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
       <h1 class="text-2xl">Annotation</h1>
       <li v-for="(annotationType, index) in annotationTypes"
-          v-bind:class="{selectedAnnotationType: selectedAnnotationIndex === index}">
+          v-bind:class="{selectedAnnotationType: selectedAnnotationIndex === index}"
+          @click="annotationClicked(annotationType)"
+          v-on:mouseenter="selectedAnnotationIndex=index">
         <a href="#" class="block px-4 py-2">{{annotationType.name}}</a>
       </li>
     </ul>
@@ -28,7 +29,7 @@ const props = defineProps({
 });
 
 
-// prevent keydown/keyup to scroll
+// prevent keydown/keyup to trigger the scrolling
 function arrow_keys_handler(e) {
   switch(e.code){
     case "ArrowUp": case "ArrowDown": case "ArrowLeft": case "ArrowRight":
@@ -81,6 +82,10 @@ function commitAnnotationType() {
   emit('commitAnnotationType', props.annotationTypes[selectedAnnotationIndex.value]);
   // reset the index to 0
   selectedAnnotationIndex.value = 0;
+}
+
+function annotationClicked(annotationType) {
+  emit('commitAnnotationType', annotationType);
 }
 
 function hideAnnotationModal() {

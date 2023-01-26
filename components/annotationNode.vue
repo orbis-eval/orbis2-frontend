@@ -1,7 +1,6 @@
 <template>
-  <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME"
-       v-on:mouseup="onMouseUp">
-      <span v-if="nestedSetNode.children.length===0" class="p-1">
+  <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME">
+      <span v-if="nestedSetNode.children.length===0" class="p-1" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
     <AnnotationNode
@@ -44,7 +43,7 @@ const props = defineProps({
 
 const emit = defineEmits(['updateAnnotations']);
 
-const onMouseUp = () => {
+function onMouseUp()  {
   // get the selection from the window
   const selection = window.getSelection();
 
