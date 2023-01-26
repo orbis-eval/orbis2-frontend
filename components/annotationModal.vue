@@ -1,32 +1,48 @@
 <template>
   <div class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
        :style="{left: leftPosition + 'px', top: topPosition + 'px' }">
+    <h1 class="text-2xl">Annotation</h1>
+    <input ref="filterInputField" type="text" v-model="filterValue" placeholder="Filter annotation types..." />
     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-      <h1 class="text-2xl">Annotation</h1>
-      <li v-for="(annotationType, index) in annotationTypes"
+      <li v-for="(annotationType, index) in filteredAnnotationTypes"
           v-bind:class="{selectedAnnotationType: selectedAnnotationIndex === index}"
           @click="annotationClicked(annotationType)"
           v-on:mouseenter="selectedAnnotationIndex=index">
         <a href="#" class="block px-4 py-2">{{annotationType.name}}</a>
       </li>
     </ul>
+    <!--{{selectedAnnotationIndex}} / {{filteredAnnotationTypes[selectedAnnotationIndex].name}}-->
   </div>
 </template>
 
 <script setup>
 
-const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
-
-const selectedAnnotationIndex = ref(0);
-
 const props = defineProps({
   leftPosition: Number,
   topPosition: Number,
+  isVisible: Boolean,
   annotationTypes: {
     type: Array,
     default: () => []
   }
 });
+
+const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
+
+const selectedAnnotationIndex = ref(0);
+
+const filterValue = ref('');
+const filterInputField = ref('filterInputField');
+
+const isVisibleRef = toRef(props, "isVisible");
+
+const filteredAnnotationTypes = computed(filterAnnotationTypes);
+
+function filterAnnotationTypes() {
+  return props.annotationTypes
+      .filter(annotationType => annotationType.name.toLowerCase()
+          .includes(filterValue.value.toLowerCase()));
+};
 
 
 // prevent keydown/keyup to trigger the scrolling
@@ -42,6 +58,8 @@ onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
   // prevent keydown/keyup to scroll
   window.addEventListener("keydown", arrow_keys_handler, false);
+  // set the focus to the input for the filter
+  filterInputField.value.focus();
 });
 
 onBeforeUnmount(()=>{
@@ -68,18 +86,24 @@ function prevAnnotationType() {
   if(selectedAnnotationIndex.value > 0) {
     selectedAnnotationIndex.value--;
   }
+  else {
+    selectedAnnotationIndex.value = filterAnnotationTypes().length-1;
+  }
   //console.log(`previous annotation, index: ${selectedAnnotationIndex.value}`);
 }
 
 function nextAnnotationType() {
-  if(selectedAnnotationIndex.value < props.annotationTypes.length-1) {
+  if(selectedAnnotationIndex.value < filterAnnotationTypes().length-1) {
     selectedAnnotationIndex.value++;
+  }
+  else {
+    selectedAnnotationIndex.value = 0;
   }
   //console.log(`next annotation, index: ${selectedAnnotationIndex.value}`);
 }
 
 function commitAnnotationType() {
-  emit('commitAnnotationType', props.annotationTypes[selectedAnnotationIndex.value]);
+  emit('commitAnnotationType', filterAnnotationTypes()[selectedAnnotationIndex.value]);
   // reset the index to 0
   selectedAnnotationIndex.value = 0;
 }
@@ -92,5 +116,17 @@ function hideAnnotationModal() {
   window.removeEventListener("keydown", arrow_keys_handler, false);
   emit('hideAnnotationModal');
 }
+
+// watching the isVisible property so we can set the focus again
+// if we make the component visible
+watch( isVisibleRef, (newIsVisible) => {
+  if(newIsVisible) {
+    console.log("isVisible, setting focus...");
+    // filterInputField.value.focus(); TODO: this call does not work, check
+  }
+}, {
+  immediate: true
+});
+
 
 </script>

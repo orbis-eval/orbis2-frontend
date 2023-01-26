@@ -9,6 +9,7 @@
         <AnnotationModal v-if="showAnnotationModal"
         :left-position="mousePosX"
         :top-position="mousePosY"
+        :is-visible="showAnnotationModal"
         :annotation-types="mockAnnotationTypes"
         @hideAnnotationModal="hideAnnotationModal"
         @commitAnnotationType="commitAnnotationType"/>
@@ -92,12 +93,15 @@ let annotationType: AnnotationType = new AnnotationType({
   _id: 1
 });
 
-
 const mockAnnotationTypes = ref([
     annotationType,
   new AnnotationType({
     name: "Type B",
     _id: 1
+  }),
+  new AnnotationType({
+    name: "Type BC",
+    _id: 3
   })
 ]);
 
