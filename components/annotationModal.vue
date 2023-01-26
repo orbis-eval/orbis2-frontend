@@ -14,7 +14,7 @@
 
 <script setup>
 
-const emit = defineEmits(['hideAnnotationModal']);
+const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
 
 const selectedAnnotationIndex = ref(0);
 
@@ -39,7 +39,6 @@ function arrow_keys_handler(e) {
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
-
   // prevent keydown/keyup to scroll
   window.addEventListener("keydown", arrow_keys_handler, false);
 });
@@ -56,6 +55,9 @@ function handleKeyDown(event) {
   else if(event.code==="ArrowDown"){
       nextAnnotationType();
   }
+  else if(event.code==="Enter") {
+    commitAnnotationType();
+  }
 }
 
 function prevAnnotationType() {
@@ -70,6 +72,12 @@ function nextAnnotationType() {
     selectedAnnotationIndex.value++;
   }
   //console.log(`next annotation, index: ${selectedAnnotationIndex.value}`);
+}
+
+function commitAnnotationType() {
+  emit('commitAnnotationType', props.annotationTypes[selectedAnnotationIndex.value]);
+  // reset the index to 0
+  selectedAnnotationIndex.value = 0;
 }
 
 function hideAnnotationModal() {
