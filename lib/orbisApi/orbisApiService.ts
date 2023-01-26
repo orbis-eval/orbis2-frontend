@@ -34,6 +34,11 @@ export class OrbisApiService {
             this.apiGet(`getRuns?corpus_id=${corpusId}`));
     }
 
+    async getAnnotations(runId?: number, documentId?: number): Promise<Annotation[] | Error> {
+        return Parser.parseList(Annotation,
+            this.apiGet(`getAnnotations?run_id=${runId}&document_id=${documentId}`));
+    }
+
     async addAnnotation(annotation: Annotation): Promise<Number | Error> {
         return Parser.parse(Number,
             this.apiPost(`addAnnotation`, annotation));
