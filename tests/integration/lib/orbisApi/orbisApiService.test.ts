@@ -1,18 +1,21 @@
 import {describe, test, expect} from "@jest/globals";
 import {Document} from "@/lib/model/document";
 import {OrbisApiService} from "@/lib/orbisApi/orbisApiService";
+import {TypedInternalResponse} from "nitropack";
 
 class OrbisApiServiceMock extends OrbisApiService {
 
     mockedApiCallResponse;
 
-    constructor(mockedApiCallResponse: Response) {
+    constructor(mockedApiCallResponse: any) {
         super('');
         this.mockedApiCallResponse = mockedApiCallResponse;
     }
 
-    async apiGet(query: string): Promise<Response> {
-        return this.mockedApiCallResponse;
+    async apiGet(query: string): Promise<TypedInternalResponse<string>> {
+        return new Promise((resolve) => {
+            resolve(this.mockedApiCallResponse)
+        });
     }
 }
 
@@ -20,21 +23,19 @@ describe('OrbisApiService.getDocument()', () => {
     test('get mocked document and parse it into correct document type', async () => {
         const orbisApiServiceMock = new OrbisApiServiceMock(
             {
-                json: () => Promise.resolve({
-                    'content': '1234',
-                    'key': 'abc',
-                    'run_id': 1234,
-                    'metadata': [
-                        {
-                            'key': 'key',
-                            'value': 'value',
-                            '_id': 1
-                        }
-                    ],
-                    'done': false,
-                    '_id': 1234
-                })
-            } as Response
+                'content': '1234',
+                'key': 'abc',
+                'run_id': 1234,
+                'metadata': [
+                    {
+                        'key': 'key',
+                        'value': 'value',
+                        '_id': 1
+                    }
+                ],
+                'done': false,
+                '_id': 1234
+            }
         );
         const parsedDocument = await orbisApiServiceMock.getDocument('1234');
         expect(parsedDocument instanceof Document).toBeTruthy();
@@ -53,45 +54,41 @@ describe('OrbisApiService.getDocument()', () => {
 
 describe('OrbisApiService.getDocuments()', () => {
     test('get mocked list of documents and parse it into correct list of document types', async () => {
-        const orbisApiServiceMock = new OrbisApiServiceMock(
+        const orbisApiServiceMock = new OrbisApiServiceMock([
             {
-                json: () => Promise.resolve([
+                'content': '1234',
+                'key': 'abc',
+                'run_id': 1234,
+                'metadata': [
                     {
-                        'content': '1234',
-                        'key': 'abc',
-                        'run_id': 1234,
-                        'metadata': [
-                            {
-                                'key': 'key',
-                                'value': 'value',
-                                '_id': 1
-                            }
-                        ],
-                        'done': false,
-                        '_id': 1234
+                        'key': 'key',
+                        'value': 'value',
+                        '_id': 1
+                    }
+                ],
+                'done': false,
+                '_id': 1234
+            },
+            {
+                'content': '5678',
+                'key': 'def',
+                'run_id': 5678,
+                'metadata': [
+                    {
+                        'key': 'key1',
+                        'value': 'value1',
+                        '_id': 1
                     },
                     {
-                        'content': '5678',
-                        'key': 'def',
-                        'run_id': 5678,
-                        'metadata': [
-                            {
-                                'key': 'key1',
-                                'value': 'value1',
-                                '_id': 1
-                            },
-                            {
-                                'key': 'key2',
-                                'value': 'value2',
-                                '_id': 2
-                            }
-                        ],
-                        'done': false,
-                        '_id': 5678
-                    },
-                ])
-            } as Response
-        );
+                        'key': 'key2',
+                        'value': 'value2',
+                        '_id': 2
+                    }
+                ],
+                'done': false,
+                '_id': 5678
+            },
+        ]);
         const parsedDocuments = await orbisApiServiceMock.getDocuments('');
         expect(Array.isArray(parsedDocuments)).toBeTruthy();
         if (Array.isArray(parsedDocuments)) {
@@ -115,36 +112,32 @@ describe('OrbisApiService.getDocuments()', () => {
 
 describe('OrbisApiService.getCorpora()', () => {
     test('get mocked list of corpora and parse it into correct list of corpus types', async () => {
-        const orbisApiServiceMock = new OrbisApiServiceMock(
+        const orbisApiServiceMock = new OrbisApiServiceMock([
             {
-                json: () => Promise.resolve([
+                'name': 'corpus1',
+                'supported_annotation_types': [
                     {
-                        'name': 'corpus1',
-                        'supported_annotation_types': [
-                            {
-                                'name': 'annotation-type1',
-                                '_id': 1
-                            },
-                            {
-                                'name': 'annotation-type2',
-                                '_id': 2
-                            }
-                        ],
-                        '_id': 11
+                        'name': 'annotation-type1',
+                        '_id': 1
                     },
                     {
-                        'name': 'corpus2',
-                        'supported_annotation_types': [
-                            {
-                                'name': 'annotation-type2',
-                                '_id': 2
-                            }
-                        ],
-                        '_id': 12
-                    },
-                ])
-            } as Response
-        );
+                        'name': 'annotation-type2',
+                        '_id': 2
+                    }
+                ],
+                '_id': 11
+            },
+            {
+                'name': 'corpus2',
+                'supported_annotation_types': [
+                    {
+                        'name': 'annotation-type2',
+                        '_id': 2
+                    }
+                ],
+                '_id': 12
+            },
+        ]);
         const parsedCorpora = await orbisApiServiceMock.getCorpora();
         expect(Array.isArray(parsedCorpora)).toBeTruthy();
         if (Array.isArray(parsedCorpora)) {
