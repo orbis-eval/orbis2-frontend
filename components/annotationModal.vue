@@ -1,14 +1,14 @@
 <template>
-  <div class="absolute bg-gray-300 drop-shadow-lg rounded-md"
+  <div class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
        :style="{left: leftPosition + 'px', top: topPosition + 'px' }"
        @keyup.enter="addSelectedAnnotation">
     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
+      <h1 class="text-2xl">Annotation</h1>
       <li v-for="(annotationType, index) in annotationTypes"
           v-bind:class="{selectedAnnotationType: selectedAnnotationIndex === index}">
         <a href="#" class="block px-4 py-2">{{annotationType.name}}</a>
       </li>
     </ul>
-    <a @click="hideAnnotationModal">Hide</a>
   </div>
 </template>
 
@@ -57,6 +57,9 @@ function handleKeyDown(event) {
   }
   else if(event.code==="Enter") {
     commitAnnotationType();
+  }
+  else if(event.code==="Escape") {
+    hideAnnotationModal();
   }
 }
 
