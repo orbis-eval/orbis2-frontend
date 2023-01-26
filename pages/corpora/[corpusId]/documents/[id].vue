@@ -4,9 +4,14 @@
     <div
         v-if="nestedSetRootNode">
       <div class="relative" ref="relativeDiv">
-        <div class="absolute border-gray-600 border" :style="{left: mousePosX + 'px', top: mousePosY + 'px' }">
-          <p>Position:Absolute</p>
-        </div>
+
+        <!-- context modal gui for selecting the type -->
+        <AnnotationModal v-if="showAnnotationModal"
+        :left-position="mousePosX"
+        :top-position="mousePosY"
+        :annotation-types="mockAnnotationTypes"
+         @hideAnnotationModal="hideAnnotationModal"/>
+
         <h2 class="text-4xl p-4">Document Test</h2>
         <AnnotationNode :nestedSetNode="nestedSetRootNode"
                         @updateAnnotations="updateAnnotations"/>
@@ -60,10 +65,11 @@ const content = ref(null);
 
 const annotations = ref([]);
 
-
 const relativeDiv = ref(null);
 const mousePosX = ref(0);
 const mousePosY = ref(0);
+
+const showAnnotationModal = ref(false);
 
 $orbisApiService.getDocument(route.params.id)
     .then(document => {
@@ -77,9 +83,18 @@ $orbisApiService.getDocument(route.params.id)
     });
 
 let annotationType: AnnotationType = new AnnotationType({
-  name: "A Type",
+  name: "Type A",
   _id: 1
 });
+
+
+const mockAnnotationTypes = ref([
+    annotationType,
+  new AnnotationType({
+    name: "Type B",
+    _id: 1
+  })
+]);
 
 let annotator: Annotator = new Annotator({
   name: "test annotator",
@@ -93,7 +108,6 @@ const parseErrorCallBack = (parseError: NestedSetParseError) => {
 };
 
 const nestedSetRootNode = ref(null);
-
 
 watch(content, async(newContent) => {
   nestedSetRootNode.value = NestedSet.toTree(
@@ -128,11 +142,18 @@ function mockAnnotation(
   }));
 }
 
+function hideAnnotationModal() {
+  showAnnotationModal.value = false;
+}
+
 function updateAnnotations(selection) {
-  var relativeDivRect = relativeDiv.value.getBoundingClientRect();
+
+  showAnnotationModal.value = true;
+
+  let relativeDivRect = relativeDiv.value.getBoundingClientRect();
   // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
-  var x = selection.left - relativeDivRect.left; //x position within the element.
-  var y = selection.top - relativeDivRect.top + 40;  //y position within the element, add 40px to position it under the selection
+  let x = selection.left - relativeDivRect.left;     // x/left position within the element.
+  let y = selection.top - relativeDivRect.top + 40;  // y/top position within the element, add 40px to position it under the selection
   mousePosX.value = x;
   mousePosY.value = y;
   // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
