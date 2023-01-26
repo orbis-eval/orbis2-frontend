@@ -1,5 +1,8 @@
 <template>
   <NuxtLayout name="sidebar">
+    <template #leftMenu>
+      <LeftMenu :runSelection="documentRuns" @selectedRunChanged="selectedRunChanged" />
+    </template>
     <LoadingSpinner v-if="!content"/>
     <div v-if="nestedSetRootNode">
       <h2 class="text-4xl p-4">Document</h2>
@@ -23,6 +26,9 @@
         <button @click="redoAnnotation" class="small-button">
           <OhVueIcon name="la-redo-alt-solid" />
         </button>
+      </div>
+      <div>
+        {{ recentlyStoredAnnotationId }}
       </div>
       <div v-if="annotationStore.annotations">
         <h2 class="text-4xl">Annotations</h2>
@@ -58,6 +64,8 @@ import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
+import {Run} from "~/lib/model/run";
+import {Corpus} from "~/lib/model/corpus";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -65,8 +73,10 @@ const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
+const recentlyStoredAnnotationId = ref(null);
 const errorNodes = ref([]);
 const nestedSetRootNode = ref(null);
+const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
 
 let annotationType: AnnotationType = new AnnotationType({
@@ -94,6 +104,7 @@ const undoEventListener = (event: KeyboardEvent) => {
 
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
+  selectedRunChanged(annotationStore.selectedRun);
 });
 
 onBeforeUnmount(() => {
@@ -115,6 +126,26 @@ $orbisApiService.getDocument(route.params.id)
         content.value = 'ERROR';
       }
     });
+
+$orbisApiService.getRuns(Number(route.params.corpusId))
+    .then(runs => {
+      if (Array.isArray(runs)) {
+        documentRuns.value = runs;
+        documentRuns.value.push(new Run({
+          name: 'default run',
+          description: 'empty default run',
+          corpus: new Corpus({
+            name: '',
+            supported_annotation_types: [],
+            _id: 0
+          }),
+          _id: 0
+        }))
+      } else {
+        console.error(runs.errorMessage);
+        documentRuns.value = [];
+      }
+    })
 
 function reload() {
   nestedSetRootNode.value = NestedSet.toTree(
@@ -156,11 +187,53 @@ function mockAnnotation(
   }));
 }
 
-function updateAnnotations(selection) {
+function selectedRunChanged(run: any) {
+  console.log(`selected run changed ${run}`)
+  annotationStore.selectedRun = run;
+  $orbisApiService.getAnnotations(run._id, route.params.id)
+      .then(annotations => {
+        if (Array.isArray(annotations)) {
+          annotationStore.annotations = annotations;
+          reload();
+        } else {
+          console.error(annotations.errorMessage);
+        }
+      })
+}
+
+async function updateAnnotations(selection) {
   console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
   annotationStore.addAnnotation(
       mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
   );
+  const result = await $orbisApiService.getRuns(Number(route.params.corpusId));
+  let runId = 0;
+  if (Array.isArray(result)) {
+    runId = result[0]._id;
+  }
+  $orbisApiService.addAnnotation(
+      new Annotation({
+        key: "",
+        surface_forms: [selection.word],
+        start_indices: [selection.start],
+        end_indices: [selection.end],
+        annotation_type: annotationType,
+        annotator: annotator,
+        run_id: runId,
+        document_id: Number(route.params.id),
+        metadata: [],
+        timestamp: new Date(),
+        _id: 0
+      }
+  )).then(annotationId => {
+    if (annotationId instanceof Number) {
+      recentlyStoredAnnotationId.value = annotationId;
+    } else {
+      console.error(annotationId.errorMessage);
+      // TODO, 06.01.2023 anf: correct error handling
+      recentlyStoredAnnotationId.value = 'ERROR';
+    }
+  });
   reload();
 }
 </script>

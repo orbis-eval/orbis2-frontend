@@ -14,12 +14,15 @@
       </header>
       <nav class="tile p-4">
         <!-- Menu Entries -->
-        <LeftMenu/>
+        <slot name="leftMenu" v-if="!overridden">
+          <LeftMenu />
+        </slot>
+        <slot name="leftMenu" v-if="overridden" />
       </nav>
       <main class="tile p-4 overflow-auto">
         <slot/>
       </main>
-      <aside class="tile p-4">
+      <aside class="tile p-4 overflow-auto">
         <!-- Sidebar -->
         <slot name="sidebar"/>
       </aside>
@@ -30,3 +33,15 @@
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+
+let overridden = null;
+
+computed(() => {
+  overridden = () => {
+    return !!this.$slots['leftMenu'];
+  }
+});
+
+</script>
