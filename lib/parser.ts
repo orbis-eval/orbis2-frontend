@@ -18,7 +18,7 @@ export class Parser {
                 if ((data as T) !== undefined) {
                     return new constructor(data as T);
                 }
-                return new Error(`Response in Promise is expected to be of type ${typeof T.prototype}`)
+                return new Error(`Response in Promise is expected to be of type ${typeof data}`)
             })
             .catch(error => {
                 return new Error(error);
