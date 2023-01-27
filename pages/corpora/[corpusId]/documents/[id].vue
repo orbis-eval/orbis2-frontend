@@ -154,7 +154,7 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', undoEventListener);
-  // annotationStore.$reset();
+  annotationStore.$reset();
 });
 
 watch(content, async() => {
