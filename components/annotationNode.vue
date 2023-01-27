@@ -1,7 +1,6 @@
 <template>
-  <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME"
-       v-on:mouseup="onMouseUp()">
-      <span v-if="nestedSetNode.children.length===0" class="p-1">
+  <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME">
+      <span v-if="nestedSetNode.children.length===0" class="p-1" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
     <AnnotationNode
@@ -11,12 +10,12 @@
     />
   </div>
   <span v-else-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME"
-        v-on:mouseup="onMouseUp()"
+        v-on:mouseup="onMouseUp"
         class="p-1">
       {{ nestedSetNode.surface_forms[0] }}
     </span>
   <span v-else-if="nestedSetNode.parent" class="annotation">
-      <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp()">
+      <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
       <AnnotationNode
@@ -31,7 +30,7 @@
           :nestedSetNode="nestedSetChildNode"
           @updateAnnotations="updateAnnotations"
       />
-    </span>
+  </span>
 </template>
 
 <script setup lang="ts">
@@ -44,7 +43,7 @@ const props = defineProps({
 
 const emit = defineEmits(['updateAnnotations']);
 
-const onMouseUp = () => {
+function onMouseUp()  {
   // get the selection from the window
   const selection = window.getSelection();
 
@@ -60,13 +59,20 @@ const onMouseUp = () => {
         &&
         props.nestedSetNode
     ) {
+
+      // get the clientRect of the selection to pass the coordinates
+      let left = range.getClientRects()[0].left;
+      let top = range.getClientRects()[0].top;
+
       // get start/end index of selected text, correct with offset of selected node
       let selectionStartIndex = range.startOffset + props.nestedSetNode.start_indices[0];
       let selectionEndIndex = range.endOffset + props.nestedSetNode.start_indices[0];
       emit('updateAnnotations', {
         start: selectionStartIndex,
         end: selectionEndIndex,
-        word: word
+        word: word,
+        left: left,
+        top: top
       });
     }
   }

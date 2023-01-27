@@ -4,12 +4,25 @@
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"/>
     </template>
     <LoadingSpinner v-if="!content"/>
-    <div v-if="nestedSetRootNode">
-      <h2 class="text-4xl p-4">Document</h2>
-      <AnnotationNode :nestedSetNode="nestedSetRootNode"
-                      @updateAnnotations="updateAnnotations"/>
+    <div
+        v-if="nestedSetRootNode">
+      <div class="relative" ref="relativeDiv">
+
+        <!-- context modal gui for selecting the type -->
+        <AnnotationModal v-if="showAnnotationModal"
+        :left-position="mousePosX"
+        :top-position="mousePosY"
+        :is-visible="showAnnotationModal"
+        :annotation-types="mockAnnotationTypes"
+        @hideAnnotationModal="hideAnnotationModal"
+        @commitAnnotationType="commitAnnotationType"/>
+
+        <h2 class="text-4xl p-4">Document Test</h2>
+        <AnnotationNode :nestedSetNode="nestedSetRootNode"
+                        @updateAnnotations="updateAnnotations"/>
+      </div>
     </div>
-    <div v-else>
+    <div v-else-if="errorNodes.length > 0">
       <h2 class="text-4xl">Tree could not be rendered</h2>
       Annotations that possibly are overlapping:
       <ul>
@@ -38,6 +51,7 @@
               <th>start</th>
               <th>end</th>
               <th>surface</th>
+              <th>type</th>
             </tr>
           </thead>
           <tbody>
@@ -45,6 +59,7 @@
             <td class="p-1">{{ annotation.start_indices[0] }}</td>
             <td class="p-1">{{ annotation.end_indices[0] }}</td>
             <td class="p-1">{{ annotation.surface_forms[0] }}</td>
+            <td class="p-1">{{ annotation.annotation_type.name}}</td>
           </tr>
           </tbody>
         </table>
@@ -73,6 +88,12 @@ const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
+const annotations = ref([]);
+const selection = ref(null);
+const relativeDiv = ref(null);
+const mousePosX = ref(0);
+const mousePosY = ref(0);
+const showAnnotationModal = ref(false);
 const recentlyStoredAnnotationId = ref(null);
 const errorNodes = ref([]);
 const nestedSetRootNode = ref(null);
@@ -80,10 +101,33 @@ const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
 const selectedRun = ref(annotationStore.selectedRun)
 
+$orbisApiService.getDocument(route.params.id)
+    .then(document => {
+      if (document instanceof Document) {
+        content.value = document.content;
+      } else {
+        console.error(document.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        content.value = 'ERROR';
+      }
+    });
+
 let annotationType: AnnotationType = new AnnotationType({
-  name: "A Type",
+  name: "Type A",
   _id: 1
 });
+
+const mockAnnotationTypes = ref([
+    annotationType,
+  new AnnotationType({
+    name: "Type B",
+    _id: 1
+  }),
+  new AnnotationType({
+    name: "Type BC",
+    _id: 3
+  })
+]);
 
 let annotator: Annotator = new Annotator({
   name: "test annotator",
@@ -205,11 +249,31 @@ function selectedRunChanged(run: any) {
   }
 }
 
-async function updateAnnotations(selection) {
-  console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
+function hideAnnotationModal() {
+  showAnnotationModal.value = false;
+}
+
+function updateAnnotations(currentSelection) {
+  selection.value = currentSelection;
+  showAnnotationModal.value = true;
+  let relativeDivRect = relativeDiv.value.getBoundingClientRect();
+  // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
+  let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
+  let y = currentSelection.top - relativeDivRect.top + 40;  // y/top position within the element, add 40px to position it under the selection
+  mousePosX.value = x;
+  mousePosY.value = y;
+  // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
+}
+
+async function commitAnnotationType(annotationType:AnnotationType) {
+  //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
   annotationStore.addAnnotation(
-      mockAnnotation(selection.word, selection.start, selection.end, 1, annotationType, annotator)
+      mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
   );
+
+  // hide the context menu
+  showAnnotationModal.value = false;
+
   const result = await $orbisApiService.getRuns(Number(route.params.corpusId));
   let runId = 0;
   if (Array.isArray(result)) {
@@ -217,19 +281,19 @@ async function updateAnnotations(selection) {
   }
   $orbisApiService.addAnnotation(
       new Annotation({
-        key: "",
-        surface_forms: [selection.word],
-        start_indices: [selection.start],
-        end_indices: [selection.end],
-        annotation_type: annotationType,
-        annotator: annotator,
-        run_id: runId,
-        document_id: Number(route.params.id),
-        metadata: [],
-        timestamp: new Date(),
-        _id: 0
-      }
-  )).then(annotationId => {
+            key: "",
+            surface_forms: [selection.word],
+            start_indices: [selection.start],
+            end_indices: [selection.end],
+            annotation_type: annotationType,
+            annotator: annotator,
+            run_id: runId,
+            document_id: Number(route.params.id),
+            metadata: [],
+            timestamp: new Date(),
+            _id: 0
+          }
+      )).then(annotationId => {
     if (annotationId instanceof Number) {
       recentlyStoredAnnotationId.value = annotationId;
     } else {

@@ -33,3 +33,10 @@
 .line span {
   @apply mt-1
 }
+
+/**
+ * styles for annotation type select modal gui
+ */
+.selectedAnnotationType {
+  @apply bg-slate-700 text-white
+}
