@@ -14,6 +14,7 @@
         :top-position="mousePosY"
         :is-visible="showAnnotationModal"
         :annotation-types="mockAnnotationTypes"
+        :selection="selection"
         @hideAnnotationModal="hideAnnotationModal"
         @commitAnnotationType="commitAnnotationType"/>
 
@@ -255,13 +256,13 @@ function updateAnnotations(currentSelection) {
   let relativeDivRect = relativeDiv.value.getBoundingClientRect();
   // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
   let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
-  let y = currentSelection.top - relativeDivRect.top + 40;  // y/top position within the element, add 40px to position it under the selection
+  let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
   mousePosX.value = x;
   mousePosY.value = y;
   // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
 }
 
-function commitAnnotationType(annotationType:AnnotationType) {
+async function commitAnnotationType(annotationType:AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
   annotationStore.addAnnotation(
       mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)

@@ -1,8 +1,10 @@
 <template>
   <div class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
        :style="{left: leftPosition + 'px', top: topPosition + 'px' }">
-    <h1 class="text-2xl">Annotation</h1>
-    <input ref="filterInputField" type="text" v-model="filterValue" placeholder="Filter annotation types..." />
+    <div class="text-center font-bold text-2xl">
+    "{{shortenText(props.selection.word)}}"
+    </div>
+    <input ref="filterInputField" type="text" v-model="filterValue" placeholder="annotation types..." />
     <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
       <li v-for="(annotationType, index) in filteredAnnotationTypes"
           v-bind:class="{selectedAnnotationType: selectedAnnotationIndex === index}"
@@ -21,6 +23,7 @@ const props = defineProps({
   leftPosition: Number,
   topPosition: Number,
   isVisible: Boolean,
+  selection: undefined,
   annotationTypes: {
     type: Array,
     default: () => []
@@ -35,6 +38,8 @@ const filterValue = ref('');
 const filterInputField = ref('filterInputField');
 
 const isVisibleRef = toRef(props, "isVisible");
+
+const selection = toRef(props, "selection");
 
 const filteredAnnotationTypes = computed(filterAnnotationTypes);
 
@@ -119,16 +124,32 @@ function hideAnnotationModal() {
 
 // watching the isVisible property so we can set the focus again
 // if we make the component visible
-watch( isVisibleRef, (newIsVisible) => {
-  if(newIsVisible) {
-    //console.log("isVisible, setting focus...");
+watch(isVisibleRef, (newIsVisible) => {
+  if (newIsVisible) {
     nextTick(() => { // wait until dom is fully rendered
       filterInputField.value.focus();
-      //console.log("nextTick, setting focus...");
     });
   }
 }, {
   immediate: true // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
 });
+
+watch(selection, (oldSelection, newSelection) => {
+      // watch if the selection has changed -> if it changed, set the focus again to the input-element
+      if (newSelection && (oldSelection.word !== newSelection.word)) {
+        nextTick(() => {
+          filterInputField.value.focus();
+        });
+      }
+    },
+    {
+      immediate: true // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
+    }
+);
+
+function shortenText(text) {
+  let maxLength = 15;
+  return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
+}
 
 </script>
