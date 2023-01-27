@@ -277,9 +277,9 @@ async function commitAnnotationType(annotationType:AnnotationType) {
   $orbisApiService.addAnnotation(
       new Annotation({
             key: "",
-            surface_forms: [selection.word],
-            start_indices: [selection.start],
-            end_indices: [selection.end],
+            surface_forms: [selection.value.word],
+            start_indices: [selection.value.start],
+            end_indices: [selection.value.end],
             annotation_type: annotationType,
             annotator: annotator,
             run_id: selectedRun.value._id,
