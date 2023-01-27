@@ -128,8 +128,7 @@ watch( isVisibleRef, (newIsVisible) => {
     });
   }
 }, {
-  immediate: true
+  immediate: true // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
 });
-
 
 </script>
