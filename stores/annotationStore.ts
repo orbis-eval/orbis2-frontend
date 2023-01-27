@@ -1,11 +1,13 @@
 import {defineStore} from "pinia";
 import {Annotation} from "~/lib/model/annotation";
+import {Run} from "~/lib/model/run";
 
 export const useAnnotationStore = defineStore('annotation', {
     state: () => {
         return {
             annotations: [] as Annotation[],
-            undoneAnnotations: [] as Annotation[]
+            undoneAnnotations: [] as Annotation[],
+            selectedRun: {} as Run,
         };
     },
     actions: {
@@ -33,6 +35,9 @@ export const useAnnotationStore = defineStore('annotation', {
                     callback();
                 }
             }
+        },
+        changeSelectedRun(run: Run) {
+            this.selectedRun = run;
         }
     }
 });
