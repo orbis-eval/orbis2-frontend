@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="sidebar">
     <template #leftMenu>
-      <LeftMenu :runSelection="documentRuns" @selectedRunChanged="selectedRunChanged" />
+      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"/>
     </template>
     <LoadingSpinner v-if="!content"/>
     <div v-if="nestedSetRootNode">
@@ -78,6 +78,7 @@ const errorNodes = ref([]);
 const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
+const selectedRun = ref(annotationStore.selectedRun)
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "A Type",
@@ -109,7 +110,7 @@ onBeforeMount(() => {
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', undoEventListener);
-  annotationStore.$reset();
+  // annotationStore.$reset();
 });
 
 watch(content, async() => {
@@ -139,7 +140,7 @@ $orbisApiService.getRuns(Number(route.params.corpusId))
             supported_annotation_types: [],
             _id: 0
           }),
-          _id: 0
+          _id: 1
         }))
       } else {
         console.error(runs.errorMessage);
@@ -188,17 +189,20 @@ function mockAnnotation(
 }
 
 function selectedRunChanged(run: any) {
-  console.log(`selected run changed ${run}`)
-  annotationStore.selectedRun = run;
-  $orbisApiService.getAnnotations(run._id, route.params.id)
-      .then(annotations => {
-        if (Array.isArray(annotations)) {
-          annotationStore.annotations = annotations;
-          reload();
-        } else {
-          console.error(annotations.errorMessage);
-        }
-      })
+  annotationStore.changeSelectedRun(run);
+  selectedRun.value = run;
+  console.log(`blabla ${run}`)
+  if (run) {
+    $orbisApiService.getAnnotations(run._id, route.params.id)
+        .then(annotations => {
+          if (Array.isArray(annotations)) {
+            annotationStore.annotations = annotations;
+            reload();
+          } else {
+            console.error(annotations.errorMessage);
+          }
+        })
+  }
 }
 
 async function updateAnnotations(selection) {
