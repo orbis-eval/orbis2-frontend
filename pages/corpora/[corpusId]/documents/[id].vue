@@ -10,7 +10,7 @@
 
         <!-- context modal gui for selecting the type -->
         <AnnotationModal
-         ref="modal"
+         ref="annotationTypeModal"
         :left-position="mousePosX"
         :top-position="mousePosY"
         :is-visible="showAnnotationModal"
@@ -103,7 +103,7 @@ const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
 
-const modal = ref(null);
+const annotationTypeModal = ref(null);
 
 $orbisApiService.getDocument(route.params.id)
     .then(document => {
@@ -153,7 +153,7 @@ const undoEventListener = (event: KeyboardEvent) => {
 
 const clickOutsideListener = (event) => {
   if(showAnnotationModal.value) {
-    if(event.target === modal.value.$el || event.composedPath().includes(modal.value.$el)) {
+    if(event.target === annotationTypeModal.value.$el || event.composedPath().includes(annotationTypeModal.value.$el)) {
       return;
     }
     if(event.target !== selection.value.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
