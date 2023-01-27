@@ -274,11 +274,6 @@ async function commitAnnotationType(annotationType:AnnotationType) {
   // hide the context menu
   showAnnotationModal.value = false;
 
-  const result = await $orbisApiService.getRuns(Number(route.params.corpusId));
-  let runId = 0;
-  if (Array.isArray(result)) {
-    runId = result[0]._id;
-  }
   $orbisApiService.addAnnotation(
       new Annotation({
             key: "",
@@ -287,7 +282,7 @@ async function commitAnnotationType(annotationType:AnnotationType) {
             end_indices: [selection.end],
             annotation_type: annotationType,
             annotator: annotator,
-            run_id: runId,
+            run_id: selectedRun.value._id,
             document_id: Number(route.params.id),
             metadata: [],
             timestamp: new Date(),
