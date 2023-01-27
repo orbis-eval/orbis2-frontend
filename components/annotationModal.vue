@@ -121,8 +121,11 @@ function hideAnnotationModal() {
 // if we make the component visible
 watch( isVisibleRef, (newIsVisible) => {
   if(newIsVisible) {
-    console.log("isVisible, setting focus...");
-    // filterInputField.value.focus(); TODO: this call does not work, check
+    //console.log("isVisible, setting focus...");
+    nextTick(() => { // wait until dom is fully rendered
+      filterInputField.value.focus();
+      //console.log("nextTick, setting focus...");
+    });
   }
 }, {
   immediate: true
