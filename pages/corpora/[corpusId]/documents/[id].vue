@@ -151,41 +151,29 @@ const undoEventListener = (event: KeyboardEvent) => {
   }
 };
 
+const clickOutsideListener = (event) => {
+  if(showAnnotationModal.value) {
+    if(event.target === modal.value.$el || event.composedPath().includes(modal.value.$el)) {
+      return;
+    }
+    if(event.target !== selection.value.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
+      showAnnotationModal.value = false;
+    }
+  }
+}
+
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
   selectedRunChanged(annotationStore.selectedRun);
 });
 
-function generateClickOutsideEventListener(element, callbackWhenInside, callBackWhenOutside) {
-  return (event:Event) => {
-    if(showAnnotationModal.value) {
-      if(event.target === element.value.$el || event.composedPath().includes(element.value.$el)) {
-        callbackWhenInside();
-        return;
-      }
-      callBackWhenOutside(event);
-    }
-  }
-}
-
-function callbackWhenInside() {}
-
-function callBackWhenOutside(event) {
-  if(event.target !== selection.value.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
-    showAnnotationModal.value = false;
-  }
-}
-
-const clickOutsideListener = ref(null);
-
 onMounted(() => {
-  clickOutsideListener.value = generateClickOutsideEventListener(modal, callbackWhenInside, callBackWhenOutside);
-  window.addEventListener('click', clickOutsideListener.value);
+  window.addEventListener('click', clickOutsideListener);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', undoEventListener);
-  window.removeEventListener('click', clickOutsideListener.value);
+  window.removeEventListener('click', clickOutsideListener);
   annotationStore.$reset();
 });
 
