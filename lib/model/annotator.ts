@@ -1,7 +1,7 @@
 import {IAnnotator} from "~/lib/model/iannotator";
 import {Role} from "~/lib/model/role";
 
-export class Annotator {
+export class Annotator implements IAnnotator {
     name: string;
     roles: Role[];
     _id: number;

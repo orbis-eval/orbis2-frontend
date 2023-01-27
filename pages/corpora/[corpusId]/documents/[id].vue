@@ -1,5 +1,8 @@
 <template>
   <NuxtLayout name="sidebar">
+    <template #leftMenu>
+      <LeftMenu :runSelection="documentRuns" @selectedRunChanged="selectedRunChanged" />
+    </template>
     <LoadingSpinner v-if="!content"/>
     <div
         v-if="nestedSetRootNode">
@@ -29,7 +32,18 @@
       </ul>
     </div>
     <template #sidebar>
-      <div v-if="annotations">
+      <div>
+        <button @click="undoAnnotation" class="small-button" >
+          <OhVueIcon name="la-undo-alt-solid" />
+        </button>
+        <button @click="redoAnnotation" class="small-button">
+          <OhVueIcon name="la-redo-alt-solid" />
+        </button>
+      </div>
+      <div>
+        {{ recentlyStoredAnnotationId }}
+      </div>
+      <div v-if="annotationStore.annotations">
         <h2 class="text-4xl">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
@@ -41,7 +55,7 @@
             </tr>
           </thead>
           <tbody>
-          <tr v-for="annotation in annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+          <tr v-for="annotation in annotationStore.annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="p-1">{{ annotation.start_indices[0] }}</td>
             <td class="p-1">{{ annotation.end_indices[0] }}</td>
             <td class="p-1">{{ annotation.surface_forms[0] }}</td>
@@ -55,27 +69,36 @@
 </template>
 
 <script setup lang="ts">
+
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { LaUndoAltSolid, LaRedoAltSolid } from "oh-vue-icons/icons"
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Annotation} from "~/lib/model/annotation";
+import {useAnnotationStore} from "~/stores/annotationStore";
+import {Run} from "~/lib/model/run";
+import {Corpus} from "~/lib/model/corpus";
+
+addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
-
 const annotations = ref([]);
-
 const selection = ref(null);
-
 const relativeDiv = ref(null);
 const mousePosX = ref(0);
 const mousePosY = ref(0);
-
 const showAnnotationModal = ref(false);
+const recentlyStoredAnnotationId = ref(null);
+const errorNodes = ref([]);
+const nestedSetRootNode = ref(null);
+const documentRuns = ref([] as Run[])
+const annotationStore = useAnnotationStore();
 
 $orbisApiService.getDocument(route.params.id)
     .then(document => {
@@ -111,23 +134,80 @@ let annotator: Annotator = new Annotator({
   _id: 1
 });
 
-const errorNodes = ref([]);
 const parseErrorCallBack = (parseError: NestedSetParseError) => {
   errorNodes.value = parseError.nodes;
 };
 
-const nestedSetRootNode = ref(null);
+const undoEventListener = (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
+    redoAnnotation();
+  } else if (event.ctrlKey && event.key === 'z') {
+    undoAnnotation();
+  }
+};
 
-watch(content, async(newContent) => {
+onBeforeMount(() => {
+  window.addEventListener('keydown', undoEventListener);
+  selectedRunChanged(annotationStore.selectedRun);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', undoEventListener);
+  annotationStore.$reset();
+});
+
+watch(content, async() => {
+  reload();
+});
+
+$orbisApiService.getDocument(route.params.id)
+    .then(document => {
+      if (document instanceof Document) {
+        content.value = document.content;
+      } else {
+        console.error(document.errorMessage);
+        // TODO, 06.01.2023 anf: correct error handling
+        content.value = 'ERROR';
+      }
+    });
+
+$orbisApiService.getRuns(Number(route.params.corpusId))
+    .then(runs => {
+      if (Array.isArray(runs)) {
+        documentRuns.value = runs;
+        documentRuns.value.push(new Run({
+          name: 'default run',
+          description: 'empty default run',
+          corpus: new Corpus({
+            name: '',
+            supported_annotation_types: [],
+            _id: 0
+          }),
+          _id: 0
+        }))
+      } else {
+        console.error(runs.errorMessage);
+        documentRuns.value = [];
+      }
+    })
+
+function reload() {
   nestedSetRootNode.value = NestedSet.toTree(
-      annotations.value,
-      newContent,
+      annotationStore.annotations,
+      content.value,
       1,
       1,
       new Date(),
       parseErrorCallBack
   );
-});
+}
+
+function undoAnnotation() {
+  annotationStore.undoAnnotation(reload);
+}
+function redoAnnotation() {
+  annotationStore.redoAnnotation(reload);
+}
 
 function mockAnnotation(
     surfaceForm: string,
@@ -151,6 +231,20 @@ function mockAnnotation(
   }));
 }
 
+function selectedRunChanged(run: any) {
+  console.log(`selected run changed ${run}`)
+  annotationStore.selectedRun = run;
+  $orbisApiService.getAnnotations(run._id, route.params.id)
+      .then(annotations => {
+        if (Array.isArray(annotations)) {
+          annotationStore.annotations = annotations;
+          reload();
+        } else {
+          console.error(annotations.errorMessage);
+        }
+      })
+}
+
 function hideAnnotationModal() {
   showAnnotationModal.value = false;
 }
@@ -169,22 +263,41 @@ function updateAnnotations(currentSelection) {
 
 function commitAnnotationType(annotationType:AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
-  annotations.value.push(
+  annotationStore.addAnnotation(
       mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
   );
 
   // hide the context menu
   showAnnotationModal.value = false;
 
-  // re-calculate the tree
-  nestedSetRootNode.value = NestedSet.toTree(
-      annotations.value,
-      content.value,
-      1,
-      1,
-      new Date(),
-      parseErrorCallBack
-  );
+  const result = await $orbisApiService.getRuns(Number(route.params.corpusId));
+  let runId = 0;
+  if (Array.isArray(result)) {
+    runId = result[0]._id;
+  }
+  $orbisApiService.addAnnotation(
+      new Annotation({
+            key: "",
+            surface_forms: [selection.word],
+            start_indices: [selection.start],
+            end_indices: [selection.end],
+            annotation_type: annotationType,
+            annotator: annotator,
+            run_id: runId,
+            document_id: Number(route.params.id),
+            metadata: [],
+            timestamp: new Date(),
+            _id: 0
+          }
+      )).then(annotationId => {
+    if (annotationId instanceof Number) {
+      recentlyStoredAnnotationId.value = annotationId;
+    } else {
+      console.error(annotationId.errorMessage);
+      // TODO, 06.01.2023 anf: correct error handling
+      recentlyStoredAnnotationId.value = 'ERROR';
+    }
+  });
+  reload();
 }
-
 </script>

@@ -1,4 +1,5 @@
 import {Error} from "~/lib/model/error";
+import {TypedInternalResponse} from "nitropack";
 
 export class Parser {
 
@@ -11,13 +12,13 @@ export class Parser {
      * @return Returns a promise containing the data (U) or an error if something went wrong.
      */
     static parse<T, U extends T>(constructor: new (data: T) => U,
-                                 promise: Promise<Response>): Promise<U | Error> {
+                                 promise: Promise<TypedInternalResponse<string>>): Promise<U | Error> {
         return promise
-            .then(response => {
-                return response.json();
-            })
             .then(data => {
-                return new constructor(data);
+                if ((data as T) !== undefined) {
+                    return new constructor(data as T);
+                }
+                return new Error(`Response in Promise is expected to be of type ${typeof data}`)
             })
             .catch(error => {
                 return new Error(error);
@@ -33,11 +34,8 @@ export class Parser {
      * @return Returns a promise containing a list of the data (U) or an error if something went wrong.
      */
     static parseList<T, U extends T>(constructor: new (data: T) => U,
-                                     promise: Promise<Response>): Promise<U[] | Error> {
+                                     promise: Promise<TypedInternalResponse<string>>): Promise<U[] | Error> {
         return promise
-            .then(response => {
-                return response.json();
-            })
             .then(data => {
                 if (Array.isArray(data)) {
                     const result: U[] = [];
