@@ -9,7 +9,8 @@
       <div class="relative" ref="relativeDiv">
 
         <!-- context modal gui for selecting the type -->
-        <AnnotationModal v-if="showAnnotationModal"
+        <AnnotationModal
+         ref="modal"
         :left-position="mousePosX"
         :top-position="mousePosY"
         :is-visible="showAnnotationModal"
@@ -82,6 +83,7 @@ import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
 import {Corpus} from "~/lib/model/corpus";
+import {AnnotationModal} from "#components";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -100,6 +102,8 @@ const errorNodes = ref([]);
 const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
+
+const modal = ref(null);
 
 $orbisApiService.getDocument(route.params.id)
     .then(document => {
@@ -152,8 +156,36 @@ onBeforeMount(() => {
   selectedRunChanged(annotationStore.selectedRun);
 });
 
+function generateClickOutsideEventListener(element, callbackWhenInside, callBackWhenOutside) {
+  return (event:Event) => {
+    if(showAnnotationModal.value) {
+      if(event.target === element.value.$el || event.composedPath().includes(element.value.$el)) {
+        callbackWhenInside();
+        return;
+      }
+      callBackWhenOutside(event);
+    }
+  }
+}
+
+function callbackWhenInside() {}
+
+function callBackWhenOutside(event) {
+  if(event.target !== selection.value.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
+    showAnnotationModal.value = false;
+  }
+}
+
+const clickOutsideListener = ref(null);
+
+onMounted(() => {
+  clickOutsideListener.value = generateClickOutsideEventListener(modal, callbackWhenInside, callBackWhenOutside);
+  window.addEventListener('click', clickOutsideListener.value);
+});
+
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', undoEventListener);
+  window.removeEventListener('click', clickOutsideListener.value);
   annotationStore.$reset();
 });
 

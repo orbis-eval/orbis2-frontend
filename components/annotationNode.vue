@@ -72,7 +72,8 @@ function onMouseUp()  {
         end: selectionEndIndex,
         word: word,
         left: left,
-        top: top
+        top: top,
+        selectionElement: selection.anchorNode.parentElement // the element where the selection was done
       });
     }
   }
