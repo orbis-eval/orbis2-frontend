@@ -233,10 +233,9 @@ function mockAnnotation(
 }
 
 function selectedRunChanged(run: any) {
-  annotationStore.changeSelectedRun(run);
-  selectedRun.value = run;
-  console.log(`blabla ${run}`)
   if (run) {
+    annotationStore.changeSelectedRun(run);
+    selectedRun.value = run;
     $orbisApiService.getAnnotations(run._id, route.params.id)
         .then(annotations => {
           if (Array.isArray(annotations)) {
