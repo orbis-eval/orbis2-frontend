@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="sidebar">
     <template #leftMenu>
-      <LeftMenu :runSelection="documentRuns" @selectedRunChanged="selectedRunChanged" />
+      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"/>
     </template>
     <LoadingSpinner v-if="!content"/>
     <div
@@ -103,6 +103,7 @@ const errorNodes = ref([]);
 const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
+const selectedRun = ref(annotationStore.selectedRun)
 
 const annotationTypeModal = ref(null);
 
@@ -205,7 +206,7 @@ $orbisApiService.getRuns(Number(route.params.corpusId))
             supported_annotation_types: [],
             _id: 0
           }),
-          _id: 0
+          _id: 1
         }))
       } else {
         console.error(runs.errorMessage);
@@ -254,17 +255,20 @@ function mockAnnotation(
 }
 
 function selectedRunChanged(run: any) {
-  console.log(`selected run changed ${run}`)
-  annotationStore.selectedRun = run;
-  $orbisApiService.getAnnotations(run._id, route.params.id)
-      .then(annotations => {
-        if (Array.isArray(annotations)) {
-          annotationStore.annotations = annotations;
-          reload();
-        } else {
-          console.error(annotations.errorMessage);
-        }
-      })
+  annotationStore.changeSelectedRun(run);
+  selectedRun.value = run;
+  console.log(`blabla ${run}`)
+  if (run) {
+    $orbisApiService.getAnnotations(run._id, route.params.id)
+        .then(annotations => {
+          if (Array.isArray(annotations)) {
+            annotationStore.annotations = annotations;
+            reload();
+          } else {
+            console.error(annotations.errorMessage);
+          }
+        })
+  }
 }
 
 function hideAnnotationModal() {
@@ -293,20 +297,15 @@ async function commitAnnotationType(annotationType:AnnotationType) {
   // hide the context menu
   showAnnotationModal.value = false;
 
-  const result = await $orbisApiService.getRuns(Number(route.params.corpusId));
-  let runId = 0;
-  if (Array.isArray(result)) {
-    runId = result[0]._id;
-  }
   $orbisApiService.addAnnotation(
       new Annotation({
             key: "",
-            surface_forms: [selection.word],
-            start_indices: [selection.start],
-            end_indices: [selection.end],
+            surface_forms: [selection.value.word],
+            start_indices: [selection.value.start],
+            end_indices: [selection.value.end],
             annotation_type: annotationType,
             annotator: annotator,
-            run_id: runId,
+            run_id: selectedRun.value._id,
             document_id: Number(route.params.id),
             metadata: [],
             timestamp: new Date(),

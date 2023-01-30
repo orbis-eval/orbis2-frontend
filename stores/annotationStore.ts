@@ -7,7 +7,7 @@ export const useAnnotationStore = defineStore('annotation', {
         return {
             annotations: [] as Annotation[],
             undoneAnnotations: [] as Annotation[],
-            selectedRun: {} as Run
+            selectedRun: {} as Run,
         };
     },
     actions: {
@@ -35,6 +35,9 @@ export const useAnnotationStore = defineStore('annotation', {
                     callback();
                 }
             }
+        },
+        changeSelectedRun(run: Run) {
+            this.selectedRun = run;
         }
     }
 });
