@@ -15,7 +15,7 @@
         :top-position="mousePosY"
         :is-visible="showAnnotationModal"
         :annotation-types="mockAnnotationTypes"
-        :selection="selection"
+        :selectionSurfaceForm="selectionSurfaceForm"
         @hideAnnotationModal="hideAnnotationModal"
         @commitAnnotationType="commitAnnotationType"/>
 
@@ -93,6 +93,7 @@ const route = useRoute();
 const content = ref(null);
 const annotations = ref([]);
 const selection = ref(null);
+const selectionSurfaceForm = ref('');
 const relativeDiv = ref(null);
 const mousePosX = ref(0);
 const mousePosY = ref(0);
@@ -272,6 +273,7 @@ function hideAnnotationModal() {
 
 function updateAnnotations(currentSelection) {
   selection.value = currentSelection;
+  selectionSurfaceForm.value = selection.value.word;
   showAnnotationModal.value = true;
   let relativeDivRect = relativeDiv.value.getBoundingClientRect();
   // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);

@@ -3,7 +3,7 @@
     <div class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
          :style="{left: leftPosition + 'px', top: topPosition + 'px' }">
       <div class="text-center font-bold text-2xl">
-<!--              "{{shortenText(props.selection.word)}}"-->
+              "{{shortenText(props.selectionSurfaceForm)}}"
       </div>
       <input ref="filterInputField" type="text" v-model="filterValue" placeholder="annotation types..."/>
       <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
@@ -25,7 +25,7 @@ const props = defineProps({
   leftPosition: Number,
   topPosition: Number,
   isVisible: Boolean,
-  selection: undefined,
+  selectionSurfaceForm: String,
   annotationTypes: {
     type: Array,
     default: () => []
@@ -41,7 +41,7 @@ const filterInputField = ref(null);
 
 const isVisibleRef = toRef(props, "isVisible");
 
-const selection = toRef(props, "selection");
+const selectionSurfaceForm = toRef(props, "selectionSurfaceForm");
 
 const filteredAnnotationTypes = computed(filterAnnotationTypes);
 
@@ -131,9 +131,9 @@ watch(isVisibleRef, (newIsVisible) => {
   immediate: true // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
 });
 
-watch(selection, (oldSelection, newSelection) => {
+watch(selectionSurfaceForm, (oldSelection, newSelection) => {
       // watch if the selection has changed -> if it changed, set the focus again to the input-element
-      if (newSelection && (oldSelection.word !== newSelection.word)) {
+      if (oldSelection && newSelection && (oldSelection !== newSelection)) {
         nextTick(() => {
           filterInputField.value.focus();
         });
