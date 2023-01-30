@@ -2,7 +2,7 @@ FROM node:18-alpine
 WORKDIR /nuxt-app
 
 COPY . .
-RUN npm ci
-RUN npm run build
+RUN yarn install --frozen-lockfile
+RUN yarn run build
 
-ENTRYPOINT ["npm", "start"]
+ENTRYPOINT ["yarn", "start"]
