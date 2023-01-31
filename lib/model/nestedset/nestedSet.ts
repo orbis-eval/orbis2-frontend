@@ -109,9 +109,8 @@ export class NestedSet {
             if (parentNode) {
                 parentNode.addChild(currentNode);
             } else {
-                console.log(`no parent found for child ${currentNode}, ${previousNode}`)
-                // tree could not be constructed, so return null
-                return null;
+                console.warn(`no parent found for child ${currentNode.surface_forms[0]}(${currentNode.start_indices[0]}:${currentNode.end_indices[0]}), ${previousNode.surface_forms[0]}(${previousNode.start_indices[0]}:${previousNode.end_indices[0]})`)
+                return null; // tree could not be constructed, so return null
             }
             previousNode = currentNode;
         }
