@@ -140,6 +140,34 @@ describe('NestedSet.toTree(...)', () => {
     });
 });
 
+describe('NestedSetNode.getAnnotations(...)', () => {
+    test('get all annotations from a node', () => {
+        let mockAnnotations = [
+            mockAnnotation('AA', 0, 2, 1, annotationType, annotator),
+            mockAnnotation('CC DD EE', 6, 14, 2, annotationType, annotator),
+            mockAnnotation('DD', 9, 11, 3, annotationType, annotator)
+        ];
+        let rootNode = NestedSet.toTree(
+            mockAnnotations,
+            'AA BB CC DD EE',
+            1,
+            1,
+            new Date(),
+            errorCallBack);
+        expect(rootNode).not.toBeNull();
+        if (rootNode) {
+            let annotations = rootNode.allAnnotations();
+            expect(annotations.length).toEqual(3);
+            expect(annotations[0].start_indices[0]).toEqual(0);
+            expect(annotations[0].end_indices[0]).toEqual(2);
+            expect(annotations[1].start_indices[0]).toEqual(6);
+            expect(annotations[1].end_indices[0]).toEqual(14);
+            expect(annotations[2].start_indices[0]).toEqual(9);
+            expect(annotations[2].end_indices[0]).toEqual(11);
+        }
+    })
+});
+
 describe('NestedSet.generateLineNodes(...)', () => {
     test('NestedSet.generateLineNodes()', () => {
         let document = `line1
