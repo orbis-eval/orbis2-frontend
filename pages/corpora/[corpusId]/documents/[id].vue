@@ -197,6 +197,7 @@ function undoAnnotation() {
     const annotationIndex = annotations.value.indexOf(undoneAnnotation);
     if (annotationIndex >= 0) {
       annotations.value.splice(annotationIndex, 1);
+      // TODO: remove from database
       reload();
     }
   }
@@ -205,6 +206,7 @@ function redoAnnotation() {
   const redoneAnnotation = annotationStore.redoAnnotation();
   if (redoneAnnotation) {
     annotations.value.push(redoneAnnotation);
+    // TODO: add to database
     reload();
   }
 
