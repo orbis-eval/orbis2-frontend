@@ -12,29 +12,36 @@ export const useAnnotationStore = defineStore('annotation', {
     },
     actions: {
         addAnnotation(annotation: Annotation) {
-            this.undoneAnnotations = [];
+            if (this.undoneAnnotations.length > 0) {
+                this.annotations = [];
+                this.undoneAnnotations = [];
+            }
             this.annotations.push(annotation);
         },
         popAnnotation() {
             return this.annotations.pop();
         },
-        undoAnnotation(callback: Function) {
+        undoAnnotation(): Annotation | undefined {
             if (this.annotations.length > 0) {
                 const undoneAnnotation = this.annotations.pop();
                 if (undoneAnnotation) {
                     this.undoneAnnotations.push(undoneAnnotation);
-                    callback();
+                    return undoneAnnotation;
                 }
             }
         },
-        redoAnnotation(callback: Function) {
+        redoAnnotation(): Annotation | undefined {
             if (this.undoneAnnotations.length > 0) {
-                const redoAnnotation = this.undoneAnnotations.pop();
-                if (redoAnnotation) {
-                    this.annotations.push(redoAnnotation);
-                    callback();
+                const redoneAnnotation = this.undoneAnnotations.pop();
+                if (redoneAnnotation) {
+                    this.annotations.push(redoneAnnotation);
+                    return redoneAnnotation;
                 }
             }
+        },
+        resetAnnotationStack() {
+            this.annotations = [];
+            this.undoneAnnotations = [];
         },
         changeSelectedRun(run: Run) {
             this.selectedRun = run;

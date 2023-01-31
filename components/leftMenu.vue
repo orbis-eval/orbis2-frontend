@@ -50,15 +50,10 @@ watch(currentSelection, newValue => {
 }, {immediate: true})
 
 watch(selectionFromParent, (newValue, oldValue) => {
-  console.log(newValue)
-  console.log(oldValue)
-  console.log(selectionFromParent)
   currentSelection.value = newValue;
 })
 
 onMounted(() => {
-  console.log(selectionFromParent.value)
-  console.log(currentSelection.value)
   currentSelection.value = selectionFromParent.value;
 })
 

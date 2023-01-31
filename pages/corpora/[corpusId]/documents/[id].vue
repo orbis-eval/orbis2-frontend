@@ -43,7 +43,7 @@
       <div>
         {{ recentlyStoredAnnotationId }}
       </div>
-      <div v-if="annotationStore.annotations">
+      <div v-if="annotations">
         <h2 class="text-4xl">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
@@ -55,7 +55,7 @@
             </tr>
           </thead>
           <tbody>
-          <tr v-for="annotation in annotationStore.annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+          <tr v-for="annotation in annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="p-1">{{ annotation.start_indices[0] }}</td>
             <td class="p-1">{{ annotation.end_indices[0] }}</td>
             <td class="p-1">{{ annotation.surface_forms[0] }}</td>
@@ -88,7 +88,7 @@ const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
-const annotations = ref([]);
+const annotations = ref([] as Annotation[]);
 const selection = ref(null);
 const relativeDiv = ref(null);
 const mousePosX = ref(0);
@@ -100,17 +100,6 @@ const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
 const selectedRun = ref(annotationStore.selectedRun)
-
-$orbisApiService.getDocument(route.params.id)
-    .then(document => {
-      if (document instanceof Document) {
-        content.value = document.content;
-      } else {
-        console.error(document.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        content.value = 'ERROR';
-      }
-    });
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "Type A",
@@ -149,12 +138,11 @@ const undoEventListener = (event: KeyboardEvent) => {
 
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
-  selectedRunChanged(annotationStore.selectedRun);
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', undoEventListener);
-  annotationStore.$reset();
+  annotationStore.resetAnnotationStack();
 });
 
 watch(content, async() => {
@@ -194,7 +182,7 @@ $orbisApiService.getRuns(Number(route.params.corpusId))
 
 function reload() {
   nestedSetRootNode.value = NestedSet.toTree(
-      annotationStore.annotations,
+      annotations.value,
       content.value,
       1,
       1,
@@ -204,10 +192,24 @@ function reload() {
 }
 
 function undoAnnotation() {
-  annotationStore.undoAnnotation(reload);
+  const undoneAnnotation = annotationStore.undoAnnotation();
+  if (undoneAnnotation) {
+    const annotationIndex = annotations.value.indexOf(undoneAnnotation);
+    if (annotationIndex >= 0) {
+      annotations.value.splice(annotationIndex, 1);
+      // TODO: remove from database
+      reload();
+    }
+  }
 }
 function redoAnnotation() {
-  annotationStore.redoAnnotation(reload);
+  const redoneAnnotation = annotationStore.redoAnnotation();
+  if (redoneAnnotation) {
+    annotations.value.push(redoneAnnotation);
+    // TODO: add to database
+    reload();
+  }
+
 }
 
 function mockAnnotation(
@@ -233,14 +235,13 @@ function mockAnnotation(
 }
 
 function selectedRunChanged(run: any) {
-  annotationStore.changeSelectedRun(run);
-  selectedRun.value = run;
-  console.log(`blabla ${run}`)
   if (run) {
+    annotationStore.changeSelectedRun(run);
+    selectedRun.value = run;
     $orbisApiService.getAnnotations(run._id, route.params.id)
-        .then(annotations => {
-          if (Array.isArray(annotations)) {
-            annotationStore.annotations = annotations;
+        .then(annotationsFromDb => {
+          if (Array.isArray(annotationsFromDb)) {
+            annotations.value = annotationsFromDb;
             reload();
           } else {
             console.error(annotations.errorMessage);
@@ -267,36 +268,30 @@ function updateAnnotations(currentSelection) {
 
 async function commitAnnotationType(annotationType:AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
+  let annotation = mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
+  annotation.run_id = selectedRun.value._id;
+  annotation.document_id = Number(route.params.id);
+  // add to store for re- / undo and to annotations list for rendering the tree
+  // (this will be refactored with adding directly to the tree)
+  annotations.value.push(annotation);
   annotationStore.addAnnotation(
-      mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
+      annotation
   );
 
   // hide the context menu
   showAnnotationModal.value = false;
 
   $orbisApiService.addAnnotation(
-      new Annotation({
-            key: "",
-            surface_forms: [selection.value.word],
-            start_indices: [selection.value.start],
-            end_indices: [selection.value.end],
-            annotation_type: annotationType,
-            annotator: annotator,
-            run_id: selectedRun.value._id,
-            document_id: Number(route.params.id),
-            metadata: [],
-            timestamp: new Date(),
-            _id: 0
-          }
-      )).then(annotationId => {
-    if (annotationId instanceof Number) {
-      recentlyStoredAnnotationId.value = annotationId;
-    } else {
-      console.error(annotationId.errorMessage);
-      // TODO, 06.01.2023 anf: correct error handling
-      recentlyStoredAnnotationId.value = 'ERROR';
-    }
-  });
+      new Annotation(annotation))
+      .then(annotationId => {
+        if (annotationId instanceof Number) {
+          recentlyStoredAnnotationId.value = annotationId;
+        } else {
+          console.error(annotationId.errorMessage);
+          // TODO, 06.01.2023 anf: correct error handling
+          recentlyStoredAnnotationId.value = 'ERROR';
+        }
+      });
   reload();
 }
 </script>
