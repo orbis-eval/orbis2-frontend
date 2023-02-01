@@ -81,6 +81,7 @@ import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
 import {Corpus} from "~/lib/model/corpus";
+import {Error} from "~/lib/model/error";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -194,20 +195,40 @@ function reload() {
 function undoAnnotation() {
   const undoneAnnotation = annotationStore.undoAnnotation();
   if (undoneAnnotation) {
-    const annotationIndex = annotations.value.indexOf(undoneAnnotation);
-    if (annotationIndex >= 0) {
-      annotations.value.splice(annotationIndex, 1);
-      // TODO: remove from database
-      reload();
+    $orbisApiService.removeAnnotationFromDocument(undoneAnnotation)
+        .then(response => {
+          if (response instanceof Error) {
+            console.error(response.errorMessage);
+            // redo annotation since it could not be removed from the database in the backend
+            annotationStore.redoAnnotation();
+          } else {
+            const annotationIndex = annotations.value.indexOf(undoneAnnotation);
+            console.log(`annotationindex: ${annotationIndex}`)
+            if (annotationIndex >= 0) {
+              annotations.value.splice(annotationIndex, 1);
+              reload();
+            }
+          }
+        })
     }
   }
-}
+
 function redoAnnotation() {
-  const redoneAnnotation = annotationStore.redoAnnotation();
+  let redoneAnnotation = annotationStore.redoAnnotation();
   if (redoneAnnotation) {
-    annotations.value.push(redoneAnnotation);
-    // TODO: add to database
-    reload();
+    $orbisApiService.addAnnotation(redoneAnnotation)
+        .then(annotationResponse => {
+          if (annotationResponse instanceof Annotation) {
+            // push redoneAnnotation, to keep the timestamp from previous set annotation otherwise annotations in
+            // redone have different timestamps than in annotations -> conflicts in second undo / redo
+            annotations.value.push(redoneAnnotation);
+            reload();
+          } else {
+            console.error(annotationResponse.errorMessage);
+            // undo annotation since it could not be stored in the backend
+            annotationStore.undoAnnotation();
+          }
+        });
   }
 
 }
@@ -271,27 +292,25 @@ async function commitAnnotationType(annotationType:AnnotationType) {
   let annotation = mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
   annotation.run_id = selectedRun.value._id;
   annotation.document_id = Number(route.params.id);
-  // add to store for re- / undo and to annotations list for rendering the tree
-  // (this will be refactored with adding directly to the tree)
-  annotations.value.push(annotation);
-  annotationStore.addAnnotation(
-      annotation
-  );
-
-  // hide the context menu
-  showAnnotationModal.value = false;
-
-  $orbisApiService.addAnnotation(
-      new Annotation(annotation))
-      .then(annotationId => {
-        if (annotationId instanceof Number) {
-          recentlyStoredAnnotationId.value = annotationId;
+  $orbisApiService.addAnnotation(annotation)
+      .then(annotationResponse => {
+        if (annotationResponse instanceof Annotation) {
+          annotation = annotationResponse;
+          // add to store for re- / undo and to annotations list for rendering the tree
+          // (this will be refactored with adding directly to the tree)
+          annotations.value.push(annotation);
+          annotationStore.addAnnotation(
+              annotation
+          );
+          // hide the context menu
+          showAnnotationModal.value = false;
+          reload();
         } else {
-          console.error(annotationId.errorMessage);
           // TODO, 06.01.2023 anf: correct error handling
-          recentlyStoredAnnotationId.value = 'ERROR';
+          console.error(annotationResponse.errorMessage);
+          // hide the context menu
+          showAnnotationModal.value = false;
         }
       });
-  reload();
 }
 </script>
