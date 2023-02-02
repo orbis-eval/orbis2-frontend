@@ -30,7 +30,7 @@ beforeEach(() => {
         timestamp: new Date(),
         _id: 3
     });
-})
+});
 
 describe('AnnotationStore.addAnnotation()', () => {
     test('add annotation to annotations list, list contains one element afterwards', () => {
@@ -42,23 +42,22 @@ describe('AnnotationStore.addAnnotation()', () => {
     });
 
     test('simulate undoing and adding a new annotation, after adding new annotation, ' +
-        'redoing is no longer possible', () => {
+        're-/undoing of older elements is no longer possible', () => {
         const annotationStore = useAnnotationStore();
         let annotation2 = new Annotation(mockedAnnotation);
-        annotation2.key = 'my-key2'
+        annotation2.key = 'my-key2';
         let annotation3 = new Annotation(mockedAnnotation);
-        annotation3.key = 'my-key3'
+        annotation3.key = 'my-key3';
 
         annotationStore.addAnnotation(mockedAnnotation);
         annotationStore.addAnnotation(annotation2);
-        annotationStore.undoAnnotation(() => {});
-        annotationStore.addAnnotation(annotation3)
+        annotationStore.undoAnnotation();
+        annotationStore.addAnnotation(annotation3);
 
-        expect(annotationStore.undoneAnnotations.length).toEqual(0)
-        expect(annotationStore.annotations.length).toEqual(2);
-        expect(annotationStore.annotations[0].key).toEqual('my-key');
-        expect(annotationStore.annotations[1].key).toEqual('my-key3');
-    })
+        expect(annotationStore.undoneAnnotations.length).toEqual(0);
+        expect(annotationStore.annotations.length).toEqual(1);
+        expect(annotationStore.annotations[0].key).toEqual('my-key3');
+    });
 });
 
 describe('AnnotationStore.popAnnotation()', () => {
@@ -80,49 +79,14 @@ describe('AnnotationStore.popAnnotation()', () => {
 
         expect(annotationStore.annotations.length).toEqual(0);
         expect(annotation).toBeUndefined();
-    })
+    });
 });
 
 describe('AnnotationStore.undoAnnotation()', () => {
-    test('undo last annotation, undoneAnnotations list contains this element afterwards, callback is executed',
-        () => {
-        const annotationStore = useAnnotationStore();
-        let callbackCounter = 0;
-        let annotation2 = new Annotation(mockedAnnotation);
-        annotation2.key = 'my-key2';
-        let annotation3 = new Annotation(mockedAnnotation);
-        annotation3.key = 'my-key3';
-
-        annotationStore.addAnnotation(mockedAnnotation);
-        annotationStore.addAnnotation(annotation2);
-        annotationStore.addAnnotation(annotation3);
-        annotationStore.undoAnnotation(() => { callbackCounter++; });
-
-        expect(annotationStore.annotations.length).toEqual(2);
-        expect(annotationStore.undoneAnnotations.length).toEqual(1);
-        expect(annotationStore.annotations[0].key).toEqual('my-key');
-        expect(annotationStore.annotations[1].key).toEqual('my-key2');
-        expect(annotationStore.undoneAnnotations[0].key).toEqual('my-key3');
-        expect(callbackCounter).toEqual(1);
-    });
-
-    test('annotations list is empty, undo annotations does not throw any errors, nor change the state, ' +
-        'callback is not executed', () => {
-        const annotationStore = useAnnotationStore();
-        let callbackCounter = 0;
-
-        annotationStore.undoAnnotation(() => { callbackCounter++; })
-        expect(annotationStore.annotations.length).toEqual(0);
-        expect(annotationStore.undoneAnnotations.length).toEqual(0);
-        expect(callbackCounter).toEqual(0);
-    })
-});
-
-describe('AnnotationStore.redoAnnotation()', () => {
-    test('redo last undone annotation, annotations list contains this element again, callback is executed',
+    test('undo last annotation, undoneAnnotations list contains this element afterwards, ' +
+        'same element is returned',
         () => {
             const annotationStore = useAnnotationStore();
-            let callbackCounter = 0;
             let annotation2 = new Annotation(mockedAnnotation);
             annotation2.key = 'my-key2';
             let annotation3 = new Annotation(mockedAnnotation);
@@ -131,26 +95,57 @@ describe('AnnotationStore.redoAnnotation()', () => {
             annotationStore.addAnnotation(mockedAnnotation);
             annotationStore.addAnnotation(annotation2);
             annotationStore.addAnnotation(annotation3);
-            annotationStore.undoAnnotation(() => {});
-            annotationStore.undoAnnotation(() => {});
-            annotationStore.redoAnnotation(() => { callbackCounter++; })
+            const undoneAnnotation = annotationStore.undoAnnotation();
 
             expect(annotationStore.annotations.length).toEqual(2);
             expect(annotationStore.undoneAnnotations.length).toEqual(1);
             expect(annotationStore.annotations[0].key).toEqual('my-key');
             expect(annotationStore.annotations[1].key).toEqual('my-key2');
             expect(annotationStore.undoneAnnotations[0].key).toEqual('my-key3');
-            expect(callbackCounter).toEqual(1);
+            expect(annotationStore.undoneAnnotations[0].key).toEqual(undoneAnnotation?.key);
+        });
+
+    test('annotations list is empty, undo annotations does not throw any errors, nor change the state, ' +
+        'returns undefined', () => {
+        const annotationStore = useAnnotationStore();
+
+        const undoneAnnotation = annotationStore.undoAnnotation();
+        expect(annotationStore.annotations.length).toEqual(0);
+        expect(annotationStore.undoneAnnotations.length).toEqual(0);
+        expect(undoneAnnotation).toEqual(undefined);
+    });
+});
+
+describe('AnnotationStore.redoAnnotation()', () => {
+    test('redo last undone annotation, annotations list contains this element again, same element is returned',
+        () => {
+            const annotationStore = useAnnotationStore();
+            let annotation2 = new Annotation(mockedAnnotation);
+            annotation2.key = 'my-key2';
+            let annotation3 = new Annotation(mockedAnnotation);
+            annotation3.key = 'my-key3';
+
+            annotationStore.addAnnotation(mockedAnnotation);
+            annotationStore.addAnnotation(annotation2);
+            annotationStore.addAnnotation(annotation3);
+            annotationStore.undoAnnotation();
+            annotationStore.undoAnnotation();
+            annotationStore.redoAnnotation();
+
+            expect(annotationStore.annotations.length).toEqual(2);
+            expect(annotationStore.undoneAnnotations.length).toEqual(1);
+            expect(annotationStore.annotations[0].key).toEqual('my-key');
+            expect(annotationStore.annotations[1].key).toEqual('my-key2');
+            expect(annotationStore.undoneAnnotations[0].key).toEqual('my-key3');
         });
 
     test('undone annotations list is empty, redo annotations does not throw any errors, ' +
-        'nor change the state, callback is not executed', () => {
+        'nor change the state, returns undefined', () => {
         const annotationStore = useAnnotationStore();
-        let callbackCounter = 0;
 
-        annotationStore.redoAnnotation(() => { callbackCounter++; })
+        const redoneAnnotations = annotationStore.redoAnnotation();
         expect(annotationStore.annotations.length).toEqual(0);
         expect(annotationStore.undoneAnnotations.length).toEqual(0);
-        expect(callbackCounter).toEqual(0);
-    })
+        expect(redoneAnnotations).toEqual(undefined);
+    });
 });

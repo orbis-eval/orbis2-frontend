@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="sidebar">
     <template #leftMenu>
-      <LeftMenu :runSelection="documentRuns" @selectedRunChanged="selectedRunChanged" />
+      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"/>
     </template>
     <LoadingSpinner v-if="!content"/>
     <div
@@ -15,7 +15,7 @@
         :top-position="mousePosY"
         :is-visible="showAnnotationModal"
         :annotation-types="mockAnnotationTypes"
-        :selection="selection"
+        :selectionSurfaceForm="selectionSurfaceForm"
         @hideAnnotationModal="hideAnnotationModal"
         @commitAnnotationType="commitAnnotationType"/>
 
@@ -45,7 +45,7 @@
       <div>
         {{ recentlyStoredAnnotationId }}
       </div>
-      <div v-if="annotationStore.annotations">
+      <div v-if="annotations">
         <h2 class="text-4xl">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
@@ -57,7 +57,7 @@
             </tr>
           </thead>
           <tbody>
-          <tr v-for="annotation in annotationStore.annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+          <tr v-for="annotation in annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="p-1">{{ annotation.start_indices[0] }}</td>
             <td class="p-1">{{ annotation.end_indices[0] }}</td>
             <td class="p-1">{{ annotation.surface_forms[0] }}</td>
@@ -83,7 +83,6 @@ import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
 import {Corpus} from "~/lib/model/corpus";
-import {AnnotationModal} from "#components";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -91,8 +90,9 @@ const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
 const content = ref(null);
-const annotations = ref([]);
+const annotations = ref([] as Annotation[]);
 const selection = ref(null);
+const selectionSurfaceForm = ref('');
 const relativeDiv = ref(null);
 const mousePosX = ref(0);
 const mousePosY = ref(0);
@@ -102,19 +102,8 @@ const errorNodes = ref([]);
 const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
-
+const selectedRun = ref(annotationStore.selectedRun);
 const annotationTypeModal = ref(null);
-
-$orbisApiService.getDocument(route.params.id)
-    .then(document => {
-      if (document instanceof Document) {
-        content.value = document.content;
-      } else {
-        console.error(document.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        content.value = 'ERROR';
-      }
-    });
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "Type A",
@@ -164,7 +153,6 @@ const clickOutsideListener = (event) => {
 
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
-  selectedRunChanged(annotationStore.selectedRun);
 });
 
 onMounted(() => {
@@ -174,7 +162,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', undoEventListener);
   window.removeEventListener('click', clickOutsideListener);
-  annotationStore.$reset();
+  annotationStore.resetAnnotationStack();
 });
 
 watch(content, async() => {
@@ -204,7 +192,7 @@ $orbisApiService.getRuns(Number(route.params.corpusId))
             supported_annotation_types: [],
             _id: 0
           }),
-          _id: 0
+          _id: 1
         }))
       } else {
         console.error(runs.errorMessage);
@@ -214,7 +202,7 @@ $orbisApiService.getRuns(Number(route.params.corpusId))
 
 function reload() {
   nestedSetRootNode.value = NestedSet.toTree(
-      annotationStore.annotations,
+      annotations.value,
       content.value,
       1,
       1,
@@ -224,10 +212,44 @@ function reload() {
 }
 
 function undoAnnotation() {
-  annotationStore.undoAnnotation(reload);
-}
+  const undoneAnnotation = annotationStore.undoAnnotation();
+  if (undoneAnnotation) {
+    $orbisApiService.removeAnnotationFromDocument(undoneAnnotation)
+        .then(response => {
+          if (response instanceof Error) {
+            console.error(response.errorMessage);
+            // redo annotation since it could not be removed from the database in the backend
+            annotationStore.redoAnnotation();
+          } else {
+            const annotationIndex = annotations.value.indexOf(undoneAnnotation);
+            console.log(`annotationindex: ${annotationIndex}`)
+            if (annotationIndex >= 0) {
+              annotations.value.splice(annotationIndex, 1);
+              reload();
+            }
+          }
+        })
+    }
+  }
+
 function redoAnnotation() {
-  annotationStore.redoAnnotation(reload);
+  let redoneAnnotation = annotationStore.redoAnnotation();
+  if (redoneAnnotation) {
+    $orbisApiService.addAnnotation(redoneAnnotation)
+        .then(annotationResponse => {
+          if (annotationResponse instanceof Annotation) {
+            // push redoneAnnotation, to keep the timestamp from previous set annotation otherwise annotations in
+            // redone have different timestamps than in annotations -> conflicts in second undo / redo
+            annotations.value.push(redoneAnnotation);
+            reload();
+          } else {
+            console.error(annotationResponse.errorMessage);
+            // undo annotation since it could not be stored in the backend
+            annotationStore.undoAnnotation();
+          }
+        });
+  }
+
 }
 
 function mockAnnotation(
@@ -253,17 +275,19 @@ function mockAnnotation(
 }
 
 function selectedRunChanged(run: any) {
-  console.log(`selected run changed ${run}`)
-  annotationStore.selectedRun = run;
-  $orbisApiService.getAnnotations(run._id, route.params.id)
-      .then(annotations => {
-        if (Array.isArray(annotations)) {
-          annotationStore.annotations = annotations;
-          reload();
-        } else {
-          console.error(annotations.errorMessage);
-        }
-      })
+  if (run) {
+    annotationStore.changeSelectedRun(run);
+    selectedRun.value = run;
+    $orbisApiService.getAnnotations(run._id, route.params.id)
+        .then(annotationsFromDb => {
+          if (Array.isArray(annotationsFromDb)) {
+            annotations.value = annotationsFromDb;
+            reload();
+          } else {
+            console.error(annotations.errorMessage);
+          }
+        })
+  }
 }
 
 function hideAnnotationModal() {
@@ -272,6 +296,7 @@ function hideAnnotationModal() {
 
 function updateAnnotations(currentSelection) {
   selection.value = currentSelection;
+  selectionSurfaceForm.value = selection.value.word;
   showAnnotationModal.value = true;
   let relativeDivRect = relativeDiv.value.getBoundingClientRect();
   // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
@@ -284,41 +309,28 @@ function updateAnnotations(currentSelection) {
 
 async function commitAnnotationType(annotationType:AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
-  annotationStore.addAnnotation(
-      mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
-  );
-
-  // hide the context menu
-  showAnnotationModal.value = false;
-
-  const result = await $orbisApiService.getRuns(Number(route.params.corpusId));
-  let runId = 0;
-  if (Array.isArray(result)) {
-    runId = result[0]._id;
-  }
-  $orbisApiService.addAnnotation(
-      new Annotation({
-            key: "",
-            surface_forms: [selection.word],
-            start_indices: [selection.start],
-            end_indices: [selection.end],
-            annotation_type: annotationType,
-            annotator: annotator,
-            run_id: runId,
-            document_id: Number(route.params.id),
-            metadata: [],
-            timestamp: new Date(),
-            _id: 0
-          }
-      )).then(annotationId => {
-    if (annotationId instanceof Number) {
-      recentlyStoredAnnotationId.value = annotationId;
-    } else {
-      console.error(annotationId.errorMessage);
-      // TODO, 06.01.2023 anf: correct error handling
-      recentlyStoredAnnotationId.value = 'ERROR';
-    }
-  });
-  reload();
+  let annotation = mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
+  annotation.run_id = selectedRun.value._id;
+  annotation.document_id = Number(route.params.id);
+  $orbisApiService.addAnnotation(annotation)
+      .then(annotationResponse => {
+        if (annotationResponse instanceof Annotation) {
+          annotation = annotationResponse;
+          // add to store for re- / undo and to annotations list for rendering the tree
+          // (this will be refactored with adding directly to the tree)
+          annotations.value.push(annotation);
+          annotationStore.addAnnotation(
+              annotation
+          );
+          // hide the context menu
+          showAnnotationModal.value = false;
+          reload();
+        } else {
+          // TODO, 06.01.2023 anf: correct error handling
+          console.error(annotationResponse.errorMessage);
+          // hide the context menu
+          showAnnotationModal.value = false;
+        }
+      });
 }
 </script>
