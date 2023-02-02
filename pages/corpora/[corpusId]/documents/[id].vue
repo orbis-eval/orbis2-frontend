@@ -92,6 +92,7 @@ const route = useRoute();
 const content = ref(null);
 const annotations = ref([] as Annotation[]);
 const selection = ref(null);
+const selectionSurfaceForm = ref('');
 const relativeDiv = ref(null);
 const mousePosX = ref(0);
 const mousePosY = ref(0);
