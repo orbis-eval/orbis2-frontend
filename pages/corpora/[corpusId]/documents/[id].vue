@@ -1,7 +1,8 @@
 <template>
   <NuxtLayout name="sidebar">
     <template #leftMenu>
-      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"/>
+      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
+                @onDocumentsClicked="() => router.go(-1)"/>
     </template>
     <LoadingSpinner v-if="!content"/>
     <div
@@ -87,6 +88,7 @@ addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
+const router = useRouter();
 
 const content = ref(null);
 const annotations = ref([] as Annotation[]);

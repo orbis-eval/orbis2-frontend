@@ -11,7 +11,7 @@
         </select>
       </div>
       <!-- Documents -->
-      <button class="menu-button">
+      <button class="menu-button" @click="() => emit('onDocumentsClicked')">
         <OhVueIcon name="hi-database" class="menu-icon"/>
         <p class="menu-button-text">Documents</p>
       </button>
@@ -43,7 +43,7 @@ const props = defineProps({
 })
 const selectionFromParent = toRef(props, 'selected')
 const currentSelection = ref(null)
-const emit = defineEmits(['selectionChanged'])
+const emit = defineEmits(['selectionChanged', 'onDocumentsClicked'])
 
 watch(currentSelection, newValue => {
   emit('selectionChanged', newValue);
