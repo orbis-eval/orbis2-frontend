@@ -39,9 +39,13 @@ export class OrbisApiService {
             this.apiGet(`getAnnotations?run_id=${runId}&document_id=${documentId}`));
     }
 
-    async addAnnotation(annotation: Annotation): Promise<Number | Error> {
-        return Parser.parse(Number,
+    async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
+        return Parser.parse(Annotation,
             this.apiPost(`addAnnotation`, annotation));
+    }
+
+    async removeAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`removeAnnotationFromDocument`, annotation));
     }
 
     async apiGet(query: string): Promise<TypedInternalResponse<string>> {
@@ -53,6 +57,13 @@ export class OrbisApiService {
     async apiPost(query: string, body: any): Promise<TypedInternalResponse<string>> {
         return $fetch(`${this.orbisApiBase}${query}`, {
             method: 'POST',
+            body: JSON.stringify(body)
+        })
+    }
+
+    async apiDelete(query: string, body: any): Promise<TypedInternalResponse<string>> {
+        return $fetch(`${this.orbisApiBase}${query}`, {
+            method: 'DELETE',
             body: JSON.stringify(body)
         })
     }

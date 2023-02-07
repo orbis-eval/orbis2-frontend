@@ -4,6 +4,21 @@ import {TypedInternalResponse} from "nitropack";
 export class Parser {
 
     /**
+     * Takes a promise containing no body in response.
+     * @param promise the promise delivering the response, which only contains a status code
+     * @return Returns true if status code = 200 or an error if something went wrong.
+     */
+    static parseEmptyResponse(promise: Promise<TypedInternalResponse<string>>): Promise<boolean | Error> {
+        return promise
+            .then(data => {
+                return true
+            })
+            .catch(error => {
+                return new Error(error);
+            });
+    }
+
+    /**
      * Takes a promise containing a response and parses it to a given type.
      * The type in which the response is parsed to (U) must be an extension of an interface (T),
      * and the data in the response must be of the same structure as T.
