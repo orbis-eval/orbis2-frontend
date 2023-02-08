@@ -70,7 +70,7 @@ export class NestedSet {
     };
 
     static toTree(
-        annotations: Annotation[],
+        annotations: NestedSetNode[],
         documentString: string,
         runId: number,
         documentId: number,
@@ -95,7 +95,7 @@ export class NestedSet {
         });
 
         //push all line-annotations
-        if(generateLineAnnotations) annotations.push(...this.generateLineAnnotations(documentString, runId, documentId, timestamp));
+        if(generateLineAnnotations) annotations.push(...this.generateLineAnnotationNodes(documentString, runId, documentId, timestamp));
 
         // sort the annotations
         annotations.sort(this.annotationCompare);
@@ -168,16 +168,16 @@ export class NestedSet {
         node.children.sort(this.annotationCompare);
     };
 
-    public static generateLineAnnotations = (
+    public static generateLineAnnotationNodes = (
         document: string,
         runId: number,
         documentId: number,
-        timeStamp: Date): Annotation[] => {
+        timeStamp: Date): NestedSetNode[] => {
         const lines = document.split("\n");
         let offset = 0;
-        let lineNodes: Annotation[] = [];
+        let lineNodes: NestedSetNode[] = [];
         lines.forEach((line) => {
-            lineNodes.push(new Annotation({
+            lineNodes.push(new NestedSetNode(new Annotation({
                 key: this.LINE_ANNOTATION_KEY,
                 surface_forms: [line],
                 start_indices: [offset],
@@ -189,7 +189,7 @@ export class NestedSet {
                 metadata: [],
                 timestamp: timeStamp,
                 _id: offset
-            }));
+            })));
             offset = offset + line.length + 1;
         });
         return lineNodes;

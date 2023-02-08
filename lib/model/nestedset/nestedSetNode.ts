@@ -4,6 +4,7 @@ import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 
 export class NestedSetNode extends Annotation {
+
     public depth: number;
     public children: NestedSetNode[];
     public parent: NestedSetNode | null;
@@ -24,7 +25,7 @@ export class NestedSetNode extends Annotation {
         this.children.push(node);
     }
 
-    public getAnnotations(annotations: Annotation[]) : Annotation[] {
+    public getAnnotationNodes(annotations: NestedSetNode[]) : NestedSetNode[] {
         for(let child of this.children) {
             if(
                 child.annotation_type.name !== NestedSet.GAP_ANNOTATION_TYPE_NAME
@@ -34,7 +35,7 @@ export class NestedSetNode extends Annotation {
                 child.parent) {
                 annotations.push(child);
             }
-            child.getAnnotations(annotations);
+            child.getAnnotationNodes(annotations);
         }
         return annotations;
     }
@@ -43,17 +44,54 @@ export class NestedSetNode extends Annotation {
      * returns all annotations that are in the subtree
      * from this node
      */
-    public allAnnotations(): Annotation[] {
-        let annotations: Annotation[] = [];
-        return this.getAnnotations(annotations);
+    public allAnnotationNodes(): NestedSetNode[] {
+        let annotations: NestedSetNode[] = [];
+        return this.getAnnotationNodes(annotations);
     }
 
-    public insertAnnotation(
-        annotation: Annotation,
+    /**
+     * insert NestedSetNode as child to this node
+     * @param annotationNode
+     * @param errorCallback
+     */
+    public insertAnnotationNode(
+        annotationNode: NestedSetNode,
         errorCallback: (parseError: NestedSetParseError) => void) {
-        let annotations = this.allAnnotations();
-        annotations.push(annotation);
-        this.children = []; // remove all childs before re-calculating the tree!
+        let annotationNodes = this.allAnnotationNodes();
+        annotationNode.parent = this;
+        annotationNodes.push(annotationNode);
+        this.children = []; // remove all childs before re-calculating the tree
+        // recalculate the subtree of this node
+        let rootNode = NestedSet.toTree(
+            annotationNodes,
+            this.surface_forms[0],
+            this.run_id,
+            this.document_id,
+            this.timestamp,
+            errorCallback,
+            this,
+            false);
+        if(rootNode) {
+            this.children = rootNode.children;
+            for(const child of this.children) {
+                child.parent = this;
+            }
+            return;
+        }
+        console.warn('could not insert annotation'); // TODO: handle/throw exception
+    }
+
+    public removeAnnotationNode(annotationToRemove: NestedSetNode, errorCallback: (parseError: NestedSetParseError) => void) {
+        let annotations = this.allAnnotationNodes();
+        annotations.filter((annotation, index, annotations)=>{
+            if (annotation._id === annotationToRemove._id) {
+                // Removes the value from the original array
+                annotations.splice(index, 1);
+                return true;
+            }
+            return false;
+        });
+        this.children = []; // remove all childs before re-calculating the tree
         let rootNode = NestedSet.toTree(
             annotations,
             this.surface_forms[0],
@@ -67,6 +105,5 @@ export class NestedSetNode extends Annotation {
             this.children = rootNode.children;
             return;
         }
-        console.warn('could not insert annotation');
     }
 }

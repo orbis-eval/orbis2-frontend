@@ -83,6 +83,7 @@ import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
 import {Corpus} from "~/lib/model/corpus";
+import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -104,6 +105,7 @@ const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
 const selectedRun = ref(annotationStore.selectedRun);
 const annotationTypeModal = ref(null);
+const selectedNode = ref(null);
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "Type A",
@@ -212,21 +214,18 @@ function reload() {
 }
 
 function undoAnnotation() {
-  const undoneAnnotation = annotationStore.undoAnnotation();
-  if (undoneAnnotation) {
-    $orbisApiService.removeAnnotationFromDocument(undoneAnnotation)
+  const undoneAnnotationNode = annotationStore.undoAnnotation();
+  if (undoneAnnotationNode) {
+    $orbisApiService.removeAnnotationFromDocument(undoneAnnotationNode)
         .then(response => {
           if (response instanceof Error) {
             console.error(response.errorMessage);
             // redo annotation since it could not be removed from the database in the backend
             annotationStore.redoAnnotation();
           } else {
-            const annotationIndex = annotations.value.indexOf(undoneAnnotation);
-            console.log(`annotationindex: ${annotationIndex}`)
-            if (annotationIndex >= 0) {
-              annotations.value.splice(annotationIndex, 1);
-              reload();
-            }
+            // console.log(`removed annotation ${undoneAnnotationNode._id}`);
+            // remove the annotation from the tree
+            undoneAnnotationNode.parent.removeAnnotationNode(undoneAnnotationNode, parseErrorCallBack);
           }
         })
     }
@@ -249,17 +248,16 @@ function redoAnnotation() {
           }
         });
   }
-
 }
 
-function mockAnnotation(
+function mockAnnotationNode(
     surfaceForm: string,
     start: number,
     end: number,
     id: number,
     annotationType: AnnotationType,
-    annotator: Annotator): Annotation {
-  return NestedSet.trimWithSpaces(new Annotation({
+    annotator: Annotator): NestedSetNode {
+  return new NestedSetNode(NestedSet.trimWithSpaces(new Annotation({
     key: "",
     surface_forms: [surfaceForm],
     start_indices: [start],
@@ -271,7 +269,7 @@ function mockAnnotation(
     metadata: [],
     timestamp: new Date(),
     _id: id
-  }));
+  })));
 }
 
 function selectedRunChanged(run: any) {
@@ -294,7 +292,7 @@ function hideAnnotationModal() {
   showAnnotationModal.value = false;
 }
 
-function updateAnnotations(currentSelection) {
+function updateAnnotations(currentSelection, node: NestedSetNode) {
   selection.value = currentSelection;
   selectionSurfaceForm.value = selection.value.word;
   showAnnotationModal.value = true;
@@ -305,26 +303,33 @@ function updateAnnotations(currentSelection) {
   mousePosX.value = x;
   mousePosY.value = y;
   // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
+  selectedNode.value = node;
 }
 
 async function commitAnnotationType(annotationType:AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
-  let annotation = mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
-  annotation.run_id = selectedRun.value._id;
-  annotation.document_id = Number(route.params.id);
-  $orbisApiService.addAnnotation(annotation)
+  let annotationNode = mockAnnotationNode(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
+  annotationNode.run_id = selectedRun.value._id;
+  annotationNode.document_id = Number(route.params.id);
+  $orbisApiService.addAnnotation(annotationNode)
       .then(annotationResponse => {
         if (annotationResponse instanceof Annotation) {
-          annotation = annotationResponse;
-          // add to store for re- / undo and to annotations list for rendering the tree
-          // (this will be refactored with adding directly to the tree)
-          annotations.value.push(annotation);
-          annotationStore.addAnnotation(
-              annotation
-          );
+          annotationNode = new NestedSetNode(annotationResponse);
+
+          // the the correct parent of the newly created node
+          // annotationNode.parent = selectedNode.value.parent;
+
+          // insert the node into the tree
+           selectedNode.value.parent.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
+            console.warn("could not update the tree..."); // TODO: do proper error handling
+          });
+
+          // add to store for re- / undo
+          annotationStore.addAnnotation(annotationNode);
           // hide the context menu
           showAnnotationModal.value = false;
-          reload();
+          // console.log(`added annotation ${annotationNode._id}`);
+
         } else {
           // TODO, 06.01.2023 anf: correct error handling
           console.error(annotationResponse.errorMessage);
