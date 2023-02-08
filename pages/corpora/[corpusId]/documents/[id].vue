@@ -28,7 +28,7 @@
       Annotations that possibly are overlapping:
       <ul>
         <li v-for="node in errorNodes">
-          {{node.surface_forms[0]}}:({{ node.start_indices[0] }}/{{ node.end_indices[0] }})
+          {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{ node.end_indices[0] }})
         </li>
       </ul>
     </div>
@@ -289,7 +289,7 @@ function updateAnnotations(currentSelection) {
   // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
 }
 
-async function commitAnnotationType(annotationType:AnnotationType) {
+async function commitAnnotationType(annotationType: AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
   let annotation = mockAnnotation(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
   annotation.run_id = selectedRun.value._id;
