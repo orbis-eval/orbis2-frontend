@@ -24,6 +24,10 @@
         </tr>
         </tbody>
       </table>
+      <Pagination v-if="nofPages"
+                  @pageChanged="pageChanged"
+                  :nofPages="nofPages"
+                  class="text-center"/>
     </div>
     <template #sidebar>
       <div class="text-center">
@@ -46,6 +50,26 @@ const route = useRoute();
 const {$orbisApiService} = useNuxtApp();
 const documents = ref(null);
 const importEnabled = ref(false);
+// TODO, anf 08.02.2023: remember last selected page
+const currentPage = ref(1);
+const filesPerPage = ref(10);
+
+const nofPages = ref(0);
+
+function pageChanged(nextPage: number) {
+  currentPage.value = nextPage;
+  const startIndex = (currentPage.value - 1) * filesPerPage.value;
+  $orbisApiService.getDocuments(route.params.corpusId, filesPerPage.value, startIndex)
+      .then(result => {
+        if (Array.isArray(result)) {
+          documents.value = result;
+        } else {
+          console.error(result.errorMessage);
+          // TODO, 06.01.2023 anf: correct error handling
+          documents.value = [{_id: 'ERROR', content: 'ERROR'}];
+        }
+      });
+}
 
 function importFiles(chosenFiles: File[]) {
   console.log('input changed');
@@ -59,7 +83,9 @@ function cancelled() {
 $orbisApiService.getDocuments(route.params.corpusId)
     .then(result => {
       if (Array.isArray(result)) {
-        documents.value = result;
+        // TODO, anf 08.02.2023: implement get nofdocuments in backend for this
+        nofPages.value = Math.ceil(result.length / filesPerPage.value);
+        pageChanged(1);
       } else {
         console.error(result.errorMessage);
         // TODO, 06.01.2023 anf: correct error handling

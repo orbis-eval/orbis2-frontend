@@ -19,9 +19,15 @@ export class OrbisApiService {
             this.apiGet(`getCorpora`));
     }
 
-    async getDocuments(corpusId: string): Promise<Document[] | Error> {
+    async getDocuments(corpusId: string,
+                       pageSize: number | undefined = undefined,
+                       skip: number = 0): Promise<Document[] | Error> {
+        let pageSizeParam = '';
+        if (pageSize) {
+            pageSizeParam = `&page_size=${pageSize}`;
+        }
         return Parser.parseList(Document,
-            this.apiGet(`getDocuments?corpus_id=${corpusId}`));
+            this.apiGet(`getDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`));
     }
 
     async getDocument(documentId: string): Promise<Document | Error> {
