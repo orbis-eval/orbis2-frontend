@@ -25,6 +25,19 @@
         </tbody>
       </table>
     </div>
+    <template #sidebar>
+      <div class="text-center">
+        <button class="small-button" @click="importEnabled = true">add documents</button>
+      </div>
+      <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center">
+        <div class="w-full m-96 bg-gray-800 p-6 rounded-lg shadow-xl">
+          <FileInput @submitted="importFiles"
+                     @cancelled="cancelled"
+                     submitText="import" cancelText="cancel"/>
+        </div>
+      </div>
+
+    </template>
   </NuxtLayout>
 </template>
 
@@ -32,6 +45,16 @@
 const route = useRoute();
 const {$orbisApiService} = useNuxtApp();
 const documents = ref(null);
+const importEnabled = ref(false);
+
+function importFiles(chosenFiles: File[]) {
+  console.log('input changed');
+  console.log(chosenFiles);
+}
+
+function cancelled() {
+  importEnabled.value = false;
+}
 
 $orbisApiService.getDocuments(route.params.corpusId)
     .then(result => {
