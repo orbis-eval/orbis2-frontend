@@ -1,0 +1,74 @@
+<template>
+  <div class="p-6 border border-gray-400">
+    <div class="flex items-center justify-between mb-6">
+      <label for="file-input" class="text-lg font-medium">
+        Import Data:
+      </label>
+      <div>
+        <input type="file" id="file-input" ref="fileInput" @change="inputChanged" multiple class="hidden"/>
+        <button @click="openFileInput" class="flex items-center justify-between">
+          <div class="small-button bg-gray-700 mx-2">
+            Choose File
+          </div>
+        </button>
+      </div>
+    </div>
+    <div @drop.prevent="dropHandler" @dragover.prevent="dragOverHandler"
+         class="p-2 border border-dashed border-gray-400">
+      <div class="text-gray-600">
+        <div v-if="selectedFiles.length == 0" class="text-center p-4">
+          <p>Or drop files here</p>
+        </div>
+        <div v-else class="p-1">
+          <div v-for="(file, index) in selectedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
+            <p id= index>{{ file.name }}</p>
+            <button @click="removeFile(index)" class="text-gray-400 hover:text-white">
+              <OhVueIcon name="md-deleteforever-outlined"/>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+
+addIcons(MdDeleteforeverOutlined);
+
+const fileInput = ref(null);
+const selectedFiles = ref([])
+const emit = defineEmits(['fileInputChanged']);
+
+function openFileInput() {
+  fileInput.value.click();
+}
+
+function removeFile(index: number) {
+  console.log(index)
+  selectedFiles.value.splice(index, 1)
+}
+
+function inputChanged() {
+  for (const file of fileInput.value.files) {
+    selectedFiles.value.push(file);
+    console.log('dropped file');
+    console.log(file);
+  }
+}
+
+function dragOverHandler(event: Event) {
+  event.preventDefault();
+}
+
+function dropHandler(event: DragEvent) {
+  for (const file of event.dataTransfer.files) {
+    selectedFiles.value.push(file);
+    console.log('dropped file');
+    console.log(file);
+  }
+}
+
+</script>
