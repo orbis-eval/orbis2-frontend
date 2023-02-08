@@ -16,11 +16,11 @@
     <div @drop.prevent="dropHandler" @dragover.prevent="dragOverHandler"
          class="p-2 border border-dashed border-gray-400">
       <div class="text-gray-600">
-        <div v-if="selectedFiles.length == 0" class="text-center p-4">
+        <div v-if="!selectedFiles.length" class="text-center p-4">
           <p>Or drop files here</p>
         </div>
         <div v-else class="p-1">
-          <div v-for="(file, index) in selectedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
+          <div v-for="(file, index) in displayedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
             <p id= index>{{ file.name }}</p>
             <button @click="removeFile(index)" class="text-gray-400 hover:text-white">
               <OhVueIcon name="md-deleteforever-outlined"/>
@@ -28,6 +28,10 @@
           </div>
         </div>
       </div>
+      <Pagination v-if="nofPages"
+                  @pageChanged="pageChanged"
+                  :nofPages="nofPages"
+                  class="text-center"/>
     </div>
   </div>
 </template>
@@ -38,25 +42,35 @@ import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 
 addIcons(MdDeleteforeverOutlined);
 
+const currentPage = ref(1);
+const filesPerPage = ref(10);
 const fileInput = ref(null);
-const selectedFiles = ref([])
+const selectedFiles = ref([]);
 const emit = defineEmits(['fileInputChanged']);
+
+const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
+const displayedFiles = computed(() => {
+  const startIndex = (currentPage.value - 1) * filesPerPage.value;
+  const endIndex = startIndex + filesPerPage.value;
+  return selectedFiles.value.slice(startIndex, endIndex);
+})
 
 function openFileInput() {
   fileInput.value.click();
 }
 
 function removeFile(index: number) {
-  console.log(index)
   selectedFiles.value.splice(index, 1)
 }
 
 function inputChanged() {
   for (const file of fileInput.value.files) {
     selectedFiles.value.push(file);
-    console.log('dropped file');
-    console.log(file);
   }
+}
+
+function pageChanged(nextPage: number) {
+  currentPage.value = nextPage;
 }
 
 function dragOverHandler(event: Event) {
@@ -66,8 +80,6 @@ function dragOverHandler(event: Event) {
 function dropHandler(event: DragEvent) {
   for (const file of event.dataTransfer.files) {
     selectedFiles.value.push(file);
-    console.log('dropped file');
-    console.log(file);
   }
 }
 
