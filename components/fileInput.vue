@@ -1,5 +1,5 @@
 <template>
-  <div class="p-6 border border-gray-400">
+  <div class="flex h-full overflow-hidden justify-between flex-col p-6 border border-gray-400">
     <div class="flex items-center justify-between mb-6">
       <label for="file-input" class="text-lg font-medium">
         Import Data:
@@ -14,10 +14,10 @@
       </div>
     </div>
     <div @drop.prevent="dropHandler" @dragover.prevent="dragOverHandler"
-         class="p-2 m-2 border border-dashed border-gray-400">
+         class="flex flex-col h-full justify-between p-2 m-2 border border-dashed border-gray-400">
       <div class="text-gray-600">
-        <div v-if="!selectedFiles.length" class="text-center p-4">
-          <p>Or drop files here</p>
+        <div v-if="!selectedFiles.length" class="flex h-full items-center p-4">
+          <p class="w-full text-center">Or drop files here</p>
         </div>
         <div v-else class="p-1">
           <div v-for="(file, index) in displayedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
@@ -33,16 +33,18 @@
                   :nofPages="nofPages"
                   class="text-center"/>
     </div>
-    <button id="submit"
-            @click="submit"
-            class="small-button bg-gray-700 mx-2 mt-2">
-      {{ submitText }}
-    </button>
-    <button id="cancel"
-            @click="cancel"
-            class="small-button bg-gray-700 mx-2 mt-2">
-      {{ cancelText }}
-    </button>
+    <div>
+      <button id="submit"
+              @click="submit"
+              class="small-button bg-gray-700 mx-2 mt-2">
+        {{ submitText }}
+      </button>
+      <button id="cancel"
+              @click="cancel"
+              class="small-button bg-gray-700 mx-2 mt-2">
+        {{ cancelText }}
+      </button>
+    </div>
   </div>
 </template>
 
@@ -53,7 +55,7 @@ import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 addIcons(MdDeleteforeverOutlined);
 
 const currentPage = ref(1);
-const filesPerPage = ref(10);
+const filesPerPage = ref(5);
 const fileInput = ref(null);
 const selectedFiles = ref([]);
 const props = defineProps({

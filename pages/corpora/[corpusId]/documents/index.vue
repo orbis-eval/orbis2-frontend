@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="sidebar">
     <LoadingSpinner v-if="!documents"/>
-    <div v-else>
+    <div v-else class="h-full flex justify-between flex-col">
       <table>
         <thead class="text-left">
         <tr>
@@ -34,7 +34,7 @@
         <button class="small-button" @click="importEnabled = true">add documents</button>
       </div>
       <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center">
-        <div class="w-full m-96 bg-gray-800 p-6 rounded-lg shadow-xl">
+        <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
           <FileInput @submitted="importFiles"
                      @cancelled="cancelled"
                      submitText="import" cancelText="cancel"/>
@@ -74,8 +74,8 @@ function pageChanged(nextPage: number) {
 function importFiles(chosenFiles: File[]) {
   console.log('input changed');
   console.log(chosenFiles);
+  importEnabled.value = false;
 }
-
 function cancelled() {
   importEnabled.value = false;
 }
