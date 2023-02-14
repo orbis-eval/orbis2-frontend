@@ -1,7 +1,8 @@
 <template>
   <NuxtLayout name="sidebar">
     <template #leftMenu>
-      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"/>
+      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
+                @onDocumentsClicked="() => router.go(-1)"/>
     </template>
     <LoadingSpinner v-if="!content"/>
     <div
@@ -29,7 +30,7 @@
       Annotations that possibly are overlapping:
       <ul>
         <li v-for="node in errorNodes">
-          {{node.surface_forms[0]}}:({{ node.start_indices[0] }}/{{ node.end_indices[0] }})
+          {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{ node.end_indices[0] }})
         </li>
       </ul>
     </div>
@@ -89,6 +90,7 @@ addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
+const router = useRouter();
 
 const content = ref(null);
 const annotations = ref([] as Annotation[]);
@@ -306,7 +308,7 @@ function updateAnnotations(currentSelection, node: NestedSetNode) {
   selectedNode.value = node;
 }
 
-async function commitAnnotationType(annotationType:AnnotationType) {
+async function commitAnnotationType(annotationType: AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
   let annotationNode = mockAnnotationNode(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
   annotationNode.run_id = selectedRun.value._id;
