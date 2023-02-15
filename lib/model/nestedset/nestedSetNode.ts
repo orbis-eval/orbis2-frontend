@@ -2,6 +2,7 @@ import {Annotation} from "~/lib/model/annotation";
 import {IAnnotation} from "~/lib/model/iannotation";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
+import {Annotator} from "~/lib/model/annotator";
 
 export class NestedSetNode extends Annotation {
 
@@ -105,5 +106,21 @@ export class NestedSetNode extends Annotation {
             this.children = rootNode.children;
             return;
         }
+    }
+
+    public toAnnotation():Annotation {
+        return new Annotation({
+            key: this.key,
+            surface_forms: this.surface_forms,
+            start_indices: this.start_indices,
+            end_indices: this.end_indices,
+            annotation_type: this.annotation_type,
+            annotator: this.annotator,
+            run_id: this.run_id,
+            document_id: this.document_id,
+            metadata: this.metadata,
+            timestamp: this.timestamp,
+            _id: this._id
+        });
     }
 }

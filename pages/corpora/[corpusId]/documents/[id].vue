@@ -234,15 +234,14 @@ function undoAnnotation() {
   }
 
 function redoAnnotation() {
-  let redoneAnnotation = annotationStore.redoAnnotation();
-  if (redoneAnnotation) {
-    $orbisApiService.addAnnotation(redoneAnnotation)
+  let redoneAnnotationNode = annotationStore.redoAnnotation();
+  if (redoneAnnotationNode) {
+    $orbisApiService.addAnnotation(redoneAnnotationNode.toAnnotation())
         .then(annotationResponse => {
           if (annotationResponse instanceof Annotation) {
             // push redoneAnnotation, to keep the timestamp from previous set annotation otherwise annotations in
             // redone have different timestamps than in annotations -> conflicts in second undo / redo
-            annotations.value.push(redoneAnnotation);
-            reload();
+            redoneAnnotationNode.parent.insertAnnotationNode(redoneAnnotationNode, parseErrorCallBack);
           } else {
             console.error(annotationResponse.errorMessage);
             // undo annotation since it could not be stored in the backend
@@ -318,11 +317,8 @@ async function commitAnnotationType(annotationType: AnnotationType) {
         if (annotationResponse instanceof Annotation) {
           annotationNode = new NestedSetNode(annotationResponse);
 
-          // the the correct parent of the newly created node
-          // annotationNode.parent = selectedNode.value.parent;
-
-          // insert the node into the tree
-           selectedNode.value.parent.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
+          // add the new node as child to the selected node where the selection was made
+           selectedNode.value.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
             console.warn("could not update the tree..."); // TODO: do proper error handling
           });
 
