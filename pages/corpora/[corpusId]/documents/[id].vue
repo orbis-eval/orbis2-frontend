@@ -46,7 +46,7 @@
       <div>
         {{ recentlyStoredAnnotationId }}
       </div>
-      <div v-if="annotations">
+      <div v-if="nestedSetRootNode">
         <h2 class="text-4xl">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
@@ -58,7 +58,7 @@
             </tr>
           </thead>
           <tbody>
-          <tr v-for="annotation in annotations" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
+          <tr v-for="annotation in nestedSetRootNode.allAnnotationNodes()" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
             <td class="p-1">{{ annotation.start_indices[0] }}</td>
             <td class="p-1">{{ annotation.end_indices[0] }}</td>
             <td class="p-1">{{ annotation.surface_forms[0] }}</td>
@@ -93,7 +93,6 @@ const route = useRoute();
 const router = useRouter();
 
 const content = ref(null);
-const annotations = ref([] as Annotation[]);
 const selection = ref(null);
 const selectionSurfaceForm = ref('');
 const relativeDiv = ref(null);
@@ -169,9 +168,6 @@ onBeforeUnmount(() => {
   annotationStore.resetAnnotationStack();
 });
 
-watch(content, async() => {
-  reload();
-});
 
 $orbisApiService.getDocument(route.params.id)
     .then(document => {
@@ -204,11 +200,11 @@ $orbisApiService.getRuns(Number(route.params.corpusId))
       }
     })
 
-function reload() {
+function reload(annotations: Annotation[]) {
   nestedSetRootNode.value = NestedSet.toTree(
-      annotations.value,
+      annotations,
       content.value,
-      1,
+      selectedRun.value,
       1,
       new Date(),
       parseErrorCallBack
@@ -242,6 +238,7 @@ function redoAnnotation() {
             // push redoneAnnotation, to keep the timestamp from previous set annotation otherwise annotations in
             // redone have different timestamps than in annotations -> conflicts in second undo / redo
             redoneAnnotationNode.parent.insertAnnotationNode(redoneAnnotationNode, parseErrorCallBack);
+            // console.log(`re-added annotation "${redoneAnnotationNode.surface_forms[0]}" into parent ${redoneAnnotationNode.parent.surface_forms[0]}`)
           } else {
             console.error(annotationResponse.errorMessage);
             // undo annotation since it could not be stored in the backend
@@ -280,10 +277,9 @@ function selectedRunChanged(run: any) {
     $orbisApiService.getAnnotations(run._id, route.params.id)
         .then(annotationsFromDb => {
           if (Array.isArray(annotationsFromDb)) {
-            annotations.value = annotationsFromDb;
-            reload();
+            reload(annotationsFromDb);
           } else {
-            console.error(annotations.errorMessage);
+            console.error(annotationsFromDb.errorMessage);
           }
         })
   }
@@ -317,10 +313,17 @@ async function commitAnnotationType(annotationType: AnnotationType) {
         if (annotationResponse instanceof Annotation) {
           annotationNode = new NestedSetNode(annotationResponse);
 
-          // add the new node as child to the selected node where the selection was made
-           selectedNode.value.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
+          let nodeToInsert = selectedNode.value;
+          // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
+          if(nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
+            nodeToInsert = selectedNode.value.parent;
+          }
+
+          // add the new node as child
+          nodeToInsert.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
             console.warn("could not update the tree..."); // TODO: do proper error handling
           });
+          // console.log(`inserted ${annotationNode.surface_forms[0]} into tree, parend node ${nodeToInsert.annotation_type.name}`);
 
           // add to store for re- / undo
           annotationStore.addAnnotation(annotationNode);
