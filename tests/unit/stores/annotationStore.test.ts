@@ -4,13 +4,14 @@ import {Annotation} from "~/lib/model/annotation";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {createPinia, setActivePinia} from "pinia";
+import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
-let mockedAnnotation: Annotation;
+let mockedAnnotation: NestedSetNode;
 
 beforeEach(() => {
     // necessary, otherwise the global store is not available
     setActivePinia(createPinia());
-    mockedAnnotation = new Annotation({
+    mockedAnnotation = new NestedSetNode(new Annotation({
         key: 'my-key',
         surface_forms: ['surfaceForm'],
         start_indices: [0],
@@ -29,7 +30,7 @@ beforeEach(() => {
         metadata: [],
         timestamp: new Date(),
         _id: 3
-    });
+    }));
 });
 
 describe('AnnotationStore.addAnnotation()', () => {
@@ -44,9 +45,9 @@ describe('AnnotationStore.addAnnotation()', () => {
     test('simulate undoing and adding a new annotation, after adding new annotation, ' +
         're-/undoing of older elements is no longer possible', () => {
         const annotationStore = useAnnotationStore();
-        let annotation2 = new Annotation(mockedAnnotation);
+        let annotation2 = new NestedSetNode(new Annotation(mockedAnnotation));
         annotation2.key = 'my-key2';
-        let annotation3 = new Annotation(mockedAnnotation);
+        let annotation3 = new NestedSetNode(new Annotation(mockedAnnotation));
         annotation3.key = 'my-key3';
 
         annotationStore.addAnnotation(mockedAnnotation);
@@ -87,9 +88,9 @@ describe('AnnotationStore.undoAnnotation()', () => {
         'same element is returned',
         () => {
             const annotationStore = useAnnotationStore();
-            let annotation2 = new Annotation(mockedAnnotation);
+            let annotation2 = new NestedSetNode(new Annotation(mockedAnnotation));
             annotation2.key = 'my-key2';
-            let annotation3 = new Annotation(mockedAnnotation);
+            let annotation3 = new NestedSetNode(new Annotation(mockedAnnotation));
             annotation3.key = 'my-key3';
 
             annotationStore.addAnnotation(mockedAnnotation);
@@ -120,9 +121,9 @@ describe('AnnotationStore.redoAnnotation()', () => {
     test('redo last undone annotation, annotations list contains this element again, same element is returned',
         () => {
             const annotationStore = useAnnotationStore();
-            let annotation2 = new Annotation(mockedAnnotation);
+            let annotation2 = new NestedSetNode(new Annotation(mockedAnnotation));
             annotation2.key = 'my-key2';
-            let annotation3 = new Annotation(mockedAnnotation);
+            let annotation3 = new NestedSetNode( new Annotation(mockedAnnotation));
             annotation3.key = 'my-key3';
 
             annotationStore.addAnnotation(mockedAnnotation);
