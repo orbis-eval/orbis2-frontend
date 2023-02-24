@@ -26,6 +26,7 @@
       </table>
       <Pagination v-if="nofPages"
                   @pageChanged="pageChanged"
+                  :currentPage="annotationStore.currentSelectedDocPage"
                   :nofPages="nofPages"
                   class="text-center"/>
     </div>
@@ -46,19 +47,25 @@
 </template>
 
 <script setup lang="ts">
+import {useAnnotationStore} from "~/stores/annotationStore";
+
 const route = useRoute();
 const {$orbisApiService} = useNuxtApp();
 const documents = ref(null);
 const importEnabled = ref(false);
 // TODO, anf 08.02.2023: remember last selected page
-const currentPage = ref(1);
 const filesPerPage = ref(10);
+const annotationStore = useAnnotationStore();
 
 const nofPages = ref(0);
 
+onMounted(() => {
+  pageChanged(annotationStore.currentSelectedDocPage);
+})
+
 function pageChanged(nextPage: number) {
-  currentPage.value = nextPage;
-  const startIndex = (currentPage.value - 1) * filesPerPage.value;
+  annotationStore.currentSelectedDocPage = nextPage;
+  const startIndex = (annotationStore.currentSelectedDocPage - 1) * filesPerPage.value;
   $orbisApiService.getDocuments(route.params.corpusId, filesPerPage.value, startIndex)
       .then(result => {
         if (Array.isArray(result)) {
@@ -85,7 +92,7 @@ $orbisApiService.getDocuments(route.params.corpusId)
       if (Array.isArray(result)) {
         // TODO, anf 08.02.2023: implement get nofdocuments in backend for this
         nofPages.value = Math.ceil(result.length / filesPerPage.value);
-        pageChanged(1);
+        pageChanged(annotationStore.currentSelectedDocPage);
       } else {
         console.error(result.errorMessage);
         // TODO, 06.01.2023 anf: correct error handling
