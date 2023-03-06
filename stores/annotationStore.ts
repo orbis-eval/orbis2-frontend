@@ -1,17 +1,18 @@
 import {defineStore} from "pinia";
-import {Annotation} from "~/lib/model/annotation";
 import {Run} from "~/lib/model/run";
+import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
 export const useAnnotationStore = defineStore('annotation', {
     state: () => {
         return {
-            annotations: [] as Annotation[],
-            undoneAnnotations: [] as Annotation[],
+            annotations: [] as NestedSetNode[],
+            undoneAnnotations: [] as NestedSetNode[],
             selectedRun: {} as Run,
+            currentSelectedDocPage: 1
         };
     },
     actions: {
-        addAnnotation(annotation: Annotation) {
+        addAnnotation(annotation: NestedSetNode) {
             if (this.undoneAnnotations.length > 0) {
                 this.annotations = [];
                 this.undoneAnnotations = [];
@@ -21,7 +22,7 @@ export const useAnnotationStore = defineStore('annotation', {
         popAnnotation() {
             return this.annotations.pop();
         },
-        undoAnnotation(): Annotation | undefined {
+        undoAnnotation(): NestedSetNode | undefined {
             if (this.annotations.length > 0) {
                 const undoneAnnotation = this.annotations.pop();
                 if (undoneAnnotation) {
@@ -30,7 +31,7 @@ export const useAnnotationStore = defineStore('annotation', {
                 }
             }
         },
-        redoAnnotation(): Annotation | undefined {
+        redoAnnotation(): NestedSetNode | undefined {
             if (this.undoneAnnotations.length > 0) {
                 const redoneAnnotation = this.undoneAnnotations.pop();
                 if (redoneAnnotation) {

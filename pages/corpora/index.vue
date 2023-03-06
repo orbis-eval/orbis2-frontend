@@ -14,9 +14,19 @@
 </template>
 
 <script setup lang="ts">
+import {useAnnotationStore} from "~/stores/annotationStore";
+
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 const corpora = ref(null);
+const annotationStore = useAnnotationStore();
+
+onMounted(() => {
+  // reset store of current corpus
+  annotationStore.currentSelectedDocPage = 1;
+  annotationStore.selectedRun = {};
+})
+
 $orbisApiService.getCorpora()
     .then(result => {
       if (Array.isArray(result)) {

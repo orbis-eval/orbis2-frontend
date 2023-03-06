@@ -72,17 +72,16 @@ function onMouseUp()  {
         end: selectionEndIndex,
         word: word,
         left: left,
-        top: top
-      });
+        top: top,
+        selectionElement: selection.anchorNode.parentElement // the element where the selection was done
+      },
+      props.nestedSetNode);
     }
   }
-  // else {
-  //   console.log(`mouse-up event, but nothing selected`);
-  // }
 };
 
-const updateAnnotations = (selection) => {
-  emit('updateAnnotations', selection);
+const updateAnnotations = (selection, selectedNode: NestedSetNode) => {
+  emit('updateAnnotations', selection, selectedNode);
 };
 
 </script>

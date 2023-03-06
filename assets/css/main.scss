@@ -56,3 +56,7 @@
 .selectedAnnotationType {
   @apply bg-slate-700 text-white
 }
+
+.annotationTypeModalHidden {
+  display: none;
+}
