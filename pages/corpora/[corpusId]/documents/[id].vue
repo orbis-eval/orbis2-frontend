@@ -85,6 +85,7 @@ import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
 import {Corpus} from "~/lib/model/corpus";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
+import {Error} from "~/lib/model/error";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -214,7 +215,7 @@ function reload(annotations: Annotation[]) {
 function undoAnnotation() {
   const undoneAnnotationNode = annotationStore.undoAnnotation();
   if (undoneAnnotationNode) {
-    $orbisApiService.removeAnnotationFromDocument(undoneAnnotationNode)
+    $orbisApiService.removeAnnotationFromDocument(undoneAnnotationNode.toAnnotation())
         .then(response => {
           if (response instanceof Error) {
             console.error(response.errorMessage);
