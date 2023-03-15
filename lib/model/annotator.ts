@@ -6,7 +6,7 @@ export class Annotator implements IAnnotator {
     name: string;
     roles: Role[];
     password?: string;
-    _id: number;
+    _id?: number;
 
     constructor(annotator: IAnnotator) {
         this.name = annotator.name;

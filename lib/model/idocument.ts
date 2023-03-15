@@ -6,5 +6,5 @@ export interface IDocument {
     run_id: number;
     metadata: Metadata[];
     done: boolean;
-    _id: number;
+    _id?: number;
 }
