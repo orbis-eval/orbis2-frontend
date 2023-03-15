@@ -12,12 +12,12 @@
         <tbody v-for="document in documents" :key="document._id">
         <tr>
           <td class="pr-5 py-1">
-            <NuxtLink :to="`documents/${document._id}`">
+            <NuxtLink :to="`documents/${document._id}`" class="link">
               {{ document._id }}
             </NuxtLink>
           </td>
           <td class="pr-5">
-            <NuxtLink :to="`documents/${document._id}`">
+            <NuxtLink :to="`documents/${document._id}`" class="link">
               {{ document.content.substring(0, 100) }}...
             </NuxtLink>
           </td>

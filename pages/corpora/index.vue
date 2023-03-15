@@ -4,7 +4,7 @@
     <div v-else>
       <ul>
         <li v-for="corpus in corpora" :key="corpus._id" class="flex">
-          <NuxtLink :to="`corpora/${corpus._id}/documents`" class="mr-6 hover:text-white">
+          <NuxtLink :to="`corpora/${corpus._id}/documents`" class="mr-6 link">
             {{ corpus._id }}
           </NuxtLink>
           <button @click="removeCorpus(corpus)" class="text-gray-400 hover:text-white">
