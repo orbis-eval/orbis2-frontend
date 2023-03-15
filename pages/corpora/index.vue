@@ -7,7 +7,7 @@
           <NuxtLink :to="`corpora/${corpus._id}/documents`" class="mr-6 hover:text-white">
             {{ corpus._id }}
           </NuxtLink>
-          <button @click="removeCorpus(corpus._id)" class="text-gray-400 hover:text-white">
+          <button @click="removeCorpus(corpus)" class="text-gray-400 hover:text-white">
             <OhVueIcon name="md-deleteforever-outlined"/>
           </button>
         </li>
@@ -35,6 +35,7 @@ import {Document} from "~/lib/model/document";
 import {Corpus} from "~/lib/model/corpus";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+import {Error} from "~/lib/model/error";
 
 addIcons(MdDeleteforeverOutlined);
 
@@ -48,21 +49,31 @@ onMounted(() => {
   // reset store of current corpus
   annotationStore.currentSelectedDocPage = 1;
   annotationStore.selectedRun = {};
+  loadCorpora();
 })
 
-$orbisApiService.getCorpora()
-    .then(result => {
-      if (Array.isArray(result)) {
-        corpora.value = result;
-      } else {
-        console.error(result.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        corpora.value = [{_id: 'ERROR'}];
-      }
-    });
+function loadCorpora() {
+  $orbisApiService.getCorpora()
+      .then(result => {
+        if (Array.isArray(result)) {
+          corpora.value = result;
+        } else {
+          console.error(result.errorMessage);
+          // TODO, 06.01.2023 anf: correct error handling
+          corpora.value = [{_id: 'ERROR'}];
+        }
+      });
+}
 
-function removeCorpus(corpusId: number) {
-  
+function removeCorpus(corpus: Corpus) {
+  $orbisApiService.removeCorpus(corpus)
+      .then(response => {
+        if (response instanceof Error) {
+          console.error(response.errorMessage);
+        } else {
+          loadCorpora();
+        }
+      });
 }
 
 function importFiles(chosenFiles: File[]) {
@@ -82,7 +93,14 @@ function importFiles(chosenFiles: File[]) {
         doc.run_id = 0;
         docs.push(doc);
         if (docs.length === chosenFiles.length) {
-          $orbisApiService.addCorpus(corpus, docs);
+          $orbisApiService.addCorpus(corpus, docs)
+              .then(response => {
+                if (response instanceof Error) {
+                  console.error(response.errorMessage);
+                } else {
+                  loadCorpora();
+                }
+              });
         }
       }
     }

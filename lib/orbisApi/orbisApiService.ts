@@ -64,6 +64,10 @@ export class OrbisApiService {
         return Parser.parseEmptyResponse(this.apiDelete(`removeAnnotationFromDocument`, annotation));
     }
 
+    async removeCorpus(corpus: Corpus): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`removeCorpus`, corpus));
+    }
+
     async apiGet(query: string): Promise<TypedInternalResponse<string>> {
         return $fetch(`${this.orbisApiBase}${query}`, {
             method: 'GET'
