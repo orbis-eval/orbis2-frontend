@@ -50,8 +50,22 @@ export class OrbisApiService {
             this.apiPost(`addAnnotation`, annotation));
     }
 
+    async addCorpus(corpus: Corpus, documents: Document[] = []): Promise<Corpus | Error> {
+        let body = corpus as any;
+        if (documents.length > 0) {
+            body = {"corpus": corpus,
+                    "documents": documents};
+        }
+        return Parser.parse(Corpus,
+            this.apiPost('addCorpus', body));
+    }
+
     async removeAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {
         return Parser.parseEmptyResponse(this.apiDelete(`removeAnnotationFromDocument`, annotation));
+    }
+
+    async removeCorpus(corpus: Corpus): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`removeCorpus`, corpus));
     }
 
     async apiGet(query: string): Promise<TypedInternalResponse<string>> {

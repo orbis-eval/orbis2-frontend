@@ -14,7 +14,7 @@ export class Annotation implements IAnnotation {
     document_id: number;
     metadata: Metadata[];
     timestamp: Date;
-    _id: number;
+    _id?: number;
 
     constructor(annotation: IAnnotation) {
         this.key = annotation.key;

@@ -1,4 +1,4 @@
 export interface IAnnotationType {
     name: string;
-    _id: number;
+    _id?: number;
 }

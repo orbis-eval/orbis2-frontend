@@ -13,5 +13,5 @@ export interface IAnnotation {
     document_id: number;
     metadata: Metadata[];
     timestamp: Date;
-    _id: number;
+    _id?: number;
 }
