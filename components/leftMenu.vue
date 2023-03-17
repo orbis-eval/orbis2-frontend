@@ -32,14 +32,12 @@
 <script setup lang="ts">
 import {OhVueIcon, addIcons} from "oh-vue-icons";
 import {HiUser, HiDatabase, HiTag, LaRocketSolid} from 'oh-vue-icons/icons';
-import {Run} from "~/lib/model/run";
-import {useAnnotationStore} from "~/stores/annotationStore";
 
 addIcons(HiUser, HiDatabase, HiTag, LaRocketSolid);
 
 const props = defineProps({
   selected: {},
-  runs: []
+  runs: Array
 })
 const selectionFromParent = toRef(props, 'selected')
 const currentSelection = ref(null)
