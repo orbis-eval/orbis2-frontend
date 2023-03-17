@@ -12,17 +12,19 @@ export class ApiUtils {
         for (let file of documentFilesToRead) {
             const reader = new FileReader();
             reader.onload = (event: ProgressEvent<FileReader>) => {
-                const content = event.target.result;
-                if (typeof (content) === "string") {
-                    if (content !== "") {
-                        let doc = new Document(JSON.parse(content));
-                        doc.done = false;
-                        doc.metadata = [];
-                        doc.run_id = 0;
-                        docs.push(doc);
-                    }
-                    if (docs.length === documentFilesToRead.length) {
-                        this.addCorpus(corpus, docs, apiService, reloadPage);
+                if (event.target) {
+                    const content = event.target.result;
+                    if (typeof (content) === "string") {
+                        if (content !== "") {
+                            let doc = new Document(JSON.parse(content));
+                            doc.done = false;
+                            doc.metadata = [];
+                            doc.run_id = 0;
+                            docs.push(doc);
+                        }
+                        if (docs.length === documentFilesToRead.length) {
+                            this.addCorpus(corpus, docs, apiService, reloadPage);
+                        }
                     }
                 }
             }
