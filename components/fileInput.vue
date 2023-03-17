@@ -1,5 +1,15 @@
 <template>
+
   <div class="flex h-full overflow-hidden justify-between flex-col p-6 border border-gray-400">
+    <div class="flex justify-between mb-6">
+      <div class="text-lg font-medium p-1">
+        Name of Corpus
+      </div>
+      <input v-if="!corpusName" @input="event => corpusNameToCreate = event.target.value" class="bg-gray-700 p-1"/>
+      <div v-else class="p-1">
+        {{ corpusName }}
+      </div>
+    </div>
     <div class="flex items-center justify-between mb-6">
       <label for="file-input" class="text-lg font-medium">
         Import Data:
@@ -7,14 +17,14 @@
       <div>
         <input type="file" id="file-input" ref="fileInput" @change="inputChanged" multiple class="hidden"/>
         <button @click="openFileInput" class="flex items-center justify-between">
-          <div class="small-button bg-gray-700 mx-2">
+          <div class="small-button bg-gray-700 ">
             Choose File
           </div>
         </button>
       </div>
     </div>
     <div @drop.prevent="dropHandler" @dragover.prevent="dragOverHandler"
-         class="flex flex-col h-full justify-between p-2 m-2 border border-dashed border-gray-400">
+         class="flex flex-col h-full justify-between border border-dashed border-gray-400">
       <div class="text-gray-600">
         <div v-if="!selectedFiles.length" class="flex h-full items-center p-4">
           <p class="w-full text-center">Or drop files here</p>
@@ -51,6 +61,7 @@
 <script setup lang="ts">
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+import {EventListenerUtils} from "~/lib/utils/eventListenerUtils";
 
 addIcons(MdDeleteforeverOutlined);
 
@@ -58,10 +69,12 @@ const currentPage = ref(1);
 const filesPerPage = ref(5);
 const fileInput = ref(null);
 const selectedFiles = ref([]);
+const corpusNameToCreate = ref("");
 const props = defineProps({
+  corpusName: String,
   submitText: String,
   cancelText: String
-})
+});
 const emit = defineEmits(['submitted', 'cancelled']);
 
 const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
@@ -71,21 +84,14 @@ const displayedFiles = computed(() => {
   return selectedFiles.value.slice(startIndex, endIndex);
 })
 
-function listenKeyboard(event: KeyboardEvent) {
-  if (event.key === 'Enter') {
-    submit();
-  }
-  if (event.key === 'Escape') {
-    cancel();
-  }
-}
-
 onBeforeMount(() => {
-  window.addEventListener('keydown', listenKeyboard);
+  window.addEventListener('keydown',
+      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, submit, cancel));
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', listenKeyboard);
+  window.removeEventListener('keydown',
+      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, submit, cancel));
 });
 
 function openFileInput() {
@@ -117,7 +123,7 @@ function dropHandler(event: DragEvent) {
 }
 
 function submit() {
-  emit('submitted', selectedFiles.value);
+  emit('submitted', corpusNameToCreate.value, selectedFiles.value);
 }
 
 function cancel() {

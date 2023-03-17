@@ -5,7 +5,7 @@
       <ul>
         <li v-for="corpus in corpora" :key="corpus._id" class="flex">
           <NuxtLink :to="`corpora/${corpus._id}/documents`" class="mr-6 link">
-            {{ corpus._id }}
+            {{ corpus.name }}
           </NuxtLink>
           <button @click="removeCorpus(corpus)" class="text-gray-400 hover:text-white">
             <OhVueIcon name="md-deleteforever-outlined"/>
@@ -26,7 +26,7 @@
       </div>
       <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center">
         <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
-          <FileInput @submitted="importFiles"
+          <FileInput @submitted="createCorpus"
                      @cancelled="cancelled"
                      submitText="import" cancelText="cancel"/>
         </div>
@@ -42,6 +42,7 @@ import {Corpus} from "~/lib/model/corpus";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import {Error} from "~/lib/model/error";
+import {ApiUtils} from "~/lib/utils/apiUtils";
 
 addIcons(MdDeleteforeverOutlined);
 
@@ -50,9 +51,10 @@ const route = useRoute();
 const corpora = ref(null);
 const importEnabled = ref(false);
 const deletionWarningEnabled = ref(false);
-const deletionTitle = ref("")
-const deletionMessage = ref("")
-const corpusUnderDeletion = ref(null)
+const corpusName = ref(null);
+const deletionTitle = ref("");
+const deletionMessage = ref("");
+const corpusUnderDeletion = ref(null);
 const annotationStore = useAnnotationStore();
 
 onMounted(() => {
@@ -99,42 +101,22 @@ function deletionConfirmed() {
 }
 function deletionDeclined() {
   deletionWarningEnabled.value = false;
-  console.log('decline clicked');
 }
 
-function importFiles(chosenFiles: File[]) {
+function createCorpus(corpusName: string, chosenFiles: File[]) {
   let corpus = new Corpus({
-    "name": "test corpus",
+    "name": corpusName,
     "supported_annotation_types": []
   })
-  let docs = [] as Document[];
-  for (let file of chosenFiles) {
-    const reader = new FileReader();
-    reader.onload = (event: ProgressEvent<FileReader>) => {
-      const content = event.target.result;
-      if (typeof(content) === "string") {
-        let doc = new Document(JSON.parse(content));
-        doc.done = false;
-        doc.metadata = [];
-        doc.run_id = 0;
-        docs.push(doc);
-        if (docs.length === chosenFiles.length) {
-          $orbisApiService.addCorpus(corpus, docs)
-              .then(response => {
-                if (response instanceof Error) {
-                  console.error(response.errorMessage);
-                } else {
-                  loadCorpora();
-                }
-              });
-        }
-      }
-    }
-    reader.readAsText(file);
+  if (chosenFiles.length == 0) {
+    ApiUtils.addCorpus(corpus, [], $orbisApiService, loadCorpora);
+  } else {
+    ApiUtils.readAndStoreDocuments(chosenFiles, corpus, $orbisApiService, loadCorpora);
   }
   importEnabled.value = false;
 }
 function cancelled() {
   importEnabled.value = false;
 }
+
 </script>

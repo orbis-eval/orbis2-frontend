@@ -30,7 +30,7 @@
                   :nofPages="nofPages"
                   class="text-center"/>
     </div>
-    <template #sidebar>
+    <template #sidebar v-if="documents.length == 0">
       <div class="text-center">
         <button class="small-button" @click="importEnabled = true">add documents</button>
       </div>
@@ -38,6 +38,7 @@
         <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
           <FileInput @submitted="importFiles"
                      @cancelled="cancelled"
+                     :corpusName="currentCorpus.name"
                      submitText="import" cancelText="cancel"/>
         </div>
       </div>
@@ -48,10 +49,15 @@
 
 <script setup lang="ts">
 import {useAnnotationStore} from "~/stores/annotationStore";
+import {Corpus} from "~/lib/model/corpus";
+import {Document} from "~/lib/model/document";
+import {Error} from "~/lib/model/error";
+import {ApiUtils} from "~/lib/utils/apiUtils";
 
 const route = useRoute();
 const {$orbisApiService} = useNuxtApp();
-const documents = ref(null);
+const currentCorpus = ref({} as Corpus);
+const documents = ref([]);
 const importEnabled = ref(false);
 // TODO, anf 08.02.2023: remember last selected page
 const filesPerPage = ref(10);
@@ -60,7 +66,16 @@ const annotationStore = useAnnotationStore();
 const nofPages = ref(0);
 
 onMounted(() => {
-  pageChanged(annotationStore.currentSelectedDocPage);
+  loadNofDocumnets();
+  loadDocuments();
+  $orbisApiService.getCorpus(route.params.corpusId)
+      .then(response => {
+        if (response instanceof Corpus) {
+          currentCorpus.value = response;
+        } else {
+          console.log(response.errorMessage);
+        }
+      })
 })
 
 function pageChanged(nextPage: number) {
@@ -78,25 +93,31 @@ function pageChanged(nextPage: number) {
       });
 }
 
-function importFiles(chosenFiles: File[]) {
-  console.log('input changed');
-  console.log(chosenFiles);
+function importFiles(corpusName: string, chosenFiles: File[]) {
+  if (chosenFiles.length != 0) {
+    ApiUtils.readAndStoreDocuments(chosenFiles, currentCorpus.value, $orbisApiService, loadDocuments);
+  }
   importEnabled.value = false;
 }
 function cancelled() {
   importEnabled.value = false;
 }
 
-$orbisApiService.getDocuments(route.params.corpusId)
-    .then(result => {
-      if (Array.isArray(result)) {
-        // TODO, anf 08.02.2023: implement get nofdocuments in backend for this
-        nofPages.value = Math.ceil(result.length / filesPerPage.value);
-        pageChanged(annotationStore.currentSelectedDocPage);
-      } else {
-        console.error(result.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        documents.value = [{_id: 'ERROR', content: 'ERROR'}];
-      }
-    });
+function loadNofDocumnets() {
+  $orbisApiService.getDocuments(route.params.corpusId)
+      .then(result => {
+        if (Array.isArray(result)) {
+          // TODO, anf 08.02.2023: implement get nofdocuments in backend for this
+          nofPages.value = Math.ceil(result.length / filesPerPage.value);
+        } else {
+          console.error(result.errorMessage);
+          // TODO, 06.01.2023 anf: correct error handling
+          documents.value = [{_id: 'ERROR', content: 'ERROR'}];
+        }
+      });
+}
+
+function loadDocuments() {
+  pageChanged(annotationStore.currentSelectedDocPage);
+}
 </script>

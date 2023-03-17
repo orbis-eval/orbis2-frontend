@@ -19,6 +19,11 @@ export class OrbisApiService {
             this.apiGet(`getCorpora`));
     }
 
+    async getCorpus(corpusId: number): Promise<Corpus | Error> {
+        return Parser.parse(Corpus,
+            this.apiGet(`getCorpus?corpus_id=${corpusId}`));
+    }
+
     async getDocuments(corpusId: string,
                        pageSize: number | undefined = undefined,
                        skip: number = 0): Promise<Document[] | Error> {
@@ -51,10 +56,9 @@ export class OrbisApiService {
     }
 
     async addCorpus(corpus: Corpus, documents: Document[] = []): Promise<Corpus | Error> {
-        let body = corpus as any;
+        let body = {"corpus": corpus} as any;
         if (documents.length > 0) {
-            body = {"corpus": corpus,
-                    "documents": documents};
+            body.documents = documents;
         }
         return Parser.parse(Corpus,
             this.apiPost('addCorpus', body));
