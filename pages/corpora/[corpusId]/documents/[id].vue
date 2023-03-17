@@ -174,6 +174,7 @@ $orbisApiService.getDocument(route.params.id)
     .then(document => {
       if (document instanceof Document) {
         content.value = document.content;
+        reload([]);
       } else {
         console.error(document.errorMessage);
         // TODO, 06.01.2023 anf: correct error handling
@@ -185,16 +186,6 @@ $orbisApiService.getRuns(Number(route.params.corpusId))
     .then(runs => {
       if (Array.isArray(runs)) {
         documentRuns.value = runs;
-        documentRuns.value.push(new Run({
-          name: 'default run',
-          description: 'empty default run',
-          corpus: new Corpus({
-            name: '',
-            supported_annotation_types: [],
-            _id: 0
-          }),
-          _id: 1
-        }))
       } else {
         console.error(runs.errorMessage);
         documentRuns.value = [];
@@ -272,7 +263,7 @@ function mockAnnotationNode(
 }
 
 function selectedRunChanged(run: any) {
-  if (run) {
+  if (run && run._id) {
     annotationStore.changeSelectedRun(run);
     selectedRun.value = run;
     $orbisApiService.getAnnotations(run._id, route.params.id)
