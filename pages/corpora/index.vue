@@ -13,6 +13,13 @@
         </li>
       </ul>
     </div>
+    <div v-if="deletionWarningEnabled">
+      <Warning :title="String(deletionTitle)"
+               :message="String(deletionMessage)"
+               confirm-text="ok" declineText="cancel"
+               @confirm="deletionConfirmed"
+               @decline="deletionDeclined"/>
+    </div>
     <template #sidebar>
       <div class="text-center">
         <button class="small-button" @click="importEnabled = true">create corpus</button>
@@ -24,7 +31,6 @@
                      submitText="import" cancelText="cancel"/>
         </div>
       </div>
-
     </template>
   </NuxtLayout>
 </template>
@@ -43,6 +49,10 @@ const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 const corpora = ref(null);
 const importEnabled = ref(false);
+const deletionWarningEnabled = ref(false);
+const deletionTitle = ref("")
+const deletionMessage = ref("")
+const corpusUnderDeletion = ref(null)
 const annotationStore = useAnnotationStore();
 
 onMounted(() => {
@@ -66,14 +76,30 @@ function loadCorpora() {
 }
 
 function removeCorpus(corpus: Corpus) {
-  $orbisApiService.removeCorpus(corpus)
-      .then(response => {
-        if (response instanceof Error) {
-          console.error(response.errorMessage);
-        } else {
-          loadCorpora();
-        }
-      });
+  deletionWarningEnabled.value = true;
+  deletionTitle.value = "Delete corpus?";
+  deletionMessage.value = `Deleting corpus with id ${corpus._id} will remove all documents and runs of this corpus!
+  Do you want to continue?`;
+  corpusUnderDeletion.value = corpus;
+}
+
+function deletionConfirmed() {
+  deletionWarningEnabled.value = false;
+  if (corpusUnderDeletion.value instanceof Corpus) {
+    $orbisApiService.removeCorpus(corpusUnderDeletion.value)
+        .then(response => {
+          if (response instanceof Error) {
+            console.error(response.errorMessage);
+          } else {
+            loadCorpora();
+          }
+          corpusUnderDeletion.value = null;
+        });
+  }
+}
+function deletionDeclined() {
+  deletionWarningEnabled.value = false;
+  console.log('decline clicked');
 }
 
 function importFiles(chosenFiles: File[]) {
