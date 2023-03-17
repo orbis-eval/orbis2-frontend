@@ -86,6 +86,7 @@ import {Run} from "~/lib/model/run";
 import {Corpus} from "~/lib/model/corpus";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
+import load from "unplugin/dist/webpack/loaders/load";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -157,6 +158,8 @@ const clickOutsideListener = (event) => {
 
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
+  loadDocuments();
+  loadRuns();
 });
 
 onMounted(() => {
@@ -169,28 +172,31 @@ onBeforeUnmount(() => {
   annotationStore.resetAnnotationStack();
 });
 
+function loadDocuments() {
+  $orbisApiService.getDocument(route.params.id)
+      .then(document => {
+        if (document instanceof Document) {
+          content.value = document.content;
+          reload([]);
+        } else {
+          console.error(document.errorMessage);
+          // TODO, 06.01.2023 anf: correct error handling
+          content.value = 'ERROR';
+        }
+      });
+}
 
-$orbisApiService.getDocument(route.params.id)
-    .then(document => {
-      if (document instanceof Document) {
-        content.value = document.content;
-        reload([]);
-      } else {
-        console.error(document.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        content.value = 'ERROR';
-      }
-    });
-
-$orbisApiService.getRuns(Number(route.params.corpusId))
-    .then(runs => {
-      if (Array.isArray(runs)) {
-        documentRuns.value = runs;
-      } else {
-        console.error(runs.errorMessage);
-        documentRuns.value = [];
-      }
-    })
+function loadRuns() {
+  $orbisApiService.getRuns(Number(route.params.corpusId))
+      .then(runs => {
+        if (Array.isArray(runs)) {
+          documentRuns.value = runs;
+        } else {
+          console.error(runs.errorMessage);
+          documentRuns.value = [];
+        }
+      })
+}
 
 function reload(annotations: Annotation[]) {
   nestedSetRootNode.value = NestedSet.toTree(
