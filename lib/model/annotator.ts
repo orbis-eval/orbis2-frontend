@@ -11,10 +11,8 @@ export class Annotator implements IAnnotator {
     constructor(annotator: IAnnotator) {
         this.name = annotator.name;
         this.roles = annotator.roles;
-        console.log(annotator.password)
         if (!annotator.password) {
             annotator.password = hash('');
-            console.log(annotator.password)
         }
         this.password = annotator.password;
         this._id = annotator._id;

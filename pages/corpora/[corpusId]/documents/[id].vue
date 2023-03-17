@@ -86,6 +86,7 @@ import {Run} from "~/lib/model/run";
 import {Corpus} from "~/lib/model/corpus";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
+import load from "unplugin/dist/webpack/loaders/load";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -157,6 +158,8 @@ const clickOutsideListener = (event) => {
 
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
+  loadDocuments();
+  loadRuns();
 });
 
 onMounted(() => {
@@ -169,37 +172,31 @@ onBeforeUnmount(() => {
   annotationStore.resetAnnotationStack();
 });
 
+function loadDocuments() {
+  $orbisApiService.getDocument(route.params.id)
+      .then(document => {
+        if (document instanceof Document) {
+          content.value = document.content;
+          reload([]);
+        } else {
+          console.error(document.errorMessage);
+          // TODO, 06.01.2023 anf: correct error handling
+          content.value = 'ERROR';
+        }
+      });
+}
 
-$orbisApiService.getDocument(route.params.id)
-    .then(document => {
-      if (document instanceof Document) {
-        content.value = document.content;
-      } else {
-        console.error(document.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        content.value = 'ERROR';
-      }
-    });
-
-$orbisApiService.getRuns(Number(route.params.corpusId))
-    .then(runs => {
-      if (Array.isArray(runs)) {
-        documentRuns.value = runs;
-        documentRuns.value.push(new Run({
-          name: 'default run',
-          description: 'empty default run',
-          corpus: new Corpus({
-            name: '',
-            supported_annotation_types: [],
-            _id: 0
-          }),
-          _id: 1
-        }))
-      } else {
-        console.error(runs.errorMessage);
-        documentRuns.value = [];
-      }
-    })
+function loadRuns() {
+  $orbisApiService.getRuns(Number(route.params.corpusId))
+      .then(runs => {
+        if (Array.isArray(runs)) {
+          documentRuns.value = runs;
+        } else {
+          console.error(runs.errorMessage);
+          documentRuns.value = [];
+        }
+      })
+}
 
 function reload(annotations: Annotation[]) {
   nestedSetRootNode.value = NestedSet.toTree(
@@ -272,7 +269,7 @@ function mockAnnotationNode(
 }
 
 function selectedRunChanged(run: any) {
-  if (run) {
+  if (run && run._id) {
     annotationStore.changeSelectedRun(run);
     selectedRun.value = run;
     $orbisApiService.getAnnotations(run._id, route.params.id)
