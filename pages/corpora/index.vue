@@ -80,7 +80,7 @@ function loadCorpora() {
 function removeCorpus(corpus: Corpus) {
   deletionWarningEnabled.value = true;
   deletionTitle.value = "Delete corpus?";
-  deletionMessage.value = `Deleting corpus with id ${corpus._id} will remove all documents and runs of this corpus!
+  deletionMessage.value = `Deleting corpus with "${corpus.name}" will remove all documents and runs of this corpus!
   Do you want to continue?`;
   corpusUnderDeletion.value = corpus;
 }
