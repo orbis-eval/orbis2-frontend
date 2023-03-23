@@ -34,6 +34,13 @@
         </li>
       </ul>
     </div>
+    <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
+      <Warning title="Please select a run."
+               message="No run or default run is selected, in both cases annotation is not possible"
+               confirm-text="ok" declineText="cancel"
+               @confirm="wrongRunSelectedEnabled = false"
+               @decline="wrongRunSelectedEnabled = false"/>
+    </div>
     <template #sidebar>
       <div>
         <button @click="undoAnnotation" class="small-button" >
@@ -87,6 +94,7 @@ import {Corpus} from "~/lib/model/corpus";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import load from "unplugin/dist/webpack/loaders/load";
+import {ApiUtils} from "~/lib/utils/apiUtils";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
 
@@ -109,6 +117,7 @@ const annotationStore = useAnnotationStore();
 const selectedRun = ref(annotationStore.selectedRun);
 const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
+const wrongRunSelectedEnabled = ref(false);
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "Type A",
@@ -187,15 +196,7 @@ function loadDocuments() {
 }
 
 function loadRuns() {
-  $orbisApiService.getRuns(Number(route.params.corpusId))
-      .then(runs => {
-        if (Array.isArray(runs)) {
-          documentRuns.value = runs;
-        } else {
-          console.error(runs.errorMessage);
-          documentRuns.value = [];
-        }
-      })
+  ApiUtils.getRuns(route.params.corpusId, documentRuns, $orbisApiService);
 }
 
 function reload(annotations: Annotation[]) {
@@ -288,17 +289,22 @@ function hideAnnotationModal() {
 }
 
 function updateAnnotations(currentSelection, node: NestedSetNode) {
-  selection.value = currentSelection;
-  selectionSurfaceForm.value = selection.value.word;
-  showAnnotationModal.value = true;
-  let relativeDivRect = relativeDiv.value.getBoundingClientRect();
-  // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
-  let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
-  let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
-  mousePosX.value = x;
-  mousePosY.value = y;
-  // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
-  selectedNode.value = node;
+  if (!(selectedRun.value instanceof Run) || selectedRun.value.name.includes('default')) {
+    console.log("wrong run selected")
+    wrongRunSelectedEnabled.value = true;
+  } else {
+    selection.value = currentSelection;
+    selectionSurfaceForm.value = selection.value.word;
+    showAnnotationModal.value = true;
+    let relativeDivRect = relativeDiv.value.getBoundingClientRect();
+    // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
+    let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
+    let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
+    mousePosX.value = x;
+    mousePosY.value = y;
+    // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
+    selectedNode.value = node;
+  }
 }
 
 async function commitAnnotationType(annotationType: AnnotationType) {
