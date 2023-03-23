@@ -64,6 +64,12 @@ export class OrbisApiService {
             this.apiPost('addCorpus', body));
     }
 
+    async addRun(runName: string, runDescription: string, corpus: Corpus): Promise<Run | Error> {
+        return Parser.parse(Run,
+            this.apiPost(`addRun?run_name=${runName}&run_description=${runDescription}`,
+                corpus));
+    }
+
     async removeAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {
         return Parser.parseEmptyResponse(this.apiDelete(`removeAnnotationFromDocument`, annotation));
     }
