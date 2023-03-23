@@ -2,6 +2,9 @@ import {Corpus} from "~/lib/model/corpus";
 import {Document} from "~/lib/model/document";
 import {Error} from "~/lib/model/error";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {Run} from "~/lib/model/run";
+import {Annotation} from "~/lib/model/annotation";
+import {Ref} from "vue";
 
 
 export class ApiUtils {
@@ -27,7 +30,7 @@ export class ApiUtils {
                         }
                     }
                 }
-            }
+            };
             reader.readAsText(file);
         }
     }
@@ -39,6 +42,18 @@ export class ApiUtils {
                     console.error(response.errorMessage);
                 } else {
                     reloadPage();
+                }
+            });
+    }
+
+    static getRuns(corpusId: number, documentRuns: Ref, apiService: OrbisApiService) {
+        apiService.getRuns(Number(corpusId))
+            .then(runs => {
+                if (Array.isArray(runs)) {
+                    documentRuns.value = runs;
+                } else {
+                    console.error(runs.errorMessage);
+                    documentRuns.value = [];
                 }
             });
     }
