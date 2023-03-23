@@ -6,7 +6,7 @@
         <OhVueIcon name="la-rocket-solid" class="menu-icon"/>
         <select v-model="currentSelection" >
           <option v-for="run in runs" :value="run">
-            {{ run._id }}
+            {{ run.name }}
           </option>
         </select>
       </div>
