@@ -236,7 +236,11 @@ function redoAnnotation() {
           if (annotationResponse instanceof Annotation) {
             // push redoneAnnotation, to keep the timestamp from previous set annotation otherwise annotations in
             // redone have different timestamps than in annotations -> conflicts in second undo / redo
-            redoneAnnotationNode.parent.insertAnnotationNode(redoneAnnotationNode, parseErrorCallBack);
+
+            // calculate the parent from scratch as the tree potentially can change
+            const parent = NestedSet.getParent(nestedSetRootNode.value, redoneAnnotationNode, parseErrorCallBack);
+            // insert the node into the parent
+            parent.insertAnnotationNode(redoneAnnotationNode, parseErrorCallBack);
             // console.log(`re-added annotation "${redoneAnnotationNode.surface_forms[0]}" into parent ${redoneAnnotationNode.parent.surface_forms[0]}`)
           } else {
             console.error(annotationResponse.errorMessage);
