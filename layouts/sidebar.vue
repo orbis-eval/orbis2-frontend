@@ -1,6 +1,6 @@
 <template>
   <div class="h-screen text-gray-400 bg-gray-900">
-    <div class="grid grid-cols-[1fr_7fr_2fr] grid-rows-[1fr_10fr_1fr] h-full">
+    <div class="grid grid-cols-[2fr_5fr_3fr] grid-rows-[1fr_10fr_1fr] h-full">
       <header class="col-span-full tile bg-gray-700 p-4 text-gray-200 rounded-t-lg">
         <div class="flex flex-row">
           <div class="basis-1/12 ">

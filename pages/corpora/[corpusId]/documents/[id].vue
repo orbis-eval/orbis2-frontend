@@ -8,21 +8,21 @@
     <div
         v-if="nestedSetRootNode">
       <div class="relative" ref="relativeDiv">
+        <div class="rounded-lg border border-gray-600 p-6">
+          <!-- context modal gui for selecting the type -->
+          <AnnotationModal
+           ref="annotationTypeModal"
+          :left-position="mousePosX"
+          :top-position="mousePosY"
+          :is-visible="showAnnotationModal"
+          :annotation-types="mockAnnotationTypes"
+          :selectionSurfaceForm="selectionSurfaceForm"
+          @hideAnnotationModal="hideAnnotationModal"
+          @commitAnnotationType="commitAnnotationType"/>
 
-        <!-- context modal gui for selecting the type -->
-        <AnnotationModal
-         ref="annotationTypeModal"
-        :left-position="mousePosX"
-        :top-position="mousePosY"
-        :is-visible="showAnnotationModal"
-        :annotation-types="mockAnnotationTypes"
-        :selectionSurfaceForm="selectionSurfaceForm"
-        @hideAnnotationModal="hideAnnotationModal"
-        @commitAnnotationType="commitAnnotationType"/>
-
-        <h2 class="text-4xl p-4">Document Test</h2>
-        <AnnotationNode :nestedSetNode="nestedSetRootNode"
-                        @updateAnnotations="updateAnnotations"/>
+          <AnnotationNode :nestedSetNode="nestedSetRootNode"
+                          @updateAnnotations="updateAnnotations"/>
+        </div>
       </div>
     </div>
     <div v-else-if="errorNodes.length > 0">
