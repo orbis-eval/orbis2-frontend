@@ -17,6 +17,10 @@ The password for postgres will be automatically generated while startup and prin
 
 After starting, access the orbis2 frontend under http://localhost:8090/
 
+
+![Orbis2 Frontend](orbis-screenshot.png)
+
+
 ## mount a local directory to persist the postgres-data 
 
 If you want to persist the postgres-data between container-starts, mount a local directory when running the container.
