@@ -19,9 +19,9 @@ After starting, access the orbis2 frontend under http://localhost:8090/
 
 ## mount a local directory to persist the postgres-data 
 
-If you want to persist the postgres-data between container-starts, mount a local directory when running the container: 
+If you want to persist the postgres-data between container-starts, mount a local directory when running the container.
 
-e.g. mount the local directory **/tmp/orbismount** to persist the postgres-data: 
+e.g. mount the local directory **/tmp/orbismount**
 ```
 docker run --name orbis2-frontend-eval -p 8090:8090 \
 -e PGDATA=/var/lib/postgresql/data/pgdata \
