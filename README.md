@@ -23,7 +23,7 @@ If you want to persist the postgres-data between container-starts, mount a local
 
 e.g. mount the local directory **/tmp/orbismount**
 ```
-docker run --name orbis2-frontend-eval -p 8090:8090 \
+docker run --name orbis2-frontend -p 8090:8090 \
 -e PGDATA=/var/lib/postgresql/data/pgdata \
 -v /tmp/orbismount:/var/lib/postgresql/data \
 ghcr.io/orbis-eval/orbis2-frontend:latest
