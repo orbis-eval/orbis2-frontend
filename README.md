@@ -19,7 +19,7 @@ The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/contai
 
 Start and run the container with the following command.
 ```bash
-docker run --name orbis2-frontend -p 8090:8090 \
+docker run --net host --name orbis2-frontend -p 8090:8090 \
    -e PGDATA=/var/lib/postgresql/data/pgdata \
    -v orbis-data:/var/lib/postgresql/data \
     ghcr.io/orbis-eval/orbis2-frontend:latest
@@ -36,19 +36,28 @@ Once startup has completed you can access Orbis Annotator under the URL http://l
 You can use the Orbis importer tool for importing corpora into Orbis annotator.
 
 #### Importing a local corpus
+Orbis currently supports importing NIF turtle files and the CareerCoach JSON format. Its import command always takes two arguments
+
+  1. the name of the corpus to import and
+  2. the run name (i.e., the internal name of the imported *Annotated Corpus*) which is used for distinguishing different versions of the annotations provided for a particular corpus (e.g., gold standard annotations, annotations provided by a human or a machine learning algorithm).
+
+The command below, for example, imports the file `KORE50.ttl` under the run name `KORE50-version1.0`
+```
+docker exec orbis2-frontend /orbis-backend/scripts/importer.py local KORE50.ttl KORE50-version1.0
+```
 
 
 #### Importing a remote corpus
 
-Obtain a list of all available remote corpora:
+Run the following command to obtain a list of all available remote corpora:
 ```
-docker exec -e PYTHONPATH=/orbis-backend/src orbis2-frontend /orbis-backend/scripts/importer.py list-remote
+docker exec orbis2-frontend /orbis-backend/scripts/importer.py list-remote
 ```
 
 
-Import a specific corpus (e.g., corpus **N3-RSS-500** with run name **N3-RSS-500-version1**). The run name refers to the name of the AnnotatedCorpus (i.e., the corpus and the corresponding annotations)
+To import a remote corpus use the `remote` subcommand with the corpus name as provided by `list-remote` (e.g., corpus **N3-RSS-500** with run name **N3-RSS-500-version1**). The run name refers to the name of the AnnotatedCorpus (i.e., the corpus and the corresponding annotations)
 ```
-docker exec -e PYTHONPATH=/orbis-backend/src orbis2-frontend /orbis-backend/scripts/importer.py remote N3-RSS-500 N3-RSS-500-version1
+docker exec orbis2-frontend /orbis-backend/scripts/importer.py remote N3-RSS-500 N3-RSS-500-version1
 ```
 
 Please refer to the [Orbis2 Backend Documentation](https://github.com/orbis-eval/orbis2-backend) for a more detailed documentation on the Orbis 2 import tool.
