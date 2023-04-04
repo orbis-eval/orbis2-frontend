@@ -1,46 +1,37 @@
-# Orbis2 Frontend 
+# Orbis Annotator / Orbis 2 Frontend
 
-This is the vuejs frontend application that can be deployed together with the [orbis2 backend](https://github.com/orbis-eval/orbis2-backend). 
+Orbis Annotator provides a user-friendly, easy to install, web-based software that supports users in efficiently annotating language data. It supports standard and collaborative workflows, reuse of language resources through corpus versioning, and provides built-in tools for assessing corpus quality. 
+
+- [Install and use Orbis Annotator](#install-and-use-orbis-annotator)
+- Developer information on the [Orbis Annotator Frontend](#orbis-annotator-frontend)
+- Developer information on the [Orbis Annotator Backend](https://github.com/orbis-eval/orbis2-backend)
+
+The Orbis 2 Frontend project hosts the Orbis vuejs application, that can be deployed together with the [Orbis 2 backend]. 
+
+The section below describes how you can easily use Orbis2 for your 
 
 
-## Orbis2 Docker Container 
+## Install and use Orbis Annotator
 
-There is a  [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/container/package/orbis2-frontend) available to run orbis2 from a single container. 
+The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/container/package/orbis2-frontend) bundles all software necessary to run Orbis Annotator.
 
-## run the container 
+### Start the container
 
+Start and run the container with the following command.
+```bash
+docker run --name orbis2-frontend -p 8090:8090 \
+   -e PGDATA=/var/lib/postgresql/data/pgdata \
+   -v orbis-data:/var/lib/postgresql/data \
+    ghcr.io/orbis-eval/orbis2-frontend:latest
 ```
-docker run --name orbis2-frontend -p 8090:8090 ghcr.io/orbis-eval/orbis2-frontend:latest
-```
 
-The password for postgres will be automatically generated while startup and printed to std-out / console. 
+The Postgres database password (required for database backups) will be automatically generated during the container's first startup and printed to the console. All databases and data is stored in the `orbis-data` volume. If you prefer to save the data in a local directory, replace `orbis-data` with its full path (e.g., `/home/albert/oribs-data`).
 
-After starting, access the orbis2 frontend under http://localhost:8090/
-
+Once startup has completed you can access Orbis Annotator under the URL http://localhost:8090/.
 
 ![Orbis2 Frontend](orbis-screenshot.png)
 
-
-## mount a local directory to persist the postgres-data 
-
-If you want to persist the postgres-data between container-starts, mount a local directory when running the container.
-
-e.g. mount the local directory **/tmp/orbismount**
-```
-docker run --name orbis2-frontend -p 8090:8090 \
--e PGDATA=/var/lib/postgresql/data/pgdata \
--v /tmp/orbismount:/var/lib/postgresql/data \
-ghcr.io/orbis-eval/orbis2-frontend:latest
-```
-
-## Data Export / SQL Dump
-
-dump the orbis postgrese database to a sql file:
-```
-docker exec -i -e PGPASSWORD=[password] orbis2-frontend /bin/bash -c "pg_dump --username postgres orbis" > [path-to-sql-dump-file].sql
-```
-
-##  Run Importer directly inside the docker container
+###  Import existing corpora into Orbis Annotator
 
 run the importer (documented in [orbis2 backend](https://github.com/orbis-eval/orbis2-backend))
 
@@ -54,7 +45,20 @@ e.g.  import the remote corpus **N3-RSS-500** with run name **N3-RSS-500-version
 docker exec -e PYTHONPATH=/orbis-backend/src orbis2-frontend /orbis-backend/scripts/importer.py remote N3-RSS-500 N3-RSS-500-version1
 ```
 
-## Setup
+
+### Backup all Orbis data
+
+You can create a backup of the Orbis Postgres database by running the following command, replacing `[password]` with the Postgres password printed at first container startup.
+```bash
+docker exec -i -e PGPASSWORD=[password] orbis2-frontend /bin/bash -c "pg_dump --username postgres orbis" > backup.sql
+```
+
+
+## Orbis Annotator Frontend
+
+The following information is intended for developers who want to run the Orbis 2 frontend component on their development platforms.
+
+### Setup
 
 Make sure to install the dependencies:
 ```bash
@@ -64,7 +68,7 @@ yarn
 We use yarn instead of npm, its faster and has better security features. Further, the pinia framework could not be installed properly with npm.
 IMPORTANT: don't mix npm and yarn, since this could lead to wrong dependencies.
 
-## Development
+### Development
 
 Start the development server on http://localhost:3000
 
@@ -74,7 +78,7 @@ yarn run dev
 
 all used icons can be found under https://oh-vue-icons.js.org/
 
-## Production
+### Production
 
 Build the application for production:
 
@@ -91,7 +95,7 @@ yarn run preview
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
 
-# Vue Hero Icons
+### Vue Hero Icons
 Installed with 
 ```
 yarn add @heroicons/vue
