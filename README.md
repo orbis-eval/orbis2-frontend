@@ -25,7 +25,7 @@ docker run --name orbis2-frontend -p 8090:8090 \
     ghcr.io/orbis-eval/orbis2-frontend:latest
 ```
 
-The Postgres database password (required for database backups) will be automatically generated during the container's first startup and printed to the console. All databases and data is stored in the `orbis-data` volume. If you prefer to save the data in a local directory, replace `orbis-data` with its full path (e.g., `/home/albert/oribs-data`).
+The Postgres database password (required for database backups) will be automatically generated during the container's first startup and printed to the console. All databases and data is stored in the `orbis-data` volume. If you prefer to save the data in a local directory, replace `orbis-data` with its full path (e.g., `/home/albert/orbis-data`).
 
 Once startup has completed you can access Orbis Annotator under the URL http://localhost:8090/.
 
@@ -33,17 +33,25 @@ Once startup has completed you can access Orbis Annotator under the URL http://l
 
 ###  Import existing corpora into Orbis Annotator
 
-run the importer (documented in [orbis2 backend](https://github.com/orbis-eval/orbis2-backend))
+You can use the Orbis importer tool for importing corpora into Orbis annotator.
+
+#### Importing a local corpus
 
 
-list the remote corpora: 
+#### Importing a remote corpus
+
+Obtain a list of all available remote corpora:
 ```
 docker exec -e PYTHONPATH=/orbis-backend/src orbis2-frontend /orbis-backend/scripts/importer.py list-remote
 ```
-e.g.  import the remote corpus **N3-RSS-500** with run name **N3-RSS-500-version1**:
+
+
+Import a specific corpus (e.g., corpus **N3-RSS-500** with run name **N3-RSS-500-version1**). The run name refers to the name of the AnnotatedCorpus (i.e., the corpus and the corresponding annotations)
 ```
 docker exec -e PYTHONPATH=/orbis-backend/src orbis2-frontend /orbis-backend/scripts/importer.py remote N3-RSS-500 N3-RSS-500-version1
 ```
+
+Please refer to the [Orbis2 Backend Documentation](https://github.com/orbis-eval/orbis2-backend) for a more detailed documentation on the Orbis 2 import tool.
 
 
 ### Backup all Orbis data
