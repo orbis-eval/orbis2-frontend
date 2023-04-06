@@ -42,7 +42,7 @@ Orbis currently supports importing NIF turtle files and the CareerCoach JSON for
   2. the run name (i.e., the internal name of the imported *Annotated Corpus*) which is used for distinguishing different versions of the annotations provided for a particular corpus (e.g., gold standard annotations, annotations provided by a human or a machine learning algorithm).
 
 The command below, for example, imports the file `KORE50.ttl` under the run name `KORE50-version1.0`
-```
+```bash
 docker exec orbis2-frontend /orbis-backend/scripts/importer.py local KORE50.ttl KORE50-version1.0
 ```
 
@@ -50,7 +50,7 @@ docker exec orbis2-frontend /orbis-backend/scripts/importer.py local KORE50.ttl 
 #### Importing a remote corpus
 
 Run the following command to obtain a list of all available remote corpora:
-```
+```bash
 docker exec orbis2-frontend /orbis-backend/scripts/importer.py list-remote
 ```
 
@@ -61,6 +61,60 @@ docker exec orbis2-frontend /orbis-backend/scripts/importer.py remote N3-RSS-500
 ```
 
 Please refer to the [Orbis2 Backend Documentation](https://github.com/orbis-eval/orbis2-backend) for a more detailed documentation on the Orbis 2 import tool.
+
+
+### Exporting annotations
+
+Orbis Annotator currently supports exporting annotations to the CareerCoach 2022 and the NIF turtle format.
+
+The example below exports the annotated corpus (i.e., run) `N3-RSS500-version1` to the file `N3-RSS500-version1.ttl` using the NIF format.
+```bash
+docker exec orbis2-frontend /orbis-backend/scripts/exporter.py N3-Reuters-128-version1 N3-Reuters-128-version1.ttl --export-format NIF
+docker cp orbis2-frontend:/N3-Reuters-128-version1.ttl .
+```
+The first command creates the export file and the second copies it to the user's working directory.
+
+
+### Evaluations 
+
+#### Comparing runs - Inter-rater-agreement
+
+Orbis supports computing the following inter-rater agreement (IRR) metrics, which compute the Fleiss Kappa without correction for random agreement and the average macro and micro F1 score.
+
+- 'el_pIRR' (Entity Linking: Inter Rater Agreement; perfect matching)
+- 'ec_pIRR' (Entity Classification: Inter Rater Agreement; perfect matching)
+- 'er_pIRR' (Entity Recognition: Inter Rater Agreement; perfect matching)
+
+
+The example below computes the inter-rater agreement between the `careercoach2022.v1`, `careercoach2022.v2` and `careercoach2022.v3` corpus annotations.
+```bash
+docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --metrics er_pIRR -- careercoach2022.v1 careercoach2022.v2 careercoach2022.v3
+```
+
+| Metric | kappa_micro | kappa_macro | average_macro_f1 | average_micro_f1 |
+|-----|-----|-----|-----|-----|
+| Entity Recognition: Inter Rater Agreement; perfect matching.|0.54 | 0.53 | 0.68 | 0.65|
+
+
+#### Comparing a run to a gold standard
+Orbis Annotator supports the following metrics
+
+- 'content_extraction_f1' (Content Extraction: Precision, Recall and F1) 
+- 'content_classification_f1' (Content Classification: Precision, Recall and F1)
+- 'er_pF1' (Entity Recognition: Precision, Recall and F1; perfect matching)
+- 'er_oF1' (Entity Recognition: Precision, Recall and F1; overlapping matching)
+- 'ec_pF1' (Entity Classification: Precision, Recall and F1; perfect matching)
+- 'ec_oF1' (Entity Recognition: Precision, Recall and F1; overlapping matching)
+- 'el_pF1' (Entity Linking: Precision, Recall and F1; perfect matching)
+- 'el_oF1' (Entity Linking: Precision, Recall and F1; overlapping matching)
+- 'slot_filling_pF1' (Slot filling: Precision, Recall and F1; perfect matching)
+- 'slot_filling_oF1' (Slot filling: Precision, Recall and F1; overlapping matching)
+
+The following example computes precision, recall and F1 metric comparing the corpus annotations in run `careercoach2022-entities.v0` against the `careercoach2022-entities.v1` corpus annotations using the entity linking metric with perfect match (`el_pF1`, i.e., entities must perfectly match to be considered correct), and overlapping match (`el_oF1`, i.e., entities may overlap to be considered correctly).
+```bash
+docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --reference careercoach2022-entities.v1 careercoach2022-entities.v0 --metrics el_pF1 el_oF1 
+```
+The `--reference` parameter specifies the run considered to hold the gold standard annotations.
 
 
 ### Backup all Orbis data
