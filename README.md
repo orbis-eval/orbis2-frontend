@@ -3,12 +3,16 @@
 Orbis Annotator provides a user-friendly, easy to install, web-based software that supports users in efficiently annotating language data. It supports standard and collaborative workflows, reuse of language resources through corpus versioning, and provides built-in tools for assessing corpus quality. 
 
 - [Install and use Orbis Annotator](#install-and-use-orbis-annotator)
+  - [Importing corpora](#import-existing-corpora-into-orbis-annotator)
+  - [Exporting corpora and annotations](#exporting-annotations)
+  - [Backup all Orbis data](#backup-all-orbis-data)
+  - [Evaluations](#evaluations)
 - Developer information on the [Orbis Annotator Frontend](#orbis-annotator-frontend)
 - Developer information on the [Orbis Annotator Backend](https://github.com/orbis-eval/orbis2-backend)
 
 The Orbis 2 Frontend project hosts the Orbis vuejs application, that can be deployed together with the [Orbis 2 backend]. 
 
-The section below describes how you can easily use Orbis2 for your 
+The section below describes how you can use Orbis2 for creating and correcting annotated datasets, and for performing evaluations on them.
 
 
 ## Install and use Orbis Annotator
@@ -25,7 +29,7 @@ docker run --net host --name orbis2-frontend -p 8090:8090 \
     ghcr.io/orbis-eval/orbis2-frontend:latest
 ```
 
-The Postgres database password (required for database backups) will be automatically generated during the container's first startup and printed to the console. All databases and data is stored in the `orbis-data` volume. If you prefer to save the data in a local directory, replace `orbis-data` with its full path (e.g., `/home/albert/orbis-data`).
+The Postgresql database password (required for database backups) will be automatically generated during the container's first startup and printed to the console. All databases and data is stored in the `orbis-data` volume. If you prefer to save the data in a local directory, replace `orbis-data` with its full path (e.g., `/home/albert/orbis-data`).
 
 Once startup has completed you can access Orbis Annotator under the URL http://localhost:8090/.
 
