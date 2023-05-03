@@ -11,4 +11,9 @@ export class Corpus implements ICorpus {
         this.supported_annotation_types = corpus.supported_annotation_types;
         this._id = corpus._id;
     }
+
+    toJSON() {
+        const { _id, ...json } = this;
+        return json;
+    }
 }

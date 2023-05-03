@@ -5,7 +5,6 @@ import {Annotator} from "~/lib/model/annotator";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-import exp from "constants";
 
 describe('NestedSet.toTree(...)', () => {
     test('test calculating the tree', () => {
@@ -166,7 +165,7 @@ describe('NestedSetNode.getAnnotations(...)', () => {
             expect(annotations[2].start_indices[0]).toEqual(9);
             expect(annotations[2].end_indices[0]).toEqual(11);
         }
-    })
+    });
 });
 
 
@@ -315,6 +314,23 @@ describe('NestedSet.trimWhiteSpaces(...)', () => {
         NestedSet.trimWithSpaces(nodeWithWhiteSpace);
         expect(nodeWithWhiteSpace.start_indices[0]).toEqual(0);
         expect(nodeWithWhiteSpace.end_indices[0]).toEqual(1);
+    });
+});
+
+describe('test json serialization', () => {
+    test('test annotation json serialization', () => {
+        let annotationNode = mockAnnotationNode('A   ', 0, 4, 1, annotationType, annotator);
+        expect(('_id' in annotationNode)).toBeTruthy();
+        expect(('_id' in annotationNode.annotation_type)).toBeTruthy();
+        expect(('_id' in annotationNode.annotator)).toBeTruthy();
+        // serialize to json
+        let annotationJsonString = JSON.stringify(annotationNode);
+        // parse back to object
+        let parsedAnnotation = JSON.parse(annotationJsonString);
+        // the id's should NOT be contained anymore in the objects
+        expect(!('_id' in parsedAnnotation)).toBeTruthy();
+        expect(!('_id' in parsedAnnotation.annotation_type)).toBeTruthy();
+        expect(!('_id' in parsedAnnotation.annotator)).toBeTruthy();
     });
 });
 

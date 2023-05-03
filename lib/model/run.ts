@@ -17,4 +17,10 @@ export class Run implements IRun{
         this.document_annotations = run.document_annotations;
         this._id = run._id;
     }
+
+    // toJson method returns an object that contains all of the class's properties except for _id.
+    toJSON() {
+        const { _id, ...json } = this;
+        return json;
+    }
 }

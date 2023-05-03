@@ -17,4 +17,9 @@ export class Annotator implements IAnnotator {
         this.password = annotator.password;
         this._id = annotator._id;
     }
+
+    toJSON() {
+        const { _id, ...json } = this;
+        return json;
+    }
 }

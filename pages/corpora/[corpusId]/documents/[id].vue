@@ -90,10 +90,8 @@ import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
-import {Corpus} from "~/lib/model/corpus";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
-import load from "unplugin/dist/webpack/loaders/load";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid)
@@ -121,25 +119,21 @@ const wrongRunSelectedEnabled = ref(false);
 
 let annotationType: AnnotationType = new AnnotationType({
   name: "Type A",
-  _id: 1
 });
 
 const mockAnnotationTypes = ref([
     annotationType,
   new AnnotationType({
-    name: "Type B",
-    _id: 1
+    name: "Type B"
   }),
   new AnnotationType({
-    name: "Type BC",
-    _id: 3
+    name: "Type BC"
   })
 ]);
 
 let annotator: Annotator = new Annotator({
   name: "test annotator",
-  roles: [],
-  _id: 1
+  roles: []
 });
 
 const parseErrorCallBack = (parseError: NestedSetParseError) => {
@@ -251,7 +245,7 @@ function redoAnnotation() {
   }
 }
 
-function mockAnnotationNode(
+function mockNestedSetNode(
     surfaceForm: string,
     start: number,
     end: number,
@@ -311,16 +305,18 @@ function updateAnnotations(currentSelection, node: NestedSetNode) {
   }
 }
 
+// called when adding a new annotation
 async function commitAnnotationType(annotationType: AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
-  let annotationNode = mockAnnotationNode(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
-  annotationNode.run_id = selectedRun.value._id;
-  annotationNode.document_id = Number(route.params.id);
-  $orbisApiService.addAnnotation(annotationNode)
+  let annotation = mockNestedSetNode(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
+      .toAnnotation();
+  annotation.run_id = selectedRun.value._id;
+  annotation.document_id = Number(route.params.id);
+  $orbisApiService.addAnnotation(annotation)
       .then(annotationResponse => {
-        if (annotationResponse instanceof Annotation) {
-          annotationNode = new NestedSetNode(annotationResponse);
 
+        if (annotationResponse instanceof Annotation) {
+          let annotationNode = new NestedSetNode(annotationResponse);
           let nodeToInsert = selectedNode.value;
           // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
           if(nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
@@ -338,7 +334,6 @@ async function commitAnnotationType(annotationType: AnnotationType) {
           // hide the context menu
           showAnnotationModal.value = false;
           // console.log(`added annotation ${annotationNode._id}`);
-
         } else {
           // TODO, 06.01.2023 anf: correct error handling
           console.error(annotationResponse.errorMessage);
@@ -347,4 +342,5 @@ async function commitAnnotationType(annotationType: AnnotationType) {
         }
       });
 }
+
 </script>

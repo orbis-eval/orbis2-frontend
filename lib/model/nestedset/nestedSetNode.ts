@@ -5,13 +5,11 @@ import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 
 export class NestedSetNode extends Annotation {
 
-    public depth: number;
     public children: NestedSetNode[];
     public parent: NestedSetNode | null;
 
-    constructor(annotation: IAnnotation, depth: number = 0, parent: NestedSetNode | null = null) {
+    constructor(annotation: IAnnotation, parent: NestedSetNode | null = null) {
         super(annotation);
-        this.depth = depth;
         this.children = [];
         if (parent) {
             parent.addChild(this);
@@ -21,7 +19,6 @@ export class NestedSetNode extends Annotation {
 
     public addChild(node: NestedSetNode) {
         node.parent = this;
-        node.depth = this.depth + 1;
         this.children.push(node);
     }
 

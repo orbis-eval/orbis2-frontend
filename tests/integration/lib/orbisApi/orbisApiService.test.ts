@@ -2,6 +2,11 @@ import {describe, test, expect} from "@jest/globals";
 import {Document} from "@/lib/model/document";
 import {OrbisApiService} from "@/lib/orbisApi/orbisApiService";
 import {TypedInternalResponse} from "nitropack";
+import {Annotation} from "~/lib/model/annotation";
+import {AnnotationType} from "~/lib/model/annotationType";
+import {Annotator} from "~/lib/model/annotator";
+import {Error} from "~/lib/model/error";
+import {Parser} from "~/lib/parser";
 
 class OrbisApiServiceMock extends OrbisApiService {
 
@@ -14,8 +19,14 @@ class OrbisApiServiceMock extends OrbisApiService {
 
     async apiGet(query: string): Promise<TypedInternalResponse<string>> {
         return new Promise((resolve) => {
-            resolve(this.mockedApiCallResponse)
+            resolve(this.mockedApiCallResponse);
         });
+    }
+
+    async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
+        return Parser.parseAnnotationResponse(new Promise((resolve) => {
+            resolve(this.mockedApiCallResponse);
+        }));
     }
 }
 
@@ -152,6 +163,78 @@ describe('OrbisApiService.getCorpora()', () => {
             expect(parsedCorpora[1].supported_annotation_types.length).toEqual(1);
             expect(parsedCorpora[1].supported_annotation_types[0]._id).toEqual(2);
             expect(parsedCorpora[1].supported_annotation_types[0].name).toEqual('annotation-type2');
+        }
+    });
+});
+
+
+describe('OrbisApiService.addAnnotation', () => {
+    test('test adding annotation with annotation_type and annotator', async () => {
+
+        let mockAnnotation = new Annotation({
+            "key": "",
+            "surface_forms": [
+                "Beispiel"
+            ],
+            "start_indices": [
+                18
+            ],
+            "end_indices": [
+                26
+            ],
+            "annotation_type": new AnnotationType({
+                "name": "Type A",
+                "color_id": 1,
+                "_id": 3367493509
+            }),
+            "annotator": new Annotator({
+                "name": "test annotator",
+                "roles": [],
+                "password": "47DEQpj8HB",
+                "_id": 927467736
+            }),
+            "run_id": 3908820094,
+            "document_id": 615516308,
+            "metadata": [],
+            "timestamp": new Date("2023-05-03T09:32:29.446763")
+        });
+
+        const orbisApiServiceMock = new OrbisApiServiceMock(
+            {
+                "key": "",
+                "surface_forms": [
+                    "Text"
+                ],
+                "start_indices": [
+                    0
+                ],
+                "end_indices": [
+                    4
+                ],
+                "annotation_type": {
+                    "name": "Type B",
+                    "color_id": null,
+                    "_id": 1993795727
+                },
+                "annotator": {
+                    "name": "test annotator",
+                    "roles": [],
+                    "password": "47DEQpj8HB",
+                    "_id": 927467736
+                },
+                "run_id": 3908820094,
+                "document_id": 2904797399,
+                "metadata": [],
+                "timestamp": "2023-05-03T08:27:04.381588",
+                "_id": 142117042
+            }
+        );
+        let result = await orbisApiServiceMock.addAnnotation(mockAnnotation);
+        let annotation: Annotation;
+        if (result instanceof Annotation) {
+            annotation = result;
+            expect(annotation.annotation_type instanceof AnnotationType).toBeTruthy();
+            expect(annotation.annotator instanceof Annotator).toBeTruthy();
         }
     });
 });

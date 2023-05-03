@@ -29,4 +29,9 @@ export class Annotation implements IAnnotation {
         this.timestamp = annotation.timestamp;
         this._id = annotation._id;
     }
+
+    toJSON() {
+        const { _id, ...json } = this;
+        return json;
+    }
 }
