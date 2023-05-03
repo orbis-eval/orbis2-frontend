@@ -21,7 +21,8 @@
           @commitAnnotationType="commitAnnotationType"/>
 
           <AnnotationNode :nestedSetNode="nestedSetRootNode"
-                          @updateAnnotations="updateAnnotations"/>
+                          @updateAnnotations="updateAnnotations"
+                          @deleteAnnotation="deleteAnnotation"/>
         </div>
       </div>
     </div>
@@ -121,15 +122,10 @@ let annotationType: AnnotationType = new AnnotationType({
   name: "Type A",
 });
 
-const mockAnnotationTypes = ref([
-    annotationType,
-  new AnnotationType({
-    name: "Type B"
-  }),
-  new AnnotationType({
-    name: "Type BC"
-  })
-]);
+
+// TODO: remove mock, us from selected run.corpus.supported_annotation_types
+// initially the list is empty
+const mockAnnotationTypes = ref([]);
 
 let annotator: Annotator = new Annotator({
   name: "test annotator",
@@ -174,6 +170,14 @@ onBeforeUnmount(() => {
   window.removeEventListener('click', clickOutsideListener);
   annotationStore.resetAnnotationStack();
 });
+
+
+function deleteAnnotation(nestedSetNode: NestedSetNode) {
+  console.log("deleting node "+nestedSetNode._id);
+  $orbisApiService.removeAnnotationFromDocument(nestedSetNode.toAnnotation()).then(response => {
+    console.log(response);
+  });
+}
 
 function loadDocuments() {
   $orbisApiService.getDocument(route.params.id)
@@ -270,6 +274,10 @@ function mockNestedSetNode(
 function selectedRunChanged(run: any) {
   if (run && run._id) {
     annotationStore.changeSelectedRun(run);
+
+    // set the supported annotation types here
+    mockAnnotationTypes.value = run.corpus.supported_annotation_types;
+
     selectedRun.value = run;
     $orbisApiService.getAnnotations(run._id, route.params.id)
         .then(annotationsFromDb => {

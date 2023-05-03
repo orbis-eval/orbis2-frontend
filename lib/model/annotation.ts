@@ -25,7 +25,7 @@ export class Annotation implements IAnnotation {
         this.annotator = new Annotator(annotation.annotator);
         this.run_id = annotation.run_id;
         this.document_id = annotation.document_id;
-        this.metadata = annotation.metadata;
+        this.metadata = annotation.metadata.map(metadata => new Metadata(metadata));
         this.timestamp = annotation.timestamp;
         this._id = annotation._id;
     }

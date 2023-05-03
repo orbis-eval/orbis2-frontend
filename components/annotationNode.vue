@@ -7,6 +7,7 @@
         v-for="nestedSetChildNode in nestedSetNode.children"
         :nestedSetNode="nestedSetChildNode"
         @updateAnnotations="updateAnnotations"
+        @deleteAnnotation="deleteAnnotation"
     />
   </div>
   <span v-else-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME"
@@ -17,11 +18,14 @@
   <span v-else-if="nestedSetNode.parent" class="annotation">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
+        <br/>
+        <a @click="deleteAnnotation(nestedSetNode)">delete</a>
       </span>
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
           @updateAnnotations="updateAnnotations"
+          @deleteAnnotation="deleteAnnotation"
       />
     </span>
   <span v-else class="p-1">
@@ -29,6 +33,7 @@
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
           @updateAnnotations="updateAnnotations"
+          @deleteAnnotation="deleteAnnotation"
       />
   </span>
 </template>
@@ -41,7 +46,11 @@ const props = defineProps({
   nestedSetNode: NestedSetNode
 });
 
-const emit = defineEmits(['updateAnnotations']);
+const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);
+
+function deleteAnnotation(nestedSetNode: NestedSetNode) {
+  emit('deleteAnnotation', nestedSetNode);
+}
 
 function onMouseUp()  {
   // get the selection from the window

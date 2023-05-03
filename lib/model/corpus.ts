@@ -8,7 +8,7 @@ export class Corpus implements ICorpus {
 
     constructor(corpus: ICorpus) {
         this.name = corpus.name;
-        this.supported_annotation_types = corpus.supported_annotation_types;
+        this.supported_annotation_types = corpus.supported_annotation_types.map(supported_annotation_type => new AnnotationType(supported_annotation_type));
         this._id = corpus._id;
     }
 

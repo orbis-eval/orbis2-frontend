@@ -13,7 +13,7 @@ export class Run implements IRun{
     constructor(run: IRun) {
         this.name = run.name;
         this.description = run.description;
-        this.corpus = run.corpus;
+        this.corpus = new Corpus(run.corpus);
         this.document_annotations = run.document_annotations;
         this._id = run._id;
     }

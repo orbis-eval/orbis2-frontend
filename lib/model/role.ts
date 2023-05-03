@@ -8,4 +8,9 @@ export class Role implements IRole {
         this.name = role.name;
         this._id = role._id;
     }
+
+    toJSON() {
+        const { _id, ...json } = this;
+        return json;
+    }
 }

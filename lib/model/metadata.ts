@@ -10,4 +10,9 @@ export class Metadata implements IMetadata {
         this.value = metadata.value;
         this._id = metadata._id;
     }
+
+    toJSON() {
+        const { _id, ...json } = this;
+        return json;
+    }
 }

@@ -10,7 +10,7 @@ export class Annotator implements IAnnotator {
 
     constructor(annotator: IAnnotator) {
         this.name = annotator.name;
-        this.roles = annotator.roles;
+        this.roles = annotator.roles.map(role => new Role(role));
         if (!annotator.password) {
             annotator.password = hash('');
         }
