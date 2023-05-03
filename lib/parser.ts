@@ -43,25 +43,6 @@ export class Parser {
             });
     }
 
-
-    static parseAnnotationResponse(promise: Promise<TypedInternalResponse<string>>): Promise<Annotation | Error> {
-        return promise
-            .then(data => {
-                if (data  !== undefined) {
-                    let annotation = new Annotation(data as Annotation);
-                    // we have to set the types on the fields explicit. TODO: investigate if it is possible to do if directly from parsing the object
-                    annotation.annotation_type = new AnnotationType(annotation.annotation_type);
-                    annotation.annotator = new Annotator(annotation.annotator);
-                    return annotation;
-                }
-                return new Error(`Response in Promise is expected to be of type Annotation`)
-            })
-            .catch(error => {
-                return new Error(error);
-            });
-    }
-
-
     /**
      * Takes a promise containing a response and parses it to a list of given types.
      * The type in which the response is parsed to (U) must be an extension of an interface (T),

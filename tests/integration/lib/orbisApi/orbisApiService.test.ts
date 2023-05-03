@@ -24,7 +24,7 @@ class OrbisApiServiceMock extends OrbisApiService {
     }
 
     async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
-        return Parser.parseAnnotationResponse(new Promise((resolve) => {
+        return Parser.parse(Annotation, new Promise((resolve) => {
             resolve(this.mockedApiCallResponse);
         }));
     }

@@ -51,7 +51,7 @@ export class OrbisApiService {
     }
 
     async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
-        return Parser.parseAnnotationResponse(
+        return Parser.parse( Annotation,
             this.apiPost(`addAnnotation`, annotation));
     }
 

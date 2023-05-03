@@ -21,8 +21,8 @@ export class Annotation implements IAnnotation {
         this.surface_forms = annotation.surface_forms;
         this.start_indices = annotation.start_indices;
         this.end_indices = annotation.end_indices;
-        this.annotation_type = annotation.annotation_type;
-        this.annotator = annotation.annotator;
+        this.annotation_type = new AnnotationType(annotation.annotation_type);
+        this.annotator = new Annotator(annotation.annotator);
         this.run_id = annotation.run_id;
         this.document_id = annotation.document_id;
         this.metadata = annotation.metadata;
