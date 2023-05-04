@@ -5,6 +5,7 @@ import {Corpus} from "~/lib/model/corpus";
 import {Annotation} from "~/lib/model/annotation";
 import {Run} from "~/lib/model/run"
 import {TypedInternalResponse} from "nitropack";
+import {ColorPalette} from "~/lib/model/colorpalette";
 
 export class OrbisApiService {
 
@@ -109,6 +110,12 @@ export class OrbisApiService {
     }
 
     async countDocuments(runId: number): Promise<Number | Error> {
+        // @ts-ignore
         return this.apiGet(`countDocuments?run_id=${runId}`);
+    }
+
+    async colorPalettes(): Promise<ColorPalette[] | Error> {
+        return Parser.parseList(ColorPalette,
+            this.apiGet(`colorPalettes`));
     }
 }

@@ -6,6 +6,22 @@
     </template>
     <LoadingSpinner v-if="!currentDocument"/>
 
+
+    <!-- TODO: only for testing - remove when everything works with the color support -->
+    <h1>Color Palettes:</h1>
+    <div class="p-4">
+      {{colorPalettes}}
+    </div>
+    <h1>Supported Annotation Types:</h1>
+    <div v-for="annotationType in annotationTypes" class="p-4">
+      name={{annotationType.name}}
+      <br/>
+      color_index = {{annotationType.color_id%colorPalettes.length}}
+      <br/>
+      color = {{colorPalettes[0].colors[annotationType.color_id%colorPalettes.length]}}
+    </div>
+
+
     <!-- previous / next document buttons -->
     <div class="p-4" v-if="selectedRun && currentDocument">
       Document: {{ currentDocument._id }}
@@ -135,6 +151,7 @@ const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
 const annotationTypes = ref([]);
 const documentsCount=ref(null);
+const colorPalettes=ref([]);
 
 // TODO: use the annotator loaded from the backend
 let annotator: Annotator = new Annotator({
@@ -169,6 +186,7 @@ onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
   loadDocument();
   loadRuns();
+  loadColorPalettes();
 });
 
 onMounted(() => {
@@ -205,6 +223,13 @@ function loadDocument() {
 
 function loadRuns() {
   ApiUtils.getRuns(route.params.corpusId, documentRuns, $orbisApiService);
+}
+
+function loadColorPalettes() {
+  $orbisApiService.colorPalettes().then(loadedColorPalettes => {
+    console.log(JSON.stringify(loadedColorPalettes));
+    colorPalettes.value = loadedColorPalettes;
+  })
 }
 
 function reload(annotations: Annotation[]) {
@@ -301,6 +326,9 @@ function selectedRunChanged(run: any) {
   if (run && run._id) {
 
     annotationStore.changeSelectedRun(run);
+
+    //console.log(JSON.stringify(run.corpus.supported_annotation_types));
+
     annotationTypes.value = run.corpus.supported_annotation_types;
     selectedRun.value = run;
 
