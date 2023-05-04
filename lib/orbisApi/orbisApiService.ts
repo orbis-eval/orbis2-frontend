@@ -97,4 +97,14 @@ export class OrbisApiService {
             body: JSON.stringify(body)
         })
     }
+
+    async nextDocument(runId: number, documentId: number): Promise<Document | Error> {
+        return Parser.parse(Document,
+            this.apiGet(`nextDocument?run_id=${runId}&document_id=${documentId}`));
+    }
+
+    async previousDocument(runId: number, documentId: number): Promise<Document | Error> {
+        return Parser.parse(Document,
+            this.apiGet(`previousDocument?run_id=${runId}&document_id=${documentId}`));
+    }
 }

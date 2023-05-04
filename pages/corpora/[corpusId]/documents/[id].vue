@@ -4,7 +4,22 @@
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
                 @onDocumentsClicked="() => router.go(-1)"/>
     </template>
-    <LoadingSpinner v-if="!content"/>
+    <LoadingSpinner v-if="!currentDocument"/>
+
+    <!-- previous / next document buttons -->
+    <div class="p-4" v-if="selectedRun && currentDocument">
+      current document: {{ currentDocument._id }}
+      <button @click="previousDocument" class="small-button">
+        <OhVueIcon name="md-navigatebefore-twotone"/>
+        previous
+      </button>
+      |
+      <button @click="nextDocument" class="small-button">
+        next
+        <OhVueIcon name="md-navigatenext-twotone"/>
+      </button>
+    </div>
+
     <div
         v-if="nestedSetRootNode">
       <div class="relative" ref="relativeDiv">
@@ -82,7 +97,7 @@
 <script setup lang="ts">
 
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { LaUndoAltSolid, LaRedoAltSolid } from "oh-vue-icons/icons"
+import { LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone } from "oh-vue-icons/icons"
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
@@ -95,13 +110,13 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 
-addIcons(LaUndoAltSolid, LaRedoAltSolid)
+addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone);
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
 
-const content = ref(null);
+const currentDocument = ref(null);
 const selection = ref(null);
 const selectionSurfaceForm = ref('');
 const relativeDiv = ref(null);
@@ -118,15 +133,12 @@ const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
 
-let annotationType: AnnotationType = new AnnotationType({
-  name: "Type A",
-});
 
-
-// TODO: remove mock, us from selected run.corpus.supported_annotation_types
+// TODO: use correct naming (it is not a mock anymore)
 // initially the list is empty
 const mockAnnotationTypes = ref([]);
 
+// TODO: clean up the annotator
 let annotator: Annotator = new Annotator({
   name: "test annotator",
   roles: []
@@ -183,12 +195,12 @@ function loadDocuments() {
   $orbisApiService.getDocument(route.params.id)
       .then(document => {
         if (document instanceof Document) {
-          content.value = document.content;
+          currentDocument.value = document;
           reload([]);
         } else {
           console.error(document.errorMessage);
           // TODO, 06.01.2023 anf: correct error handling
-          content.value = 'ERROR';
+          currentDocument.value.content = 'ERROR';
         }
       });
 }
@@ -200,7 +212,7 @@ function loadRuns() {
 function reload(annotations: Annotation[]) {
   nestedSetRootNode.value = NestedSet.toTree(
       annotations,
-      content.value,
+      currentDocument.value.content,
       selectedRun.value,
       1,
       new Date(),
@@ -249,6 +261,23 @@ function redoAnnotation() {
   }
 }
 
+function nextDocument() {
+  $orbisApiService.nextDocument(selectedRun.value._id, currentDocument.value._id).then(document => {
+    navigateToDocument(document);
+  });
+}
+
+function previousDocument() {
+  $orbisApiService.previousDocument(selectedRun.value._id, currentDocument.value._id).then(document => {
+    navigateToDocument(document);
+  });
+}
+
+function navigateToDocument(document: Document) {
+  router.push({ path: `/corpora/${route.params.corpusId}/documents/${document._id}` });
+}
+
+// TODO: remove "mock"-naming
 function mockNestedSetNode(
     surfaceForm: string,
     start: number,
@@ -333,7 +362,7 @@ async function commitAnnotationType(annotationType: AnnotationType) {
 
           // add the new node as child
           nodeToInsert.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
-            console.warn("could not update the tree..."); // TODO: do proper error handling
+            console.warn(`could not update the tree, error: ${JSON.stringify(parseError)}`); // TODO: do proper error handling
           });
           // console.log(`inserted ${annotationNode.surface_forms[0]} into tree, parend node ${nodeToInsert.annotation_type.name}`);
 
