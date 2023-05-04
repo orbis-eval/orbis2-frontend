@@ -8,7 +8,7 @@
 
     <!-- previous / next document buttons -->
     <div class="p-4" v-if="selectedRun && currentDocument">
-      current document: {{ currentDocument._id }}
+      Document: {{ currentDocument._id }}
       <button @click="previousDocument" class="small-button">
         <OhVueIcon name="md-navigatebefore-twotone"/>
         previous
@@ -18,6 +18,7 @@
         next
         <OhVueIcon name="md-navigatenext-twotone"/>
       </button>
+      Total Documents in Run: {{documentsCount}}
     </div>
 
     <div
@@ -30,7 +31,7 @@
           :left-position="mousePosX"
           :top-position="mousePosY"
           :is-visible="showAnnotationModal"
-          :annotation-types="mockAnnotationTypes"
+          :annotation-types="annotationTypes"
           :selectionSurfaceForm="selectionSurfaceForm"
           @hideAnnotationModal="hideAnnotationModal"
           @commitAnnotationType="commitAnnotationType"/>
@@ -132,13 +133,10 @@ const selectedRun = ref(annotationStore.selectedRun);
 const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
+const annotationTypes = ref([]);
+const documentsCount=ref(null);
 
-
-// TODO: use correct naming (it is not a mock anymore)
-// initially the list is empty
-const mockAnnotationTypes = ref([]);
-
-// TODO: clean up the annotator
+// TODO: use the annotator loaded from the backend
 let annotator: Annotator = new Annotator({
   name: "test annotator",
   roles: []
@@ -169,7 +167,7 @@ const clickOutsideListener = (event) => {
 
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
-  loadDocuments();
+  loadDocument();
   loadRuns();
 });
 
@@ -191,7 +189,7 @@ function deleteAnnotation(nestedSetNode: NestedSetNode) {
   });
 }
 
-function loadDocuments() {
+function loadDocument() {
   $orbisApiService.getDocument(route.params.id)
       .then(document => {
         if (document instanceof Document) {
@@ -277,8 +275,7 @@ function navigateToDocument(document: Document) {
   router.push({ path: `/corpora/${route.params.corpusId}/documents/${document._id}` });
 }
 
-// TODO: remove "mock"-naming
-function mockNestedSetNode(
+function createNestedSetNode(
     surfaceForm: string,
     start: number,
     end: number,
@@ -302,12 +299,12 @@ function mockNestedSetNode(
 
 function selectedRunChanged(run: any) {
   if (run && run._id) {
+
     annotationStore.changeSelectedRun(run);
-
-    // set the supported annotation types here
-    mockAnnotationTypes.value = run.corpus.supported_annotation_types;
-
+    annotationTypes.value = run.corpus.supported_annotation_types;
     selectedRun.value = run;
+
+    // load the annotations
     $orbisApiService.getAnnotations(run._id, route.params.id)
         .then(annotationsFromDb => {
           if (Array.isArray(annotationsFromDb)) {
@@ -315,7 +312,13 @@ function selectedRunChanged(run: any) {
           } else {
             console.error(annotationsFromDb.errorMessage);
           }
-        })
+        });
+
+    // load the total documents
+    $orbisApiService.countDocuments(run._id).then(documentCount => {
+          documentsCount.value = documentCount;
+        }
+    );
   }
 }
 
@@ -345,7 +348,7 @@ function updateAnnotations(currentSelection, node: NestedSetNode) {
 // called when adding a new annotation
 async function commitAnnotationType(annotationType: AnnotationType) {
   //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
-  let annotation = mockNestedSetNode(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
+  let annotation = createNestedSetNode(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
       .toAnnotation();
   annotation.run_id = selectedRun.value._id;
   annotation.document_id = Number(route.params.id);

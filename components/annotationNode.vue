@@ -19,7 +19,9 @@
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
         <br/>
+        <!--
         <a @click="deleteAnnotation(nestedSetNode)">delete</a>
+        -->
       </span>
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
@@ -87,7 +89,7 @@ function onMouseUp()  {
       props.nestedSetNode);
     }
   }
-};
+}
 
 const updateAnnotations = (selection, selectedNode: NestedSetNode) => {
   emit('updateAnnotations', selection, selectedNode);

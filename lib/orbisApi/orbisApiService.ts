@@ -107,4 +107,8 @@ export class OrbisApiService {
         return Parser.parse(Document,
             this.apiGet(`previousDocument?run_id=${runId}&document_id=${documentId}`));
     }
+
+    async countDocuments(runId: number): Promise<Number | Error> {
+        return this.apiGet(`countDocuments?run_id=${runId}`);
+    }
 }
