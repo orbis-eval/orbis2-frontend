@@ -8,6 +8,7 @@
 
 
     <!-- TODO: only for testing - remove when everything works with the color support -->
+    <!--
     <h1>Color Palettes:</h1>
     <div class="p-4">
       <p v-for="colorPalette in colorPalettes">
@@ -24,6 +25,7 @@
         color = {{colorPalettes[0].getHexadecimalColorValue(annotationType.color_id)}}
       </div>
     </div>
+    -->
 
     <!-- previous / next document buttons -->
     <div class="p-4" v-if="selectedRun && currentDocument">
@@ -57,6 +59,7 @@
 
           <AnnotationNode :nestedSetNode="nestedSetRootNode"
                           :colorPalette = "currentColorPalette"
+                          :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
                           @updateAnnotations="updateAnnotations"
                           @deleteAnnotation="deleteAnnotation"/>
         </div>
@@ -91,22 +94,38 @@
         {{ recentlyStoredAnnotationId }}
       </div>
       <div v-if="nestedSetRootNode">
-        <h2 class="text-4xl">Annotations</h2>
+        <h2 class="text-4xl p-2">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
-          <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
+          <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
             <tr>
-              <th>start</th>
-              <th>end</th>
-              <th>surface</th>
-              <th>type</th>
+              <th class="p-2"></th>
+              <th class="p-2">start</th>
+              <th class="p-2">end</th>
+              <th class="p-2">surface</th>
+              <th class="p-2">type</th>
+              <th class="p-2"></th>
             </tr>
           </thead>
           <tbody>
-          <tr v-for="annotation in nestedSetRootNode.allAnnotationNodes()" class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700">
-            <td class="p-1">{{ annotation.start_indices[0] }}</td>
-            <td class="p-1">{{ annotation.end_indices[0] }}</td>
-            <td class="p-1">{{ annotation.surface_forms[0] }}</td>
-            <td class="p-1">{{ annotation.annotation_type.name}}</td>
+          <tr v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
+              class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700 hover:underline"
+              @mouseover="highlightNestedSetNode(nestedSetNode._id)"
+              @mouseleave="unsetHighlightedNestedSetNodeId()"
+              @mouseout="unsetHighlightedNestedSetNodeId()"
+
+          >
+            <td class="p-2">
+              <div class="rounded-lg w-10 h-10" :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"></div>
+            </td>
+            <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>
+            <td class="p-2">{{ nestedSetNode.end_indices[0] }}</td>
+            <td class="p-2">{{ nestedSetNode.surface_forms[0] }}</td>
+            <td class="p-2">{{ nestedSetNode.annotation_type.name}}</td>
+            <td class="p-2">
+              <button @click="deleteAnnotation(nestedSetNode)" class="small-button">
+                Delete <OhVueIcon name="md-Deleteforever-outlined"/>
+              </button>
+            </td>
           </tr>
           </tbody>
         </table>
@@ -118,7 +137,7 @@
 <script setup lang="ts">
 
 import {addIcons, OhVueIcon} from "oh-vue-icons";
-import {LaRedoAltSolid, LaUndoAltSolid, MdNavigatebeforeTwotone, MdNavigatenextTwotone} from "oh-vue-icons/icons";
+import {LaRedoAltSolid, LaUndoAltSolid, MdNavigatebeforeTwotone, MdNavigatenextTwotone, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
@@ -131,7 +150,7 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 
-addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone);
+addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone, MdDeleteforeverOutlined);
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
@@ -157,6 +176,7 @@ const annotationTypes = ref([]);
 const documentsCount=ref(null);
 const colorPalettes=ref([]);
 const currentColorPalette=ref(null);
+const highlightedNestedSetNodeId=ref(null);
 
 // TODO: use the annotator loaded from the backend
 let annotator: Annotator = new Annotator({
@@ -205,11 +225,12 @@ onBeforeUnmount(() => {
 });
 
 
-function deleteAnnotation(nestedSetNode: NestedSetNode) {
-  console.log("deleting node "+nestedSetNode._id);
-  $orbisApiService.removeAnnotationFromDocument(nestedSetNode.toAnnotation()).then(response => {
-    console.log(response);
-  });
+function highlightNestedSetNode(id: number) {
+  highlightedNestedSetNodeId.value = id;
+}
+
+function unsetHighlightedNestedSetNodeId() {
+  highlightedNestedSetNodeId.value = null;
 }
 
 function loadDocument() {
@@ -260,22 +281,28 @@ function reload(annotations: Annotation[]) {
 }
 
 function undoAnnotation() {
-  const undoneAnnotationNode = annotationStore.undoAnnotation();
-  if (undoneAnnotationNode) {
-    $orbisApiService.removeAnnotationFromDocument(undoneAnnotationNode.toAnnotation())
-        .then(response => {
-          if (response instanceof Error) {
-            console.error(response.errorMessage);
-            // redo annotation since it could not be removed from the database in the backend
-            annotationStore.redoAnnotation();
-          } else {
-            // console.log(`removed annotation ${undoneAnnotationNode._id}`);
-            // remove the annotation from the tree
-            undoneAnnotationNode.parent.removeAnnotationNode(undoneAnnotationNode, parseErrorCallBack);
-          }
-        })
-    }
-  }
+  removeAnnotation(annotationStore.undoAnnotation());
+}
+
+function deleteAnnotation(nestedSetNode: NestedSetNode) {
+  // TODO: implement undo functionality for deleted annotations
+  // annotationStore.addAnnotation(nestedSetNode);
+  removeAnnotation(nestedSetNode);
+}
+
+function removeAnnotation(nestedSetNode: NestedSetNode) {
+  $orbisApiService.removeAnnotationFromDocument(nestedSetNode.toAnnotation())
+      .then(response => {
+        if (response instanceof Error) {
+          console.error(response.errorMessage);
+          // redo annotation since it could not be removed from the database in the backend
+          annotationStore.redoAnnotation();
+        } else {
+          // remove the annotation from the tree
+          nestedSetNode.parent.removeAnnotationNode(nestedSetNode, parseErrorCallBack);
+        }
+      });
+}
 
 function redoAnnotation() {
   let redoneAnnotationNode = annotationStore.redoAnnotation();
@@ -338,7 +365,7 @@ function createNestedSetNode(
     metadata: [],
     timestamp: new Date(),
     _id: id
-  })), annotationType.color_id);
+  })));
 }
 
 /**

@@ -7,6 +7,7 @@
         v-for="nestedSetChildNode in nestedSetNode.children"
         :nestedSetNode="nestedSetChildNode"
         :colorPalette = "colorPalette"
+        :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
         @updateAnnotations="updateAnnotations"
         @deleteAnnotation="deleteAnnotation"
     />
@@ -16,17 +17,16 @@
         class="p-1">
       {{ nestedSetNode.surface_forms[0] }}
     </span>
-  <span v-else-if="nestedSetNode.parent" class="annotation" :style="{borderColor: '#'+colorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}">
+  <span v-else-if="nestedSetNode.parent" class="annotation" :style="{borderColor: '#'+colorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"
+        :class="{ 'bg-neutral-400 text-white rounded': nestedSetNode._id === highlightedNestedSetNodeId }">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
-        <!--
-        <a @click="deleteAnnotation(nestedSetNode)">delete</a>
-        -->
       </span>
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
           :colorPalette = "colorPalette"
+          :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -36,6 +36,7 @@
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
           :colorPalette = "colorPalette"
+          :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -49,7 +50,8 @@ import {ColorPalette} from "~/lib/model/colorpalette";
 
 const props = defineProps({
   nestedSetNode: NestedSetNode,
-  colorPalette: ColorPalette
+  colorPalette: ColorPalette,
+  highlightedNestedSetNodeId: Number
 });
 
 const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);
