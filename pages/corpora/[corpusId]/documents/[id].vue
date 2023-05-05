@@ -117,8 +117,8 @@
 
 <script setup lang="ts">
 
-import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone } from "oh-vue-icons/icons"
+import {addIcons, OhVueIcon} from "oh-vue-icons";
+import {LaRedoAltSolid, LaUndoAltSolid, MdNavigatebeforeTwotone, MdNavigatenextTwotone} from "oh-vue-icons/icons";
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
@@ -130,7 +130,6 @@ import {Run} from "~/lib/model/run";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
-import {ColorPalette} from "~/lib/model/colorpalette";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone);
 
@@ -241,13 +240,15 @@ function loadColorPalettes() {
 }
 
 function reload(annotations: Annotation[]) {
-
-  // TODO: user better list comprehension
-  for(let i = 0; i < annotations.length; i++) {
-    let color_id = getAnnotationTypeByName(annotations[i].annotation_type.name).color_id;
-    annotations[i].annotation_type.color_id = color_id;
-  }
-
+  // assign the color-id value based on the supported_annotation_types to every annotation
+  annotations = annotations.map(annotation => {
+    annotation.annotation_type.color_id =
+        annotationTypes.value.
+        find(annotationType => annotationType.name === annotation.annotation_type.name)
+            .color_id;
+    return annotation;
+  });
+  // calculate the root-node
   nestedSetRootNode.value = NestedSet.toTree(
       annotations,
       currentDocument.value.content,
@@ -256,16 +257,6 @@ function reload(annotations: Annotation[]) {
       new Date(),
       parseErrorCallBack
   );
-}
-
-// TODO: use better list comprehension
-function getAnnotationTypeByName(annotationTypeName: string) {
-  for (let i = 0; i < annotationTypes.value.length; i++) {
-    if (annotationTypes.value[i].name === annotationTypeName) {
-      return annotationTypes.value[i];
-    }
-  }
-  return null;
 }
 
 function undoAnnotation() {
