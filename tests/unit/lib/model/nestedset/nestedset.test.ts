@@ -336,6 +336,7 @@ describe('test json serialization', () => {
 
 let annotationType: AnnotationType = new AnnotationType({
     name: "A Type",
+    color_id: 1,
     _id: 1
 });
 

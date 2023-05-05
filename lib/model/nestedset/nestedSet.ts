@@ -15,11 +15,13 @@ export class NestedSet {
 
     public static GAP_ANNOTATION_TYPE = new AnnotationType({
         name: this.GAP_ANNOTATION_TYPE_NAME,
+        color_id: 1,
         _id: 1000
     });
 
     public static LINE_ANNOTATION_TYPE = new AnnotationType({
         name: this.LINE_ANNOTATION_TYPE_NAME,
+        color_id: 1,
         _id: 1001
     });
 
@@ -31,6 +33,7 @@ export class NestedSet {
 
     public static ROOT_ANNOTATION_TYPE = new AnnotationType({
         name: "ROOT_NODE_ANNOTATION",
+        color_id: 1,
         _id: 4000
     });
 
@@ -78,7 +81,7 @@ export class NestedSet {
         errorCallback: (parseError: NestedSetParseError) => void,
         rootNode?: NestedSetNode,
         generateLineAnnotations=true): NestedSetNode | null {
-
+        //console.log(`in toTree method annotations param: ${JSON.stringify(annotations)}`)
         if(!rootNode) {
             rootNode = this.generateRootNode(
                 documentString,
@@ -104,6 +107,7 @@ export class NestedSet {
 
         // iterate all annotations
         for (let annotation of annotations) {
+            //console.log(`when generating annotation: ${JSON.stringify(annotation)}`);
             let currentNode = new NestedSetNode(annotation);
             let parentNode = this.getParent(previousNode, currentNode, errorCallback);
             if (parentNode) {

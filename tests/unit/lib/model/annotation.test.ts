@@ -22,6 +22,7 @@ describe('Annotation.constructor()', () => {
                 annotation_type: {
                     _id: 0,
                     name: "Type B",
+                    color_id: 1,
                     toJSON() {
                         const { _id, ...json } = this;
                         return json;

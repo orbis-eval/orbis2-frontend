@@ -17,6 +17,7 @@ beforeEach(() => {
         start_indices: [0],
         end_indices: [12],
         annotation_type: new AnnotationType({
+            color_id: 1,
             name: 'type1',
             _id: 1
         }),

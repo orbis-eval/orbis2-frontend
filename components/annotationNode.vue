@@ -6,6 +6,7 @@
     <AnnotationNode
         v-for="nestedSetChildNode in nestedSetNode.children"
         :nestedSetNode="nestedSetChildNode"
+        :colorPalette = "colorPalette"
         @updateAnnotations="updateAnnotations"
         @deleteAnnotation="deleteAnnotation"
     />
@@ -15,10 +16,9 @@
         class="p-1">
       {{ nestedSetNode.surface_forms[0] }}
     </span>
-  <span v-else-if="nestedSetNode.parent" class="annotation">
+  <span v-else-if="nestedSetNode.parent" class="annotation" :style="{borderColor: '#'+colorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
-        <br/>
         <!--
         <a @click="deleteAnnotation(nestedSetNode)">delete</a>
         -->
@@ -26,6 +26,7 @@
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
+          :colorPalette = "colorPalette"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -34,6 +35,7 @@
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
+          :colorPalette = "colorPalette"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -43,9 +45,11 @@
 <script setup lang="ts">
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
+import {ColorPalette} from "~/lib/model/colorpalette";
 
 const props = defineProps({
-  nestedSetNode: NestedSetNode
+  nestedSetNode: NestedSetNode,
+  colorPalette: ColorPalette
 });
 
 const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);

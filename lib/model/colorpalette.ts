@@ -10,4 +10,8 @@ export class ColorPalette implements IColorPalette {
         this.name = colorPalette.name;
         this.colors = colorPalette.colors;
     }
+
+    getHexadecimalColorValue(colorId: number) {
+        return (this.colors[colorId%this.colors.length]).toString(16);
+    }
 }

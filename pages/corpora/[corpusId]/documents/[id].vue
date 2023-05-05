@@ -10,17 +10,20 @@
     <!-- TODO: only for testing - remove when everything works with the color support -->
     <h1>Color Palettes:</h1>
     <div class="p-4">
-      {{colorPalettes}}
+      <p v-for="colorPalette in colorPalettes">
+        {{colorPalette}}
+      </p>
     </div>
     <h1>Supported Annotation Types:</h1>
     <div v-for="annotationType in annotationTypes" class="p-4">
       name={{annotationType.name}}
       <br/>
-      color_index = {{annotationType.color_id%colorPalettes.length}}
+      color_index = {{annotationType.color_id%colorPalettes[0].colors.length}}
       <br/>
-      color = {{colorPalettes[0].colors[annotationType.color_id%colorPalettes.length]}}
+      <div class="border-2" :style="{borderColor: '#'+colorPalettes[0].getHexadecimalColorValue(annotationType.color_id)}">
+        color = {{colorPalettes[0].getHexadecimalColorValue(annotationType.color_id)}}
+      </div>
     </div>
-
 
     <!-- previous / next document buttons -->
     <div class="p-4" v-if="selectedRun && currentDocument">
@@ -53,6 +56,7 @@
           @commitAnnotationType="commitAnnotationType"/>
 
           <AnnotationNode :nestedSetNode="nestedSetRootNode"
+                          :colorPalette = "currentColorPalette"
                           @updateAnnotations="updateAnnotations"
                           @deleteAnnotation="deleteAnnotation"/>
         </div>
@@ -126,6 +130,7 @@ import {Run} from "~/lib/model/run";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
+import {ColorPalette} from "~/lib/model/colorpalette";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone);
 
@@ -152,6 +157,7 @@ const wrongRunSelectedEnabled = ref(false);
 const annotationTypes = ref([]);
 const documentsCount=ref(null);
 const colorPalettes=ref([]);
+const currentColorPalette=ref(null);
 
 // TODO: use the annotator loaded from the backend
 let annotator: Annotator = new Annotator({
@@ -229,10 +235,19 @@ function loadColorPalettes() {
   $orbisApiService.colorPalettes().then(loadedColorPalettes => {
     console.log(JSON.stringify(loadedColorPalettes));
     colorPalettes.value = loadedColorPalettes;
+    // TODO: make selectable in GUI
+    currentColorPalette.value = colorPalettes.value[0];
   })
 }
 
 function reload(annotations: Annotation[]) {
+
+  // TODO: user better list comprehension
+  for(let i = 0; i < annotations.length; i++) {
+    let color_id = getAnnotationTypeByName(annotations[i].annotation_type.name).color_id;
+    annotations[i].annotation_type.color_id = color_id;
+  }
+
   nestedSetRootNode.value = NestedSet.toTree(
       annotations,
       currentDocument.value.content,
@@ -241,6 +256,16 @@ function reload(annotations: Annotation[]) {
       new Date(),
       parseErrorCallBack
   );
+}
+
+// TODO: use better list comprehension
+function getAnnotationTypeByName(annotationTypeName: string) {
+  for (let i = 0; i < annotationTypes.value.length; i++) {
+    if (annotationTypes.value[i].name === annotationTypeName) {
+      return annotationTypes.value[i];
+    }
+  }
+  return null;
 }
 
 function undoAnnotation() {
@@ -300,6 +325,9 @@ function navigateToDocument(document: Document) {
   router.push({ path: `/corpora/${route.params.corpusId}/documents/${document._id}` });
 }
 
+/**
+ * called when a new annotation was added in GUI
+ */
 function createNestedSetNode(
     surfaceForm: string,
     start: number,
@@ -319,16 +347,18 @@ function createNestedSetNode(
     metadata: [],
     timestamp: new Date(),
     _id: id
-  })));
+  })), annotationType.color_id);
 }
 
+/**
+ * called when the run changes. will load all annotations for given run from the backend
+ * and re-render the tree with those
+ * @param run the run that was selected
+ */
 function selectedRunChanged(run: any) {
   if (run && run._id) {
 
     annotationStore.changeSelectedRun(run);
-
-    //console.log(JSON.stringify(run.corpus.supported_annotation_types));
-
     annotationTypes.value = run.corpus.supported_annotation_types;
     selectedRun.value = run;
 
@@ -336,13 +366,15 @@ function selectedRunChanged(run: any) {
     $orbisApiService.getAnnotations(run._id, route.params.id)
         .then(annotationsFromDb => {
           if (Array.isArray(annotationsFromDb)) {
+            console.log(`annotations loaded from db: ${JSON.stringify(annotationsFromDb)}`);
+            // reload the annotations
             reload(annotationsFromDb);
           } else {
             console.error(annotationsFromDb.errorMessage);
           }
         });
 
-    // load the total documents
+    // load the total documents count for given run
     $orbisApiService.countDocuments(run._id).then(documentCount => {
           documentsCount.value = documentCount;
         }
