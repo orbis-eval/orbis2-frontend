@@ -151,7 +151,10 @@ Start the development server on http://localhost:3000
 yarn run dev
 ```
 
-all used icons can be found under https://oh-vue-icons.js.org/
+run the unit tests: 
+```shell
+jest
+```
 
 ### Production
 
