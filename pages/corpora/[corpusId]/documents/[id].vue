@@ -412,13 +412,18 @@ async function commitAnnotationType(annotationType: AnnotationType) {
   $orbisApiService.addAnnotation(annotation)
       .then(annotationResponse => {
 
-        if (annotationResponse instanceof Annotation) {
-          let annotationNode = new NestedSetNode(annotationResponse);
-          let nodeToInsert = selectedNode.value;
-          // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
-          if(nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
-            nodeToInsert = selectedNode.value.parent;
-          }
+      if (annotationResponse instanceof Annotation) {
+        let annotationNode = new NestedSetNode(annotationResponse);
+
+        if (annotation.annotation_type.color_id) {
+          annotationNode.annotation_type.color_id = annotation.annotation_type.color_id;
+        }
+
+        let nodeToInsert = selectedNode.value;
+        // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
+        if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
+          nodeToInsert = selectedNode.value.parent;
+        }
 
           // add the new node as child
           nodeToInsert.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
