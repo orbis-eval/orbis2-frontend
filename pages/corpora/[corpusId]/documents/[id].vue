@@ -2,44 +2,23 @@
   <NuxtLayout name="sidebar">
     <template #leftMenu>
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
-                @onDocumentsClicked="() => router.go(-1)"/>
+        @onDocumentsClicked="() => router.go(-1)" />
     </template>
-    <LoadingSpinner v-if="!currentDocument"/>
-
-
-    <!-- TODO: only for testing - remove when everything works with the color support -->
-    <!--
-    <h1>Color Palettes:</h1>
-    <div class="p-4">
-      <p v-for="colorPalette in colorPalettes">
-        {{colorPalette}}
-      </p>
-    </div>
-    <h1>Supported Annotation Types:</h1>
-    <div v-for="annotationType in annotationTypes" class="p-4">
-      name={{annotationType.name}}
-      <br/>
-      color_index = {{annotationType.color_id%colorPalettes[0].colors.length}}
-      <br/>
-      <div class="border-2" :style="{borderColor: '#'+colorPalettes[0].getHexadecimalColorValue(annotationType.color_id)}">
-        color = {{colorPalettes[0].getHexadecimalColorValue(annotationType.color_id)}}
-      </div>
-    </div>
-    -->
+    <LoadingSpinner v-if="!currentDocument" />
 
     <!-- previous / next document buttons -->
     <div class="p-4" v-if="selectedRun && currentDocument">
       Document: {{ currentDocument._id }}
       <button @click="previousDocument" class="small-button">
-        <OhVueIcon name="md-navigatebefore-twotone"/>
+        <OhVueIcon name="md-navigatebefore-twotone" />
         previous
       </button>
       |
       <button @click="nextDocument" class="small-button">
         next
-        <OhVueIcon name="md-navigatenext-twotone"/>
+        <OhVueIcon name="md-navigatenext-twotone" />
       </button>
-      Total Documents in Run: {{documentsCount}}
+      Total Documents in Run: {{ documentsCount }}
     </div>
 
     <div
@@ -433,13 +412,18 @@ async function commitAnnotationType(annotationType: AnnotationType) {
   $orbisApiService.addAnnotation(annotation)
       .then(annotationResponse => {
 
-        if (annotationResponse instanceof Annotation) {
-          let annotationNode = new NestedSetNode(annotationResponse);
-          let nodeToInsert = selectedNode.value;
-          // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
-          if(nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
-            nodeToInsert = selectedNode.value.parent;
-          }
+      if (annotationResponse instanceof Annotation) {
+        let annotationNode = new NestedSetNode(annotationResponse);
+
+        if (annotation.annotation_type.color_id) {
+          annotationNode.annotation_type.color_id = annotation.annotation_type.color_id;
+        }
+
+        let nodeToInsert = selectedNode.value;
+        // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
+        if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
+          nodeToInsert = selectedNode.value.parent;
+        }
 
           // add the new node as child
           nodeToInsert.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
