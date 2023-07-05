@@ -1,35 +1,29 @@
 <template>
   <div class="h-screen text-gray-400 bg-gray-900">
-    <div class="grid grid-cols-[2fr_5fr_3fr] grid-rows-[1fr_10fr_1fr] h-full">
-      <header class="col-span-full tile bg-gray-700 p-4 text-gray-200 rounded-t-lg">
-        <div class="flex flex-row">
-          <div class="basis-1/12 ">
-            <NuxtLink :to="'/'">
-              <img src="~/assets/img/Orbis-Logo-Transparent.png" class="w-20 h-20 rounded-full border border-gray-600 bg-white"/>
-            </NuxtLink>
-          </div>
-          <div class="basis-1/12 pt-6 ">Orbis NG</div>
-          <div class="basis-10/12 " ></div>
-        </div>
-      </header>
-      <nav class="tile p-4">
+    <header class="col-span-full bg-gray-700 text-gray-200 py-2 px-4">
+      <div class="flex flex-row items-center">
+        <NuxtLink :to="'/'">
+          <img src="~/assets/img/Orbis-Logo-Transparent_2.png"
+               class="w-12 h-12 rounded-full border border-gray-600 bg-white"/>
+        </NuxtLink>
+        <div class="ml-4 text-lg">Orbis NG</div>
+      </div>
+    </header>
+    <div class="grid grid-cols-[2fr_5fr_3fr]">
+      <nav class="p-4">
         <!-- Menu Entries -->
         <slot name="leftMenu" v-if="!overridden">
-          <LeftMenu />
+          <LeftMenu/>
         </slot>
-        <slot name="leftMenu" v-if="overridden" />
+        <slot name="leftMenu" v-if="overridden"/>
       </nav>
-      <main class="tile p-4 overflow-auto">
+      <main class="p-4 overflow-auto">
         <slot/>
       </main>
-      <aside class="tile p-4 overflow-auto">
+      <aside class="p-4 overflow-auto">
         <!-- Sidebar -->
         <slot name="sidebar"/>
       </aside>
-      <footer class="col-span-full tile p-6 rounded-b-lg text-center bg-gray-700">
-        <!-- Footer -->
-        Orbis NG - 2023
-      </footer>
     </div>
   </div>
 </template>
