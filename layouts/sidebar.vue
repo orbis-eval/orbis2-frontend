@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen text-gray-400 bg-gray-900">
+  <div class="h-screen text-white bg-gray-800">
     <header class="col-span-full bg-gray-700 text-gray-200 py-2 px-4">
       <div class="flex flex-row items-center">
         <NuxtLink :to="'/'">
@@ -9,7 +9,7 @@
         <div class="ml-4 text-lg">Orbis NG</div>
       </div>
     </header>
-    <div class="grid grid-cols-[2fr_5fr_3fr]">
+    <div class="grid grid-cols-[2fr_5fr_3fr] pt-10">
       <nav class="p-4">
         <!-- Menu Entries -->
         <slot name="leftMenu" v-if="!overridden">

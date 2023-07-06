@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-col justify-start items-center w-full">
-    <div id="menu1" class="flex justify-start  flex-col w-full md:w-auto items-start">
+  <div class="flex flex-col justify-start items-center w-full content-card">
+    <div id="menu1" class="flex justify-start flex-col w-full md:w-auto items-start my-4">
       <!-- Runs -->
       <div v-if="runs" class="menu-item">
         <OhVueIcon name="la-rocket-solid" class="menu-icon"/>

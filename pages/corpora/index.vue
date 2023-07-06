@@ -1,13 +1,28 @@
 <template>
   <NuxtLayout name="sidebar">
     <LoadingSpinner v-if="!corpora"/>
-    <div v-else>
-      <ul>
-        <li v-for="corpus in corpora" :key="corpus._id" class="flex">
-          <NuxtLink :to="`corpora/${corpus._id}/documents`" class="mr-6 link">
+    <div v-else class="content-card">
+      <div class="content-card-title">Corpora</div>
+      <div class="py-2 px-2 text-center">
+        <button class="hover:text-purple-400" @click="importEnabled = true">
+          <OhVueIcon name="bi-plus"/>
+          Create Corpus
+        </button>
+      </div>
+      <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center">
+        <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
+          <FileInput @submitted="createCorpus"
+                     @cancelled="cancelled"
+                     submitText="import" cancelText="cancel"/>
+        </div>
+      </div>
+      <ul class="">
+        <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2 px-3">
+          <NuxtLink :to="`corpora/${corpus._id}/documents`" class="hover:text-purple-400">
             {{ corpus.name }}
           </NuxtLink>
-          <button @click="removeCorpus(corpus)" class="text-gray-400 hover:text-white">
+          <div class="flex-grow"></div>
+          <button @click="removeCorpus(corpus)" class="text-white hover:text-purple-400">
             <OhVueIcon name="md-deleteforever-outlined"/>
           </button>
         </li>
@@ -21,16 +36,16 @@
                @decline="deletionDeclined"/>
     </div>
     <template #sidebar>
-      <div class="text-center">
-        <button class="small-button" @click="importEnabled = true">create corpus</button>
-      </div>
-      <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center">
-        <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
-          <FileInput @submitted="createCorpus"
-                     @cancelled="cancelled"
-                     submitText="import" cancelText="cancel"/>
-        </div>
-      </div>
+<!--      <div class="text-center">-->
+<!--        <button class="small-button" @click="importEnabled = true">create corpus</button>-->
+<!--      </div>-->
+<!--      <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center">-->
+<!--        <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">-->
+<!--          <FileInput @submitted="createCorpus"-->
+<!--                     @cancelled="cancelled"-->
+<!--                     submitText="import" cancelText="cancel"/>-->
+<!--        </div>-->
+<!--      </div>-->
     </template>
   </NuxtLayout>
 </template>
@@ -40,11 +55,11 @@ import {useAnnotationStore} from "~/stores/annotationStore";
 import {Document} from "~/lib/model/document";
 import {Corpus} from "~/lib/model/corpus";
 import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+import { MdDeleteforeverOutlined, BiPlus } from "oh-vue-icons/icons";
 import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 
-addIcons(MdDeleteforeverOutlined);
+addIcons(MdDeleteforeverOutlined, BiPlus);
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
