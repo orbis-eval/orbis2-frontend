@@ -87,12 +87,22 @@
           </thead>
           <tbody>
           <tr v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
-              class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700 hover:underline"
+              :class="{
+                    'bg-gray-50': true,
+                    'border-b': true,
+                    'dark:bg-gray-800': true,
+                    'dark:border-gray-700': true,
+                    'hover:underline': true,
+              }"
+              :style="{
+                    'opacity': nestedSetNode.clicked ? '0.5' : '1',
+              }"
               @mouseover="highlightNestedSetNode(nestedSetNode._id)"
               @mouseleave="unsetHighlightedNestedSetNodeId()"
               @mouseout="unsetHighlightedNestedSetNodeId()"
-
+              @click="nestedSetNode.clicked = ! nestedSetNode.clicked"
           >
+            <!--              @mouseup="callMethodToRemoveBorderColor(nestedSetNode)"-->
             <td class="p-2">
               <div class="rounded-lg w-10 h-10" :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"></div>
             </td>
@@ -109,6 +119,45 @@
           </tbody>
         </table>
       </div>
+      <div v-if="nestedSetRootNode">
+        <h2 class="text-2xl p-2 mt-4">Annotation Types</h2>
+        <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
+          <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-center">
+          <tr>
+            <th class="p-2"></th>
+            <th class="p-2">type</th>
+            <th class="p-2">display/hide</th>
+            <th class="p-2"></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr v-for="annotationType in selectedRun.corpus.supported_annotation_types"
+              :class="{
+                    'bg-gray-50': true,
+                    'border-b': true,
+                    'dark:bg-gray-800': true,
+                    'dark:border-gray-700': true,
+                    'hover:underline': true,
+              }"
+              :style="{
+                    'opacity': annotationType.clicked ? '0.5' : '1',
+              }"
+              @click="annotationType.clicked = ! annotationType.clicked"
+          >
+            <!--              @mouseup="callMethodToRemoveBorderColor(nestedSetNode)"-->
+            <td class="p-2">
+              <div class="rounded-lg w-10 h-10" :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(annotationType.color_id)}"></div>
+            </td>
+            <td class="p-2">{{ annotationType.name}}</td>
+            <td class="p-2 text-center">
+                <button @click="toggleAnnotationTypeDisplay(nestedSetRootNode.allAnnotationNodes())" class="text-white">
+                <OhVueIcon class="w-8 h-8" :name="annotationType.clicked ? 'bi-toggle2-on' : 'bi-toggle2-off' "/>
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
     </template>
   </NuxtLayout>
 </template>
@@ -116,7 +165,7 @@
 <script setup lang="ts">
 
 import {addIcons, OhVueIcon} from "oh-vue-icons";
-import {LaRedoAltSolid, LaUndoAltSolid, MdNavigatebeforeTwotone, MdNavigatenextTwotone, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
+import {LaRedoAltSolid, LaUndoAltSolid, MdNavigatebeforeTwotone, MdNavigatenextTwotone, MdDeleteforeverOutlined, BiToggle2Off, BiToggle2On} from "oh-vue-icons/icons";
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
@@ -129,7 +178,7 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 
-addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone, MdDeleteforeverOutlined);
+addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone, MdDeleteforeverOutlined, BiToggle2Off, BiToggle2On);
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
@@ -204,27 +253,50 @@ onBeforeUnmount(() => {
 });
 
 
-function highlightNestedSetNode(id: number) {
-  highlightedNestedSetNodeId.value = id;
+function toggleAnnotationTypeDisplay(annotationType: any) {
+  // TODO: iterate through all annotations and remove border color when there is a match
+  nestedSetRootNode.allAnnotationNodes().map(annotation => {
+    console.log(annotation);
+
+    if (annotation.annotation_type.name == annotationType.name) {
+      // remove border color
+      annotation.annotation_type.style = "0";
+    }
+  })
+
+  const annotationTypesArray = annotationTypes.value;
+  for (const annotationType of annotationTypesArray) {
+    console.log(annotationType.name);
+  }
 }
 
 function unsetHighlightedNestedSetNodeId() {
   highlightedNestedSetNodeId.value = null;
 }
 
-function loadDocument() {
-  $orbisApiService.getDocument(route.params.id)
-      .then(document => {
-        if (document instanceof Document) {
-          currentDocument.value = document;
-          reload([]);
-        } else {
-          console.error(document.errorMessage);
-          // TODO, 06.01.2023 anf: correct error handling
-          currentDocument.value.content = 'ERROR';
-        }
-      });
+function highlightNestedSetNode(id: number) {
+  highlightedNestedSetNodeId.value = id;
 }
+/*function callMethodToRemoveBorderColor(nestedSetNode) {
+  if (nestedSetNode.clicked) {
+    // Emit a custom event using the event bus to notify other components
+    this.$emit('remove-border-color', nestedSetNode._id);
+  }
+}*/
+
+  function loadDocument() {
+    $orbisApiService.getDocument(route.params.id)
+        .then(document => {
+          if (document instanceof Document) {
+            currentDocument.value = document;
+            reload([]);
+          } else {
+            console.error(document.errorMessage);
+            // TODO, 06.01.2023 anf: correct error handling
+            currentDocument.value.content = 'ERROR';
+          }
+        });
+  }
 
 function loadRuns() {
   ApiUtils.getRuns(route.params.corpusId, documentRuns, $orbisApiService);
@@ -358,6 +430,7 @@ function selectedRunChanged(run: any) {
     annotationStore.changeSelectedRun(run);
     annotationTypes.value = run.corpus.supported_annotation_types;
     selectedRun.value = run;
+    console.log(selectedRun.value);
 
     // load the annotations
     $orbisApiService.getAnnotations(run._id, route.params.id)
