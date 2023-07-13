@@ -1,7 +1,7 @@
 <template>
-  <div class="flex flex-col p-6">
-    <div class="flex justify-center mb-6">
-      <div class="bg-gray-800 rounded-lg p-6  text-center">
+  <div class="flex flex-col">
+    <div class="flex justify-center">
+      <div class="text-center">
         <div class="font-bold text-lg mb-4">
           {{ title }}
         </div>
@@ -9,16 +9,12 @@
           {{ message }}
         </div>
         <div class="flex justify-center">
-          <button
-              class="small-button mr-2"
-              @click="confirmClicked"
-          >
+          <button class="small-button mr-2"
+                  @click="confirmClicked">
             {{ confirmText }}
           </button>
-          <button
-              class="small-button"
-              @click="declineClicked"
-          >
+          <button class="small-button"
+                  @click="declineClicked">
             {{ declineText }}
           </button>
         </div>
@@ -53,6 +49,7 @@ function confirmClicked() {
   emit('confirm');
 
 }
+
 function declineClicked() {
   emit('decline');
 }
