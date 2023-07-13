@@ -39,8 +39,10 @@
           <AnnotationNode :nestedSetNode="nestedSetRootNode"
                           :colorPalette = "currentColorPalette"
                           :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
+                          :visibilityMap = "visibilityMap"
                           @updateAnnotations="updateAnnotations"
-                          @deleteAnnotation="deleteAnnotation"/>
+                          @deleteAnnotation="deleteAnnotation"
+          />
         </div>
       </div>
     </div>
@@ -94,15 +96,10 @@
                     'dark:border-gray-700': true,
                     'hover:underline': true,
               }"
-              :style="{
-                    'opacity': nestedSetNode.clicked ? '0.5' : '1',
-              }"
               @mouseover="highlightNestedSetNode(nestedSetNode._id)"
               @mouseleave="unsetHighlightedNestedSetNodeId()"
               @mouseout="unsetHighlightedNestedSetNodeId()"
-              @click="nestedSetNode.clicked = ! nestedSetNode.clicked"
           >
-            <!--              @mouseup="callMethodToRemoveBorderColor(nestedSetNode)"-->
             <td class="p-2">
               <div class="rounded-lg w-10 h-10" :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"></div>
             </td>
@@ -119,7 +116,7 @@
           </tbody>
         </table>
       </div>
-      <div v-if="nestedSetRootNode">
+      <div v-if="nestedSetRootNode && selectedRun.corpus !== undefined">
         <h2 class="text-2xl p-2 mt-4">Annotation Types</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-center">
@@ -142,17 +139,15 @@
               :style="{
                     'opacity': annotationType.clicked ? '0.5' : '1',
               }"
-              @click="annotationType.clicked = ! annotationType.clicked"
+              @click="updateVisibility(nestedSetRootNode, annotationType)"
           >
-            <!--              @mouseup="callMethodToRemoveBorderColor(nestedSetNode)"-->
             <td class="p-2">
+<!--          TODO: error: Cannot read properties of null reading getHexadecimal...    -->
               <div class="rounded-lg w-10 h-10" :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(annotationType.color_id)}"></div>
             </td>
             <td class="p-2">{{ annotationType.name}}</td>
             <td class="p-2 text-center">
-                <button @click="toggleAnnotationTypeDisplay(nestedSetRootNode.allAnnotationNodes())" class="text-white">
                 <OhVueIcon class="w-8 h-8" :name="annotationType.clicked ? 'bi-toggle2-on' : 'bi-toggle2-off' "/>
-              </button>
             </td>
           </tr>
           </tbody>
@@ -205,6 +200,7 @@ const documentsCount=ref(null);
 const colorPalettes=ref([]);
 const currentColorPalette=ref(null);
 const highlightedNestedSetNodeId=ref(null);
+const visibilityMap=ref([]);
 
 // TODO: use the annotator loaded from the backend
 let annotator: Annotator = new Annotator({
@@ -253,21 +249,25 @@ onBeforeUnmount(() => {
 });
 
 
-function toggleAnnotationTypeDisplay(annotationType: any) {
-  // TODO: iterate through all annotations and remove border color when there is a match
-  nestedSetRootNode.allAnnotationNodes().map(annotation => {
-    console.log(annotation);
+function updateVisibility(nestedSetRootNode: NestedSetNode, annotationType: AnnotationType) {
+  // Find all the child nodes of the parent node with the same annotationType
+  const nodesWithSameAnnotationType = nestedSetRootNode.allAnnotationNodes().filter(
+    (childNode) => childNode.annotation_type.name === annotationType.name
+  );
 
-    if (annotation.annotation_type.name == annotationType.name) {
-      // remove border color
-      annotation.annotation_type.style = "0";
+  // Toggle the visibility for each node with the same annotationType
+  nodesWithSameAnnotationType.forEach((node) => {
+    const nodeId = node._id; // Assuming there's an ID field for the node
+
+    if (visibilityMap.value[nodeId] === undefined) {
+      visibilityMap.value[nodeId] = true; // Set initially to true
+    } else {
+      // Toggle the visibility state for the node
+      visibilityMap.value[nodeId] = !visibilityMap.value[nodeId]; // Toggle the visibility state
     }
-  })
+  });
 
-  const annotationTypesArray = annotationTypes.value;
-  for (const annotationType of annotationTypesArray) {
-    console.log(annotationType.name);
-  }
+  return annotationType.clicked = !annotationType.clicked;
 }
 
 function unsetHighlightedNestedSetNodeId() {
@@ -277,12 +277,6 @@ function unsetHighlightedNestedSetNodeId() {
 function highlightNestedSetNode(id: number) {
   highlightedNestedSetNodeId.value = id;
 }
-/*function callMethodToRemoveBorderColor(nestedSetNode) {
-  if (nestedSetNode.clicked) {
-    // Emit a custom event using the event bus to notify other components
-    this.$emit('remove-border-color', nestedSetNode._id);
-  }
-}*/
 
   function loadDocument() {
     $orbisApiService.getDocument(route.params.id)
@@ -430,7 +424,6 @@ function selectedRunChanged(run: any) {
     annotationStore.changeSelectedRun(run);
     annotationTypes.value = run.corpus.supported_annotation_types;
     selectedRun.value = run;
-    console.log(selectedRun.value);
 
     // load the annotations
     $orbisApiService.getAnnotations(run._id, route.params.id)
