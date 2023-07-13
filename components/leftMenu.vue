@@ -1,39 +1,25 @@
 <template>
-  <div class="flex flex-col justify-start items-center w-full content-card">
-    <div id="menu1" class="flex justify-start flex-col w-full md:w-auto items-start my-4">
-      <!-- Runs -->
-      <div v-if="runs" class="menu-item">
-        <OhVueIcon name="la-rocket-solid" class="menu-icon"/>
-        <select v-model="currentSelection" >
-          <option v-for="run in runs" :value="run">
-            {{ run.name }}
-          </option>
-        </select>
-      </div>
-      <!-- Documents -->
-      <button class="menu-button" @click="() => emit('onDocumentsClicked')">
-        <OhVueIcon name="hi-database" class="menu-icon"/>
-        <p class="menu-button-text">Documents</p>
-      </button>
-      <!-- Members -->
-      <button class="menu-button">
-        <OhVueIcon name="hi-user" class="menu-icon"/>
-        <p class="menu-button-text">Members</p>
-      </button>
-      <!-- Labels -->
-      <button class="menu-button">
-        <OhVueIcon name="hi-tag" class="menu-icon"/>
-        <p class="menu-button-text">Labels</p>
-      </button>
-    </div>
+  <div class="flex flex-col justify-start items-center bg-neutral relative h-full">
+    <ul class="menu bg-neutral pt-10 absolut inset-y-0 left-0">
+      <li>
+        <NuxtLink :to="'/'" class="mt-2">
+          <OhVueIcon name="hi-home" class="menu-icon"/>
+        </NuxtLink>
+      </li>
+      <li>
+        <NuxtLink :to="'/'" class="mt-2">
+          <OhVueIcon name="hi-database" class="menu-icon"/>
+        </NuxtLink>
+      </li>
+    </ul>
   </div>
 </template>
 
 <script setup lang="ts">
 import {OhVueIcon, addIcons} from "oh-vue-icons";
-import {HiUser, HiDatabase, HiTag, LaRocketSolid} from 'oh-vue-icons/icons';
+import {HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome} from 'oh-vue-icons/icons';
 
-addIcons(HiUser, HiDatabase, HiTag, LaRocketSolid);
+addIcons(HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome);
 
 const props = defineProps({
   selected: {},

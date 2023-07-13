@@ -1,5 +1,4 @@
 <template>
-
   <div class="flex h-full overflow-hidden justify-between flex-col p-6 border border-gray-400">
     <div class="flex justify-between mb-6">
       <div class="text-lg font-medium p-1">
