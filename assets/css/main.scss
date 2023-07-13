@@ -70,7 +70,7 @@
  */
 
 .content-card {
-  @apply rounded-md border border-gray-700 bg-gray-900 text-white
+  @apply card shadow-xl bg-neutral
 }
 
 .content-card-title {
