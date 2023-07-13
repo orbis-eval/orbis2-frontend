@@ -142,8 +142,7 @@
               @click="updateVisibility(nestedSetRootNode, annotationType)"
           >
             <td class="p-2">
-<!--          TODO: error: Cannot read properties of null reading getHexadecimal...    -->
-              <div class="rounded-lg w-10 h-10" :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(annotationType.color_id)}"></div>
+              <div class="rounded-lg w-10 h-10" :style="{background: (currentColorPalette && '#'+currentColorPalette.getHexadecimalColorValue(annotationType.color_id))}"></div>
             </td>
             <td class="p-2">{{ annotationType.name}}</td>
             <td class="p-2 text-center">
