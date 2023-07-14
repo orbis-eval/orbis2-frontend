@@ -2,21 +2,21 @@
   <NuxtLayout name="default-layout">
     <template #leftMenu>
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
-        @onDocumentsClicked="() => router.go(-1)" />
+                @onDocumentsClicked="() => router.go(-1)"/>
     </template>
-    <LoadingSpinner v-if="!currentDocument" />
+    <LoadingSpinner v-if="!currentDocument"/>
 
     <!-- previous / next document buttons -->
     <div class="p-4" v-if="selectedRun && currentDocument">
       Document: {{ currentDocument._id }}
       <button @click="previousDocument" class="small-button">
-        <OhVueIcon name="md-navigatebefore-twotone" />
+        <OhVueIcon name="md-navigatebefore-twotone"/>
         previous
       </button>
       |
       <button @click="nextDocument" class="small-button">
         next
-        <OhVueIcon name="md-navigatenext-twotone" />
+        <OhVueIcon name="md-navigatenext-twotone"/>
       </button>
       Total Documents in Run: {{ documentsCount }}
     </div>
@@ -27,18 +27,18 @@
         <div class="rounded-lg border border-gray-600 p-6">
           <!-- context modal gui for selecting the type -->
           <AnnotationModal
-           ref="annotationTypeModal"
-          :left-position="mousePosX"
-          :top-position="mousePosY"
-          :is-visible="showAnnotationModal"
-          :annotation-types="annotationTypes"
-          :selectionSurfaceForm="selectionSurfaceForm"
-          @hideAnnotationModal="hideAnnotationModal"
-          @commitAnnotationType="commitAnnotationType"/>
+              ref="annotationTypeModal"
+              :left-position="mousePosX"
+              :top-position="mousePosY"
+              :is-visible="showAnnotationModal"
+              :annotation-types="annotationTypes"
+              :selectionSurfaceForm="selectionSurfaceForm"
+              @hideAnnotationModal="hideAnnotationModal"
+              @commitAnnotationType="commitAnnotationType"/>
 
           <AnnotationNode :nestedSetNode="nestedSetRootNode"
-                          :colorPalette = "currentColorPalette"
-                          :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
+                          :colorPalette="currentColorPalette"
+                          :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
                           @updateAnnotations="updateAnnotations"
                           @deleteAnnotation="deleteAnnotation"/>
         </div>
@@ -62,11 +62,11 @@
     </div>
     <template #sidebar>
       <div>
-        <button @click="undoAnnotation" class="small-button" >
-          <OhVueIcon name="la-undo-alt-solid" />
+        <button @click="undoAnnotation" class="small-button">
+          <OhVueIcon name="la-undo-alt-solid"/>
         </button>
         <button @click="redoAnnotation" class="small-button">
-          <OhVueIcon name="la-redo-alt-solid" />
+          <OhVueIcon name="la-redo-alt-solid"/>
         </button>
       </div>
       <div>
@@ -76,14 +76,14 @@
         <h2 class="text-4xl p-2">Annotations</h2>
         <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
           <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
-            <tr>
-              <th class="p-2"></th>
-              <th class="p-2">start</th>
-              <th class="p-2">end</th>
-              <th class="p-2">surface</th>
-              <th class="p-2">type</th>
-              <th class="p-2"></th>
-            </tr>
+          <tr>
+            <th class="p-2"></th>
+            <th class="p-2">start</th>
+            <th class="p-2">end</th>
+            <th class="p-2">surface</th>
+            <th class="p-2">type</th>
+            <th class="p-2"></th>
+          </tr>
           </thead>
           <tbody>
           <tr v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
@@ -94,15 +94,17 @@
 
           >
             <td class="p-2">
-              <div class="rounded-lg w-10 h-10" :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"></div>
+              <div class="rounded-lg w-10 h-10"
+                   :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"></div>
             </td>
             <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>
             <td class="p-2">{{ nestedSetNode.end_indices[0] }}</td>
             <td class="p-2">{{ nestedSetNode.surface_forms[0] }}</td>
-            <td class="p-2">{{ nestedSetNode.annotation_type.name}}</td>
+            <td class="p-2">{{ nestedSetNode.annotation_type.name }}</td>
             <td class="p-2">
               <button @click="deleteAnnotation(nestedSetNode)" class="small-button">
-                Delete <OhVueIcon name="md-Deleteforever-outlined"/>
+                Delete
+                <OhVueIcon name="md-Deleteforever-outlined"/>
               </button>
             </td>
           </tr>
@@ -116,7 +118,13 @@
 <script setup lang="ts">
 
 import {addIcons, OhVueIcon} from "oh-vue-icons";
-import {LaRedoAltSolid, LaUndoAltSolid, MdNavigatebeforeTwotone, MdNavigatenextTwotone, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
+import {
+  LaRedoAltSolid,
+  LaUndoAltSolid,
+  MdNavigatebeforeTwotone,
+  MdNavigatenextTwotone,
+  MdDeleteforeverOutlined
+} from "oh-vue-icons/icons";
 import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
@@ -147,15 +155,17 @@ const errorNodes = ref([]);
 const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[])
 const annotationStore = useAnnotationStore();
-const selectedRun = ref(annotationStore.selectedRun);
+// const selectedRun = ref(annotationStore.selectedRun);
+// https://pinia.vuejs.org/core-concepts/#destructuring-from-a-store
+const {selectedRun} = storeToRefs(annotationStore) // Use this instead to access the state variables
 const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
 const annotationTypes = ref([]);
-const documentsCount=ref(null);
-const colorPalettes=ref([]);
-const currentColorPalette=ref(null);
-const highlightedNestedSetNodeId=ref(null);
+const documentsCount = ref(null);
+const colorPalettes = ref([]);
+const currentColorPalette = ref(null);
+const highlightedNestedSetNodeId = ref(null);
 
 // TODO: use the annotator loaded from the backend
 let annotator: Annotator = new Annotator({
@@ -176,11 +186,11 @@ const undoEventListener = (event: KeyboardEvent) => {
 };
 
 const clickOutsideListener = (event) => {
-  if(showAnnotationModal.value) {
-    if(event.target === annotationTypeModal.value.$el || event.composedPath().includes(annotationTypeModal.value.$el)) {
+  if (showAnnotationModal.value) {
+    if (event.target === annotationTypeModal.value.$el || event.composedPath().includes(annotationTypeModal.value.$el)) {
       return;
     }
-    if(event.target !== selection.value.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
+    if (event.target !== selection.value.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
       showAnnotationModal.value = false;
     }
   }
@@ -243,8 +253,7 @@ function reload(annotations: Annotation[]) {
   // assign the color-id value based on the supported_annotation_types to every annotation
   annotations = annotations.map(annotation => {
     annotation.annotation_type.color_id =
-        annotationTypes.value.
-        find(annotationType => annotationType.name === annotation.annotation_type.name)
+        annotationTypes.value.find(annotationType => annotationType.name === annotation.annotation_type.name)
             .color_id;
     return annotation;
   });
@@ -319,7 +328,7 @@ function previousDocument() {
 }
 
 function navigateToDocument(document: Document) {
-  router.push({ path: `/corpora/${route.params.corpusId}/documents/${document._id}` });
+  router.push({path: `/corpora/${route.params.corpusId}/documents/${document._id}`});
 }
 
 /**
@@ -412,18 +421,18 @@ async function commitAnnotationType(annotationType: AnnotationType) {
   $orbisApiService.addAnnotation(annotation)
       .then(annotationResponse => {
 
-      if (annotationResponse instanceof Annotation) {
-        let annotationNode = new NestedSetNode(annotationResponse);
+        if (annotationResponse instanceof Annotation) {
+          let annotationNode = new NestedSetNode(annotationResponse);
 
-        if (annotation.annotation_type.color_id) {
-          annotationNode.annotation_type.color_id = annotation.annotation_type.color_id;
-        }
+          if (annotation.annotation_type.color_id) {
+            annotationNode.annotation_type.color_id = annotation.annotation_type.color_id;
+          }
 
-        let nodeToInsert = selectedNode.value;
-        // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
-        if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
-          nodeToInsert = selectedNode.value.parent;
-        }
+          let nodeToInsert = selectedNode.value;
+          // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
+          if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
+            nodeToInsert = selectedNode.value.parent;
+          }
 
           // add the new node as child
           nodeToInsert.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
