@@ -1,46 +1,48 @@
 <template>
-  <div class="flex items-center justify-center h-full">
-    <LoadingSpinner v-if="!corpora"/>
-    <div v-else class="content-card grow max-w-xl">
-      <div class="card-body">
-        <div class="card-title flex">
-          <div>Corpora</div>
-          <div class="grow"></div>
-          <button class="btn btn-square bg-neutral border-none">
-            <OhVueIcon name="bi-plus" scale="2" @click="$refs.createCorpus.showModal()"/>
-          </button>
-        </div>
-        <ul class="mt-5">
-          <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
-            <NuxtLink :to="`corpora/${corpus._id}/documents`" class="hover:text-purple-400">
-              {{ corpus.name }}
-            </NuxtLink>
-            <div class="flex-grow"></div>
-            <button @click="removeCorpus(corpus)" class="text-white hover:text-purple-400 mr-3.5">
-              <OhVueIcon name="md-deleteforever-outlined"/>
+  <NuxtLayout name="default-layout">
+    <div class="flex items-center justify-center h-full">
+      <LoadingSpinner v-if="!corpora"/>
+      <div v-else class="content-card grow max-w-xl">
+        <div class="card-body">
+          <div class="card-title flex">
+            <div>Corpora</div>
+            <div class="grow"></div>
+            <button class="btn btn-square bg-neutral border-none">
+              <OhVueIcon name="bi-plus" scale="2" @click="$refs.createCorpus.showModal()"/>
             </button>
-          </li>
-        </ul>
+          </div>
+          <ul class="mt-5">
+            <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
+              <NuxtLink :to="`corpora/${corpus._id}/documents`" class="hover:text-purple-400">
+                {{ corpus.name }}
+              </NuxtLink>
+              <div class="flex-grow"></div>
+              <button @click="removeCorpus(corpus)" class="text-white hover:text-purple-400 mr-3.5">
+                <OhVueIcon name="md-deleteforever-outlined"/>
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
-    </div>
 
-    <dialog ref="deleteCorpus" id="delete_corpus" class="modal">
-      <form method="dialog" class="modal-box">
-        <Warning :title="String(deletionTitle)"
-                 :message="String(deletionMessage)"
-                 confirm-text="ok" declineText="cancel"
-                 @confirm="deletionConfirmed"
-                 @decline="deletionDeclined"/>
-      </form>
-    </dialog>
-    <dialog ref="createCorpus" id="create_corpus" class="modal">
-      <form method="dialog" class="modal-box">
-        <FileInput @submitted="createCorpus"
-                   @cancelled="cancelled"
-                   submitText="import" cancelText="cancel"/>
-      </form>
-    </dialog>
-  </div>
+      <dialog ref="deleteCorpus" id="delete_corpus" class="modal">
+        <form method="dialog" class="modal-box">
+          <Warning :title="String(deletionTitle)"
+                   :message="String(deletionMessage)"
+                   confirm-text="ok" declineText="cancel"
+                   @confirm="deletionConfirmed"
+                   @decline="deletionDeclined"/>
+        </form>
+      </dialog>
+      <dialog ref="createCorpus" id="create_corpus" class="modal">
+        <form method="dialog" class="modal-box">
+          <FileInput @submitted="createCorpus"
+                     @cancelled="cancelled"
+                     submitText="import" cancelText="cancel"/>
+        </form>
+      </dialog>
+    </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">

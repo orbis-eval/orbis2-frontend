@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <NuxtLayout name="default-layout">
     <template #leftMenu>
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
                 @onDocumentsClicked="() => router.go(-1)"/>
@@ -68,7 +68,7 @@
         </div>
       </div>
     </template>
-  </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
@@ -147,6 +147,7 @@ function importFiles(corpusName: string, chosenFiles: File[]) {
   importEnabled.value = false;
   loading.value = false;
 }
+
 function cancelledFileImport() {
   importEnabled.value = false;
 }

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <NuxtLayout name="default-layout">
     <template #leftMenu>
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
         @onDocumentsClicked="() => router.go(-1)" />
@@ -110,7 +110,7 @@
         </table>
       </div>
     </template>
-  </div>
+  </NuxtLayout>
 </template>
 
 <script setup lang="ts">
