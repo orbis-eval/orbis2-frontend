@@ -31,5 +31,11 @@ export default defineNuxtConfig({
         public: {
             orbisApiBase: 'http://localhost:63012/'
         }
-    }
+    },
+    pinia: {
+        autoImports: [
+            // automatically imports `defineStore`
+            'defineStore', // import { defineStore } from 'pinia'
+        ],
+    },
 })
