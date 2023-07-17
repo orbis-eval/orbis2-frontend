@@ -1,8 +1,7 @@
 <template>
   <NuxtLayout name="default-layout">
     <template #leftMenu>
-      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
-                @onDocumentsClicked="() => router.go(-1)"/>
+      <LeftMenu/>
     </template>
     <LoadingSpinner v-if="loading"/>
     <div v-else class="h-full flex justify-between flex-col">
