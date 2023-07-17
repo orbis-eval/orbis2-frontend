@@ -1,32 +1,30 @@
 <template>
   <NuxtLayout name="default-layout">
-    <!--  TODO: should be outsourced to own component  -->
     <template #leftMenu>
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
                 @onDocumentsClicked="() => router.go(-1)"/>
     </template>
-<!--    // TODO: create dropdown with daisyui-->
-<!--    //  TODO: use this color in main.css-->
-<!--    //  TODO: apply rounded border with slight grey color-->
     <LoadingSpinner v-if="loading"/>
     <div v-else class="h-full flex justify-between flex-col">
-      <div class="bg-[#111827] flex mt-12">
-          <div class="w-4/5">
-          <details class="dropdown mb-32">
-            <summary class="m-1 btn">open or close
-            <OhVueIcon name="MdKeyboardarrowdown"/>
+      <!--  TODO: should be outsourced to own component  -->
+      <div v-if="runStore.runs" class="bg-neutral flex border border-gray-500 rounded-xl p-2 mt-20">
+        <div class="w-4/5">
+          <details class="dropdown w-full" @click="toggleDropdown">
+            <summary class="m-1 btn bg-gray-100 text-black w-full">
+              {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
+              <OhVueIcon name="md-keyboardarrowdown"/>
             </summary>
-            <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
-              <!-- TODO: inject runStore and display them as options in the dropdown -->
-              <li v-for="runs in runStore.runs" :key="runs._id">
-                <NuxtLink :to="`runs/${runs._id}`" class="link">
-                  {{runs.name}}
+            <ul v-show="isOpen === true" class="text-black p-2 shadow menu dropdown-content z-[1] bg-gray-100 rounded-md w-full">
+              <li v-for="run in runStore.runs" :key="runs._id">
+                <!--  TODO: not be able to toggle -->
+                <NuxtLink class="link" @click="selectedRunChanged(run)">
+                  {{ run.name }}
                 </NuxtLink>
               </li>
             </ul>
           </details>
-          </div>
-          <button class="m-1 btn w-1/5">Run</button>
+        </div>
+        <button class="m-1 btn w-1/5">Runs</button>
       </div>
       <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto">
         <h1 class="text-3xl text-white mb-5">Documents</h1>
@@ -144,29 +142,15 @@ const newRunDesc = ref("");
 const addRunEnabled = ref(false);
 const importEnabled = ref(false);
 const filesPerPage = ref(10);
-
 const nofPages = ref(0);
 
+const isOpen = ref(false);
 
-
-// const corpusStore = useCorpusStore();
-
-// const runStore = useRunStore();
 
 onBeforeMount(() => {
   loading.value += 1;
   loadNofDocuments();
   loadDocuments();
-  // loadRuns();
-/*  await $orbisApiService.getCorpus(route.params.corpusId)
-      .then(response => {
-        if (response instanceof Corpus) {
-          currentCorpus.value = response;
-        } else {
-          console.log(response.errorMessage);
-        }
-        loading.value -= 1;
-      });*/
   window.addEventListener('keydown',
       (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, addRun, cancelledAddRun));
 })
@@ -180,6 +164,7 @@ function pageChanged(nextPage: number) {
   loading.value += 1;
   annotationStore.currentSelectedDocPage = nextPage;
   const startIndex = (annotationStore.currentSelectedDocPage - 1) * filesPerPage.value;
+  // TODO: documentStore
   $orbisApiService.getDocuments(route.params.corpusId, filesPerPage.value, startIndex)
       .then(result => {
         if (Array.isArray(result)) {
@@ -256,6 +241,13 @@ function selectedRunChanged(run: any) {
   if (run && run._id) {
     annotationStore.changeSelectedRun(run);
     selectedRun.value = run;
+    isOpen.value = false; // close dropdown
   }
 }
+
+function toggleDropdown() {
+  // toggle between open and closed
+  isOpen.value = !isOpen.value;
+}
+
 </script>
