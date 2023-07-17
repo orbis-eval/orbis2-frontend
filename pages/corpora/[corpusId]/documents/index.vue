@@ -28,29 +28,39 @@
           </div>
           <button class="m-1 btn w-1/5">Run</button>
       </div>
+      <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto">
+        <h1 class="text-3xl text-white mb-5">Documents</h1>
+        <!--    TODO: make whole row clickable    -->
+        <table class="table text-white">
+          <thead class="text-left">
+          <tr class="text-white text-lg">
+            <th>Nr</th>
+            <th>ID</th>
+            <th>Content</th>
+          </tr>
+          </thead>
 
-      <table>
-        <thead class="text-left">
-        <tr>
-          <th>ID</th>
-          <th>Content</th>
-        </tr>
-        </thead>
-        <tbody v-for="document in documents" :key="document._id">
-        <tr>
-          <td class="pr-5 py-1">
-            <NuxtLink :to="`documents/${document._id}`" class="link">
-              {{ document._id }}
-            </NuxtLink>
-          </td>
-          <td class="pr-5">
-            <NuxtLink :to="`documents/${document._id}`" class="link">
-              {{ document.content.substring(0, 100) }}...
-            </NuxtLink>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+          <tbody v-for="(document, index) in documents" :key="document._id">
+          <tr>
+            <td class="pr-5 py-1">
+              <NuxtLink :to="`documents/${document._id}`" class="link">
+                {{ index + 1 }}
+              </NuxtLink>
+            </td>
+            <td class="pr-5 py-1">
+              <NuxtLink :to="`documents/${document._id}`" class="link">
+                {{ document._id }}
+              </NuxtLink>
+            </td>
+            <td class="pr-5">
+              <NuxtLink :to="`documents/${document._id}`" class="link">
+                {{ document.content.substring(0, 100) }}...
+              </NuxtLink>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
       <Pagination v-if="nofPages"
                   @pageChanged="pageChanged"
                   :currentPage="annotationStore.currentSelectedDocPage"
