@@ -44,8 +44,5 @@ export const useAnnotationStore = defineStore('annotation', {
             this.annotations = [];
             this.undoneAnnotations = [];
         },
-        changeSelectedRun(run: Run) {
-            this.selectedRun = run;
-        }
     }
 });
