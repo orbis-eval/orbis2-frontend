@@ -233,10 +233,6 @@ function loadDocuments() {
   pageChanged(annotationStore.currentSelectedDocPage);
 }
 
-function loadRuns() {
-  ApiUtils.getRuns(route.params.corpusId, documentRuns, $orbisApiService)
-}
-
 function selectedRunChanged(run: any) {
   if (run && run._id) {
     annotationStore.changeSelectedRun(run);
