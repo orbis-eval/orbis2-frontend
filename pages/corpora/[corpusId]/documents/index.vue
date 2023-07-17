@@ -5,26 +5,7 @@
     </template>
     <LoadingSpinner v-if="loading"/>
     <div v-else class="h-full flex justify-between flex-col">
-      <!--  TODO: should be outsourced to own component  -->
-      <div v-if="runStore.runs" class="bg-neutral flex border border-gray-500 rounded-xl p-2 mt-20">
-        <div class="w-4/5">
-          <details class="dropdown w-full" @click="toggleDropdown">
-            <summary class="m-1 btn bg-gray-100 text-black w-full">
-              {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
-              <OhVueIcon name="md-keyboardarrowdown"/>
-            </summary>
-            <ul v-show="isOpen === true" class="text-black p-2 shadow menu dropdown-content z-[1] bg-gray-100 rounded-md w-full">
-              <li v-for="run in runStore.runs" :key="runs._id">
-                <!--  TODO: not be able to toggle -->
-                <NuxtLink class="link" @click="selectedRunChanged(run)">
-                  {{ run.name }}
-                </NuxtLink>
-              </li>
-            </ul>
-          </details>
-        </div>
-        <button class="m-1 btn w-1/5">Runs</button>
-      </div>
+        <RunDropdown :selectedRun="selectedRun" :isOpen="isOpen?.value" :runs="runs as Run[]"/>
       <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto">
         <h1 class="text-3xl text-white mb-5">Documents</h1>
         <!--    TODO: make whole row clickable    -->
@@ -235,13 +216,7 @@ function loadDocuments() {
 function selectedRunChanged(run: any) {
   if (run && run._id) {
     runStore.changeSelectedRun(run);
-    isOpen.value = false; // close dropdown
   }
-}
-
-function toggleDropdown() {
-  // toggle between open and closed
-  isOpen.value = !isOpen.value;
 }
 
 </script>
