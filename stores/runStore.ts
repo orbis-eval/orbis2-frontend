@@ -1,5 +1,4 @@
 import {Run} from "~/lib/model/run";
-
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
 export const useRunStore = defineStore('run', {
@@ -21,6 +20,7 @@ export const useRunStore = defineStore('run', {
             console.log(run)
             this.selectedRun = run;
         },
+        // TODO: inject whole corpus object instead of number?
         async loadRuns(corpusId: number, orbisApiService: OrbisApiService) {
             if (this.corpusId !== corpusId) {
                 const runs = await orbisApiService.getRuns(corpusId);
