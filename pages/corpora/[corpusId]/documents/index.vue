@@ -235,8 +235,7 @@ function loadDocuments() {
 
 function selectedRunChanged(run: any) {
   if (run && run._id) {
-    annotationStore.changeSelectedRun(run);
-    selectedRun.value = run;
+    runStore.changeSelectedRun(run);
     isOpen.value = false; // close dropdown
   }
 }
