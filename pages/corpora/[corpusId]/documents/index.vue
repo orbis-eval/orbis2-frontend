@@ -110,6 +110,7 @@ import {addIcons, OhVueIcon} from "oh-vue-icons";
 import {MdKeyboardarrowdown} from "oh-vue-icons/icons";
 import {useRunStore} from "~/stores/runStore";
 import {useCorpusStore} from "~/stores/corpusStore";
+import {storeToRefs} from "pinia";
 
 addIcons(MdKeyboardarrowdown);
 
@@ -134,7 +135,7 @@ loading.value -= 1;
 await runStore.loadRuns(currentCorpus.value._id, $orbisApiService);
 const runs = ref(runStore.runs);
 
-const selectedRun = ref(annotationStore.selectedRun);
+const {selectedRun} = storeToRefs(runStore);
 const documentRuns = ref([] as Run[])
 const newRunName = ref("");
 const newRunDesc = ref("");
