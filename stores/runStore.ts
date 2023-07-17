@@ -17,8 +17,6 @@ export const useRunStore = defineStore('run', {
             this.selectedRun = {} as Run;
         },
         changeSelectedRun(run: Run) {
-            console.log("changeSelectedRun")
-            console.log(run)
             this.selectedRun = run;
         },
         async loadRuns(corpusId: number, orbisApiService: OrbisApiService) {
