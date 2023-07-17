@@ -1,11 +1,34 @@
 <template>
   <NuxtLayout name="default-layout">
+    <!--  TODO: should be outsourced to own component  -->
     <template #leftMenu>
       <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
                 @onDocumentsClicked="() => router.go(-1)"/>
     </template>
+<!--    // TODO: create dropdown with daisyui-->
+<!--    //  TODO: use this color in main.css-->
+<!--    //  TODO: apply rounded border with slight grey color-->
     <LoadingSpinner v-if="loading"/>
     <div v-else class="h-full flex justify-between flex-col">
+      <div class="bg-[#111827] flex mt-12">
+          <div class="w-4/5">
+          <details class="dropdown mb-32">
+            <summary class="m-1 btn">open or close
+            <OhVueIcon name="MdKeyboardarrowdown"/>
+            </summary>
+            <ul class="p-2 shadow menu dropdown-content z-[1] bg-base-100 rounded-box w-52">
+              <!-- TODO: inject runStore and display them as options in the dropdown -->
+              <li v-for="runs in runStore.runs" :key="runs._id">
+                <NuxtLink :to="`runs/${runs._id}`" class="link">
+                  {{runs.name}}
+                </NuxtLink>
+              </li>
+            </ul>
+          </details>
+          </div>
+          <button class="m-1 btn w-1/5">Run</button>
+      </div>
+
       <table>
         <thead class="text-left">
         <tr>
@@ -73,22 +96,37 @@
 
 <script setup lang="ts">
 import {useAnnotationStore} from "~/stores/annotationStore";
-import {Corpus} from "~/lib/model/corpus";
-import {Document} from "~/lib/model/document";
-import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 import {Run} from "~/lib/model/run";
-import load from "unplugin/dist/webpack/loaders/load";
 import {EventListenerUtils} from "~/lib/utils/eventListenerUtils";
+import {addIcons, OhVueIcon} from "oh-vue-icons";
+import {MdKeyboardarrowdown} from "oh-vue-icons/icons";
+import {useRunStore} from "~/stores/runStore";
+import {useCorpusStore} from "~/stores/corpusStore";
+
+addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
 const router = useRouter();
 const {$orbisApiService} = useNuxtApp();
 
 const loading = ref(0);
-const currentCorpus = ref({} as Corpus);
 const documents = ref([]);
 const annotationStore = useAnnotationStore();
+
+
+// TODO: make this cleaner
+const corpusStore = useCorpusStore();
+await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
+
+const runStore = useRunStore();
+const currentCorpus = ref(corpusStore.corpus);
+// TODO: simplify
+loading.value -= 1;
+
+await runStore.loadRuns(currentCorpus.value._id, $orbisApiService);
+const runs = ref(runStore.runs);
+
 const selectedRun = ref(annotationStore.selectedRun);
 const documentRuns = ref([] as Run[])
 const newRunName = ref("");
@@ -99,12 +137,18 @@ const filesPerPage = ref(10);
 
 const nofPages = ref(0);
 
+
+
+// const corpusStore = useCorpusStore();
+
+// const runStore = useRunStore();
+
 onBeforeMount(() => {
   loading.value += 1;
-  loadNofDocumnets();
+  loadNofDocuments();
   loadDocuments();
-  loadRuns();
-  $orbisApiService.getCorpus(route.params.corpusId)
+  // loadRuns();
+/*  await $orbisApiService.getCorpus(route.params.corpusId)
       .then(response => {
         if (response instanceof Corpus) {
           currentCorpus.value = response;
@@ -112,7 +156,7 @@ onBeforeMount(() => {
           console.log(response.errorMessage);
         }
         loading.value -= 1;
-      });
+      });*/
   window.addEventListener('keydown',
       (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, addRun, cancelledAddRun));
 })
@@ -174,7 +218,7 @@ function cancelledAddRun() {
   addRunEnabled.value = false;
 }
 
-function loadNofDocumnets() {
+function loadNofDocuments() {
   loading.value += 1;
   $orbisApiService.getDocuments(route.params.corpusId)
       .then(result => {
