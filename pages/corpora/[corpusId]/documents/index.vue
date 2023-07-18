@@ -5,7 +5,11 @@
     </template>
     <LoadingSpinner v-if="loading"/>
     <div v-else class="h-full flex justify-between flex-col">
-        <RunDropdown :selectedRun="selectedRun" :isOpen="isOpen?.value" :runs="runs as Run[]"/>
+      <RunDropdown
+          :orbisApiService="$orbisApiService"
+          :currentCorpus="corpus"
+      />
+
       <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto">
         <h1 class="text-3xl text-white mb-5">Documents</h1>
         <!--    TODO: make whole row clickable    -->
@@ -113,10 +117,7 @@ const currentCorpus = ref(corpusStore.corpus);
 // TODO: simplify
 loading.value -= 1;
 
-await runStore.loadRuns(currentCorpus.value._id, $orbisApiService);
-const runs = ref(runStore.runs);
 
-const {selectedRun} = storeToRefs(runStore);
 const documentRuns = ref([] as Run[])
 const newRunName = ref("");
 const newRunDesc = ref("");
@@ -124,8 +125,6 @@ const addRunEnabled = ref(false);
 const importEnabled = ref(false);
 const filesPerPage = ref(10);
 const nofPages = ref(0);
-const isOpen = ref(false);
-
 
 onBeforeMount(() => {
   loading.value += 1;
@@ -211,12 +210,6 @@ function loadNofDocuments() {
 
 function loadDocuments() {
   pageChanged(annotationStore.currentSelectedDocPage);
-}
-
-function selectedRunChanged(run: any) {
-  if (run && run._id) {
-    runStore.changeSelectedRun(run);
-  }
 }
 
 </script>

@@ -22,28 +22,36 @@
 
 <script setup lang="ts">
 import {OhVueIcon} from "oh-vue-icons";
-import {Run} from "~/lib/model/run";
+import {useRunStore} from "~/stores/runStore";
+import {storeToRefs} from "pinia";
+import {Corpus} from "~/lib/model/corpus";
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {PropType} from "@vue/runtime-core";
 
 const props = defineProps({
-  runs: {
-    type: Array as () => Run[],
+  orbisApiService: {
+    type: Object as PropType<OrbisApiService>,
     required: true
   },
-  selectedRun: {
-    type: {} as () => Run,
+  currentCorpus: {
+    type: Object as PropType<Corpus>,
     required: true
-  },
-  isOpen: Boolean
+  }
 });
 
-const isOpen = ref(props.isOpen);
+const runStore = useRunStore();
 
-const emit = defineEmits(["selectedRunChanged"]);
+await runStore.loadRuns(props.currentCorpus?._id || 0, props.orbisApiService);
+const runs = ref(runStore.runs);
+const {selectedRun} = storeToRefs(runStore);
 
-// TODO: emit properly or directly use the selectedRunChanged function?
+const isOpen = ref(false);
+
 function selectedRunChanged(run: any) {
-  emit("selectedRunChanged", run);
-  isOpen.value = false;
+  if (run && run._id) {
+    runStore.changeSelectedRun(run);
+    isOpen.value = false;
+  }
 }
 
 function toggleDropdown() {
