@@ -4,13 +4,16 @@
       <LeftMenu/>
     </template>
     <LoadingSpinner class="mt-20" v-if="loading"/>
-    <div v-else class="h-full flex justify-between flex-col">
+    <!--  TODO: delayed placement of component  -->
+    <div v-else class="flex flex-col h-full ml-10 mr-10">
+
       <RunDropdown
+          class="mb-10"
           :orbisApiService="$orbisApiService"
           :currentCorpus="corpus"
       />
 
-      <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto">
+      <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto mb-40">
         <h1 class="text-3xl text-white mb-5">Documents</h1>
         <!--    TODO: make whole row clickable    -->
         <table class="table text-white">
