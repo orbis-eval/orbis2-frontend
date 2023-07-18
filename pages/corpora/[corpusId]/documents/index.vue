@@ -78,7 +78,7 @@
         <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
           <FileInput @submitted="importFiles"
                      @cancelled="cancelledFileImport"
-                     :corpusName="currentCorpus.name"
+                     :corpusName="corpus.name"
                      submitText="import" cancelText="cancel"/>
         </div>
       </div>
@@ -91,7 +91,7 @@ import {useAnnotationStore} from "~/stores/annotationStore";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 import {Run} from "~/lib/model/run";
 import {EventListenerUtils} from "~/lib/utils/eventListenerUtils";
-import {addIcons, OhVueIcon} from "oh-vue-icons";
+import {addIcons} from "oh-vue-icons";
 import {MdKeyboardarrowdown} from "oh-vue-icons/icons";
 import {useRunStore} from "~/stores/runStore";
 import {useCorpusStore} from "~/stores/corpusStore";
@@ -113,7 +113,7 @@ const corpusStore = useCorpusStore();
 await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
 
 const runStore = useRunStore();
-const currentCorpus = ref(corpusStore.corpus);
+const {corpus} = storeToRefs(corpusStore);
 // TODO: simplify
 loading.value -= 1;
 
@@ -160,7 +160,7 @@ function pageChanged(nextPage: number) {
 function importFiles(corpusName: string, chosenFiles: File[]) {
   loading.value = true;
   if (chosenFiles.length != 0) {
-    ApiUtils.readAndStoreDocuments(chosenFiles, currentCorpus.value, $orbisApiService, loadDocuments);
+    ApiUtils.readAndStoreDocuments(chosenFiles, corpus.value, $orbisApiService, loadDocuments);
   }
   importEnabled.value = false;
   loading.value = false;
@@ -173,7 +173,7 @@ function cancelledFileImport() {
 function addRun() {
   if (addRunEnabled.value) {
     loading.value = true;
-    $orbisApiService.addRun(newRunName.value, newRunDesc.value, currentCorpus.value)
+    $orbisApiService.addRun(newRunName.value, newRunDesc.value, corpus.value)
         .then(response => {
           if (response instanceof Run) {
             loadRuns();
