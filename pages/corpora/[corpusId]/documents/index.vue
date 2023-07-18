@@ -47,12 +47,14 @@
           </tbody>
         </table>
       </div>
+
       <Pagination v-if="nofPages"
                   @pageChanged="pageChanged"
                   :currentPage="annotationStore.currentSelectedDocPage"
                   :nofPages="nofPages"
                   class="text-center"/>
     </div>
+
     <template #sidebar>
       <div v-if="!loading" class="text-center">
         <button class="small-button" @click="addRunEnabled = !addRunEnabled">add run</button>
