@@ -3,7 +3,7 @@
     <template #leftMenu>
       <LeftMenu/>
     </template>
-    <LoadingSpinner v-if="loading"/>
+    <LoadingSpinner class="mt-20" v-if="loading"/>
     <div v-else class="h-full flex justify-between flex-col">
       <RunDropdown
           :orbisApiService="$orbisApiService"
