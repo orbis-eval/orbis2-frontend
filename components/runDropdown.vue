@@ -32,7 +32,7 @@ const props = defineProps({
     type: Object as PropType<OrbisApiService>,
     required: true
   },
-  currentCorpus: {
+  corpus: {
     type: Object as PropType<Corpus>,
     required: true
   }
@@ -40,7 +40,7 @@ const props = defineProps({
 
 const runStore = useRunStore();
 
-await runStore.loadRuns(props.currentCorpus?._id || 0, props.orbisApiService);
+await runStore.loadRuns(props.corpus?._id || 0, props.orbisApiService);
 const runs = ref(runStore.runs);
 const {selectedRun} = storeToRefs(runStore);
 

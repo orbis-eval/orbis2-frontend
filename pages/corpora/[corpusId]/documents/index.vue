@@ -10,7 +10,7 @@
       <RunDropdown
           class="mb-10"
           :orbisApiService="$orbisApiService"
-          :currentCorpus="corpus"
+          :corpus="corpus"
       />
 
       <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto mb-40">
