@@ -1,19 +1,20 @@
+<!--  TODO: gap between components -->
 <template>
   <NuxtLayout name="default-layout">
     <template #leftMenu>
       <LeftMenu/>
     </template>
-    <LoadingSpinner class="mt-20" v-if="loading"/>
-    <!--  TODO: delayed placement of component  -->
-    <div v-else class="flex flex-col h-full ml-10 mr-10">
+    <LoadingSpinner class="mt-20" v-show="loading"/>
+    <div v-show="!loading" class="flex flex-col h-full ml-10 mr-10">
 
       <RunDropdown
+          v-show="!loading"
           class="mb-10"
           :orbisApiService="$orbisApiService"
           :corpus="corpus"
       />
 
-      <div class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto mb-40">
+      <div v-show="!loading" class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto mb-40">
         <h1 class="text-3xl text-white mb-5">Documents</h1>
         <!--    TODO: make whole row clickable    -->
         <table class="table text-white">
@@ -107,20 +108,12 @@ const route = useRoute();
 const router = useRouter();
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
-const loading = ref(0);
+const loading = ref(true);
 const documents = ref([]);
 const annotationStore = useAnnotationStore();
-
-
-// TODO: make this cleaner
 const corpusStore = useCorpusStore();
-await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
-
 const runStore = useRunStore();
 const {corpus} = storeToRefs(corpusStore);
-// TODO: simplify
-loading.value -= 1;
-
 
 const documentRuns = ref([] as Run[])
 const newRunName = ref("");
@@ -130,10 +123,17 @@ const importEnabled = ref(false);
 const filesPerPage = ref(10);
 const nofPages = ref(0);
 
-onBeforeMount(() => {
-  loading.value += 1;
-  loadNofDocuments();
-  loadDocuments();
+onMounted(async () => {
+  try {
+    await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
+    loadNofDocuments();
+    loadDocuments();
+  } finally {
+    loading.value = false; // Hide the loading spinner
+  }
+})
+
+onBeforeMount(async () => {
   window.addEventListener('keydown',
       (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, addRun, cancelledAddRun));
 })
@@ -144,7 +144,7 @@ onBeforeUnmount(() => {
 })
 
 function pageChanged(nextPage: number) {
-  loading.value += 1;
+  loading.value = true;
   annotationStore.currentSelectedDocPage = nextPage;
   const startIndex = (annotationStore.currentSelectedDocPage - 1) * filesPerPage.value;
   // TODO: documentStore
@@ -157,7 +157,7 @@ function pageChanged(nextPage: number) {
           // TODO, 06.01.2023 anf: correct error handling
           documents.value = [{_id: 'ERROR', content: 'ERROR'}];
         }
-        loading.value -= 1;
+        loading.value = false;
       });
 }
 
@@ -197,7 +197,7 @@ function cancelledAddRun() {
 }
 
 function loadNofDocuments() {
-  loading.value += 1;
+  loading.value = true;
   $orbisApiService.getDocuments(route.params.corpusId)
       .then(result => {
         if (Array.isArray(result)) {
@@ -208,10 +208,11 @@ function loadNofDocuments() {
           // TODO, 06.01.2023 anf: correct error handling
           documents.value = [{_id: 'ERROR', content: 'ERROR'}];
         }
-        loading.value -= 1;
+        loading.value = false;
       });
 }
 
+// TODO: documentStore
 function loadDocuments() {
   pageChanged(annotationStore.currentSelectedDocPage);
 }
