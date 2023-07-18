@@ -96,12 +96,13 @@ import {MdKeyboardarrowdown} from "oh-vue-icons/icons";
 import {useRunStore} from "~/stores/runStore";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {storeToRefs} from "pinia";
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
 addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
 const router = useRouter();
-const {$orbisApiService} = useNuxtApp();
+const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
 const loading = ref(0);
 const documents = ref([]);
