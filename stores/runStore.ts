@@ -16,11 +16,11 @@ export const useRunStore = defineStore('run', {
             this.runs = [] as Run[];
             this.selectedRun = {} as Run;
         },
-        // TODO: use $patch over this method to update the state directly
-        // https://github.com/vuejs/pinia/discussions/1264
+
         changeSelectedRun(run: Run) {
             this.selectedRun = run;
         },
+
         async loadRuns(corpusId: number, orbisApiService: OrbisApiService) {
             if (this.corpusId !== corpusId) {
                 const runs = await orbisApiService.getRuns(corpusId);
