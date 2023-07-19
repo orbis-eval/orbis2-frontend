@@ -1,4 +1,3 @@
-<!--  TODO: gap between components -->
 <template>
   <NuxtLayout name="default-layout">
     <template #leftMenu>
@@ -8,7 +7,6 @@
     <div v-show="!loading" class="flex flex-col h-full ml-10 mr-10">
 
       <RunDropdown
-          v-show="!loading"
           :orbisApiService="$orbisApiService"
           :corpus="corpus"
       />
