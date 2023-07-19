@@ -111,16 +111,6 @@ onMounted(async () => {
   }
 })
 
-onBeforeMount(async () => {
-  window.addEventListener('keydown',
-      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, addRun, cancelledAddRun));
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown',
-      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, addRun, cancelledAddRun));
-})
-
 function pageChanged(nextPage: number) {
   loading.value = true;
   annotationStore.currentSelectedDocPage = nextPage;
