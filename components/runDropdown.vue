@@ -19,7 +19,7 @@
   </div>
 
   <!-- TODO: extract to modalComponent -->
-  <dialog id="runModal" class="modal" :class="{'modal-open': modalOpen}">
+  <dialog ref="runsModal" id="run_modal" class="modal">
     <form method="dialog" class="modal-box bg-neutral max-w-6xl">
       <h2 class="font-bold text-2xl mb-5">Runs</h2>
       <template v-for="run in runs" :key="run._id" class="mb-20">
@@ -81,7 +81,9 @@ const runStore = useRunStore();
 await runStore.loadRuns(props.corpus?._id || 0, props.orbisApiService);
 const runs = ref(runStore.runs);
 const {selectedRun} = storeToRefs(runStore);
-const modalOpen = ref(false);
+
+const runsModal = ref(null);
+const addRunEnabled = ref(false);
 
 function selectedRunChanged(run: any) {
   console.log("clicked");
@@ -97,12 +99,15 @@ function selectedRunChanged(run: any) {
 }
 
 function openModal() {
-  console.log("opened");
-  modalOpen.value = true;
+  if (runsModal.value) {
+    runsModal.value.showModal();
+  }
 }
 
 function closeModal() {
-  modalOpen.value = false;
+  if (runsModal.value) {
+    runsModal.close();
+  }
 }
 
 function removeRun(run: any) {
