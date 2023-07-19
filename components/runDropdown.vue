@@ -15,7 +15,7 @@
         </ul>
       </details>
     </div>
-    <button class="m-1 btn w-1/5" @click="openModal()">Runs</button>
+    <button class="m-1 btn w-1/5" @click="openRunsModal()">Runs</button>
   </div>
 
   <!-- TODO: extract to modalComponent -->
@@ -33,21 +33,21 @@
             <span>{{ "1.1.2023 12:13" }}</span>
           </div>
 
-            <button @click="editRun(run)" class="text-white hover:text-purple-400 col-span-1">
-              <OhVueIcon name="co-pencil"/>
-            </button>
+          <button @click="editRun(run)" class="text-white hover:text-purple-400 col-span-1">
+            <OhVueIcon name="co-pencil"/>
+          </button>
 
-            <button @click="removeRun(run)" class="text-white hover:text-purple-400 col-span-1">
-              <OhVueIcon name="md-deleteforever-outlined"/>
-            </button>
+          <button @click="removeRun(run)" class="text-white hover:text-purple-400 col-span-1">
+            <OhVueIcon name="md-deleteforever-outlined"/>
+          </button>
 
         </div>
       </template>
       <div class="grid grid-cols-4 gap-4 mt-40">
-        <button class="btn" @click="closeModal()">Create Run</button>
-        <button class="btn" @click="closeModal()">Export Run</button>
-        <button class="btn" @click="closeModal()">Compare Runs</button>
-        <button class="btn" @click="closeModal()">Close</button>
+        <button class="btn" @click="openCreateRunModal()">Create Run</button>
+        <button class="btn">Export Run</button>
+        <button class="btn">Compare Runs</button>
+        <button class="btn" @click="closeRunsModal()">Close</button>
       </div>
     </form>
   </dialog>
@@ -98,15 +98,15 @@ function selectedRunChanged(run: any) {
   }
 }
 
-function openModal() {
+function openRunsModal() {
   if (runsModal.value) {
     runsModal.value.showModal();
   }
 }
 
-function closeModal() {
+function closeRunsModal() {
   if (runsModal.value) {
-    runsModal.close();
+    runsModal.value.close();
   }
 }
 
