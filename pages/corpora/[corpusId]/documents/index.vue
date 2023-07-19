@@ -9,7 +9,6 @@
 
       <RunDropdown
           v-show="!loading"
-          class="mb-10"
           :orbisApiService="$orbisApiService"
           :corpus="corpus"
       />
