@@ -75,7 +75,6 @@ import {ApiUtils} from "~/lib/utils/apiUtils";
 import {Run} from "~/lib/model/run";
 import {addIcons, OhVueIcon} from "oh-vue-icons";
 import {BiGear, MdKeyboardarrowdown} from "oh-vue-icons/icons";
-import {useRunStore} from "~/stores/runStore";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {storeToRefs} from "pinia";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
@@ -83,15 +82,16 @@ import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 addIcons(MdKeyboardarrowdown, BiGear);
 
 const route = useRoute();
-const router = useRouter();
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
+const router = useRouter();
+
+const annotationStore = useAnnotationStore();
+const corpusStore = useCorpusStore();
+await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
+const {corpus} = storeToRefs(corpusStore);
 
 const loading = ref(true);
 const documents = ref([]);
-const annotationStore = useAnnotationStore();
-const corpusStore = useCorpusStore();
-const runStore = useRunStore();
-const {corpus} = storeToRefs(corpusStore);
 
 const documentRuns = ref([] as Run[])
 const importEnabled = ref(false);
@@ -100,7 +100,6 @@ const nofPages = ref(0);
 
 onMounted(async () => {
   try {
-    await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
     loadNofDocuments();
     loadDocuments();
   } finally {
