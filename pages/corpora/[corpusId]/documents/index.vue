@@ -56,28 +56,8 @@
     </div>
 
     <template #sidebar>
-      <div v-if="!loading" class="text-center">
-        <button class="small-button" @click="addRunEnabled = !addRunEnabled">add run</button>
-      </div>
-      <div v-if="addRunEnabled" class="mx-12 my-2 text-center">
-        <label for="runName">Run Name</label>
-        <input id="runName" @input="event => newRunName = event.target.value" class="bg-gray-700 p-1 my-1"/>
-        <label for="runDesc">Run Description</label>
-        <input id="runDesc" @input="event => newRunDesc = event.target.value" class="bg-gray-700 p-1 my-1"/>
-        <div>
-          <button id="submit"
-                  @click="addRun"
-                  class="small-button bg-gray-700 mx-3 mt-2">
-            add run
-          </button>
-          <button id="cancel"
-                  @click="cancelledAddRun"
-                  class="small-button bg-gray-700 mx-3 mt-2">
-            cancel
-          </button>
-        </div>
-      </div>
-      <div v-if="(loading === 0 && documents.length === 0)" class="text-center">
+      <OhVueIcon class="w-6 h-6" name="bi-gear"/>
+<!--      <div v-if="(loading === 0 && documents.length === 0)" class="text-center">
         <button class="small-button" @click="importEnabled = true">add documents</button>
       </div>
       <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center z-50">
@@ -87,7 +67,7 @@
                      :corpusName="corpus.name"
                      submitText="import" cancelText="cancel"/>
         </div>
-      </div>
+      </div>-->
     </template>
   </NuxtLayout>
 </template>
@@ -96,15 +76,14 @@
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 import {Run} from "~/lib/model/run";
-import {EventListenerUtils} from "~/lib/utils/eventListenerUtils";
-import {addIcons} from "oh-vue-icons";
-import {MdKeyboardarrowdown} from "oh-vue-icons/icons";
+import {addIcons, OhVueIcon} from "oh-vue-icons";
+import {BiGear, MdKeyboardarrowdown} from "oh-vue-icons/icons";
 import {useRunStore} from "~/stores/runStore";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {storeToRefs} from "pinia";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
-addIcons(MdKeyboardarrowdown);
+addIcons(MdKeyboardarrowdown, BiGear);
 
 const route = useRoute();
 const router = useRouter();
@@ -118,9 +97,6 @@ const runStore = useRunStore();
 const {corpus} = storeToRefs(corpusStore);
 
 const documentRuns = ref([] as Run[])
-const newRunName = ref("");
-const newRunDesc = ref("");
-const addRunEnabled = ref(false);
 const importEnabled = ref(false);
 const filesPerPage = ref(10);
 const nofPages = ref(0);
@@ -174,28 +150,6 @@ function importFiles(corpusName: string, chosenFiles: File[]) {
 
 function cancelledFileImport() {
   importEnabled.value = false;
-}
-
-function addRun() {
-  if (addRunEnabled.value) {
-    loading.value = true;
-    $orbisApiService.addRun(newRunName.value, newRunDesc.value, corpus.value)
-        .then(response => {
-          if (response instanceof Run) {
-            loadRuns();
-          } else {
-            console.error(response.errorMessage);
-          }
-          newRunName.value = "";
-          newRunDesc.value = "";
-          addRunEnabled.value = false;
-          loading.value = false;
-        });
-  }
-}
-
-function cancelledAddRun() {
-  addRunEnabled.value = false;
 }
 
 function loadNofDocuments() {
