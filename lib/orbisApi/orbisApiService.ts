@@ -52,7 +52,7 @@ export class OrbisApiService {
     }
 
     async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
-        return Parser.parse( Annotation,
+        return Parser.parse(Annotation,
             this.apiPost(`addAnnotation`, annotation));
     }
 
@@ -71,10 +71,8 @@ export class OrbisApiService {
                 corpus));
     }
 
-    async removeRun(run: Run): Promise<Run | Error> {
-        return Parser.parse(Run,
-            this.apiPost(`removeRun?run=${run}`,
-                run));
+    async removeRun(run: Run): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`removeRun`, run));
     }
 
     async removeAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {
