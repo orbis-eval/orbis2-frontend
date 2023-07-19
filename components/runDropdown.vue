@@ -1,5 +1,5 @@
 <template>
-  <div v-if="runs" class="bg-neutral flex border border-gray-500 rounded-xl p-2 mt-20">
+  <div v-if="runs" class="bg-neutral flex border border-gray-500 rounded-xl p-2 mt-20 mb-10">
     <div class="w-4/5">
       <details class="dropdown w-full">
         <summary class="m-1 btn bg-gray-100 text-black hover:text-white w-full">
@@ -19,34 +19,31 @@
   </div>
 
   <!-- TODO: extract to modalComponent -->
-  <!-- TODO: also changes gap between dropdown and document table -->
   <dialog id="runModal" class="modal" :class="{'modal-open': modalOpen}">
-    <form method="dialog" class="modal-box bg-neutral max-w-80">
-      <h2 class="font-bold text-xl mb-5">Runs</h2>
+    <form method="dialog" class="modal-box bg-neutral max-w-6xl">
+      <h2 class="font-bold text-2xl mb-5">Runs</h2>
       <template v-for="run in runs" :key="run._id" class="mb-20">
-        <div class="flex items-center py-2">
-          <!-- First column -->
-          <div class="w-2/4">
+        <div class="flex py-2 text-lg font-bold">
+
+          <div class="flex-1 w-4/6">
             <span>{{ run.name }}</span>
           </div>
 
-          <!-- TODO: also save date from run -->
-          <div class="w-2/4">
+          <div class="w-1/6">
             <span>{{ "1.1.2023 12:13" }}</span>
           </div>
 
-          <!-- Third column -->
-          <button @click="editRun(run)" class="text-white hover:text-purple-400 col-span-1">
-            <OhVueIcon name="co-pencil"/>
-          </button>
+            <button @click="editRun(run)" class="text-white hover:text-purple-400 col-span-1">
+              <OhVueIcon name="co-pencil"/>
+            </button>
 
-          <!-- Fourth column -->
-          <button @click="removeRun(run)" class="text-white hover:text-purple-400 col-span-1">
-            <OhVueIcon name="md-deleteforever-outlined"/>
-          </button>
+            <button @click="removeRun(run)" class="text-white hover:text-purple-400 col-span-1">
+              <OhVueIcon name="md-deleteforever-outlined"/>
+            </button>
+
         </div>
       </template>
-      <div class="grid grid-cols-4 gap-4 mt-20">
+      <div class="grid grid-cols-4 gap-4 mt-40">
         <button class="btn" @click="closeModal()">Create Run</button>
         <button class="btn" @click="closeModal()">Export Run</button>
         <button class="btn" @click="closeModal()">Compare Runs</button>
