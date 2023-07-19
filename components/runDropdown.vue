@@ -52,6 +52,41 @@
     </form>
   </dialog>
 
+  <dialog ref="deleteRunModal" id="delete_run" class="modal">
+    <form method="dialog" class="modal-box">
+      <Warning
+          :title="String(deletionTitle)"
+          :message="String(deletionMessage)"
+          confirm-text="ok"
+          declineText="cancel"
+          @confirm="deletionConfirmed"
+          @decline="deletionDeclined"
+      />
+    </form>
+  </dialog>
+
+  <dialog ref="createRunModal" id="create_run" class="modal">
+    <form method="dialog" class="modal-box">
+      <h2 class="font-bold text-xl mb-5">Create Run</h2>
+      <div class="mb-4">
+        <label class="text-white block mb-1">Name:</label>
+        <input v-model="newRunName" required type="text" class="input w-full"/>
+      </div>
+      <div class="mb-4">
+        <label class="text-white block mb-1">Description:</label>
+        <input v-model="newRunDesc" required type="text" class="input w-full"/>
+      </div>
+      <div class="mb-4">
+        <label class="text-white block mb-1">Date:</label>
+        <input v-model="newRunDate" type="date" class="input w-full"/>
+      </div>
+      <div class="flex justify-end mt-4">
+        <button class="btn btn-primary mr-2" @click="createRun">Create</button>
+        <button class="btn" @click="cancelledCreateRun">Cancel</button>
+      </div>
+    </form>
+  </dialog>
+
 </template>
 
 <script setup lang="ts">
@@ -62,6 +97,8 @@ import {Corpus} from "~/lib/model/corpus";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {PropType} from "@vue/runtime-core";
 import {CoPencil, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
+import {Run} from "~/lib/model/run";
+import {Error} from "~/lib/model/error";
 
 addIcons(MdDeleteforeverOutlined, CoPencil);
 
@@ -79,15 +116,25 @@ const props = defineProps({
 const runStore = useRunStore();
 
 await runStore.loadRuns(props.corpus?._id || 0, props.orbisApiService);
-const runs = ref(runStore.runs);
+const {runs} = storeToRefs(runStore);
+// TODO: on reload you cannot select correct run
 const {selectedRun} = storeToRefs(runStore);
 
 const runsModal = ref(null);
-const addRunEnabled = ref(false);
+const deleteRunModal = ref(null);
+const createRunModal = ref(false);
+
+const deletionWarningEnabled = ref(false);
+const deletionTitle = ref("");
+const deletionMessage = ref("");
+const runUnderDeletion = ref<Run>();
+
+const newRunName = ref("");
+const newRunDesc = ref("");
+const newRunDate = ref("");
 
 function selectedRunChanged(run: any) {
-  console.log("clicked");
-  if (run?._id) {
+  if (run && run._id) {
     runStore.changeSelectedRun(run);
 
     // close dropdown once clicked
@@ -110,12 +157,71 @@ function closeRunsModal() {
   }
 }
 
-function removeRun(run: any) {
-  console.log(run);
+function openCreateRunModal() {
+  if (createRunModal.value) {
+    createRunModal.value.showModal();
+  }
+}
+
+function removeRun(run: Run) {
+  // TODO: runsModal closes
+  // TODO: extract this to modal props
+  deletionWarningEnabled.value = true;
+  deletionTitle.value = "Delete run?";
+  deletionMessage.value = `Deleting run with "${run.name}" will remove the run from this corpus! Do you want to continue?`;
+  runUnderDeletion.value = run;
+  deleteRunModal.value.showModal();
+}
+
+async function deletionConfirmed() {
+  deletionWarningEnabled.value = false;
+
+  try {
+    const response = await props.orbisApiService.removeRun(runUnderDeletion.value);
+
+    if (response instanceof Error) {
+      console.error(response.errorMessage);
+    } else {
+      await runStore.loadRuns(props.corpus._id, props.orbisApiService);
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    runUnderDeletion.value = {} as Run;
+  }
+}
+
+function deletionDeclined() {
+  deletionWarningEnabled.value = false;
 }
 
 function editRun(run: any) {
   console.log(run);
+}
+
+async function createRun() {
+  try {
+    const response = await props.orbisApiService.addRun(newRunName.value, newRunDesc.value, props.corpus);
+    console.log(response);
+
+    if (response instanceof Error) {
+      console.error(response.errorMessage);
+    } else {
+      await runStore.loadRuns(props.corpus._id, props.orbisApiService);
+    }
+  } catch (error) {
+    console.error(error);
+  } finally {
+    newRunName.value = "";
+    newRunDesc.value = "";
+  }
+}
+
+function cancelledCreateRun() {
+  newRunName.value = "";
+  newRunDesc.value = "";
+  newRunDate.value = "";
+  createRunModal.value.close();
 }
 
 </script>
