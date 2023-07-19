@@ -177,7 +177,7 @@ async function deletionConfirmed() {
   deletionWarningEnabled.value = false;
 
   try {
-    const response = await props.orbisApiService.removeRun(runUnderDeletion.value);
+    const response = await props.orbisApiService.removeRun(runUnderDeletion.value as Run);
 
     if (response instanceof Error) {
       console.error(response.errorMessage);
@@ -199,10 +199,10 @@ function editRun(run: any) {
   console.log(run);
 }
 
+// TODO: as soon as run is created, new documents are displayed?
 async function createRun() {
   try {
     const response = await props.orbisApiService.addRun(newRunName.value, newRunDesc.value, props.corpus);
-    console.log(response);
 
     if (response instanceof Error) {
       console.error(response.errorMessage);
@@ -214,6 +214,7 @@ async function createRun() {
   } finally {
     newRunName.value = "";
     newRunDesc.value = "";
+    newRunDate.value = "";
   }
 }
 
