@@ -8,4 +8,5 @@ export interface IRun {
     corpus: Corpus;
     document_annotations?: Map<Document, Annotation[]>;
     _id?: number;
+    updatedAt?: string;
 }

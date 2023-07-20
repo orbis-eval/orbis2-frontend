@@ -3,12 +3,13 @@ import {Annotation} from "~/lib/model/annotation";
 import {IRun} from "~/lib/model/irun";
 import {Document} from "~/lib/model/document";
 
-export class Run implements IRun{
+export class Run implements IRun {
     name: string;
     description: string;
     corpus: Corpus;
     document_annotations?: Map<Document, Annotation[]>;
     _id?: number;
+    updatedAt?: string;
 
     constructor(run: IRun) {
         this.name = run.name;
@@ -16,11 +17,24 @@ export class Run implements IRun{
         this.corpus = new Corpus(run.corpus);
         this.document_annotations = run.document_annotations;
         this._id = run._id;
+        this.updatedAt = this.getFormattedUpdatedAt();
     }
 
     // toJson method returns an object that contains all of the class's properties except for _id.
+    // TODO: exclude updatedAt for now
     toJSON() {
-        const { _id, ...json } = this;
+        const {_id, updatedAt, ...json} = this;
         return json;
+    }
+
+    // Method to format the createdAt date as "dd-mm-yyyy hh:mm" or return an empty string if createdAt is null
+    getFormattedUpdatedAt(): string {
+        const date = new Date();
+        const day = date.getDate().toString().padStart(2, '0');
+        const month = (date.getMonth() + 1).toString().padStart(2, '0');
+        const year = date.getFullYear();
+        const hours = date.getHours().toString().padStart(2, '0');
+        const minutes = date.getMinutes().toString().padStart(2, '0');
+        return `${day}-${month}-${year} ${hours}:${minutes}`;
     }
 }
