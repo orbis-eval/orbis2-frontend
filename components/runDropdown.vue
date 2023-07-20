@@ -204,13 +204,7 @@ function editRun(run: any) {
 // TODO: as soon as run is created, new documents are displayed?
 async function createRun() {
   try {
-    const response = await props.orbisApiService.addRun(newRunName.value, newRunDesc.value, props.corpus);
-
-    if (response instanceof Error) {
-      console.error(response.errorMessage);
-    } else {
-      await runStore.loadRuns(props.corpus._id, props.orbisApiService);
-    }
+    await runStore.createRun(newRunName.value, newRunDesc.value, props.corpus, props.orbisApiService);
   } catch (error) {
     console.error(error);
   } finally {

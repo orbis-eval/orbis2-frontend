@@ -1,6 +1,7 @@
 import {defineStore} from "pinia";
 import {Run} from "~/lib/model/run";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {Corpus} from "~/lib/model/corpus";
 
 export const useRunStore = defineStore('run', {
     state: () => {
@@ -19,6 +20,21 @@ export const useRunStore = defineStore('run', {
 
         changeSelectedRun(run: Run) {
             this.selectedRun = run;
+        },
+
+        async createRun(newRunName: string, newRunDesc: string, corpus: Corpus, orbisApiService: OrbisApiService) {
+            try {
+                const response = await orbisApiService.addRun(newRunName, newRunDesc, corpus);
+
+                if (response instanceof Error) {
+                    console.error(response.message);
+                } else {
+                    // Reload the runs in the store after creating a new one
+                    await this.loadRuns(corpus._id, orbisApiService);
+                }
+            } catch (error) {
+                console.error(error);
+            }
         },
 
         async loadRuns(corpusId: number | undefined, orbisApiService: OrbisApiService) {
