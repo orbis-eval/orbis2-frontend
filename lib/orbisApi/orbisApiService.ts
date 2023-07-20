@@ -65,9 +65,9 @@ export class OrbisApiService {
             this.apiPost('addCorpus', body));
     }
 
-    async addRun(runName: string, runDescription: string, corpus: Corpus): Promise<Run | Error> {
+    async addRun(newRun: Run, corpus: Corpus): Promise<Run | Error> {
         return Parser.parse(Run,
-            this.apiPost(`addRun?run_name=${runName}&run_description=${runDescription}`,
+            this.apiPost(`addRun?run_name=${newRun.name}&run_description=${newRun.description}`,
                 corpus));
     }
 

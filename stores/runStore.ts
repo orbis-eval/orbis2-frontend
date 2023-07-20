@@ -22,9 +22,9 @@ export const useRunStore = defineStore('run', {
             this.selectedRun = run;
         },
 
-        async createRun(newRunName: string, newRunDesc: string, corpus: Corpus, orbisApiService: OrbisApiService) {
+        async createRun(newRun: Run, corpus: Corpus, orbisApiService: OrbisApiService) {
             try {
-                const response = await orbisApiService.addRun(newRunName, newRunDesc, corpus);
+                const response = await orbisApiService.addRun(newRun, corpus);
 
                 if (response instanceof Error) {
                     console.error(response.message);
