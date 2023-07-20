@@ -8,7 +8,6 @@ export const useAnnotationStore = defineStore('annotation', {
             annotations: [] as NestedSetNode[],
             undoneAnnotations: [] as NestedSetNode[],
             selectedRun: {} as Run,
-            currentSelectedDocPage: 1
         };
     },
     actions: {
