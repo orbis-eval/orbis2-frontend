@@ -205,7 +205,6 @@ function editRun(run: any) {
   console.log(run);
 }
 
-// TODO: as soon as run is created, new documents are displayed?
 async function createRun() {
   try {
     const newRun = new Run({name: newRunName.value, description: newRunDesc.value, corpus: props.corpus});

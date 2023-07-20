@@ -98,6 +98,8 @@ const loading = ref(true);
 const documentRuns = ref([] as Run[])
 const importEnabled = ref(false);
 
+// TODO: simplify
+// TODO: check behavior of loading spinner
 const {currentSelectedDocPage} = storeToRefs(documentStore);
 await loadNofDocuments();
 await loadDocuments();
