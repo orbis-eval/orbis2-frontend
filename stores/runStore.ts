@@ -21,7 +21,12 @@ export const useRunStore = defineStore('run', {
             this.selectedRun = run;
         },
 
-        async loadRuns(corpusId: number, orbisApiService: OrbisApiService) {
+        async loadRuns(corpusId: number | undefined, orbisApiService: OrbisApiService) {
+            if (corpusId === undefined) {
+                console.error("No corpusId provided!");
+                return;
+            }
+
             const runs = await orbisApiService.getRuns(corpusId);
             if (Array.isArray(runs) && runs.length > 0) {
                 this.corpusId = corpusId;
