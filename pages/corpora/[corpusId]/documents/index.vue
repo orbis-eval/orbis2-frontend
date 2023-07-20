@@ -45,10 +45,10 @@
         </table>
       </div>
 
-      <Pagination v-if="nofPages"
+      <Pagination v-if="nrOfPages"
                   @pageChanged="pageChanged"
-                  :currentPage="annotationStore.currentSelectedDocPage"
-                  :nofPages="nofPages"
+                  :currentPage="currentSelectedDocPage"
+                  :nofPages="nrOfPages"
                   class="text-center"/>
     </div>
 
@@ -92,33 +92,26 @@ const documentStore = useDocumentStore();
 await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
 const {corpus} = storeToRefs(corpusStore);
 
+const filesPerPage = ref(10);
 const loading = ref(true);
 
 const documentRuns = ref([] as Run[])
 const importEnabled = ref(false);
-const filesPerPage = ref(10);
-const {documents} = storeToRefs(documentStore);
+
 const {currentSelectedDocPage} = storeToRefs(documentStore);
+await loadNofDocuments();
+await loadDocuments();
+
+const {documents} = storeToRefs(documentStore);
 const {nrOfPages} = storeToRefs(documentStore);
 const {nrOfDocuments} = storeToRefs(documentStore);
-
-await loadNofDocuments();
-
-onMounted(async () => {
-  try {
-    await loadNofDocuments();
-    loadDocuments();
-  } finally {
-    loading.value = false; // Hide the loading spinner
-  }
-})
 
 async function pageChanged(nextPage: number) {
   loading.value = true;
   documentStore.currentSelectedDocPage = nextPage;
   const startIndex = (currentSelectedDocPage.value - 1) * filesPerPage.value;
   try {
-    await documentStore.getDocuments(corpus.value._id, filesPerPage.value, startIndex)
+    await documentStore.loadDocuments(corpus.value._id, $orbisApiService, filesPerPage.value, startIndex)
   } catch (error) {
     console.error(error);
   } finally {
@@ -150,8 +143,8 @@ async function loadNofDocuments() {
   loading.value = false;
 }
 
-function loadDocuments() {
-  pageChanged(currentSelectedDocPage.value);
+async function loadDocuments() {
+  await pageChanged(currentSelectedDocPage.value);
 }
 
 </script>
