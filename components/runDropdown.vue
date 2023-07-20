@@ -30,7 +30,7 @@
           </div>
 
           <div class="w-1/6">
-            <span>{{ "1.1.2023 12:13" }}</span>
+            <span>{{ run.updatedAt }}</span>
           </div>
 
           <button @click="editRun(run)" class="text-white hover:text-purple-400 col-span-1">
@@ -198,6 +198,10 @@ function deletionDeclined() {
 }
 
 function editRun(run: any) {
+  // TODO: use $patch from store to update state
+  /*  runStore.$patch({
+
+    })*/
   console.log(run);
 }
 
