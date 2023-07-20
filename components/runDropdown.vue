@@ -6,9 +6,9 @@
           {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
           <OhVueIcon name="md-keyboardarrowdown"/>
         </summary>
-        <ul class="text-black hover:text-black shadow menu dropdown-content z-[1] bg-gray-100 rounded-md w-full">
+        <ul class="text-black shadow menu dropdown-content z-[1] bg-gray-100 rounded-md w-full">
           <li v-for="run in runs" :key="runs._id">
-            <NuxtLink class="link" @click="selectedRunChanged(run)">
+            <NuxtLink class="link hover:text-black hover:bg-gray-200" @click="selectedRunChanged(run)">
               {{ run.name }}
             </NuxtLink>
           </li>
