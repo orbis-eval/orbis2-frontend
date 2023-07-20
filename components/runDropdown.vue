@@ -1,7 +1,7 @@
 <template>
   <div v-if="runs" class="bg-neutral flex border border-gray-500 rounded-xl p-2 mt-20 mb-10">
     <div class="w-4/5">
-      <details class="dropdown w-full">
+      <details id="run_dropdown" class="dropdown w-full">
         <summary class="m-1 btn bg-gray-100 text-black hover:text-white w-full">
           {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
           <OhVueIcon name="md-keyboardarrowdown"/>
@@ -109,16 +109,16 @@ const props = defineProps({
   },
   corpus: {
     type: Object as PropType<Corpus>,
-    required: true
+    required: true,
   }
 });
 
 const runStore = useRunStore();
-
-await runStore.loadRuns(props.corpus?._id || 0, props.orbisApiService);
-const {runs} = storeToRefs(runStore);
+await runStore.loadRuns(props.corpus._id, props.orbisApiService);
 // TODO: on reload you cannot select correct run
 const {selectedRun} = storeToRefs(runStore);
+const {runs} = storeToRefs(runStore)
+
 
 const runsModal = ref(null);
 const deleteRunModal = ref(null);
@@ -133,14 +133,16 @@ const newRunName = ref("");
 const newRunDesc = ref("");
 const newRunDate = ref("");
 
-function selectedRunChanged(run: any) {
+function selectedRunChanged(run: Run) {
   if (run && run._id) {
     runStore.changeSelectedRun(run);
 
     // close dropdown once clicked
-    const dropdown = document.querySelector(".dropdown");
-    if (dropdown) {
+    const dropdown = document.getElementById("run_dropdown");
+    if (dropdown?.hasAttribute("open")) {
       dropdown.removeAttribute("open");
+    } else {
+      dropdown?.setAttribute("open", "");
     }
   }
 }
