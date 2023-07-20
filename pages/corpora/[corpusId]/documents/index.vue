@@ -54,17 +54,17 @@
 
     <template #sidebar>
       <OhVueIcon class="w-6 h-6" name="bi-gear"/>
-<!--      <div v-if="(loading === 0 && documents.length === 0)" class="text-center">
-        <button class="small-button" @click="importEnabled = true">add documents</button>
-      </div>
-      <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center z-50">
-        <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
-          <FileInput @submitted="importFiles"
-                     @cancelled="cancelledFileImport"
-                     :corpusName="corpus.name"
-                     submitText="import" cancelText="cancel"/>
-        </div>
-      </div>-->
+      <!--      <div v-if="(loading === 0 && documents.length === 0)" class="text-center">
+              <button class="small-button" @click="importEnabled = true">add documents</button>
+            </div>
+            <div v-if="importEnabled" class="fixed inset-0 flex items-center justify-center z-50">
+              <div class="w-full max-w-4xl h-4/6 m-6 overflow-hidden bg-gray-800 p-6 rounded-lg shadow-xl">
+                <FileInput @submitted="importFiles"
+                           @cancelled="cancelledFileImport"
+                           :corpusName="corpus.name"
+                           submitText="import" cancelText="cancel"/>
+              </div>
+            </div>-->
     </template>
   </NuxtLayout>
 </template>
@@ -78,6 +78,7 @@ import {BiGear, MdKeyboardarrowdown} from "oh-vue-icons/icons";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {storeToRefs} from "pinia";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {useDocumentStore} from "~/stores/documentStore";
 
 addIcons(MdKeyboardarrowdown, BiGear);
 
@@ -87,42 +88,42 @@ const router = useRouter();
 
 const annotationStore = useAnnotationStore();
 const corpusStore = useCorpusStore();
+const documentStore = useDocumentStore();
 await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
 const {corpus} = storeToRefs(corpusStore);
 
 const loading = ref(true);
-const documents = ref([]);
 
 const documentRuns = ref([] as Run[])
 const importEnabled = ref(false);
 const filesPerPage = ref(10);
-const nofPages = ref(0);
+const {documents} = storeToRefs(documentStore);
+const {currentSelectedDocPage} = storeToRefs(documentStore);
+const {nrOfPages} = storeToRefs(documentStore);
+const {nrOfDocuments} = storeToRefs(documentStore);
+
+await loadNofDocuments();
 
 onMounted(async () => {
   try {
-    loadNofDocuments();
+    await loadNofDocuments();
     loadDocuments();
   } finally {
     loading.value = false; // Hide the loading spinner
   }
 })
 
-function pageChanged(nextPage: number) {
+async function pageChanged(nextPage: number) {
   loading.value = true;
-  annotationStore.currentSelectedDocPage = nextPage;
-  const startIndex = (annotationStore.currentSelectedDocPage - 1) * filesPerPage.value;
-  // TODO: documentStore
-  $orbisApiService.getDocuments(route.params.corpusId, filesPerPage.value, startIndex)
-      .then(result => {
-        if (Array.isArray(result)) {
-          documents.value = result;
-        } else {
-          console.error(result.errorMessage);
-          // TODO, 06.01.2023 anf: correct error handling
-          documents.value = [{_id: 'ERROR', content: 'ERROR'}];
-        }
-        loading.value = false;
-      });
+  documentStore.currentSelectedDocPage = nextPage;
+  const startIndex = (currentSelectedDocPage.value - 1) * filesPerPage.value;
+  try {
+    await documentStore.getDocuments(corpus.value._id, filesPerPage.value, startIndex)
+  } catch (error) {
+    console.error(error);
+  } finally {
+    loading.value = false;
+  }
 }
 
 function importFiles(corpusName: string, chosenFiles: File[]) {
@@ -138,25 +139,19 @@ function cancelledFileImport() {
   importEnabled.value = false;
 }
 
-function loadNofDocuments() {
+async function loadNofDocuments() {
   loading.value = true;
-  $orbisApiService.getDocuments(route.params.corpusId)
-      .then(result => {
-        if (Array.isArray(result)) {
-          // TODO, anf 08.02.2023: implement get nofdocuments in backend for this
-          nofPages.value = Math.ceil(result.length / filesPerPage.value);
-        } else {
-          console.error(result.errorMessage);
-          // TODO, 06.01.2023 anf: correct error handling
-          documents.value = [{_id: 'ERROR', content: 'ERROR'}];
-        }
-        loading.value = false;
-      });
+  try {
+    await documentStore.getNumberOfDocuments(corpus.value._id, $orbisApiService);
+    documentStore.nrOfPages = Math.ceil(documentStore.nrOfDocuments / filesPerPage.value);
+  } catch (error) {
+    console.error(error);
+  }
+  loading.value = false;
 }
 
-// TODO: documentStore
 function loadDocuments() {
-  pageChanged(annotationStore.currentSelectedDocPage);
+  pageChanged(currentSelectedDocPage.value);
 }
 
 </script>
