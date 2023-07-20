@@ -22,13 +22,12 @@ export const useRunStore = defineStore('run', {
         },
 
         async loadRuns(corpusId: number, orbisApiService: OrbisApiService) {
-            if (this.corpusId !== corpusId) {
-                const runs = await orbisApiService.getRuns(corpusId);
-                if (Array.isArray(runs) && runs.length > 0) {
-                    this.corpusId = corpusId;
-                    this.runs = runs;
-                    this.selectedRun = this.runs[0];
-                }
+            const runs = await orbisApiService.getRuns(corpusId);
+            if (Array.isArray(runs) && runs.length > 0) {
+                this.corpusId = corpusId;
+                this.runs = runs;
+                // when there is already a selectedRun, use that one, otherwise first in the array
+                this.selectedRun = this.selectedRun ? this.selectedRun : this.runs[0];
             }
         }
     }
