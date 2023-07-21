@@ -41,7 +41,7 @@ export const useCorpusStore = defineStore("corpus", {
                     this.corpus = corpus;
                 }
             } catch (error) {
-                console.error("corpusStore: error retrieving corpus")
+                return new Error("An error occurred while fetching a corpus.");
             }
         },
         // TODO: removeCorpus action
