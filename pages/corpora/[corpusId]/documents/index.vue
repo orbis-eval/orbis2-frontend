@@ -89,12 +89,11 @@ const router = useRouter();
 const annotationStore = useAnnotationStore();
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
-await corpusStore.getCorpus(route.params.corpusId, $orbisApiService);
+await corpusStore.loadCorpus(route.params.corpusId, $orbisApiService);
 const {corpus} = storeToRefs(corpusStore);
 
 const filesPerPage = ref(10);
 const loading = ref(true);
-
 const documentRuns = ref([] as Run[])
 const importEnabled = ref(false);
 
