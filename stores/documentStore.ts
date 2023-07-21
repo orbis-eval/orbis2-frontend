@@ -14,6 +14,8 @@ export const useDocumentStore = defineStore('document', {
     actions: {
         $reset() {
             this.documents = [] as Document[];
+            this.nrOfDocuments = 1;
+            this.nrOfPages = 1;
             this.currentSelectedDocPage = 1;
         },
 
