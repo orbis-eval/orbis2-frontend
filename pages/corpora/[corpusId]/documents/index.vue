@@ -27,6 +27,7 @@
           <tr>
             <td class="pr-5 py-1">
               <NuxtLink :to="`documents/${document._id}`" class="link">
+<!--                // TODO: index is not correct when switching to next site -->
                 {{ index + 1 }}
               </NuxtLink>
             </td>
