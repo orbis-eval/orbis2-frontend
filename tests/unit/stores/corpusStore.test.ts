@@ -23,12 +23,30 @@ const corpus = createCorpus(1, "corpus name", [
   { name: "annotation-type-2", color_id: 2 },
 ]);
 
+const corpora = Array.from([
+    createCorpus(1, "corpus name", [
+        {name: "annotation-type-1", color_id: 1},
+        {name: "annotation-type-2", color_id: 2},
+    ]),
+    createCorpus(2, "corpus name 2", [
+        {name: "annotation-type-1", color_id: 1},
+        {name: "annotation-type-2", color_id: 2},
+    ]),
+    createCorpus(3, "corpus name 3", [
+        {name: "annotation-type-1", color_id: 1},
+        {name: "annotation-type-2", color_id: 2},
+    ])
+]);
+
 // Create a mock class for OrbisApiService with all required methods for this test suite
 jest.mock("~/lib/orbisApi/orbisApiService", () => {
     return {
         OrbisApiService: jest.fn().mockImplementation(() => ({
             getCorpus: async (corpusId: number): Promise<Corpus | Error> => {
                 return Parser.parse(Corpus, Promise.resolve(corpus));
+            },
+            getCorpora: async (): Promise<Corpus[] | Error> => {
+                return Parser.parseList(Corpus, Promise.resolve(corpora));
             },
         })),
     };
@@ -44,6 +62,7 @@ describe("Corpus Store", () => {
     test('Initial state should return default state values', () => {
         const corpusStore = useCorpusStore();
         expect(corpusStore.corpus).toEqual({} as Corpus);
+        expect(corpusStore.corpora).toEqual([] as Corpus[]);
     });
 
     test('Resetting the state should return default initial state values', () => {
@@ -51,6 +70,7 @@ describe("Corpus Store", () => {
         corpusStore.$reset();
 
         expect(corpusStore.corpus).toEqual({} as Corpus);
+        expect(corpusStore.corpora).toEqual([] as Corpus[]);
     });
 
     test("loadCorpus should fetch and update a corpus", async () => {
@@ -61,4 +81,14 @@ describe("Corpus Store", () => {
 
         expect(corpusStore.corpus).toEqual(corpus);
     });
+
+    test("loadCorpora should fetch and update a corpus", async () => {
+        const corpusStore = useCorpusStore();
+        const corpusId = 1;
+
+        await corpusStore.loadCorpora(mockedOrbisApiService);
+
+        expect(corpusStore.corpora).toEqual(corpora);
+    });
+
 });
