@@ -19,10 +19,14 @@ export const useCorpusStore = defineStore("corpus", {
         },
         async loadCorpora(orbisApiService: OrbisApiService) {
             try {
-                const corpora = await orbisApiService.getCorpora();
+                const response = await orbisApiService.getCorpora();
 
-                if (Array.isArray(corpora) && corpora.length > 0) {
-                    this.corpora = corpora;
+                if (response instanceof Error) {
+                    return new Error("Something is wrong with the response");
+                }
+
+                if (Array.isArray(response) && response.length > 0) {
+                    this.corpora = response;
                 }
             } catch (error) {
                 return new Error("An error occurred while fetching corpora.");
