@@ -49,8 +49,7 @@ export const useRunStore = defineStore('run', {
             if (Array.isArray(runs) && runs.length > 0) {
                 this.corpusId = corpusId;
                 this.runs = runs;
-                // when there is already a selectedRun, use that one, otherwise first in the array
-                this.selectedRun = this.selectedRun ? this.selectedRun : this.runs[0];
+                this.selectedRun = this.runs[0];
             }
         }
     }
