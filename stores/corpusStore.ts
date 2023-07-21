@@ -9,6 +9,12 @@ export const useCorpusStore = defineStore("corpus", {
         };
     },
     actions: {
+        $reset: () => {
+            return {
+                corpus: {} as Corpus,
+            };
+        },
+
         async loadCorpus(corpusId: number, orbisApiService: OrbisApiService) {
             try {
                 const corpus = await orbisApiService.getCorpus(corpusId);
@@ -19,6 +25,7 @@ export const useCorpusStore = defineStore("corpus", {
             } catch (error) {
                 console.error("corpusStore: error retrieving corpus")
             }
-        }
+        },
+        // TODO: removeCorpus action
     },
 });
