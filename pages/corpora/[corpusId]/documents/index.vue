@@ -87,7 +87,6 @@ const route = useRoute();
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const router = useRouter();
 
-const annotationStore = useAnnotationStore();
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 await corpusStore.loadCorpus(route.params.corpusId, $orbisApiService);
@@ -95,8 +94,6 @@ const {corpus} = storeToRefs(corpusStore);
 
 const filesPerPage = ref(10);
 const loading = ref(true);
-const documentRuns = ref([] as Run[])
-const importEnabled = ref(false);
 
 // TODO: simplify
 // TODO: check behavior of loading spinner
@@ -119,19 +116,6 @@ async function pageChanged(nextPage: number) {
   } finally {
     loading.value = false;
   }
-}
-
-function importFiles(corpusName: string, chosenFiles: File[]) {
-  loading.value = true;
-  if (chosenFiles.length != 0) {
-    ApiUtils.readAndStoreDocuments(chosenFiles, corpus.value, $orbisApiService, loadDocuments);
-  }
-  importEnabled.value = false;
-  loading.value = false;
-}
-
-function cancelledFileImport() {
-  importEnabled.value = false;
 }
 
 async function loadNofDocuments() {
