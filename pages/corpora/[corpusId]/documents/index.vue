@@ -71,9 +71,6 @@
 </template>
 
 <script setup lang="ts">
-import {useAnnotationStore} from "~/stores/annotationStore";
-import {ApiUtils} from "~/lib/utils/apiUtils";
-import {Run} from "~/lib/model/run";
 import {addIcons, OhVueIcon} from "oh-vue-icons";
 import {BiGear, MdKeyboardarrowdown} from "oh-vue-icons/icons";
 import {useCorpusStore} from "~/stores/corpusStore";
@@ -103,7 +100,6 @@ await loadDocuments();
 
 const {documents} = storeToRefs(documentStore);
 const {nrOfPages} = storeToRefs(documentStore);
-const {nrOfDocuments} = storeToRefs(documentStore);
 
 async function pageChanged(nextPage: number) {
   loading.value = true;
