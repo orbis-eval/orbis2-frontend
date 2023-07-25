@@ -103,18 +103,15 @@ import {Error} from "~/lib/model/error";
 addIcons(MdDeleteforeverOutlined, CoPencil);
 
 const props = defineProps({
-  orbisApiService: {
-    type: Object as PropType<OrbisApiService>,
-    required: true
-  },
   corpus: {
     type: Object as PropType<Corpus>,
     required: true,
   }
 });
 
+const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const runStore = useRunStore();
-await runStore.loadRuns(props.corpus._id, props.orbisApiService);
+await runStore.loadRuns(props.corpus._id, $orbisApiService);
 // TODO: on reload you cannot select correct run
 const {selectedRun} = storeToRefs(runStore);
 const {runs} = storeToRefs(runStore)
@@ -179,12 +176,12 @@ async function deletionConfirmed() {
   deletionWarningEnabled.value = false;
 
   try {
-    const response = await props.orbisApiService.removeRun(runUnderDeletion.value as Run);
+    const response = await $orbisApiService.removeRun(runUnderDeletion.value as Run);
 
     if (response instanceof Error) {
       console.error(response.errorMessage);
     } else {
-      await runStore.loadRuns(props.corpus._id, props.orbisApiService);
+      await runStore.loadRuns(props.corpus._id, $orbisApiService);
     }
   } catch (error) {
     console.error(error);
@@ -208,7 +205,7 @@ function editRun(run: any) {
 async function createRun() {
   try {
     const newRun = new Run({name: newRunName.value, description: newRunDesc.value, corpus: props.corpus});
-    await runStore.createRun(newRun, newRun.corpus, props.orbisApiService);
+    await runStore.createRun(newRun, newRun.corpus, $orbisApiService);
   } catch (error) {
     console.error(error);
   } finally {
