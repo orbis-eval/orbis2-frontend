@@ -30,7 +30,7 @@
           </div>
 
           <div class="w-1/6">
-            <span>{{ run.updatedAt }}</span>
+            <span>{{ run.timestamp }}</span>
           </div>
 
           <button @click="editRun(run)" class="text-white hover:text-purple-400 col-span-1">

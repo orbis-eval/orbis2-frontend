@@ -7,23 +7,23 @@ export class Run implements IRun {
     name: string;
     description: string;
     corpus: Corpus;
+    timestamp?: string;
     document_annotations?: Map<Document, Annotation[]>;
     _id?: number;
-    updatedAt?: string;
 
     constructor(run: IRun) {
         this.name = run.name;
         this.description = run.description;
         this.corpus = new Corpus(run.corpus);
+        this.timestamp = this.getFormattedUpdatedAt();
         this.document_annotations = run.document_annotations;
         this._id = run._id;
-        this.updatedAt = this.getFormattedUpdatedAt();
     }
 
     // toJson method returns an object that contains all of the class's properties except for _id.
-    // TODO: exclude updatedAt for now
+    // TODO: exclude timestamp for now
     toJSON() {
-        const {_id, updatedAt, ...json} = this;
+        const {_id, timestamp, ...json} = this;
         return json;
     }
 
