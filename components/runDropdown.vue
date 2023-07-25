@@ -69,16 +69,12 @@
     <form method="dialog" class="modal-box">
       <h2 class="font-bold text-xl mb-5">Create Run</h2>
       <div class="mb-4">
-        <label class="text-white block mb-1">Name:</label>
-        <input v-model="newRunName" required type="text" class="input w-full"/>
+        <label class="text-white block mb-1 ">Name:</label>
+        <input v-model="newRunName" required type="text" class="input w-full bg-white"/>
       </div>
       <div class="mb-4">
         <label class="text-white block mb-1">Description:</label>
-        <input v-model="newRunDesc" required type="text" class="input w-full"/>
-      </div>
-      <div class="mb-4">
-        <label class="text-white block mb-1">Date:</label>
-        <input v-model="newRunDate" type="date" class="input w-full"/>
+        <input v-model="newRunDesc" required type="text" class="input w-full bg-white"/>
       </div>
       <div class="flex justify-end mt-4">
         <button class="btn btn-primary mr-2" @click="createRun">Create</button>
@@ -112,7 +108,6 @@ const props = defineProps({
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const runStore = useRunStore();
 await runStore.loadRuns(props.corpus._id, $orbisApiService);
-// TODO: on reload you cannot select correct run
 const {selectedRun} = storeToRefs(runStore);
 const {runs} = storeToRefs(runStore)
 
