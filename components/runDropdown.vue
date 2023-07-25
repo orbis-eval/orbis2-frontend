@@ -70,11 +70,11 @@
       <h2 class="font-bold text-xl mb-5">Create Run</h2>
       <div class="mb-4">
         <label class="text-white block mb-1 ">Name:</label>
-        <input v-model="newRunName" required type="text" class="input w-full bg-white"/>
+        <input v-model="newRunName" required type="text" class="input w-full bg-white text-black"/>
       </div>
       <div class="mb-4">
         <label class="text-white block mb-1">Description:</label>
-        <input v-model="newRunDesc" required type="text" class="input w-full bg-white"/>
+        <input v-model="newRunDesc" required type="text" class="input w-full bg-white text-black"/>
       </div>
       <div class="flex justify-end mt-4">
         <button class="btn btn-primary mr-2" @click="createRun">Create</button>
