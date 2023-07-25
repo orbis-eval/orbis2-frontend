@@ -123,7 +123,6 @@ const runUnderDeletion = ref<Run>();
 
 const newRunName = ref("");
 const newRunDesc = ref("");
-const newRunDate = ref("");
 
 function selectedRunChanged(run: Run) {
   if (run && run._id) {
@@ -206,14 +205,12 @@ async function createRun() {
   } finally {
     newRunName.value = "";
     newRunDesc.value = "";
-    newRunDate.value = "";
   }
 }
 
 function cancelledCreateRun() {
   newRunName.value = "";
   newRunDesc.value = "";
-  newRunDate.value = "";
   createRunModal.value.close();
 }
 
