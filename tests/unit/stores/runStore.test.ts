@@ -77,7 +77,7 @@ describe('Run Store', () => {
         const corpusId = 1;
         const corpus = runs[0].corpus;
 
-        await runStore.loadRuns(corpus._id, mockedOrbisApiService);
+        await runStore.loadRuns(corpusId, mockedOrbisApiService);
 
         expect(runStore.corpusId).toBe(corpusId);
         expect(runStore.runs.length).toBeGreaterThan(0);
