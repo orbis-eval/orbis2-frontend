@@ -2,7 +2,7 @@
   <div v-if="runs" class="bg-neutral flex border border-gray-500 rounded-xl p-2 mt-20 mb-10">
     <div class="w-4/5">
       <details id="run_dropdown" class="dropdown w-full">
-        <summary class="m-1 btn bg-gray-100 text-black hover:text-white w-full">
+        <summary class="m-1 btn bg-gray-100 text-black hover:bg-gray-100 hover:text-black w-full">
           {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
           <OhVueIcon name="md-keyboardarrowdown"/>
         </summary>
