@@ -23,8 +23,6 @@ export const useRunStore = defineStore('run', {
             this.selectedRun = run;
         },
 
-        // TODO: as soon as run is created, new documents are displayed?
-        // TODO: write test case to check if new documents are created
         async createRun(newRun: Run, corpus: Corpus, orbisApiService: OrbisApiService) {
             try {
                 const response = await orbisApiService.addRun(newRun, corpus);
