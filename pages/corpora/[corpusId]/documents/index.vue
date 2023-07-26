@@ -7,7 +7,6 @@
     <div v-show="!loading" class="flex flex-col h-full ml-10 mr-10">
 
       <RunDropdown
-          :orbisApiService="$orbisApiService"
           :corpus="corpus"
       />
 

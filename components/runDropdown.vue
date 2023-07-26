@@ -2,7 +2,7 @@
   <div v-if="runs" class="bg-neutral flex border border-gray-500 rounded-xl p-2 mt-20 mb-10">
     <div class="w-4/5">
       <details id="run_dropdown" class="dropdown w-full">
-        <summary class="m-1 btn bg-gray-100 text-black hover:text-white w-full">
+        <summary class="m-1 btn bg-gray-100 text-black hover:bg-gray-100 hover:text-black w-full">
           {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
           <OhVueIcon name="md-keyboardarrowdown"/>
         </summary>
@@ -30,7 +30,7 @@
           </div>
 
           <div class="w-1/6">
-            <span>{{ run.updatedAt }}</span>
+            <span>{{ run.timestamp }}</span>
           </div>
 
           <button @click="editRun(run)" class="text-white hover:text-purple-400 col-span-1">
@@ -69,16 +69,12 @@
     <form method="dialog" class="modal-box">
       <h2 class="font-bold text-xl mb-5">Create Run</h2>
       <div class="mb-4">
-        <label class="text-white block mb-1">Name:</label>
-        <input v-model="newRunName" required type="text" class="input w-full"/>
+        <label class="text-white block mb-1 ">Name:</label>
+        <input v-model="newRunName" required type="text" class="input w-full bg-white text-black"/>
       </div>
       <div class="mb-4">
         <label class="text-white block mb-1">Description:</label>
-        <input v-model="newRunDesc" required type="text" class="input w-full"/>
-      </div>
-      <div class="mb-4">
-        <label class="text-white block mb-1">Date:</label>
-        <input v-model="newRunDate" type="date" class="input w-full"/>
+        <input v-model="newRunDesc" required type="text" class="input w-full bg-white text-black"/>
       </div>
       <div class="flex justify-end mt-4">
         <button class="btn btn-primary mr-2" @click="createRun">Create</button>
@@ -103,19 +99,15 @@ import {Error} from "~/lib/model/error";
 addIcons(MdDeleteforeverOutlined, CoPencil);
 
 const props = defineProps({
-  orbisApiService: {
-    type: Object as PropType<OrbisApiService>,
-    required: true
-  },
   corpus: {
     type: Object as PropType<Corpus>,
     required: true,
   }
 });
 
+const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const runStore = useRunStore();
-await runStore.loadRuns(props.corpus._id, props.orbisApiService);
-// TODO: on reload you cannot select correct run
+await runStore.loadRuns(props.corpus._id, $orbisApiService);
 const {selectedRun} = storeToRefs(runStore);
 const {runs} = storeToRefs(runStore)
 
@@ -179,12 +171,12 @@ async function deletionConfirmed() {
   deletionWarningEnabled.value = false;
 
   try {
-    const response = await props.orbisApiService.removeRun(runUnderDeletion.value as Run);
+    const response = await $orbisApiService.removeRun(runUnderDeletion.value as Run);
 
     if (response instanceof Error) {
       console.error(response.errorMessage);
     } else {
-      await runStore.loadRuns(props.corpus._id, props.orbisApiService);
+      await runStore.loadRuns(props.corpus._id, $orbisApiService);
     }
   } catch (error) {
     console.error(error);
@@ -208,7 +200,7 @@ function editRun(run: any) {
 async function createRun() {
   try {
     const newRun = new Run({name: newRunName.value, description: newRunDesc.value, corpus: props.corpus});
-    await runStore.createRun(newRun, newRun.corpus, props.orbisApiService);
+    await runStore.createRun(newRun, newRun.corpus, $orbisApiService);
   } catch (error) {
     console.error(error);
   } finally {
