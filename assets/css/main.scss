@@ -3,7 +3,7 @@
  */
 
 .link {
-  @apply hover:text-white;
+  @apply no-underline hover:underline;
 }
 
 .menu-item {

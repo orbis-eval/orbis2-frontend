@@ -25,15 +25,22 @@ export class OrbisApiService {
             this.apiGet(`getCorpus?corpus_id=${corpusId}`));
     }
 
-    async getDocuments(corpusId: string,
-                       pageSize: number | undefined = undefined,
+    async getDocuments(
+                       runId: number,
+                       pageSize: number,
                        skip: number = 0): Promise<Document[] | Error> {
+        return Parser.parseList(Document,
+            this.apiGet(`getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`));
+    }
+
+    async getNumberOfDocuments(corpusId: number, // TODO: change to runId and countDocuments api call, remove the getNofDocuments api call
+                               pageSize: number | undefined = undefined,
+                               skip: number = 0): Promise<Number | Error> {
         let pageSizeParam = '';
         if (pageSize) {
             pageSizeParam = `&page_size=${pageSize}`;
         }
-        return Parser.parseList(Document,
-            this.apiGet(`getDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`));
+        return Parser.parse(Number, this.apiGet(`getNofDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`));
     }
 
     async getDocument(documentId: string): Promise<Document | Error> {
@@ -52,7 +59,7 @@ export class OrbisApiService {
     }
 
     async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
-        return Parser.parse( Annotation,
+        return Parser.parse(Annotation,
             this.apiPost(`addAnnotation`, annotation));
     }
 
@@ -65,10 +72,14 @@ export class OrbisApiService {
             this.apiPost('addCorpus', body));
     }
 
-    async addRun(runName: string, runDescription: string, corpus: Corpus): Promise<Run | Error> {
+    async addRun(newRun: Run, corpus: Corpus): Promise<Run | Error> {
         return Parser.parse(Run,
-            this.apiPost(`addRun?run_name=${runName}&run_description=${runDescription}`,
+            this.apiPost(`addRun?run_name=${newRun.name}&run_description=${newRun.description}`,
                 corpus));
+    }
+
+    async removeRun(run: Run): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`removeRun`, run));
     }
 
     async removeAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {

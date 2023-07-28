@@ -1,6 +1,8 @@
+import {defineStore} from "pinia";
 import {Run} from "~/lib/model/run";
-
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {Corpus} from "~/lib/model/corpus";
+import {Error} from "~/lib/model/error";
 
 export const useRunStore = defineStore('run', {
     state: () => {
@@ -16,19 +18,46 @@ export const useRunStore = defineStore('run', {
             this.runs = [] as Run[];
             this.selectedRun = {} as Run;
         },
+
         changeSelectedRun(run: Run) {
-            console.log("changeSelectedRun")
-            console.log(run)
             this.selectedRun = run;
         },
+
+        async createRun(newRun: Run, corpus: Corpus, orbisApiService: OrbisApiService) {
+            if (corpus._id === undefined) {
+                console.error("No corpusId provided!");
+                return;
+            }
+
+            try {
+                const response = await orbisApiService.addRun(newRun, corpus);
+
+                if (response instanceof Error) {
+                    return new Error("Something is wrong with the response");
+                } else {
+                    // Reload the runs in the store after creating a new one
+                    await this.loadRuns(corpus._id, orbisApiService);
+                }
+            } catch (error) {
+                return new Error("An error occurred while creating a run.");
+            }
+        },
+
         async loadRuns(corpusId: number, orbisApiService: OrbisApiService) {
-            if (this.corpusId !== corpusId) {
+            if (corpusId === undefined) {
+                console.error("No corpusId provided!");
+                return;
+            }
+
+            try {
                 const runs = await orbisApiService.getRuns(corpusId);
                 if (Array.isArray(runs) && runs.length > 0) {
                     this.corpusId = corpusId;
                     this.runs = runs;
                     this.selectedRun = this.runs[0];
                 }
+            } catch (error) {
+                return new Error("An error occurred while fetching runs.");
             }
         }
     }

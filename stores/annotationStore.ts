@@ -1,3 +1,4 @@
+import {defineStore} from "pinia";
 import {Run} from "~/lib/model/run";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
@@ -7,7 +8,6 @@ export const useAnnotationStore = defineStore('annotation', {
             annotations: [] as NestedSetNode[],
             undoneAnnotations: [] as NestedSetNode[],
             selectedRun: {} as Run,
-            currentSelectedDocPage: 1
         };
     },
     actions: {
@@ -43,8 +43,5 @@ export const useAnnotationStore = defineStore('annotation', {
             this.annotations = [];
             this.undoneAnnotations = [];
         },
-        changeSelectedRun(run: Run) {
-            this.selectedRun = run;
-        }
     }
 });

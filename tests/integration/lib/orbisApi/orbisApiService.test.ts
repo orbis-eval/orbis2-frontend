@@ -100,7 +100,7 @@ describe('OrbisApiService.getDocuments()', () => {
                 '_id': 5678
             },
         ]);
-        const parsedDocuments = await orbisApiServiceMock.getDocuments('');
+        const parsedDocuments = await orbisApiServiceMock.getDocuments(1, 10, 0);
         expect(Array.isArray(parsedDocuments)).toBeTruthy();
         if (Array.isArray(parsedDocuments)) {
             expect(parsedDocuments.length).toEqual(2);

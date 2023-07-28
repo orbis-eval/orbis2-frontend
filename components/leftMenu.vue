@@ -21,25 +21,5 @@ import {HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome} from 'oh-vue-icons/ico
 
 addIcons(HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome);
 
-const props = defineProps({
-  selected: {},
-  runs: Array
-})
-const selectionFromParent = toRef(props, 'selected')
-const currentSelection = ref(null)
-const emit = defineEmits(['selectionChanged', 'onDocumentsClicked'])
-
-watch(currentSelection, newValue => {
-  emit('selectionChanged', newValue);
-}, {immediate: true})
-
-watch(selectionFromParent, (newValue, oldValue) => {
-  currentSelection.value = newValue;
-})
-
-onMounted(() => {
-  currentSelection.value = selectionFromParent.value;
-})
-
 </script>
 

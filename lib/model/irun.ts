@@ -6,6 +6,7 @@ export interface IRun {
     name: string;
     description: string;
     corpus: Corpus;
+    timestamp?: string;
     document_annotations?: Map<Document, Annotation[]>;
     _id?: number;
 }
