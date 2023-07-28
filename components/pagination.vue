@@ -6,7 +6,7 @@
             :disabled="isFirstPage">
       prev
     </button>
-    <button v-for="pageNumber in nofPages"
+    <button v-for="pageNumber in totalPages"
             @click="changePage(pageNumber)"
             class="pagination-button button-enabled"
             :class="(currentPage === pageNumber)?'highlighted':''">
@@ -23,24 +23,23 @@
 
 <script setup lang="ts">
 
-// const currentPage = ref(1);
 const props = defineProps({
   currentPage: Number,
-  nofPages: Number
+  totalPages: Number
 });
-const nofPages = toRef(props, 'nofPages');
+const totalPages = toRef(props, 'totalPages');
 const emit = defineEmits(['pageChanged']);
 
-const isLastPage = computed(() => props.currentPage == props.nofPages);
+const isLastPage = computed(() => props.currentPage == props.totalPages);
 const isFirstPage = computed(() => props.currentPage == 1);
 
-watch(nofPages, newValue => {
+watch(totalPages, newValue => {
   // when nofPages changed go to last page
   changePage(newValue);
 })
 
 function changePage(nextPage: number) {
-  if (nextPage > 0 && nextPage <= props.nofPages) {
+  if (nextPage > 0 && nextPage <= props.totalPages) {
     emit('pageChanged', nextPage);
   }
 }

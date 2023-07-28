@@ -27,8 +27,7 @@
           <tr>
             <td class="pr-5 py-1">
               <NuxtLink :to="`documents/${document._id}`" class="link">
-<!--                // TODO: index is not correct when switching to next site -->
-                {{filesPerPage*(currentSelectedDocPage-1)+index + 1 }}
+                {{ pageSize * (currentPage - 1) + index + 1 }}
               </NuxtLink>
             </td>
             <td class="pr-5 py-1">
@@ -46,10 +45,10 @@
         </table>
       </div>
 
-      <Pagination v-if="nrOfPages"
+      <Pagination v-if="totalPages"
                   @pageChanged="pageChanged"
-                  :currentPage="currentSelectedDocPage"
-                  :nofPages="nrOfPages"
+                  :currentPage="currentPage"
+                  :totalPages="totalPages"
                   class="text-center"/>
     </div>
 
@@ -95,30 +94,28 @@ const runStore = useRunStore();
 await runStore.loadRuns(route.params.corpusId, $orbisApiService);
 const {selectedRun} = storeToRefs(runStore)
 
-const filesPerPage = ref(10);
+const pageSize = ref(10);
 const loading = ref(true);
 
-// TODO: simplify
-// TODO: check behavior of loading spinner
-const {currentSelectedDocPage} = storeToRefs(documentStore);
-await loadNofDocuments();
+const {currentPage} = storeToRefs(documentStore);
+await countDocuments();
 await loadDocuments();
 
 const {documents} = storeToRefs(documentStore);
-const {nrOfPages} = storeToRefs(documentStore);
+const {totalPages} = storeToRefs(documentStore);
 
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
   console.log(selectedRun.value._id)
   loading.value = true;
-  documentStore.currentSelectedDocPage = nextPage;
-  const startIndex = (currentSelectedDocPage.value - 1) * filesPerPage.value;
+  documentStore.currentPage = nextPage;
+  const startIndex = (currentPage.value - 1) * pageSize.value;
   try {
     await documentStore.loadDocuments(
         selectedRun.value._id,
         $orbisApiService,
-        filesPerPage.value,
+        pageSize.value,
         startIndex)
   } catch (error) {
     console.error(error);
@@ -128,14 +125,14 @@ async function pageChanged(nextPage: number) {
 }
 
 async function runChanged() {
-  await pageChanged(currentSelectedDocPage.value);
+  await pageChanged(currentPage.value);
 }
 
-async function loadNofDocuments() {
+async function countDocuments() {
   loading.value = true;
   try {
-    await documentStore.getNumberOfDocuments(corpus.value._id, $orbisApiService);
-    documentStore.nrOfPages = Math.ceil(documentStore.nrOfDocuments / filesPerPage.value);
+    await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
+    documentStore.totalPages = Math.ceil(documentStore.nrOfDocuments / pageSize.value);
   } catch (error) {
     console.error(error);
   }
@@ -143,7 +140,7 @@ async function loadNofDocuments() {
 }
 
 async function loadDocuments() {
-  await pageChanged(currentSelectedDocPage.value);
+  await pageChanged(currentPage.value);
 }
 
 </script>

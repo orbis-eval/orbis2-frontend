@@ -46,8 +46,6 @@
 </template>
 
 <script setup lang="ts">
-import {useAnnotationStore} from "~/stores/annotationStore";
-import {Document} from "~/lib/model/document";
 import {Corpus} from "~/lib/model/corpus";
 import {OhVueIcon, addIcons} from "oh-vue-icons";
 import {MdDeleteforeverOutlined, BiPlus} from "oh-vue-icons/icons";
@@ -59,21 +57,19 @@ import {storeToRefs} from "pinia";
 addIcons(MdDeleteforeverOutlined, BiPlus);
 
 const {$orbisApiService} = useNuxtApp();
-const route = useRoute();
 const corpora = ref(null);
 const importEnabled = ref(false);
 const deletionWarningEnabled = ref(false);
-const corpusName = ref(null);
 const deletionTitle = ref("");
 const deletionMessage = ref("");
 const corpusUnderDeletion = ref(null);
 const deleteCorpus = ref(null)
 const documentStore = useDocumentStore();
-const {currentSelectedDocPage} = storeToRefs(documentStore);
+const {currentPage} = storeToRefs(documentStore);
 
 onMounted(() => {
   // reset store of current corpus
-  currentSelectedDocPage.value = 1;
+  currentPage.value = 1;
   loadCorpora();
 })
 

@@ -37,10 +37,10 @@ const documents: Document[] = Array.from([
 jest.mock("~/lib/orbisApi/orbisApiService", () => {
     return {
         OrbisApiService: jest.fn().mockImplementation(() => ({
-            getDocuments: async (corpusId: number, pageSize: number | undefined = undefined, skip: number = 0): Promise<Document[] | Error> => {
+            getDocuments: async (runId: number, pageSize: number | undefined = undefined, skip: number = 0): Promise<Document[] | Error> => {
                 return Parser.parseList(Document, Promise.resolve(documents));
             },
-            getNumberOfDocuments: async (corpusId: number, pageSize: number | undefined = undefined, skip: number = 0): Promise<Number | Error> => {
+            countDocuments: async (runId: number): Promise<Number | Error> => {
                 return documents.length;
             },
         })),
@@ -58,8 +58,8 @@ describe("Document Store", () => {
         const documentStore = useDocumentStore();
         expect(documentStore.documents).toEqual([] as Document[]);
         expect(documentStore.nrOfDocuments).toEqual(1);
-        expect(documentStore.nrOfPages).toEqual(1);
-        expect(documentStore.currentSelectedDocPage).toEqual(1);
+        expect(documentStore.totalPages).toEqual(1);
+        expect(documentStore.currentPage).toEqual(1);
     });
 
     test('Resetting the state should return default initial state values', () => {
@@ -68,8 +68,8 @@ describe("Document Store", () => {
 
         expect(documentStore.documents).toEqual([] as Document[]);
         expect(documentStore.nrOfDocuments).toEqual(1);
-        expect(documentStore.nrOfPages).toEqual(1);
-        expect(documentStore.currentSelectedDocPage).toEqual(1);
+        expect(documentStore.totalPages).toEqual(1);
+        expect(documentStore.currentPage).toEqual(1);
     });
 
     test("loadDocuments should fetch and update documents", async () => {
@@ -85,16 +85,12 @@ describe("Document Store", () => {
 
     test("getNumberOfDocuments should fetch and update the number of documents", async () => {
         const documentStore = useDocumentStore();
-        const corpusId = 1;
-        const pageSize = 10;
-        const skip = 0;
+        const runId = 1;
         const mockedNumberOfDocuments = documents.length;
 
-        await documentStore.getNumberOfDocuments(
-            corpusId,
-            mockedOrbisApiService,
-            pageSize,
-            skip
+        await documentStore.countDocuments(
+            runId,
+            mockedOrbisApiService
         );
 
         expect(documentStore.nrOfDocuments).toEqual(mockedNumberOfDocuments);

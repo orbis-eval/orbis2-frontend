@@ -7,16 +7,16 @@ export const useDocumentStore = defineStore('document', {
         return {
             documents: [] as Document[],
             nrOfDocuments: 1,
-            nrOfPages: 1,
-            currentSelectedDocPage: 1
+            totalPages: 1,
+            currentPage: 1
         };
     },
     actions: {
         $reset() {
             this.documents = [] as Document[];
             this.nrOfDocuments = 1;
-            this.nrOfPages = 1;
-            this.currentSelectedDocPage = 1;
+            this.totalPages = 1;
+            this.currentPage = 1;
         },
 
         async loadDocuments(
@@ -29,41 +29,19 @@ export const useDocumentStore = defineStore('document', {
                     runId,
                     pageSize,
                     skip);
-
                 if (Array.isArray(documents)) {
                     this.documents = documents;
                 } else {
                     return new Error("The response of the documents seems invalid.");
                 }
-
             } catch (error) {
                 return new Error("An error occurred while fetching documents.");
             }
         },
 
-        // TODO: should the number of documents come from either the current corpus or the run?
-        async getNumberOfDocuments(corpusId: number, orbisApiService: OrbisApiService, pageSize: number | undefined = undefined, skip: number = 0) {
-            if (corpusId === undefined) {
-                console.error("No corpusId provided!");
-                return;
-            }
-
+        async countDocuments(runId: number, orbisApiService: OrbisApiService) {
             try {
-                const response = await orbisApiService.getNumberOfDocuments(corpusId, pageSize, skip);
-
-                if (response instanceof Error) {
-                    return response;
-                }
-
-                // Convert the response to a primitive number if it's of type Number
-                const nrOfdocuments = response instanceof Number ? Number(response) : response;
-
-                if (typeof nrOfdocuments === 'number') {
-                    this.nrOfDocuments = nrOfdocuments;
-                } else {
-                    return new Error("The response of the nOfdocuments seems invalid.");
-                }
-
+                this.nrOfDocuments = Number(await orbisApiService.countDocuments(runId));
             } catch (error) {
                 return new Error("An error occurred while fetching documents.");
             }
