@@ -8,6 +8,7 @@
 
       <RunDropdown
           :corpus="corpus"
+          @runChanged="runChanged"
       />
 
       <div v-show="!loading" class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto mb-40">
@@ -27,7 +28,7 @@
             <td class="pr-5 py-1">
               <NuxtLink :to="`documents/${document._id}`" class="link">
 <!--                // TODO: index is not correct when switching to next site -->
-                {{ index + 1 }}
+                {{filesPerPage*(currentSelectedDocPage-1)+index + 1 }}
               </NuxtLink>
             </td>
             <td class="pr-5 py-1">
@@ -76,6 +77,7 @@ import {useCorpusStore} from "~/stores/corpusStore";
 import {storeToRefs} from "pinia";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {useDocumentStore} from "~/stores/documentStore";
+import {useRunStore} from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown, BiGear);
 
@@ -85,8 +87,13 @@ const router = useRouter();
 
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
+
 await corpusStore.loadCorpus(route.params.corpusId, $orbisApiService);
 const {corpus} = storeToRefs(corpusStore);
+
+const runStore = useRunStore();
+await runStore.loadRuns(route.params.corpusId, $orbisApiService);
+const {selectedRun} = storeToRefs(runStore)
 
 const filesPerPage = ref(10);
 const loading = ref(true);
@@ -100,17 +107,28 @@ await loadDocuments();
 const {documents} = storeToRefs(documentStore);
 const {nrOfPages} = storeToRefs(documentStore);
 
+
+// called when another page is selected
 async function pageChanged(nextPage: number) {
+  console.log(selectedRun.value._id)
   loading.value = true;
   documentStore.currentSelectedDocPage = nextPage;
   const startIndex = (currentSelectedDocPage.value - 1) * filesPerPage.value;
   try {
-    await documentStore.loadDocuments(corpus.value._id, $orbisApiService, filesPerPage.value, startIndex)
+    await documentStore.loadDocuments(
+        selectedRun.value._id,
+        $orbisApiService,
+        filesPerPage.value,
+        startIndex)
   } catch (error) {
     console.error(error);
   } finally {
     loading.value = false;
   }
+}
+
+async function runChanged() {
+  await pageChanged(currentSelectedDocPage.value);
 }
 
 async function loadNofDocuments() {

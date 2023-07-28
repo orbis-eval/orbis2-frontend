@@ -19,14 +19,16 @@ export const useDocumentStore = defineStore('document', {
             this.currentSelectedDocPage = 1;
         },
 
-        async loadDocuments(corpusId: number, orbisApiService: OrbisApiService, pageSize: number | undefined = undefined, skip: number = 0) {
-            if (corpusId === undefined) {
-                console.error("No corpusId provided!");
-                return;
-            }
-
+        async loadDocuments(
+            runId: number,
+            orbisApiService: OrbisApiService,
+            pageSize: number,
+            skip: number = 0) {
             try {
-                const documents = await orbisApiService.getDocuments(corpusId, pageSize, skip);
+                const documents = await orbisApiService.getDocuments(
+                    runId,
+                    pageSize,
+                    skip);
 
                 if (Array.isArray(documents)) {
                     this.documents = documents;

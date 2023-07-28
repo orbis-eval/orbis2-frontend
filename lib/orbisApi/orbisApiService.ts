@@ -25,18 +25,15 @@ export class OrbisApiService {
             this.apiGet(`getCorpus?corpus_id=${corpusId}`));
     }
 
-    async getDocuments(corpusId: number,
-                       pageSize: number | undefined = undefined,
+    async getDocuments(
+                       runId: number,
+                       pageSize: number,
                        skip: number = 0): Promise<Document[] | Error> {
-        let pageSizeParam = '';
-        if (pageSize) {
-            pageSizeParam = `&page_size=${pageSize}`;
-        }
         return Parser.parseList(Document,
-            this.apiGet(`getDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`));
+            this.apiGet(`getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`));
     }
 
-    async getNumberOfDocuments(corpusId: number,
+    async getNumberOfDocuments(corpusId: number, // TODO: change to runId and countDocuments api call, remove the getNofDocuments api call
                                pageSize: number | undefined = undefined,
                                skip: number = 0): Promise<Number | Error> {
         let pageSizeParam = '';

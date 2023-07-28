@@ -104,6 +104,7 @@ const props = defineProps({
     required: true,
   }
 });
+const emit = defineEmits(['runChanged']);
 
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const runStore = useRunStore();
@@ -128,7 +129,7 @@ const newRunDate = ref("");
 function selectedRunChanged(run: Run) {
   if (run && run._id) {
     runStore.changeSelectedRun(run);
-
+    emit('runChanged');
     // close dropdown once clicked
     const dropdown = document.getElementById("run_dropdown");
     if (dropdown?.hasAttribute("open")) {
