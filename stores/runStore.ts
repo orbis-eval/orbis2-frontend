@@ -3,62 +3,84 @@ import {Run} from "~/lib/model/run";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {Corpus} from "~/lib/model/corpus";
 import {Error} from "~/lib/model/error";
+import {ref} from 'vue';
 
-export const useRunStore = defineStore('run', {
-    state: () => {
-        return {
-            corpusId: -1,
-            runs: [] as Run[],
-            selectedRun: {} as Run
-        };
-    },
-    actions: {
-        $reset() {
-            this.corpusId = -1;
-            this.runs = [] as Run[];
-            this.selectedRun = {} as Run;
-        },
+// const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
-        changeSelectedRun(run: Run) {
-            this.selectedRun = run;
-        },
+export const useRunStore = defineStore('run', () => {
+    const corpusId = ref(-1);
+    const runs = ref([] as Run[]);
+    const selectedRun = ref({} as Run);
 
-        async createRun(newRun: Run, corpus: Corpus, orbisApiService: OrbisApiService) {
-            if (corpus._id === undefined) {
-                console.error("No corpusId provided!");
-                return;
+    function reset() {
+        corpusId.value = -1;
+        runs.value = [] as Run[];
+        selectedRun.value = {} as Run;
+    }
+
+    function changeSelectedRun(run: Run) {
+        selectedRun.value = run;
+    }
+
+    async function createRun(newRun: Run, corpus: Corpus, orbisApiService: OrbisApiService) {
+        if (corpus._id === undefined) {
+            console.error("No corpusId provided!");
+            return;
+        }
+
+        try {
+            const response = await orbisApiService.addRun(newRun, corpus);
+
+            if (response instanceof Error) {
+                return new Error("Something is wrong with the response");
+            } else {
+                // Reload the runs in the store after creating a new one
+                await loadRuns(corpus._id, orbisApiService);
             }
-
-            try {
-                const response = await orbisApiService.addRun(newRun, corpus);
-
-                if (response instanceof Error) {
-                    return new Error("Something is wrong with the response");
-                } else {
-                    // Reload the runs in the store after creating a new one
-                    await this.loadRuns(corpus._id, orbisApiService);
-                }
-            } catch (error) {
-                return new Error("An error occurred while creating a run.");
-            }
-        },
-
-        async loadRuns(corpusId: number, orbisApiService: OrbisApiService) {
-            if (corpusId === undefined) {
-                console.error("No corpusId provided!");
-                return;
-            }
-
-            try {
-                const runs = await orbisApiService.getRuns(corpusId);
-                if (Array.isArray(runs) && runs.length > 0) {
-                    this.corpusId = corpusId;
-                    this.runs = runs;
-                    this.selectedRun = this.runs[0];
-                }
-            } catch (error) {
-                return new Error("An error occurred while fetching runs.");
-            }
+        } catch (error) {
+            return new Error("An error occurred while creating a run.");
         }
     }
+
+    async function loadRuns(id: number, orbisApiService: OrbisApiService) {
+        if (id === undefined) {
+            console.error("No corpusId provided!");
+            return;
+        }
+
+        try {
+            const loadedRuns = await orbisApiService.getRuns(id);
+            if (Array.isArray(loadedRuns) && loadedRuns.length > 0) {
+                corpusId.value = id;
+                runs.value = loadedRuns;
+                selectedRun.value = loadedRuns[0];
+            }
+        } catch (error) {
+            return new Error("An error occurred while fetching runs.");
+        }
+    }
+
+    async function removeRun(run: Run, orbisApiService: OrbisApiService) {
+        if (run === undefined) {
+            console.error("No run provided!");
+            return;
+        }
+
+        try {
+            const response = await orbisApiService.removeRun(run);
+
+            if (response instanceof Error) {
+                console.error(response);
+            } else {
+                if (run.corpus._id) {
+                    await loadRuns(run.corpus._id, orbisApiService);
+                }
+            }
+
+        } catch (error) {
+            return new Error("An error occurred while fetching runs.");
+        }
+    }
+
+    return {corpusId, runs, selectedRun, reset, removeRun, loadRuns, createRun, changeSelectedRun};
 });
