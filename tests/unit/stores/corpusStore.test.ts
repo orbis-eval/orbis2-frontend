@@ -67,7 +67,7 @@ describe("Corpus Store", () => {
 
     test('Resetting the state should return default initial state values', () => {
         const corpusStore = useCorpusStore();
-        corpusStore.$reset();
+        corpusStore.reset();
 
         expect(corpusStore.corpus).toEqual({} as Corpus);
         expect(corpusStore.corpora).toEqual([] as Corpus[]);
