@@ -64,7 +64,7 @@ describe("Document Store", () => {
 
     test('Resetting the state should return default initial state values', () => {
         const documentStore = useDocumentStore();
-        documentStore.$reset();
+        documentStore.reset();
 
         expect(documentStore.documents).toEqual([] as Document[]);
         expect(documentStore.nrOfDocuments).toEqual(1);

@@ -57,7 +57,7 @@ describe('Run Store', () => {
 
     test('Resetting the state should return default initial state values', () => {
         const runStore = useRunStore();
-        runStore.$reset();
+        runStore.reset();
 
         expect(runStore.corpusId).toBe(-1);
         expect(runStore.runs).toEqual([]);
