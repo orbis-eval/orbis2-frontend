@@ -124,7 +124,7 @@ describe('AnnotationStore.redoAnnotation()', () => {
             const annotationStore = useAnnotationStore();
             let annotation2 = new NestedSetNode(new Annotation(mockedAnnotation));
             annotation2.key = 'my-key2';
-            let annotation3 = new NestedSetNode( new Annotation(mockedAnnotation));
+            let annotation3 = new NestedSetNode(new Annotation(mockedAnnotation));
             annotation3.key = 'my-key3';
 
             annotationStore.addAnnotation(mockedAnnotation);
