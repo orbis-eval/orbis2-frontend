@@ -84,30 +84,40 @@ const route = useRoute();
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const router = useRouter();
 
+
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 
-await corpusStore.loadCorpus(route.params.corpusId, $orbisApiService);
 const {corpus} = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-await runStore.loadRuns(route.params.corpusId, $orbisApiService);
-const {selectedRun} = storeToRefs(runStore)
+
+const {selectedRun} = storeToRefs(runStore);
 
 const pageSize = ref(10);
 const loading = ref(true);
 
 const {currentPage} = storeToRefs(documentStore);
-await countDocuments();
-await loadDocuments();
-
 const {documents} = storeToRefs(documentStore);
 const {totalPages} = storeToRefs(documentStore);
+
+onMounted(async () => {
+  loading.value = true;
+  try {
+    await corpusStore.loadCorpus(route.params.corpusId, $orbisApiService);
+    await runStore.loadRuns(route.params.corpusId, $orbisApiService);
+    await countDocuments();
+    await loadDocuments();
+    // @Todo: Error message for user
+  } finally {
+    loading.value = false;
+  }
+});
 
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
-  console.log(selectedRun.value._id)
+  console.log(selectedRun.value._id);
   loading.value = true;
   documentStore.currentPage = nextPage;
   const startIndex = (currentPage.value - 1) * pageSize.value;
@@ -129,14 +139,8 @@ async function runChanged() {
 }
 
 async function countDocuments() {
-  loading.value = true;
-  try {
-    await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
-    documentStore.totalPages = Math.ceil(documentStore.nrOfDocuments / pageSize.value);
-  } catch (error) {
-    console.error(error);
-  }
-  loading.value = false;
+  await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
+  documentStore.totalPages = Math.ceil(documentStore.nrOfDocuments / pageSize.value);
 }
 
 async function loadDocuments() {
