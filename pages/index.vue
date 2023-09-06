@@ -13,7 +13,7 @@
           </div>
           <ul class="mt-5">
             <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
-              <NuxtLink :to="`corpora/${corpus._id}/documents`" class="hover:text-purple-400">
+                <NuxtLink :to="`/corpora/${corpus._id}/documents`" class="hover:text-purple-400">
                 {{ corpus.name }}
               </NuxtLink>
               <div class="flex-grow"></div>
@@ -57,7 +57,7 @@ import {storeToRefs} from "pinia";
 addIcons(MdDeleteforeverOutlined, BiPlus);
 
 const {$orbisApiService} = useNuxtApp();
-const corpora = ref(null);
+const corpora = ref([] as Corpus[]);
 const importEnabled = ref(false);
 const deletionWarningEnabled = ref(false);
 const deletionTitle = ref("");
