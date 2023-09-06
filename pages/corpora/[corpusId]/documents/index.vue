@@ -26,17 +26,17 @@
           <tbody v-for="(document, index) in documents" :key="document._id">
           <tr>
             <td class="pr-5 py-1">
-              <NuxtLink :to="`documents/${document._id}`" class="link">
+              <NuxtLink :to="`/documents/${document._id}`" class="link">
                 {{ pageSize * (currentPage - 1) + index + 1 }}
               </NuxtLink>
             </td>
             <td class="pr-5 py-1">
-              <NuxtLink :to="`documents/${document._id}`" class="link">
+              <NuxtLink :to="`/documents/${document._id}`" class="link">
                 {{ document._id }}
               </NuxtLink>
             </td>
             <td class="pr-5">
-              <NuxtLink :to="`documents/${document._id}`" class="link">
+              <NuxtLink :to="`/documents/${document._id}`" class="link">
                 {{ document.content.substring(0, 100) }}...
               </NuxtLink>
             </td>
