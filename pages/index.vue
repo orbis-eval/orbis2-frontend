@@ -13,7 +13,7 @@
           </div>
           <ul class="mt-5">
             <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
-              <NuxtLink :to="`corpora/${corpus._id}/documents`" class="hover:text-purple-400">
+                <NuxtLink :to="`/corpora/${corpus._id}/documents`" class="hover:text-purple-400">
                 {{ corpus.name }}
               </NuxtLink>
               <div class="flex-grow"></div>
