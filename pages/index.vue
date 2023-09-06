@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="default-layout">
     <div class="flex items-center justify-center h-full">
-      <LoadingSpinner v-if="!corpora"/>
+      <LoadingSpinner v-if="loading"/>
       <div v-else class="content-card grow max-w-xl">
         <div class="card-body">
           <div class="card-title flex">
@@ -57,7 +57,8 @@ import {storeToRefs} from "pinia";
 addIcons(MdDeleteforeverOutlined, BiPlus);
 
 const {$orbisApiService} = useNuxtApp();
-const corpora = ref(null);
+const corpora = ref([] as Corpus[]);
+const loading = ref(true);
 const importEnabled = ref(false);
 const deletionWarningEnabled = ref(false);
 const deletionTitle = ref("");
@@ -67,23 +68,26 @@ const deleteCorpus = ref(null)
 const documentStore = useDocumentStore();
 const {currentPage} = storeToRefs(documentStore);
 
-onMounted(() => {
+onMounted(async () => {
   // reset store of current corpus
   currentPage.value = 1;
-  loadCorpora();
+  await loadCorpora();
 })
 
-function loadCorpora() {
-  $orbisApiService.getCorpora()
-      .then(result => {
-        if (Array.isArray(result)) {
-          corpora.value = result;
-        } else {
-          console.error(result.errorMessage);
-          // TODO, 06.01.2023 anf: correct error handling
-          corpora.value = [{_id: 'ERROR'}];
-        }
-      });
+async function loadCorpora() {
+  loading.value = true
+  try {
+    let response = await $orbisApiService.getCorpora();
+    if (Array.isArray(response)) {
+      corpora.value = response;
+    } else {
+      console.error(response.errorMessage);
+      // TODO, 06.01.2023 anf: correct error handling
+      corpora.value = [{_id: 'ERROR'}];
+    }
+  } finally {
+    loading.value = false
+  }
 }
 
 function removeCorpus(corpus: Corpus) {
