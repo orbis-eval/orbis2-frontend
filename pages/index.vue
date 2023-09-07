@@ -36,7 +36,6 @@
       <dialog ref="createCorpus" id="create_corpus" class="modal">
         <form method="dialog" class="modal-box">
           <FileInput @submitted="createCorpus"
-                     @cancelled="cancelled"
                      submitText="import" cancelText="cancel"/>
         </form>
       </dialog>
@@ -114,10 +113,6 @@ function createCorpus(corpusName: string, chosenFiles: File[]) {
   } else {
     ApiUtils.readAndStoreDocuments(chosenFiles, corpus, $orbisApiService, loadCorpora);
   }
-  importEnabled.value = false;
-}
-
-function cancelled() {
   importEnabled.value = false;
 }
 
