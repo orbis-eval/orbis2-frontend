@@ -1,9 +1,9 @@
 <template>
   <NuxtLayout name="default-layout">
     <div class="flex items-center justify-center h-full">
-      <LoadingSpinner v-show="loading"/>
+      <LoadingSpinner v-if="loading"/>
       <!-- Todo: Show spinner for creating/deleting in modal  -->
-      <CorpusList v-show="!loading"
+      <CorpusList v-else
                   @openCreateCorpus="$refs.createCorpusDialog.showDialog()"
                   @openDeleteCorpus="openDeleteCorpusDialog"></CorpusList>
 
