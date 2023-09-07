@@ -123,6 +123,7 @@ function dropHandler(event: DragEvent) {
 
 function submit() {
   emit('submitted', corpusNameToCreate.value, selectedFiles.value);
+  selectedFiles.value = [];
 }
 
 function cancel() {
