@@ -8,7 +8,7 @@
             <div>Corpora</div>
             <div class="grow"></div>
             <button class="btn btn-square bg-neutral border-none">
-              <OhVueIcon name="bi-plus" scale="2" @click="$refs.createCorpus.showModal()"/>
+              <OhVueIcon name="bi-plus" scale="2" @click="$refs.createCorpusDialog.showModal()"/>
             </button>
           </div>
           <ul class="mt-5">
@@ -33,7 +33,7 @@
                    @confirm="deletionConfirmed"/>
         </form>
       </dialog>
-      <dialog ref="createCorpus" id="create_corpus" class="modal">
+      <dialog id="create_corpus" ref="createCorpusDialog" class="modal">
         <form method="dialog" class="modal-box">
           <FileInput @submitted="createCorpus"
                      submitText="import" cancelText="cancel"/>
@@ -89,7 +89,6 @@ function removeCorpus(corpus: Corpus) {
 
 async function deletionConfirmed() {
   if (corpusUnderDeletion.value instanceof Corpus) {
-    console.log("delete confirmed");
     try {
       // Todo: Check if another loading spinner is more appropriate
       loading.value = true
