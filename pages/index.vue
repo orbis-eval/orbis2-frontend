@@ -1,66 +1,36 @@
 <template>
   <NuxtLayout name="default-layout">
     <div class="flex items-center justify-center h-full">
-      <LoadingSpinner v-if="loading"/>
-      <div v-else class="content-card grow max-w-xl">
-        <div class="card-body">
-          <div class="card-title flex">
-            <div>Corpora</div>
-            <div class="grow"></div>
-            <button class="btn btn-square bg-neutral border-none">
-              <OhVueIcon name="bi-plus" scale="2" @click="$refs.createCorpusDialog.showModal()"/>
-            </button>
-          </div>
-          <ul class="mt-5">
-            <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
-              <NuxtLink :to="`/corpora/${corpus._id}/documents`" class="hover:text-purple-400">
-                {{ corpus.name }}
-              </NuxtLink>
-              <div class="flex-grow"></div>
-              <button @click="removeCorpus(corpus)" class="text-white hover:text-purple-400 mr-3.5">
-                <OhVueIcon name="md-deleteforever-outlined"/>
-              </button>
-            </li>
-          </ul>
-        </div>
-      </div>
+      <LoadingSpinner v-show="loading"/>
+      <!-- Todo: Show spinner for creating/deleting in modal  -->
+      <CorpusList v-show="!loading"
+                  @openCreateCorpus="$refs.createCorpusDialog.showDialog()"
+                  @openDeleteCorpus="openDeleteCorpusDialog"></CorpusList>
 
-      <dialog ref="deleteCorpus" id="delete_corpus" class="modal">
-        <form method="dialog" class="modal-box">
-          <Warning :title="String(deletionTitle)"
-                   :message="String(deletionMessage)"
-                   confirm-text="ok" declineText="cancel"
-                   @confirm="deletionConfirmed"/>
-        </form>
-      </dialog>
-      <dialog id="create_corpus" ref="createCorpusDialog" class="modal">
-        <form method="dialog" class="modal-box">
-          <FileInput @submitted="createCorpus"
-                     submitText="import" cancelText="cancel"/>
-        </form>
-      </dialog>
+      <DialogCreateCorpus ref="createCorpusDialog" @finished="loading = false"
+                          @started="loading = true"></DialogCreateCorpus>
+      <DialogDeleteCorpus ref="deleteCorpusDialog" @finished="loading = false"
+                          @started="loading = true"></DialogDeleteCorpus>
     </div>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import {Corpus} from "~/lib/model/corpus";
-import {OhVueIcon, addIcons} from "oh-vue-icons";
+import {addIcons} from "oh-vue-icons";
 import {MdDeleteforeverOutlined, BiPlus} from "oh-vue-icons/icons";
-import {storeToRefs} from "pinia";
 import {useCorpusStore} from "~/stores/corpusStore";
+import CorpusList from "~/components/home/corpusList.vue";
+import DialogCreateCorpus from "~/components/home/dialog/dialogCreateCorpus.vue";
+import DialogDeleteCorpus from "~/components/home/dialog/dialogDeleteCorpus.vue";
+import {Corpus} from "~/lib/model/corpus";
 
 addIcons(MdDeleteforeverOutlined, BiPlus);
 
 const {$orbisApiService} = useNuxtApp();
 const corpusStore = useCorpusStore();
-const {corpora} = storeToRefs(corpusStore);
 
 const loading = ref(true);
-const deletionTitle = ref("");
-const deletionMessage = ref("");
-const corpusUnderDeletion = ref(null);
-const deleteCorpus = ref(null);
+const deleteCorpusDialog = ref(null)
 
 onMounted(async () => {
   // reset store of current corpus
@@ -77,37 +47,8 @@ async function loadCorpora() {
   }
 }
 
-function removeCorpus(corpus: Corpus) {
-  deletionTitle.value = "Delete corpus?";
-  deletionMessage.value = `Deleting corpus with "${corpus.name}" will remove all documents and runs of this corpus!
-  Do you want to continue?`;
-  corpusUnderDeletion.value = corpus;
-  deleteCorpus.value.showModal()
-}
-
-async function deletionConfirmed() {
-  if (corpusUnderDeletion.value instanceof Corpus) {
-    try {
-      // Todo: Check if another loading spinner is more appropriate
-      loading.value = true
-      await corpusStore.deleteCorpora(corpusUnderDeletion.value, $orbisApiService);
-      corpusUnderDeletion.value = null;
-    } catch (Error) {
-      // Todo: Add Error Message
-    } finally {
-      loading.value = false
-    }
-  }
-}
-
-async function createCorpus(corpusName: string, chosenFiles: File[]) {
-  try {
-    await corpusStore.addCorpus(corpusName, chosenFiles, $orbisApiService)
-  } catch (Error) {
-    // Todo: Add Error Message
-  } finally {
-    loading.value = false
-  }
+function openDeleteCorpusDialog(corpus: Corpus) {
+  deleteCorpusDialog.value.showDialog(corpus)
 }
 
 </script>
