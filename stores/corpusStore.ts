@@ -1,8 +1,8 @@
-import { defineStore } from "pinia";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
-import { Corpus } from "~/lib/model/corpus";
-import { Error } from "~/lib/model/error";
-import { ref } from 'vue';
+import {defineStore} from "pinia";
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {Corpus} from "~/lib/model/corpus";
+import {Error} from "~/lib/model/error";
+import {ref} from 'vue';
 
 export const useCorpusStore = defineStore("corpus", () => {
     const corpora = ref([] as Corpus[]);
@@ -29,6 +29,15 @@ export const useCorpusStore = defineStore("corpus", () => {
         }
     }
 
+    async function deleteCorpora(corpusToDelete: Corpus, orbisApiService: OrbisApiService) {
+        try {
+            await orbisApiService.removeCorpus(corpusToDelete);
+            corpora.value = corpora.value.filter(corpus => corpus._id !== corpusToDelete._id);
+        } catch (error) {
+            return new Error("An error occurred while deleting a corpus");
+        }
+    }
+
     async function loadCorpus(corpusId: number, orbisApiService: OrbisApiService) {
         try {
             const loadedCorpus = await orbisApiService.getCorpus(corpusId);
@@ -43,5 +52,5 @@ export const useCorpusStore = defineStore("corpus", () => {
 
     // TODO: Implement the removeCorpus action if needed
 
-    return { corpora, corpus, reset, loadCorpora, loadCorpus };
+    return {corpora, corpus, reset, loadCorpora, deleteCorpora, loadCorpus};
 });

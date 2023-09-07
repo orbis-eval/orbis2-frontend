@@ -30,8 +30,7 @@
           <Warning :title="String(deletionTitle)"
                    :message="String(deletionMessage)"
                    confirm-text="ok" declineText="cancel"
-                   @confirm="deletionConfirmed"
-                   @decline="deletionDeclined"/>
+                   @confirm="deletionConfirmed"/>
         </form>
       </dialog>
       <dialog ref="createCorpus" id="create_corpus" class="modal">
@@ -63,7 +62,6 @@ const {corpora} = storeToRefs(corpusStore);
 
 const loading = ref(true);
 const importEnabled = ref(false);
-const deletionWarningEnabled = ref(false);
 const deletionTitle = ref("");
 const deletionMessage = ref("");
 const corpusUnderDeletion = ref(null);
@@ -88,7 +86,6 @@ async function loadCorpora() {
 }
 
 function removeCorpus(corpus: Corpus) {
-  deletionWarningEnabled.value = true;
   deletionTitle.value = "Delete corpus?";
   deletionMessage.value = `Deleting corpus with "${corpus.name}" will remove all documents and runs of this corpus!
   Do you want to continue?`;
@@ -96,23 +93,20 @@ function removeCorpus(corpus: Corpus) {
   deleteCorpus.value.showModal()
 }
 
-function deletionConfirmed() {
-  deletionWarningEnabled.value = false;
+async function deletionConfirmed() {
   if (corpusUnderDeletion.value instanceof Corpus) {
-    $orbisApiService.removeCorpus(corpusUnderDeletion.value)
-        .then(response => {
-          if (response instanceof Error) {
-            console.error(response.errorMessage);
-          } else {
-            loadCorpora();
-          }
-          corpusUnderDeletion.value = null;
-        });
+    console.log("delete confirmed");
+    try {
+      // Todo: Check if another loading spinner is more appropriate
+      loading.value = true
+      await corpusStore.deleteCorpora(corpusUnderDeletion.value, $orbisApiService);
+      corpusUnderDeletion.value = null;
+    } catch (Error) {
+      // Todo: Add Error Message
+    } finally {
+      loading.value = false
+    }
   }
-}
-
-function deletionDeclined() {
-  deletionWarningEnabled.value = false;
 }
 
 function createCorpus(corpusName: string, chosenFiles: File[]) {
