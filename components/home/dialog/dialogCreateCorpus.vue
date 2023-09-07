@@ -13,7 +13,7 @@
 import {useCorpusStore} from "~/stores/corpusStore";
 
 const emit = defineEmits(['started', 'finished']);
-defineExpose({showDialog})
+defineExpose({showDialog});
 
 const {$orbisApiService} = useNuxtApp();
 const corpusStore = useCorpusStore();

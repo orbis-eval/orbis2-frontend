@@ -30,7 +30,7 @@ const {$orbisApiService} = useNuxtApp();
 const corpusStore = useCorpusStore();
 
 const loading = ref(true);
-const deleteCorpusDialog = ref(null)
+const deleteCorpusDialog = ref(null);
 
 onMounted(async () => {
   // reset store of current corpus
@@ -43,12 +43,12 @@ async function loadCorpora() {
     await corpusStore.loadCorpora($orbisApiService);
     // TODO, 06.01.2023 anf: correct error handling
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 function openDeleteCorpusDialog(corpus: Corpus) {
-  deleteCorpusDialog.value.showDialog(corpus)
+  deleteCorpusDialog.value.showDialog(corpus);
 }
 
 </script>
