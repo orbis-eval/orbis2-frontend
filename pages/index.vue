@@ -13,7 +13,7 @@
           </div>
           <ul class="mt-5">
             <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
-                <NuxtLink :to="`/corpora/${corpus._id}/documents`" class="hover:text-purple-400">
+              <NuxtLink :to="`/corpora/${corpus._id}/documents`" class="hover:text-purple-400">
                 {{ corpus.name }}
               </NuxtLink>
               <div class="flex-grow"></div>
@@ -53,11 +53,14 @@ import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
 import {useDocumentStore} from "~/stores/documentStore";
 import {storeToRefs} from "pinia";
+import {useCorpusStore} from "~/stores/corpusStore";
 
 addIcons(MdDeleteforeverOutlined, BiPlus);
 
 const {$orbisApiService} = useNuxtApp();
-const corpora = ref([] as Corpus[]);
+const corpusStore = useCorpusStore();
+const {corpora} = storeToRefs(corpusStore);
+
 const loading = ref(true);
 const importEnabled = ref(false);
 const deletionWarningEnabled = ref(false);
@@ -77,14 +80,8 @@ onMounted(async () => {
 async function loadCorpora() {
   loading.value = true
   try {
-    let response = await $orbisApiService.getCorpora();
-    if (Array.isArray(response)) {
-      corpora.value = response;
-    } else {
-      console.error(response.errorMessage);
-      // TODO, 06.01.2023 anf: correct error handling
-      corpora.value = [{_id: 'ERROR'}];
-    }
+    await corpusStore.loadCorpora($orbisApiService);
+    // TODO, 06.01.2023 anf: correct error handling
   } finally {
     loading.value = false
   }
