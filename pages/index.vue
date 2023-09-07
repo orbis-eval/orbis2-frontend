@@ -48,9 +48,7 @@
 import {Corpus} from "~/lib/model/corpus";
 import {OhVueIcon, addIcons} from "oh-vue-icons";
 import {MdDeleteforeverOutlined, BiPlus} from "oh-vue-icons/icons";
-import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
-import {useDocumentStore} from "~/stores/documentStore";
 import {storeToRefs} from "pinia";
 import {useCorpusStore} from "~/stores/corpusStore";
 
@@ -65,13 +63,10 @@ const importEnabled = ref(false);
 const deletionTitle = ref("");
 const deletionMessage = ref("");
 const corpusUnderDeletion = ref(null);
-const deleteCorpus = ref(null)
-const documentStore = useDocumentStore();
-const {currentPage} = storeToRefs(documentStore);
+const deleteCorpus = ref(null);
 
 onMounted(async () => {
   // reset store of current corpus
-  currentPage.value = 1;
   await loadCorpora();
 })
 
