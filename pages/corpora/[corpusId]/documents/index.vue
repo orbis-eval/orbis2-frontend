@@ -13,7 +13,6 @@
 
       <div v-show="!loading" class="bg-neutral border border-gray-500 rounded-xl p-6 overflow-x-auto mb-40">
         <h1 class="text-3xl text-white mb-5">Documents</h1>
-        <!--    TODO: make whole row clickable    -->
         <table class="table text-white">
           <thead class="text-left">
           <tr class="text-white text-lg">
@@ -24,21 +23,16 @@
           </thead>
 
           <tbody v-for="(document, index) in documents" :key="document._id">
-          <tr>
+          <tr class="hover cursor-pointer"
+              @click="router.push(`/corpora/${corpus._id}/documents/${document._id}`)">
             <td class="pr-5 py-1">
-              <NuxtLink :to="`/corpora/${corpus._id}/documents/${document._id}`" class="link">
-                {{ pageSize * (currentPage - 1) + index + 1 }}
-              </NuxtLink>
+              {{ pageSize * (currentPage - 1) + index + 1 }}
             </td>
             <td class="pr-5 py-1">
-              <NuxtLink :to="`/corpora/${corpus._id}/documents/${document._id}`" class="link">
-                {{ document._id }}
-              </NuxtLink>
+              {{ document._id }}
             </td>
             <td class="pr-5">
-              <NuxtLink :to="`/corpora/${corpus._id}/documents/${document._id}`" class="link">
-                {{ document.content.substring(0, 100) }}...
-              </NuxtLink>
+              {{ document.content.substring(0, 100) }}...
             </td>
           </tr>
           </tbody>
