@@ -3,6 +3,8 @@ import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {Corpus} from "~/lib/model/corpus";
 import {Error} from "~/lib/model/error";
 import {ref} from 'vue';
+import {Document} from "~/lib/model/document";
+import {ApiUtils} from "~/lib/utils/apiUtils";
 
 export const useCorpusStore = defineStore("corpus", () => {
     const corpora = ref([] as Corpus[]);
@@ -50,7 +52,26 @@ export const useCorpusStore = defineStore("corpus", () => {
         }
     }
 
-    // TODO: Implement the removeCorpus action if needed
+    async function addCorpus(corpusName: string, chosenFiles: File[], orbisApiService: OrbisApiService) {
+        try {
+            let newCorpus: Corpus | Error = new Corpus({
+                "name": corpusName,
+                "supported_annotation_types": []
+            })
+            if (chosenFiles.length == 0) {
+                newCorpus = await ApiUtils.addCorpus(newCorpus, [], orbisApiService);
+            } else {
+                newCorpus = await ApiUtils.readAndStoreDocuments(chosenFiles, newCorpus, orbisApiService);
+            }
+            if (newCorpus instanceof Corpus) {
+                corpora.value.push(newCorpus)
+            } else {
+                return new Error("An error occurred while adding a new corpus");
+            }
+        } catch (error) {
+            return new Error("An error occurred while adding a new corpus");
+        }
+    }
 
-    return {corpora, corpus, reset, loadCorpora, deleteCorpora, loadCorpus};
+    return {corpora, corpus, reset, loadCorpora, deleteCorpora, loadCorpus, addCorpus};
 });

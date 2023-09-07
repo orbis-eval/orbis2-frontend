@@ -47,7 +47,6 @@
 import {Corpus} from "~/lib/model/corpus";
 import {OhVueIcon, addIcons} from "oh-vue-icons";
 import {MdDeleteforeverOutlined, BiPlus} from "oh-vue-icons/icons";
-import {ApiUtils} from "~/lib/utils/apiUtils";
 import {storeToRefs} from "pinia";
 import {useCorpusStore} from "~/stores/corpusStore";
 
@@ -58,7 +57,6 @@ const corpusStore = useCorpusStore();
 const {corpora} = storeToRefs(corpusStore);
 
 const loading = ref(true);
-const importEnabled = ref(false);
 const deletionTitle = ref("");
 const deletionMessage = ref("");
 const corpusUnderDeletion = ref(null);
@@ -102,17 +100,14 @@ async function deletionConfirmed() {
   }
 }
 
-function createCorpus(corpusName: string, chosenFiles: File[]) {
-  let corpus = new Corpus({
-    "name": corpusName,
-    "supported_annotation_types": []
-  })
-  if (chosenFiles.length == 0) {
-    ApiUtils.addCorpus(corpus, [], $orbisApiService, loadCorpora);
-  } else {
-    ApiUtils.readAndStoreDocuments(chosenFiles, corpus, $orbisApiService, loadCorpora);
+async function createCorpus(corpusName: string, chosenFiles: File[]) {
+  try {
+    await corpusStore.addCorpus(corpusName, chosenFiles, $orbisApiService)
+  } catch (Error) {
+    // Todo: Add Error Message
+  } finally {
+    loading.value = false
   }
-  importEnabled.value = false;
 }
 
 </script>
