@@ -35,6 +35,7 @@ export const useRunStore = defineStore('run', () => {
                 return new Error("Something is wrong with the response");
             } else {
                 // Reload the runs in the store after creating a new one
+                // Todo: Add run directly without loading it from server.
                 await loadRuns(corpus._id, orbisApiService);
             }
         } catch (error) {
