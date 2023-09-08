@@ -6,8 +6,7 @@
     <LoadingSpinner v-if="loading" class="mt-20"/>
     <div v-else class="flex flex-col h-full ml-10 mr-10">
 
-      <RunDropdown :corpus="corpus"
-                   @runChanged="runChanged"/>
+      <RunDropdown @runChanged="runChanged"/>
 
       <DocumentsTable></DocumentsTable>
 
@@ -37,8 +36,6 @@ const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService }
 
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
-
-const {corpus} = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 
