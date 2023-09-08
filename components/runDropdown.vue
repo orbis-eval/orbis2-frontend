@@ -108,7 +108,6 @@ const emit = defineEmits(['runChanged']);
 
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const runStore = useRunStore();
-await runStore.loadRuns(props.corpus._id, $orbisApiService);
 const {selectedRun} = storeToRefs(runStore);
 const {runs} = storeToRefs(runStore)
 
