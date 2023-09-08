@@ -17,14 +17,12 @@ export class ApiUtils {
                     try {
                         if (event.target) {
                             const content = event.target.result;
-                            if (typeof content === "string") {
-                                if (content !== "") {
-                                    let doc = new Document(JSON.parse(content));
-                                    doc.done = false;
-                                    doc.metadata = [];
-                                    doc.run_id = 0;
-                                    docs.push(doc);
-                                }
+                            if (typeof content === "string" && content !== "") {
+                                let doc = new Document(JSON.parse(content));
+                                doc.done = false;
+                                doc.metadata = [];
+                                doc.run_id = 0;
+                                docs.push(doc);
                             }
                         }
                         resolve();
