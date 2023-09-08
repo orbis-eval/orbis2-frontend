@@ -42,7 +42,7 @@ addIcons(MdDeleteforeverOutlined, CoPencil);
 const emit = defineEmits(['editRun', 'removeRun', 'createRun', 'closeModal']);
 
 const runStore = useRunStore();
-const {runs} = storeToRefs(runStore)
+const {runs} = storeToRefs(runStore);
 
 
 </script>

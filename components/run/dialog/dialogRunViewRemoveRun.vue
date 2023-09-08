@@ -33,7 +33,7 @@ async function deletionConfirmed() {
   try {
     loading.value = true;
     await runStore.removeRun(props.runToDelete, $orbisApiService);
-    emit('deleted')
+    emit('deleted');
   } catch (error) {
     // @Todo: Show error message to user
     console.error(error);
@@ -41,6 +41,4 @@ async function deletionConfirmed() {
     loading.value = false;
   }
 }
-
-
 </script>

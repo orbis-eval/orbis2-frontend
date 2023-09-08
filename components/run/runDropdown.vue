@@ -35,8 +35,7 @@ const emit = defineEmits(['runChanged']);
 
 const runStore = useRunStore();
 const {selectedRun} = storeToRefs(runStore);
-const {runs} = storeToRefs(runStore)
-
+const {runs} = storeToRefs(runStore);
 
 const runsModal = ref(null);
 
