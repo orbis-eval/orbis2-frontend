@@ -19,9 +19,9 @@
 import {addIcons} from "oh-vue-icons";
 import {MdDeleteforeverOutlined, BiPlus} from "oh-vue-icons/icons";
 import {useCorpusStore} from "~/stores/corpusStore";
-import CorpusList from "~/components/home/corpusList.vue";
-import DialogCreateCorpus from "~/components/home/dialog/dialogCreateCorpus.vue";
-import DialogDeleteCorpus from "~/components/home/dialog/dialogDeleteCorpus.vue";
+import CorpusList from "~/components/corpus/corpusList.vue";
+import DialogCreateCorpus from "~/components/corpus/dialog/dialogCreateCorpus.vue";
+import DialogDeleteCorpus from "~/components/corpus/dialog/dialogDeleteCorpus.vue";
 import {Corpus} from "~/lib/model/corpus";
 
 addIcons(MdDeleteforeverOutlined, BiPlus);
