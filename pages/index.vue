@@ -35,10 +35,10 @@ const deleteCorpusDialog = ref(null);
 onMounted(async () => {
   // reset store of current corpus
   await loadCorpora();
-})
+});
 
 async function loadCorpora() {
-  loading.value = true
+  loading.value = true;
   try {
     await corpusStore.loadCorpora($orbisApiService);
     // TODO, 06.01.2023 anf: correct error handling
