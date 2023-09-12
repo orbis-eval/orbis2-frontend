@@ -18,9 +18,7 @@ import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
 
 const emit = defineEmits(['deletionDeclined', 'deleted']);
-const props = defineProps<{
-  runToDelete: Run
-}>()
+const props = defineProps({runToDelete: Run});
 
 const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
