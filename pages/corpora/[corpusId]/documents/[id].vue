@@ -27,7 +27,7 @@
             <!-- context modal gui for selecting the type -->
             <AnnotationModal
                 ref="annotationTypeModal"
-                :annotation-types="annotationTypes"
+                :annotation-types="selectedRun.corpus.supported_annotation_types"
                 :is-visible="showAnnotationModal"
                 :left-position="mousePosX"
                 :selectionSurfaceForm="selectionSurfaceForm"
@@ -143,6 +143,7 @@ import {storeToRefs} from "pinia";
 import {useRunStore} from "~/stores/runStore";
 import {useDocumentStore} from "~/stores/documentStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
+import {useCorpusStore} from "~/stores/corpusStore";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone, MdDeleteforeverOutlined);
 
@@ -161,7 +162,7 @@ const showAnnotationModal = ref(false);
 const recentlyStoredAnnotationId = ref(null);
 const errorNodes = ref([]);
 // const nestedSetRootNode = ref(null);
-const documentRuns = ref([] as Run[]);
+// const documentRuns = ref([] as Run[]);
 const documentStore = useDocumentStore();
 const {currentDocument, nrOfDocuments} = storeToRefs(documentStore);
 const runStore = useRunStore();
@@ -174,7 +175,7 @@ const {currentColorPalette} = storeToRefs(colorPalettesStore);
 const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
-const annotationTypes = ref([]);
+// const annotationTypes = ref([]);
 // const documentsCount = ref(null);
 // const currentColorPalette = ref(null);
 const highlightedNestedSetNodeId = ref(null);
