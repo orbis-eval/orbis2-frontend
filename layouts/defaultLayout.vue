@@ -19,7 +19,7 @@
       <main class="p-4 overflow-auto grow">
         <slot/>
       </main>
-      <aside class="p-4 overflow-auto">
+      <aside class="overflow-auto">
         <!-- Sidebar -->
         <slot name="sidebar"/>
       </aside>
