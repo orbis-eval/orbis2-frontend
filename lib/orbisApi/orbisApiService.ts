@@ -43,7 +43,7 @@ export class OrbisApiService {
         return Parser.parse(Number, this.apiGet(`getNofDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`));
     }
 
-    async getDocument(documentId: string): Promise<Document | Error> {
+    async getDocument(documentId: number): Promise<Document | Error> {
         return Parser.parse(Document,
             this.apiGet(`getDocument?document_id=${documentId}`));
     }
