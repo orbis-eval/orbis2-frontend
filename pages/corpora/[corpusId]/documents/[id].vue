@@ -128,7 +128,6 @@ import {
   MdNavigatenextTwotone,
   MdDeleteforeverOutlined
 } from "oh-vue-icons/icons";
-import {Document} from "~/lib/model/document";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
@@ -138,18 +137,15 @@ import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
-import {ApiUtils} from "~/lib/utils/apiUtils";
 import {storeToRefs} from "pinia";
 import {useRunStore} from "~/stores/runStore";
 import {useDocumentStore} from "~/stores/documentStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
-import {useCorpusStore} from "~/stores/corpusStore";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone, MdDeleteforeverOutlined);
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
-const router = useRouter();
 
 // const currentDocument = ref(null);
 const loading = ref(true);
@@ -339,20 +335,19 @@ function redoAnnotation() {
   }
 }
 
-function nextDocument() {
-  $orbisApiService.nextDocument(selectedRun.value._id, currentDocument.value._id).then(document => {
-    navigateToDocument(document);
-  });
+async function nextDocument() {
+  await documentStore.nextDocument(selectedRun.value._id, $orbisApiService);
+  await reloadAnnotations();
 }
 
-function previousDocument() {
-  $orbisApiService.previousDocument(selectedRun.value._id, currentDocument.value._id).then(document => {
-    navigateToDocument(document);
-  });
+async function previousDocument() {
+  await documentStore.previousDocument(selectedRun.value._id, $orbisApiService);
+  await reloadAnnotations();
 }
 
-function navigateToDocument(document: Document) {
-  router.push({path: `/corpora/${route.params.corpusId}/documents/${document._id}`});
+async function reloadAnnotations() {
+  annotationStore.resetAnnotationStack();
+  await annotationStore.loadAnnotations($orbisApiService);
 }
 
 /**

@@ -47,6 +47,29 @@ export const useDocumentStore = defineStore('document', () => {
         }
     }
 
+    async function nextDocument(runId: number, orbisApiService: OrbisApiService) {
+        let document = await orbisApiService.nextDocument(runId, currentDocument.value._id);
+        if (document instanceof Document) {
+            currentDocument.value = document;
+        } else {
+            console.error(document.errorMessage);
+            // TODO, 06.01.2023 anf: correct error handling
+            currentDocument.value.content = 'ERROR';
+        }
+    }
+
+    async function previousDocument(runId: number, orbisApiService: OrbisApiService) {
+        let document = await orbisApiService.nextDocument(runId, currentDocument.value._id);
+        if (document instanceof Document) {
+            currentDocument.value = document;
+        } else {
+            console.error(document.errorMessage);
+            // TODO, 06.01.2023 anf: correct error handling
+            currentDocument.value.content = 'ERROR';
+        }
+    }
+
+
     async function countDocuments(runId: number, orbisApiService: OrbisApiService) {
         try {
             const response = await orbisApiService.countDocuments(runId);
@@ -58,6 +81,6 @@ export const useDocumentStore = defineStore('document', () => {
 
     return {
         documents, currentDocument, nrOfDocuments, totalPages, currentPage, reset, loadDocuments, loadDocument,
-        countDocuments
+        nextDocument, previousDocument, countDocuments
     };
 });
