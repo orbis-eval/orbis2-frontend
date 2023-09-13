@@ -1,117 +1,120 @@
 <template>
   <NuxtLayout name="default-layout">
-    <template #leftMenu>
-      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"
-                @onDocumentsClicked="() => router.go(-1)"/>
-    </template>
-    <LoadingSpinner v-if="!currentDocument"/>
+    <!--    <template #leftMenu>-->
+    <!--      <LeftMenu :runs="documentRuns" :selected="selectedRun" @selectionChanged="selectedRunChanged"-->
+    <!--                @onDocumentsClicked="() => router.go(-1)"/>-->
+    <!--    </template>-->
+    <LoadingSpinner v-if="loading"/>
+    <div v-else class="mt-20">
+      <!-- previous / next document buttons -->
+      <div v-if="selectedRun && currentDocument" class="p-4">
+        Document: {{ currentDocument._id }}
+        <button class="small-button" @click="previousDocument">
+          <OhVueIcon name="md-navigatebefore-twotone"/>
+          previous
+        </button>
+        |
+        <button class="small-button" @click="nextDocument">
+          next
+          <OhVueIcon name="md-navigatenext-twotone"/>
+        </button>
+        Total Documents in Run: {{ documentsCount }}
+      </div>
 
-    <!-- previous / next document buttons -->
-    <div class="p-4" v-if="selectedRun && currentDocument">
-      Document: {{ currentDocument._id }}
-      <button @click="previousDocument" class="small-button">
-        <OhVueIcon name="md-navigatebefore-twotone"/>
-        previous
-      </button>
-      |
-      <button @click="nextDocument" class="small-button">
-        next
-        <OhVueIcon name="md-navigatenext-twotone"/>
-      </button>
-      Total Documents in Run: {{ documentsCount }}
-    </div>
+      <div v-if="nestedSetRootNode">
+        <div ref="relativeDiv" class="relative">
+          <div class="rounded-lg border border-gray-600 p-6">
+            <!-- context modal gui for selecting the type -->
+            <AnnotationModal
+                ref="annotationTypeModal"
+                :annotation-types="annotationTypes"
+                :is-visible="showAnnotationModal"
+                :left-position="mousePosX"
+                :selectionSurfaceForm="selectionSurfaceForm"
+                :top-position="mousePosY"
+                @commitAnnotationType="commitAnnotationType"
+                @hideAnnotationModal="hideAnnotationModal"/>
 
-    <div
-        v-if="nestedSetRootNode">
-      <div class="relative" ref="relativeDiv">
-        <div class="rounded-lg border border-gray-600 p-6">
-          <!-- context modal gui for selecting the type -->
-          <AnnotationModal
-              ref="annotationTypeModal"
-              :left-position="mousePosX"
-              :top-position="mousePosY"
-              :is-visible="showAnnotationModal"
-              :annotation-types="annotationTypes"
-              :selectionSurfaceForm="selectionSurfaceForm"
-              @hideAnnotationModal="hideAnnotationModal"
-              @commitAnnotationType="commitAnnotationType"/>
-
-          <AnnotationNode :nestedSetNode="nestedSetRootNode"
-                          :colorPalette="currentColorPalette"
-                          :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-                          @updateAnnotations="updateAnnotations"
-                          @deleteAnnotation="deleteAnnotation"/>
+            <AnnotationNode :colorPalette="currentColorPalette"
+                            :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
+                            :nestedSetNode="nestedSetRootNode"
+                            @deleteAnnotation="deleteAnnotation"
+                            @updateAnnotations="updateAnnotations"/>
+          </div>
         </div>
       </div>
-    </div>
-    <div v-else-if="errorNodes.length > 0">
-      <h2 class="text-4xl">Tree could not be rendered</h2>
-      Annotations that possibly are overlapping:
-      <ul>
-        <li v-for="node in errorNodes">
-          {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{ node.end_indices[0] }})
-        </li>
-      </ul>
-    </div>
-    <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
-      <Warning title="Please select a run."
-               message="No run or default run is selected, in both cases annotation is not possible"
-               confirm-text="ok" declineText="cancel"
-               @confirm="wrongRunSelectedEnabled = false"
-               @decline="wrongRunSelectedEnabled = false"/>
+      <div v-else-if="errorNodes.length > 0">
+        <h2 class="text-4xl">Tree could not be rendered</h2>
+        Annotations that possibly are overlapping:
+        <ul>
+          <li v-for="node in errorNodes">
+            {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{ node.end_indices[0] }})
+          </li>
+        </ul>
+      </div>
+      <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
+        <Warning confirm-text="ok"
+                 declineText="cancel"
+                 message="No run or default run is selected, in both cases annotation is not possible" title="Please select a run."
+                 @confirm="wrongRunSelectedEnabled = false"
+                 @decline="wrongRunSelectedEnabled = false"/>
+      </div>
     </div>
     <template #sidebar>
-      <div>
-        <button @click="undoAnnotation" class="small-button">
-          <OhVueIcon name="la-undo-alt-solid"/>
-        </button>
-        <button @click="redoAnnotation" class="small-button">
-          <OhVueIcon name="la-redo-alt-solid"/>
-        </button>
-      </div>
-      <div>
-        {{ recentlyStoredAnnotationId }}
-      </div>
-      <div v-if="nestedSetRootNode">
-        <h2 class="text-4xl p-2">Annotations</h2>
-        <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
-          <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
-          <tr>
-            <th class="p-2"></th>
-            <th class="p-2">start</th>
-            <th class="p-2">end</th>
-            <th class="p-2">surface</th>
-            <th class="p-2">type</th>
-            <th class="p-2"></th>
-          </tr>
-          </thead>
-          <tbody>
-          <tr v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
-              class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700 hover:underline"
-              @mouseover="highlightNestedSetNode(nestedSetNode._id)"
-              @mouseleave="unsetHighlightedNestedSetNodeId()"
-              @mouseout="unsetHighlightedNestedSetNodeId()"
-
-          >
-            <td class="p-2">
-              <div class="rounded-lg w-10 h-10"
-                   :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"></div>
-            </td>
-            <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>
-            <td class="p-2">{{ nestedSetNode.end_indices[0] }}</td>
-            <td class="p-2">{{ nestedSetNode.surface_forms[0] }}</td>
-            <td class="p-2">{{ nestedSetNode.annotation_type.name }}</td>
-            <td class="p-2">
-              <button @click="deleteAnnotation(nestedSetNode)" class="small-button">
-                Delete
-                <OhVueIcon name="md-Deleteforever-outlined"/>
-              </button>
-            </td>
-          </tr>
-          </tbody>
-        </table>
+      <div v-if="!loading">
+        <div class="mt-20">
+          <button class="small-button" @click="undoAnnotation">
+            <OhVueIcon name="la-undo-alt-solid"/>
+          </button>
+          <button class="small-button" @click="redoAnnotation">
+            <OhVueIcon name="la-redo-alt-solid"/>
+          </button>
+        </div>
+        <div>
+          {{ recentlyStoredAnnotationId }}
+        </div>
+        <div v-if="nestedSetRootNode">
+          <h2 class="text-4xl p-2">Annotations</h2>
+          <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
+            <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
+            <tr>
+              <th class="p-2"></th>
+              <th class="p-2">start</th>
+              <th class="p-2">end</th>
+              <th class="p-2">surface</th>
+              <th class="p-2">type</th>
+              <th class="p-2"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
+                class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700 hover:underline"
+                @mouseleave="unsetHighlightedNestedSetNodeId()"
+                @mouseout="unsetHighlightedNestedSetNodeId()"
+                @mouseover="highlightNestedSetNode(nestedSetNode._id)">
+              <td class="p-2">
+                <div :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"
+                     class="rounded-lg w-10 h-10"></div>
+              </td>
+              <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>
+              <td class="p-2">{{ nestedSetNode.end_indices[0] }}</td>
+              <td class="p-2">{{ nestedSetNode.surface_forms[0] }}</td>
+              <td class="p-2">{{ nestedSetNode.annotation_type.name }}</td>
+              <td class="p-2">
+                <button class="small-button" @click="deleteAnnotation(nestedSetNode)">
+                  Delete
+                  <OhVueIcon name="md-Deleteforever-outlined"/>
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
     </template>
+    <!--    <template #sidebar>-->
+    <!--      <DocumentSidebar></DocumentSidebar>-->
+    <!--    </template>-->
   </NuxtLayout>
 </template>
 
@@ -136,6 +139,10 @@ import {Run} from "~/lib/model/run";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {ApiUtils} from "~/lib/utils/apiUtils";
+import {storeToRefs} from "pinia";
+import {useRunStore} from "~/stores/runStore";
+import {useDocumentStore} from "~/stores/documentStore";
+import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebeforeTwotone, MdDeleteforeverOutlined);
 
@@ -143,7 +150,8 @@ const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 const router = useRouter();
 
-const currentDocument = ref(null);
+// const currentDocument = ref(null);
+const loading = ref(true);
 const selection = ref(null);
 const selectionSurfaceForm = ref('');
 const relativeDiv = ref(null);
@@ -152,20 +160,53 @@ const mousePosY = ref(0);
 const showAnnotationModal = ref(false);
 const recentlyStoredAnnotationId = ref(null);
 const errorNodes = ref([]);
-const nestedSetRootNode = ref(null);
-const documentRuns = ref([] as Run[])
+// const nestedSetRootNode = ref(null);
+const documentRuns = ref([] as Run[]);
+const documentStore = useDocumentStore();
+const currentDocument = storeToRefs(documentStore);
+const runStore = useRunStore();
+const {selectedRun} = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
-// const selectedRun = ref(annotationStore.selectedRun);
-// https://pinia.vuejs.org/core-concepts/#destructuring-from-a-store
-const {selectedRun} = storeToRefs(annotationStore) // Use this instead to access the state variables
+const {nestedSetRootNode} = storeToRefs(annotationStore);
+const colorPalettesStore = useColorPalettesStore();
+const {currentColorPalette} = storeToRefs(colorPalettesStore);
+
 const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
 const annotationTypes = ref([]);
 const documentsCount = ref(null);
-const colorPalettes = ref([]);
-const currentColorPalette = ref(null);
+// const currentColorPalette = ref(null);
 const highlightedNestedSetNodeId = ref(null);
+
+onBeforeMount(() => {
+  window.addEventListener('keydown', undoEventListener);
+  // loadDocument();
+  // loadRuns();
+  // loadColorPalettes();
+});
+
+onMounted(async () => {
+  window.addEventListener('click', clickOutsideListener);
+  loading.value = true;
+  try {
+    await runStore.loadRuns(route.params.corpusId, $orbisApiService);
+    await documentStore.loadDocument(route.params.id, $orbisApiService);
+    await colorPalettesStore.loadColorPalettes($orbisApiService);
+
+    await annotationStore.loadAnnotations($orbisApiService);
+  } catch (Error) {
+    // Todo: Error Message for user
+  } finally {
+    loading.value = false;
+  }
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', undoEventListener);
+  window.removeEventListener('click', clickOutsideListener);
+  annotationStore.resetAnnotationStack();
+});
 
 // TODO: use the annotator loaded from the backend
 let annotator: Annotator = new Annotator({
@@ -194,25 +235,7 @@ const clickOutsideListener = (event) => {
       showAnnotationModal.value = false;
     }
   }
-}
-
-onBeforeMount(() => {
-  window.addEventListener('keydown', undoEventListener);
-  loadDocument();
-  loadRuns();
-  loadColorPalettes();
-});
-
-onMounted(() => {
-  window.addEventListener('click', clickOutsideListener);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown', undoEventListener);
-  window.removeEventListener('click', clickOutsideListener);
-  annotationStore.resetAnnotationStack();
-});
-
+};
 
 function highlightNestedSetNode(id: number) {
   highlightedNestedSetNodeId.value = id;
@@ -222,51 +245,51 @@ function unsetHighlightedNestedSetNodeId() {
   highlightedNestedSetNodeId.value = null;
 }
 
-function loadDocument() {
-  $orbisApiService.getDocument(route.params.id)
-      .then(document => {
-        if (document instanceof Document) {
-          currentDocument.value = document;
-          reload([]);
-        } else {
-          console.error(document.errorMessage);
-          // TODO, 06.01.2023 anf: correct error handling
-          currentDocument.value.content = 'ERROR';
-        }
-      });
-}
+// function loadDocument() {
+//   $orbisApiService.getDocument(route.params.id)
+//       .then(document => {
+//         if (document instanceof Document) {
+//           currentDocument.value = document;
+//           reload([]);
+//         } else {
+//           console.error(document.errorMessage);
+//           // TODO, 06.01.2023 anf: correct error handling
+//           currentDocument.value.content = 'ERROR';
+//         }
+//       });
+// }
 
-function loadRuns() {
-  ApiUtils.getRuns(route.params.corpusId, documentRuns, $orbisApiService);
-}
+// function loadRuns() {
+//   ApiUtils.getRuns(route.params.corpusId, documentRuns, $orbisApiService);
+// }
 
-function loadColorPalettes() {
-  $orbisApiService.colorPalettes().then(loadedColorPalettes => {
-    console.log(JSON.stringify(loadedColorPalettes));
-    colorPalettes.value = loadedColorPalettes;
-    // TODO: make selectable in GUI
-    currentColorPalette.value = colorPalettes.value[0];
-  })
-}
+// function loadColorPalettes() {
+//   $orbisApiService.colorPalettes().then(loadedColorPalettes => {
+//     console.log(JSON.stringify(loadedColorPalettes));
+//     colorPalettes.value = loadedColorPalettes;
+//     // TODO: make selectable in GUI
+//     currentColorPalette.value = colorPalettes.value[0];
+//   })
+// }
 
-function reload(annotations: Annotation[]) {
-  // assign the color-id value based on the supported_annotation_types to every annotation
-  annotations = annotations.map(annotation => {
-    annotation.annotation_type.color_id =
-        annotationTypes.value.find(annotationType => annotationType.name === annotation.annotation_type.name)
-            .color_id;
-    return annotation;
-  });
-  // calculate the root-node
-  nestedSetRootNode.value = NestedSet.toTree(
-      annotations,
-      currentDocument.value.content,
-      selectedRun.value,
-      1,
-      new Date(),
-      parseErrorCallBack
-  );
-}
+// function reload(annotations: Annotation[]) {
+//   // assign the color-id value based on the supported_annotation_types to every annotation
+//   annotations = annotations.map(annotation => {
+//     annotation.annotation_type.color_id =
+//         annotationTypes.value.find(annotationType => annotationType.name === annotation.annotation_type.name)
+//             .color_id;
+//     return annotation;
+//   });
+//   // calculate the root-node
+//   nestedSetRootNode.value = NestedSet.toTree(
+//       annotations,
+//       currentDocument.value.content,
+//       selectedRun.value,
+//       1,
+//       new Date(),
+//       parseErrorCallBack
+//   );
+// }
 
 function undoAnnotation() {
   removeAnnotation(annotationStore.undoAnnotation());
@@ -361,32 +384,32 @@ function createNestedSetNode(
  * and re-render the tree with those
  * @param run the run that was selected
  */
-function selectedRunChanged(run: any) {
-  if (run && run._id) {
-
-    annotationStore.changeSelectedRun(run);
-    annotationTypes.value = run.corpus.supported_annotation_types;
-    selectedRun.value = run;
-
-    // load the annotations
-    $orbisApiService.getAnnotations(run._id, route.params.id)
-        .then(annotationsFromDb => {
-          if (Array.isArray(annotationsFromDb)) {
-            console.log(`annotations loaded from db: ${JSON.stringify(annotationsFromDb)}`);
-            // reload the annotations
-            reload(annotationsFromDb);
-          } else {
-            console.error(annotationsFromDb.errorMessage);
-          }
-        });
-
-    // load the total documents count for given run
-    $orbisApiService.countDocuments(run._id).then(documentCount => {
-          documentsCount.value = documentCount;
-        }
-    );
-  }
-}
+// function selectedRunChanged(run: any) {
+//   if (run && run._id) {
+//
+//     annotationStore.changeSelectedRun(run);
+//     annotationTypes.value = run.corpus.supported_annotation_types;
+//     selectedRun.value = run;
+//
+//     // load the annotations
+//     $orbisApiService.getAnnotations(run._id, route.params.id)
+//         .then(annotationsFromDb => {
+//           if (Array.isArray(annotationsFromDb)) {
+//             console.log(`annotations loaded from db: ${JSON.stringify(annotationsFromDb)}`);
+//             // reload the annotations
+//             reload(annotationsFromDb);
+//           } else {
+//             console.error(annotationsFromDb.errorMessage);
+//           }
+//         });
+//
+//     // load the total documents count for given run
+//     $orbisApiService.countDocuments(run._id).then(documentCount => {
+//           documentsCount.value = documentCount;
+//         }
+//     );
+//   }
+// }
 
 function hideAnnotationModal() {
   showAnnotationModal.value = false;
