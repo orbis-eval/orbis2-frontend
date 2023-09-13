@@ -49,7 +49,7 @@ function filterAnnotationTypes() {
   return props.annotationTypes
       .filter(annotationType => annotationType.name.toLowerCase()
           .includes(filterValue.value.toLowerCase()));
-};
+}
 
 
 // prevent keydown/keyup to trigger the scrolling
@@ -59,7 +59,7 @@ function arrow_keys_handler(e) {
     case "Space": e.preventDefault(); break;
     default: break; // do not block other keys
   }
-};
+}
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDown);
@@ -72,7 +72,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", handleKeyDown, false);
   window.removeEventListener("keydown", arrow_keys_handler, false);
-})
+});
 
 function handleKeyDown(event) {
   if (event.code === "ArrowUp") {
