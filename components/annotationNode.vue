@@ -63,10 +63,6 @@ const props = defineProps({
   }
 });
 
-onMounted(async () => {
-  console.log(props.colorPalette);
-});
-
 const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);
 
 function deleteAnnotation(nestedSetNode: NestedSetNode) {
