@@ -27,11 +27,11 @@
             <!-- context modal gui for selecting the type -->
             <AnnotationModal
                 ref="annotationTypeModal"
-                :annotation-types="selectedRun.corpus.supported_annotation_types"
-                :is-visible="showAnnotationModal"
-                :left-position="mousePosX"
+                :annotationTypes="selectedRun.corpus.supported_annotation_types"
+                :isVisible="showAnnotationModal"
+                :leftPosition="mousePosX"
                 :selectionSurfaceForm="selectionSurfaceForm"
-                :top-position="mousePosY"
+                :topPosition="mousePosY"
                 @commitAnnotationType="commitAnnotationType"
                 @hideAnnotationModal="hideAnnotationModal"/>
 
@@ -53,7 +53,7 @@
         </ul>
       </div>
       <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
-        <Warning confirm-text="ok"
+        <Warning confirmText="ok"
                  declineText="cancel"
                  message="No run or default run is selected, in both cases annotation is not possible" title="Please select a run."
                  @confirm="wrongRunSelectedEnabled = false"
