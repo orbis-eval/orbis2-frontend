@@ -1,16 +1,62 @@
-import { defineStore } from "pinia";
-import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
-import { Run } from "~/lib/model/run";
-import { ref } from 'vue';
+import {defineStore} from "pinia";
+import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
+import {Run} from "~/lib/model/run";
+import {useRunStore} from "~/stores/runStore";
+import {useDocumentStore} from "~/stores/documentStore";
+import {ref} from 'vue';
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {NestedSet} from "~/lib/model/nestedset/nestedSet";
+import {Error} from "~/lib/model/error";
 
 export const useAnnotationStore = defineStore('annotation', () => {
+    const run = useRunStore();
+    const documents = useDocumentStore();
     const annotations = ref([] as NestedSetNode[]);
     const undoneAnnotations = ref([] as NestedSetNode[]);
-    const selectedRun = ref({} as Run);
+    const nestedSetRootNode = ref({} as NestedSetNode);
 
     function reset() {
         annotations.value = [];
         undoneAnnotations.value = [];
+    }
+
+    async function loadAnnotations(orbisApiService: OrbisApiService) {
+        try {
+            let annotationsFromDb = await orbisApiService.getAnnotations(run.selectedRun._id,
+                documents.currentDocument._id);
+            if (Array.isArray(annotationsFromDb)) {
+                console.log(`annotations loaded from db: ${JSON.stringify(annotationsFromDb)}`);
+                // reload the annotations
+                // reload(annotationsFromDb);
+                annotationsFromDb = annotationsFromDb.map(annotation => {
+                    annotation.annotation_type.color_id =
+                        run.selectedRun.corpus.supported_annotation_types.find(annotationType => annotationType.name === annotation.annotation_type.name)
+                            .color_id;
+                    return annotation;
+                });
+                annotations.value = annotationsFromDb;
+                console.log(annotations.value);
+
+
+                nestedSetRootNode.value = NestedSet.toTree(
+                    annotationsFromDb,
+                    documents.currentDocument.content,
+                    run.selectedRun,
+                    1,
+                    new Date(),
+                    parseErrorCallBack
+                );
+                console.log(nestedSetRootNode.value);
+            } else {
+                console.error(annotationsFromDb.errorMessage);
+            }
+        } catch (error) {
+            return new Error("An error occurred while loading annotations");
+        }
+    }
+
+    function parseErrorCallBack() {
+        //TODO: Only placeholder for the moment
     }
 
     function addAnnotation(annotation: NestedSetNode) {
@@ -46,5 +92,8 @@ export const useAnnotationStore = defineStore('annotation', () => {
     }
 
 
-    return { annotations, undoneAnnotations, selectedRun, addAnnotation, popAnnotation, undoAnnotation, redoAnnotation, resetAnnotationStack: reset };
+    return {
+        annotations, undoneAnnotations, nestedSetRootNode, loadAnnotations, addAnnotation, popAnnotation, undoAnnotation,
+        redoAnnotation, resetAnnotationStack: reset
+    };
 });
