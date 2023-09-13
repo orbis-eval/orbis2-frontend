@@ -18,7 +18,7 @@
           next
           <OhVueIcon name="md-navigatenext-twotone"/>
         </button>
-        Total Documents in Run: {{ documentsCount }}
+        Total Documents in Run: {{ nrOfDocuments }}
       </div>
 
       <div v-if="nestedSetRootNode">
@@ -163,7 +163,7 @@ const errorNodes = ref([]);
 // const nestedSetRootNode = ref(null);
 const documentRuns = ref([] as Run[]);
 const documentStore = useDocumentStore();
-const currentDocument = storeToRefs(documentStore);
+const {currentDocument, nrOfDocuments} = storeToRefs(documentStore);
 const runStore = useRunStore();
 const {selectedRun} = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
@@ -175,7 +175,7 @@ const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
 const annotationTypes = ref([]);
-const documentsCount = ref(null);
+// const documentsCount = ref(null);
 // const currentColorPalette = ref(null);
 const highlightedNestedSetNodeId = ref(null);
 
@@ -192,8 +192,8 @@ onMounted(async () => {
   try {
     await runStore.loadRuns(route.params.corpusId, $orbisApiService);
     await documentStore.loadDocument(route.params.id, $orbisApiService);
+    await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
     await colorPalettesStore.loadColorPalettes($orbisApiService);
-
     await annotationStore.loadAnnotations($orbisApiService);
   } catch (Error) {
     // Todo: Error Message for user
