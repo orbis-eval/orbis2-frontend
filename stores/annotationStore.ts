@@ -1,6 +1,5 @@
 import {defineStore} from "pinia";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-import {Run} from "~/lib/model/run";
 import {useRunStore} from "~/stores/runStore";
 import {useDocumentStore} from "~/stores/documentStore";
 import {ref} from 'vue';
@@ -25,9 +24,6 @@ export const useAnnotationStore = defineStore('annotation', () => {
             let annotationsFromDb = await orbisApiService.getAnnotations(run.selectedRun._id,
                 documents.currentDocument._id);
             if (Array.isArray(annotationsFromDb)) {
-                console.log(`annotations loaded from db: ${JSON.stringify(annotationsFromDb)}`);
-                // reload the annotations
-                // reload(annotationsFromDb);
                 annotationsFromDb = annotationsFromDb.map(annotation => {
                     annotation.annotation_type.color_id =
                         run.selectedRun.corpus.supported_annotation_types.find(annotationType => annotationType.name === annotation.annotation_type.name)
@@ -35,8 +31,6 @@ export const useAnnotationStore = defineStore('annotation', () => {
                     return annotation;
                 });
                 annotations.value = annotationsFromDb;
-                console.log(annotations.value);
-
 
                 nestedSetRootNode.value = NestedSet.toTree(
                     annotationsFromDb,
@@ -46,7 +40,6 @@ export const useAnnotationStore = defineStore('annotation', () => {
                     new Date(),
                     parseErrorCallBack
                 );
-                console.log(nestedSetRootNode.value);
             } else {
                 console.error(annotationsFromDb.errorMessage);
             }
