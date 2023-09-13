@@ -6,30 +6,32 @@
     <AnnotationNode
         v-for="nestedSetChildNode in nestedSetNode.children"
         :nestedSetNode="nestedSetChildNode"
-        :colorPalette = "colorPalette"
-        :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
-        :visibilityMap = "visibilityMap"
+        :colorPalette="colorPalette"
+        :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
+        :visibilityMap="visibilityMap"
         @updateAnnotations="updateAnnotations"
         @deleteAnnotation="deleteAnnotation"
     />
   </div>
   <span v-else-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME"
         v-on:mouseup="onMouseUp"
-        class="p-1">
+        class="pt-1 pb-1 text-lg tracking-wider">
       {{ nestedSetNode.surface_forms[0] }}
     </span>
-  <span v-else-if="nestedSetNode.parent" v-bind:class="(visibilityMap && visibilityMap[nestedSetNode._id] !== true) ? 'annotation': ''"
+  <span v-else-if="nestedSetNode.parent"
+        :class="{ 'bg-neutral-400 text-white rounded-t': nestedSetNode._id === highlightedNestedSetNodeId ,}"
         :style="{borderColor: '#' + colorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id) }"
-        :class="{ 'bg-neutral-400 text-white rounded': nestedSetNode._id === highlightedNestedSetNodeId }">
+        class="border-solid border-b-4 pt-1 text-lg tracking-wider"
+        v-bind:class="(visibilityMap && visibilityMap[nestedSetNode._id] !== true) ? 'annotation': ''">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
-          :colorPalette = "colorPalette"
-          :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
-          :visibilityMap = "visibilityMap"
+          :colorPalette="colorPalette"
+          :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
+          :visibilityMap="visibilityMap"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -38,9 +40,9 @@
       <AnnotationNode
           v-for="nestedSetChildNode in nestedSetNode.children"
           :nestedSetNode="nestedSetChildNode"
-          :colorPalette = "colorPalette"
-          :highlightedNestedSetNodeId = "highlightedNestedSetNodeId"
-          :visibilityMap = "visibilityMap"
+          :colorPalette="colorPalette"
+          :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
+          :visibilityMap="visibilityMap"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -61,13 +63,17 @@ const props = defineProps({
   }
 });
 
+onMounted(async () => {
+  console.log(props.colorPalette);
+});
+
 const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);
 
 function deleteAnnotation(nestedSetNode: NestedSetNode) {
   emit('deleteAnnotation', nestedSetNode);
 }
 
-function onMouseUp()  {
+function onMouseUp() {
   // get the selection from the window
   const selection = window.getSelection();
 
@@ -92,14 +98,14 @@ function onMouseUp()  {
       let selectionStartIndex = range.startOffset + props.nestedSetNode.start_indices[0];
       let selectionEndIndex = range.endOffset + props.nestedSetNode.start_indices[0];
       emit('updateAnnotations', {
-        start: selectionStartIndex,
-        end: selectionEndIndex,
-        word: word,
-        left: left,
-        top: top,
-        selectionElement: selection.anchorNode.parentElement // the element where the selection was done
-      },
-      props.nestedSetNode);
+            start: selectionStartIndex,
+            end: selectionEndIndex,
+            word: word,
+            left: left,
+            top: top,
+            selectionElement: selection.anchorNode.parentElement // the element where the selection was done
+          },
+          props.nestedSetNode);
     }
   }
 }
