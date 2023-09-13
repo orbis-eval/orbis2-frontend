@@ -103,7 +103,7 @@
               <td class="p-2">
                 <button class="small-button" @click="deleteAnnotation(nestedSetNode)">
                   Delete
-                  <OhVueIcon name="md-Deleteforever-outlined"/>
+                  <OhVueIcon name="md-deleteforever-outlined"/>
                 </button>
               </td>
             </tr>
