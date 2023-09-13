@@ -1,11 +1,12 @@
-import { defineStore } from "pinia";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
-import { Document } from "~/lib/model/document";
-import { Error } from "~/lib/model/error";
-import { ref } from 'vue';
+import {defineStore} from "pinia";
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {Document} from "~/lib/model/document";
+import {Error} from "~/lib/model/error";
+import {ref} from 'vue';
 
 export const useDocumentStore = defineStore('document', () => {
     const documents = ref([] as Document[]);
+    const currentDocument = ref({} as Document);
     const nrOfDocuments = ref(1);
     const totalPages = ref(1);
     const currentPage = ref(1);
@@ -31,6 +32,21 @@ export const useDocumentStore = defineStore('document', () => {
         }
     }
 
+    async function loadDocument(documentId: number, orbisApiService: OrbisApiService) {
+        try {
+            const document = await orbisApiService.getDocument(documentId);
+            if (document instanceof Document) {
+                currentDocument.value = document;
+            } else {
+                console.error(document.errorMessage);
+                // TODO, 06.01.2023 anf: correct error handling
+                currentDocument.value.content = 'ERROR';
+            }
+        } catch (error) {
+            return new Error("An error occurred while fetching document " + documentId);
+        }
+    }
+
     async function countDocuments(runId: number, orbisApiService: OrbisApiService) {
         try {
             const response = await orbisApiService.countDocuments(runId);
@@ -40,5 +56,8 @@ export const useDocumentStore = defineStore('document', () => {
         }
     }
 
-    return { documents, nrOfDocuments, totalPages, currentPage, reset, loadDocuments, countDocuments };
+    return {
+        documents, currentDocument, nrOfDocuments, totalPages, currentPage, reset, loadDocuments, loadDocument,
+        countDocuments
+    };
 });
