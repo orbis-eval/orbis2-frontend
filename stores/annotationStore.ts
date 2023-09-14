@@ -6,17 +6,22 @@ import {ref} from 'vue';
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Error} from "~/lib/model/error";
+import {AnnotationType} from "~/lib/model/annotationType";
+import {Annotator} from "~/lib/model/annotator";
+import {AddAnnotationCommand} from "~/lib/utils/annotation/addAnnotationCommand";
+import {CommandHistory} from "~/lib/utils/annotation/AnnotationCommandHistory";
+import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
 
 export const useAnnotationStore = defineStore('annotation', () => {
     const run = useRunStore();
     const documents = useDocumentStore();
     const annotations = ref([] as NestedSetNode[]);
-    const undoneAnnotations = ref([] as NestedSetNode[]);
     const nestedSetRootNode = ref({} as NestedSetNode);
+    const annotationHistory = new CommandHistory();
 
     function reset() {
         annotations.value = [];
-        undoneAnnotations.value = [];
+        annotationHistory.reset();
     }
 
     async function loadAnnotations(orbisApiService: OrbisApiService) {
@@ -24,16 +29,15 @@ export const useAnnotationStore = defineStore('annotation', () => {
             let annotationsFromDb = await orbisApiService.getAnnotations(run.selectedRun._id,
                 documents.currentDocument._id);
             if (Array.isArray(annotationsFromDb)) {
-                annotationsFromDb = annotationsFromDb.map(annotation => {
+                annotations.value = annotationsFromDb.map(annotation => {
                     annotation.annotation_type.color_id =
                         run.selectedRun.corpus.supported_annotation_types.find(annotationType => annotationType.name === annotation.annotation_type.name)
                             .color_id;
                     return annotation;
                 });
-                annotations.value = annotationsFromDb;
 
                 nestedSetRootNode.value = NestedSet.toTree(
-                    annotationsFromDb,
+                    annotations.value,
                     documents.currentDocument.content,
                     run.selectedRun,
                     1,
@@ -52,41 +56,30 @@ export const useAnnotationStore = defineStore('annotation', () => {
         //TODO: Only placeholder for the moment
     }
 
-    function addAnnotation(annotation: NestedSetNode) {
-        if (undoneAnnotations.value.length > 0) {
-            annotations.value = [];
-            undoneAnnotations.value = [];
-        }
-        annotations.value.push(annotation);
+    async function addAnnotation(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
+                                 annotator: Annotator, runId: number, documentId: number, selectedNode: NestedSetNode,
+                                 orbisApiService: OrbisApiService) {
+        const addCommand = new AddAnnotationCommand(surfaceForm, start, end, annotationType,
+            annotator, runId, documentId, selectedNode, orbisApiService);
+        await annotationHistory.execute(addCommand);
     }
 
-    function popAnnotation(): NestedSetNode | undefined {
-        return annotations.value.pop();
+    async function deleteAnnotation(annotation: NestedSetNode, orbisApiService: OrbisApiService) {
+        const deleteCommand = new DeleteAnnotationCommand(annotation, orbisApiService);
+        await annotationHistory.execute(deleteCommand);
     }
 
-    function undoAnnotation(): NestedSetNode | undefined {
-        if (annotations.value.length > 0) {
-            const undoneAnnotation = annotations.value.pop();
-            if (undoneAnnotation) {
-                undoneAnnotations.value.push(undoneAnnotation);
-                return undoneAnnotation;
-            }
-        }
+    async function undoAnnotation() {
+        await annotationHistory.undo();
     }
 
-    function redoAnnotation(): NestedSetNode | undefined {
-        if (undoneAnnotations.value.length > 0) {
-            const redoneAnnotation = undoneAnnotations.value.pop();
-            if (redoneAnnotation) {
-                annotations.value.push(redoneAnnotation);
-                return redoneAnnotation;
-            }
-        }
+    async function redoAnnotation() {
+        await annotationHistory.redo();
     }
 
 
     return {
-        annotations, undoneAnnotations, nestedSetRootNode, loadAnnotations, addAnnotation, popAnnotation, undoAnnotation,
+        annotations, nestedSetRootNode, loadAnnotations, addAnnotation, deleteAnnotation, undoAnnotation,
         redoAnnotation, resetAnnotationStack: reset
     };
 });

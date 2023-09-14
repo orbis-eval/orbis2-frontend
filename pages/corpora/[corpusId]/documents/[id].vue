@@ -32,7 +32,7 @@
                 :leftPosition="mousePosX"
                 :selectionSurfaceForm="selectionSurfaceForm"
                 :topPosition="mousePosY"
-                @commitAnnotationType="commitAnnotationType"
+                @commitAnnotationType="addAnnotation"
                 @hideAnnotationModal="hideAnnotationModal"/>
 
             <AnnotationNode :colorPalette="currentColorPalette"
@@ -55,7 +55,8 @@
       <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
         <Warning confirmText="ok"
                  declineText="cancel"
-                 message="No run or default run is selected, in both cases annotation is not possible" title="Please select a run."
+                 message="No run or default run is selected, in both cases annotation is not possible"
+                 title="Please select a run."
                  @confirm="wrongRunSelectedEnabled = false"
                  @decline="wrongRunSelectedEnabled = false"/>
       </div>
@@ -93,8 +94,9 @@
                 @mouseout="unsetHighlightedNestedSetNodeId()"
                 @mouseover="highlightNestedSetNode(nestedSetNode._id)">
               <td class="p-2">
-                <div :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"
-                     class="rounded-lg w-10 h-10"></div>
+                <div
+                    :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"
+                    class="rounded-lg w-10 h-10"></div>
               </td>
               <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>
               <td class="p-2">{{ nestedSetNode.end_indices[0] }}</td>
@@ -130,13 +132,9 @@ import {
 } from "oh-vue-icons/icons";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
-import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
-import {NestedSet} from "~/lib/model/nestedset/nestedSet";
-import {Annotation} from "~/lib/model/annotation";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Run} from "~/lib/model/run";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-import {Error} from "~/lib/model/error";
 import {storeToRefs} from "pinia";
 import {useRunStore} from "~/stores/runStore";
 import {useDocumentStore} from "~/stores/documentStore";
@@ -147,7 +145,6 @@ addIcons(LaUndoAltSolid, LaRedoAltSolid, MdNavigatenextTwotone, MdNavigatebefore
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
-// const currentDocument = ref(null);
 const loading = ref(true);
 const selection = ref(null);
 const selectionSurfaceForm = ref('');
@@ -157,8 +154,6 @@ const mousePosY = ref(0);
 const showAnnotationModal = ref(false);
 const recentlyStoredAnnotationId = ref(null);
 const errorNodes = ref([]);
-// const nestedSetRootNode = ref(null);
-// const documentRuns = ref([] as Run[]);
 const documentStore = useDocumentStore();
 const {currentDocument, nrOfDocuments} = storeToRefs(documentStore);
 const runStore = useRunStore();
@@ -171,16 +166,10 @@ const {currentColorPalette} = storeToRefs(colorPalettesStore);
 const annotationTypeModal = ref(null);
 const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
-// const annotationTypes = ref([]);
-// const documentsCount = ref(null);
-// const currentColorPalette = ref(null);
 const highlightedNestedSetNodeId = ref(null);
 
 onBeforeMount(() => {
   window.addEventListener('keydown', undoEventListener);
-  // loadDocument();
-  // loadRuns();
-  // loadColorPalettes();
 });
 
 onMounted(async () => {
@@ -211,10 +200,6 @@ let annotator: Annotator = new Annotator({
   roles: []
 });
 
-const parseErrorCallBack = (parseError: NestedSetParseError) => {
-  errorNodes.value = parseError.nodes;
-};
-
 const undoEventListener = (event: KeyboardEvent) => {
   if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
     redoAnnotation();
@@ -242,97 +227,16 @@ function unsetHighlightedNestedSetNodeId() {
   highlightedNestedSetNodeId.value = null;
 }
 
-// function loadDocument() {
-//   $orbisApiService.getDocument(route.params.id)
-//       .then(document => {
-//         if (document instanceof Document) {
-//           currentDocument.value = document;
-//           reload([]);
-//         } else {
-//           console.error(document.errorMessage);
-//           // TODO, 06.01.2023 anf: correct error handling
-//           currentDocument.value.content = 'ERROR';
-//         }
-//       });
-// }
-
-// function loadRuns() {
-//   ApiUtils.getRuns(route.params.corpusId, documentRuns, $orbisApiService);
-// }
-
-// function loadColorPalettes() {
-//   $orbisApiService.colorPalettes().then(loadedColorPalettes => {
-//     console.log(JSON.stringify(loadedColorPalettes));
-//     colorPalettes.value = loadedColorPalettes;
-//     // TODO: make selectable in GUI
-//     currentColorPalette.value = colorPalettes.value[0];
-//   })
-// }
-
-// function reload(annotations: Annotation[]) {
-//   // assign the color-id value based on the supported_annotation_types to every annotation
-//   annotations = annotations.map(annotation => {
-//     annotation.annotation_type.color_id =
-//         annotationTypes.value.find(annotationType => annotationType.name === annotation.annotation_type.name)
-//             .color_id;
-//     return annotation;
-//   });
-//   // calculate the root-node
-//   nestedSetRootNode.value = NestedSet.toTree(
-//       annotations,
-//       currentDocument.value.content,
-//       selectedRun.value,
-//       1,
-//       new Date(),
-//       parseErrorCallBack
-//   );
-// }
-
-function undoAnnotation() {
-  removeAnnotation(annotationStore.undoAnnotation());
+async function undoAnnotation() {
+  await annotationStore.undoAnnotation()
 }
 
-function deleteAnnotation(nestedSetNode: NestedSetNode) {
-  // TODO: implement undo functionality for deleted annotations
-  // annotationStore.addAnnotation(nestedSetNode);
-  removeAnnotation(nestedSetNode);
+async function redoAnnotation() {
+  await annotationStore.redoAnnotation();
 }
 
-function removeAnnotation(nestedSetNode: NestedSetNode) {
-  $orbisApiService.removeAnnotationFromDocument(nestedSetNode.toAnnotation())
-      .then(response => {
-        if (response instanceof Error) {
-          console.error(response.errorMessage);
-          // redo annotation since it could not be removed from the database in the backend
-          annotationStore.redoAnnotation();
-        } else {
-          // remove the annotation from the tree
-          nestedSetNode.parent.removeAnnotationNode(nestedSetNode, parseErrorCallBack);
-        }
-      });
-}
-
-function redoAnnotation() {
-  let redoneAnnotationNode = annotationStore.redoAnnotation();
-  if (redoneAnnotationNode) {
-    $orbisApiService.addAnnotation(redoneAnnotationNode.toAnnotation())
-        .then(annotationResponse => {
-          if (annotationResponse instanceof Annotation) {
-            // push redoneAnnotation, to keep the timestamp from previous set annotation otherwise annotations in
-            // redone have different timestamps than in annotations -> conflicts in second undo / redo
-
-            // calculate the parent from scratch as the tree potentially can change
-            const parent = NestedSet.getParent(nestedSetRootNode.value, redoneAnnotationNode, parseErrorCallBack);
-            // insert the node into the parent
-            parent.insertAnnotationNode(redoneAnnotationNode, parseErrorCallBack);
-            // console.log(`re-added annotation "${redoneAnnotationNode.surface_forms[0]}" into parent ${redoneAnnotationNode.parent.surface_forms[0]}`)
-          } else {
-            console.error(annotationResponse.errorMessage);
-            // undo annotation since it could not be stored in the backend
-            annotationStore.undoAnnotation();
-          }
-        });
-  }
+async function deleteAnnotation(nestedSetNode: NestedSetNode) {
+  await annotationStore.deleteAnnotation(nestedSetNode, $orbisApiService);
 }
 
 async function nextDocument() {
@@ -350,70 +254,13 @@ async function reloadAnnotations() {
   await annotationStore.loadAnnotations($orbisApiService);
 }
 
-/**
- * called when a new annotation was added in GUI
- */
-function createNestedSetNode(
-    surfaceForm: string,
-    start: number,
-    end: number,
-    id: number,
-    annotationType: AnnotationType,
-    annotator: Annotator): NestedSetNode {
-  return new NestedSetNode(NestedSet.trimWithSpaces(new Annotation({
-    key: "",
-    surface_forms: [surfaceForm],
-    start_indices: [start],
-    end_indices: [end],
-    annotation_type: annotationType,
-    annotator: annotator,
-    run_id: 1,
-    document_id: 1,
-    metadata: [],
-    timestamp: new Date(),
-    _id: id
-  })));
-}
-
-/**
- * called when the run changes. will load all annotations for given run from the backend
- * and re-render the tree with those
- * @param run the run that was selected
- */
-// function selectedRunChanged(run: any) {
-//   if (run && run._id) {
-//
-//     annotationStore.changeSelectedRun(run);
-//     annotationTypes.value = run.corpus.supported_annotation_types;
-//     selectedRun.value = run;
-//
-//     // load the annotations
-//     $orbisApiService.getAnnotations(run._id, route.params.id)
-//         .then(annotationsFromDb => {
-//           if (Array.isArray(annotationsFromDb)) {
-//             console.log(`annotations loaded from db: ${JSON.stringify(annotationsFromDb)}`);
-//             // reload the annotations
-//             reload(annotationsFromDb);
-//           } else {
-//             console.error(annotationsFromDb.errorMessage);
-//           }
-//         });
-//
-//     // load the total documents count for given run
-//     $orbisApiService.countDocuments(run._id).then(documentCount => {
-//           documentsCount.value = documentCount;
-//         }
-//     );
-//   }
-// }
-
 function hideAnnotationModal() {
   showAnnotationModal.value = false;
 }
 
 function updateAnnotations(currentSelection, node: NestedSetNode) {
   if (!(selectedRun.value instanceof Run) || selectedRun.value.name.includes('default')) {
-    console.log("wrong run selected")
+    console.log("wrong run selected");
     wrongRunSelectedEnabled.value = true;
   } else {
     selection.value = currentSelection;
@@ -431,46 +278,13 @@ function updateAnnotations(currentSelection, node: NestedSetNode) {
 }
 
 // called when adding a new annotation
-async function commitAnnotationType(annotationType: AnnotationType) {
-  //console.log(`selected annotation type: ${annotationType.name}, selection: ${selection.value.word}`);
-  let annotation = createNestedSetNode(selection.value.word, selection.value.start, selection.value.end, 1, annotationType, annotator)
-      .toAnnotation();
-  annotation.run_id = selectedRun.value._id;
-  annotation.document_id = Number(route.params.id);
-  $orbisApiService.addAnnotation(annotation)
-      .then(annotationResponse => {
-
-        if (annotationResponse instanceof Annotation) {
-          let annotationNode = new NestedSetNode(annotationResponse);
-
-          if (annotation.annotation_type.color_id) {
-            annotationNode.annotation_type.color_id = annotation.annotation_type.color_id;
-          }
-
-          let nodeToInsert = selectedNode.value;
-          // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
-          if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
-            nodeToInsert = selectedNode.value.parent;
-          }
-
-          // add the new node as child
-          nodeToInsert.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
-            console.warn(`could not update the tree, error: ${JSON.stringify(parseError)}`); // TODO: do proper error handling
-          });
-          // console.log(`inserted ${annotationNode.surface_forms[0]} into tree, parend node ${nodeToInsert.annotation_type.name}`);
-
-          // add to store for re- / undo
-          annotationStore.addAnnotation(annotationNode);
-          // hide the context menu
-          showAnnotationModal.value = false;
-          // console.log(`added annotation ${annotationNode._id}`);
-        } else {
-          // TODO, 06.01.2023 anf: correct error handling
-          console.error(annotationResponse.errorMessage);
-          // hide the context menu
-          showAnnotationModal.value = false;
-        }
-      });
+async function addAnnotation(annotationType: AnnotationType) {
+  try {
+    await annotationStore.addAnnotation(selection.value.word, selection.value.start, selection.value.end,
+        annotationType, annotator, selectedRun.value._id, Number(route.params.id), selectedNode.value, $orbisApiService);
+  } finally {
+    showAnnotationModal.value = false;
+  }
 }
 
 </script>
