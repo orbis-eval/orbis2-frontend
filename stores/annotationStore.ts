@@ -19,9 +19,14 @@ export const useAnnotationStore = defineStore('annotation', () => {
     const nestedSetRootNode = ref({} as NestedSetNode);
     const annotationHistory = new CommandHistory();
 
+    const isUndoDisabled = ref(true);
+    const isRedoDisabled = ref(true);
+
     function reset() {
         annotations.value = [];
         annotationHistory.reset();
+        isUndoDisabled.value = true;
+        isRedoDisabled.value = true;
     }
 
     async function loadAnnotations(orbisApiService: OrbisApiService) {
@@ -44,6 +49,7 @@ export const useAnnotationStore = defineStore('annotation', () => {
                     new Date(),
                     parseErrorCallBack
                 );
+                annotationHistory.reset();
             } else {
                 console.error(annotationsFromDb.errorMessage);
             }
@@ -62,24 +68,30 @@ export const useAnnotationStore = defineStore('annotation', () => {
         const addCommand = new AddAnnotationCommand(surfaceForm, start, end, annotationType,
             annotator, runId, documentId, selectedNode, orbisApiService);
         await annotationHistory.execute(addCommand);
+        isRedoDisabled.value = true;
+        isUndoDisabled.value = false;
     }
 
     async function deleteAnnotation(annotation: NestedSetNode, orbisApiService: OrbisApiService) {
         const deleteCommand = new DeleteAnnotationCommand(annotation, orbisApiService);
         await annotationHistory.execute(deleteCommand);
+        isRedoDisabled.value = true;
+        isUndoDisabled.value = false;
     }
 
     async function undoAnnotation() {
-        await annotationHistory.undo();
+        isUndoDisabled.value = await annotationHistory.undo();
+        isRedoDisabled.value = false;
     }
 
     async function redoAnnotation() {
-        await annotationHistory.redo();
+        isRedoDisabled.value = await annotationHistory.redo();
+        isUndoDisabled.value = false;
     }
 
 
     return {
-        annotations, nestedSetRootNode, loadAnnotations, addAnnotation, deleteAnnotation, undoAnnotation,
-        redoAnnotation, resetAnnotationStack: reset
+        annotations, nestedSetRootNode, isUndoDisabled, isRedoDisabled, loadAnnotations, addAnnotation,
+        deleteAnnotation, undoAnnotation, redoAnnotation, resetAnnotationStack: reset
     };
 });

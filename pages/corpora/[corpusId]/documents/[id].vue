@@ -64,10 +64,16 @@
     <template #sidebar>
       <div v-if="!loading">
         <div class="mt-20">
-          <button class="small-button" @click="undoAnnotation">
+          <button :class="{'btn-disabled': isUndoDisabled}"
+                  :disabled="isUndoDisabled"
+                  class="small-button"
+                  @click="undoAnnotation" >
             <OhVueIcon name="la-undo-alt-solid"/>
           </button>
-          <button class="small-button" @click="redoAnnotation">
+          <button :class="{'btn-disabled': isRedoDisabled}"
+                  :disabled="isRedoDisabled"
+                  class="small-button"
+                  @click="redoAnnotation">
             <OhVueIcon name="la-redo-alt-solid"/>
           </button>
         </div>
@@ -159,7 +165,7 @@ const {currentDocument, nrOfDocuments} = storeToRefs(documentStore);
 const runStore = useRunStore();
 const {selectedRun} = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
-const {nestedSetRootNode} = storeToRefs(annotationStore);
+const {nestedSetRootNode, isUndoDisabled, isRedoDisabled} = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
 const {currentColorPalette} = storeToRefs(colorPalettesStore);
 

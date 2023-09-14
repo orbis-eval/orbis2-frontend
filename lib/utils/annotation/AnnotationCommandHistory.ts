@@ -21,6 +21,7 @@ export class CommandHistory {
             await command.undo();
             this.redoStack.push(command);
         }
+        return this.undoStack.length === 0;
     }
 
     async redo() {
@@ -29,5 +30,6 @@ export class CommandHistory {
             await command.execute();
             this.undoStack.push(command);
         }
+        return this.redoStack.length === 0;
     }
 }
