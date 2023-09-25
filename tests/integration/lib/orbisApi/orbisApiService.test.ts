@@ -48,7 +48,7 @@ describe('OrbisApiService.getDocument()', () => {
                 '_id': 1234
             }
         );
-        const parsedDocument = await orbisApiServiceMock.getDocument('1234');
+        const parsedDocument = await orbisApiServiceMock.getDocument(1234);
         expect(parsedDocument instanceof Document).toBeTruthy();
         if (parsedDocument instanceof Document) {
             expect(parsedDocument.content).toEqual('1234');
@@ -168,7 +168,7 @@ describe('OrbisApiService.getCorpora()', () => {
 });
 
 
-describe('OrbisApiService.addAnnotation', () => {
+describe('OrbisApiService.annotationCommands', () => {
     test('test adding annotation with annotation_type and annotator', async () => {
 
         let mockAnnotation = new Annotation({
