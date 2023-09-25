@@ -32,6 +32,15 @@ const documents: Document[] = Array.from([
     createDocument(3, 'some content', 'key 3', 1, [], false),
 ]);
 
+function findDocumentById(docArray: Document[], targetId: number): Document | Error {
+    const doc = docArray.find(doc => doc._id === targetId);
+    if (doc) {
+        return doc;
+    } else  {
+        return new Error("No Document found")
+    }
+}
+
 
 // Create a mock class for OrbisApiService with all required methods for this test suite
 jest.mock("~/lib/orbisApi/orbisApiService", () => {
@@ -43,6 +52,14 @@ jest.mock("~/lib/orbisApi/orbisApiService", () => {
             countDocuments: async (runId: number): Promise<Number | Error> => {
                 return documents.length;
             },
+            nextDocument: async (runId: number, documentId: number): Promise<Document | Error> => {
+                const id = documentId + 1;
+                return findDocumentById(documents, id);
+            },
+            previousDocument: async (runId: number, documentId: number): Promise<Document | Error> => {
+                const id = documentId - 1;
+                return findDocumentById(documents, id);
+            }
         })),
     };
 });
@@ -74,25 +91,42 @@ describe("Document Store", () => {
 
     test("loadDocuments should fetch and update documents", async () => {
         const documentStore = useDocumentStore();
-        const corpusId = 1;
+        const runId = 1;
         const pageSize = 10;
         const skip = 0;
 
-        await documentStore.loadDocuments(corpusId, mockedOrbisApiService, pageSize, skip);
+        await documentStore.loadDocuments(runId, mockedOrbisApiService, pageSize, skip);
 
         expect(documentStore.documents).toEqual(documents);
     });
 
-    test("getNumberOfDocuments should fetch and update the number of documents", async () => {
+    test("countDocuments should fetch and update the number of documents", async () => {
         const documentStore = useDocumentStore();
         const runId = 1;
         const mockedNumberOfDocuments = documents.length;
 
-        await documentStore.countDocuments(
-            runId,
-            mockedOrbisApiService
-        );
+        await documentStore.countDocuments(runId, mockedOrbisApiService);
 
         expect(documentStore.nrOfDocuments).toEqual(mockedNumberOfDocuments);
+    });
+
+    test("nextDocument should fetch the next document and update the current document", async () => {
+        const documentStore = useDocumentStore();
+        documentStore.currentDocument = documents[0];
+        const runId = 1;
+
+        await documentStore.nextDocument(runId, mockedOrbisApiService);
+
+        expect(documentStore.currentDocument).toEqual(documents[1]);
+    });
+
+    test("previousDocument should fetch the previous document and update the current document", async () => {
+        const documentStore = useDocumentStore();
+        documentStore.currentDocument = documents[2];
+        const runId = 1;
+
+        await documentStore.previousDocument(runId, mockedOrbisApiService);
+
+        expect(documentStore.currentDocument).toEqual(documents[1]);
     });
 });

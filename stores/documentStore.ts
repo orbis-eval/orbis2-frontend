@@ -13,6 +13,7 @@ export const useDocumentStore = defineStore('document', () => {
 
     function reset() {
         documents.value = [] as Document[];
+        currentDocument.value = {} as Document;
         nrOfDocuments.value = 1;
         totalPages.value = 1;
         currentPage.value = 1;
@@ -48,6 +49,9 @@ export const useDocumentStore = defineStore('document', () => {
     }
 
     async function nextDocument(runId: number, orbisApiService: OrbisApiService) {
+        if (!currentDocument.value._id) {
+            return new Error("No valid id for current Document");
+        }
         let document = await orbisApiService.nextDocument(runId, currentDocument.value._id);
         if (document instanceof Document) {
             currentDocument.value = document;
@@ -59,7 +63,10 @@ export const useDocumentStore = defineStore('document', () => {
     }
 
     async function previousDocument(runId: number, orbisApiService: OrbisApiService) {
-        let document = await orbisApiService.nextDocument(runId, currentDocument.value._id);
+        if (!currentDocument.value._id) {
+            return new Error("No valid id for current Document");
+        }
+        let document = await orbisApiService.previousDocument(runId, currentDocument.value._id);
         if (document instanceof Document) {
             currentDocument.value = document;
         } else {
