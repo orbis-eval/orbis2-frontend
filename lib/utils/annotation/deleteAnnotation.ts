@@ -8,7 +8,7 @@ export async function deleteAnnotation(annotation: NestedSetNode, orbisApiServic
         console.error(response.errorMessage);
     } else {
         // remove the annotation from the tree
-        annotation.parent.removeAnnotationNode(annotation, parseErrorCallBack);
+        annotation.parent?.removeAnnotationNode(annotation, parseErrorCallBack);
     }
 }
 
