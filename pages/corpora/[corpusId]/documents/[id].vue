@@ -31,7 +31,6 @@ const runStore = useRunStore();
 const {selectedRun} = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
 const colorPalettesStore = useColorPalettesStore();
-const {currentColorPalette} = storeToRefs(colorPalettesStore);
 
 const highlightedNestedSetNodeId = ref(null);
 
@@ -43,7 +42,10 @@ onMounted(async () => {
     await documentStore.loadDocument(route.params.id, $orbisApiService);
     await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
     await colorPalettesStore.loadColorPalettes($orbisApiService);
-    await annotationStore.loadAnnotations($orbisApiService);
+    await annotationStore.loadAnnotations(documentStore.currentDocument._id,
+        documentStore.currentDocument.content, selectedRun.value._id,
+        selectedRun.value.corpus.supported_annotation_types,
+        $orbisApiService);
   } catch (Error) {
     // Todo: Error Message for user
   } finally {

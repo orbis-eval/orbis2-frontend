@@ -1,7 +1,5 @@
 import {defineStore} from "pinia";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-import {useRunStore} from "~/stores/runStore";
-import {useDocumentStore} from "~/stores/documentStore";
 import {ref} from 'vue';
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
@@ -11,10 +9,9 @@ import {Annotator} from "~/lib/model/annotator";
 import {AddAnnotationCommand} from "~/lib/utils/annotation/addAnnotationCommand";
 import {CommandHistory} from "~/lib/utils/annotation/AnnotationCommandHistory";
 import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
+import {Run} from "~/lib/model/run";
 
 export const useAnnotationStore = defineStore('annotation', () => {
-    const run = useRunStore();
-    const documents = useDocumentStore();
     const annotations = ref([] as NestedSetNode[]);
     const nestedSetRootNode = ref({} as NestedSetNode);
     const annotationHistory = new CommandHistory();
@@ -29,22 +26,26 @@ export const useAnnotationStore = defineStore('annotation', () => {
         isRedoDisabled.value = true;
     }
 
-    async function loadAnnotations(orbisApiService: OrbisApiService) {
+    async function loadAnnotations(documentId: number, documentContent: string, runId: number,
+                                   annotationTypes: AnnotationType[], orbisApiService: OrbisApiService) {
         try {
-            let annotationsFromDb = await orbisApiService.getAnnotations(run.selectedRun._id,
-                documents.currentDocument._id);
+            let annotationsFromDb = await orbisApiService.getAnnotations(runId,
+                documentId);
             if (Array.isArray(annotationsFromDb)) {
                 annotations.value = annotationsFromDb.map(annotation => {
-                    annotation.annotation_type.color_id =
-                        run.selectedRun.corpus.supported_annotation_types.find(annotationType => annotationType.name === annotation.annotation_type.name)
-                            .color_id;
+                    const annotationType = annotationTypes.find(annotationType => annotationType.name === annotation.annotation_type.name);
+                    if (annotationType) {
+                        annotation.annotation_type.color_id = annotationType.color_id
+                    } else {
+                        console.error("Missing annotation type " + annotation.annotation_type.name);
+                    }
                     return annotation;
                 });
 
                 nestedSetRootNode.value = NestedSet.toTree(
                     annotations.value,
-                    documents.currentDocument.content,
-                    run.selectedRun,
+                    documentContent,
+                    runId,
                     1,
                     new Date(),
                     parseErrorCallBack
