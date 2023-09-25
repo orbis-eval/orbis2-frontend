@@ -3,7 +3,7 @@ import {IAnnotationType} from "~/lib/model/iannotationType";
 export class AnnotationType implements IAnnotationType {
     name: string;
 
-    color_id: number
+    color_id: number;
 
     _id?: number;
 
