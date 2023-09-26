@@ -15,7 +15,7 @@
         </ul>
       </details>
     </div>
-    <button class="m-1 btn w-1/5" @click="$refs.runsModal.showDialog()">Runs</button>
+    <OrbisButton @click="$refs.runsModal.showDialog()" size="sm">Runs</OrbisButton>
   </div>
 
   <DialogRunConfig ref="runsModal"></DialogRunConfig>

@@ -15,11 +15,7 @@
       </label>
       <div>
         <input type="file" id="file-input" ref="fileInput" @change="inputChanged" multiple class="hidden"/>
-        <button @click="openFileInput" class="flex items-center justify-between">
-          <div class="small-button bg-gray-700 ">
-            Choose File
-          </div>
-        </button>
+        <OrbisButton @click="openFileInput">Choose File</orbisButton>
       </div>
     </div>
     <div @drop.prevent="dropHandler" @dragover.prevent="dragOverHandler"
@@ -31,9 +27,9 @@
         <div v-else class="p-1">
           <div v-for="(file, index) in displayedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
             <p id= index>{{ file.name }}</p>
-            <button @click="removeFile(index)" class="text-gray-400 hover:text-white">
+            <OrbisButton @click="removeFile(index)">
               <OhVueIcon name="md-deleteforever-outlined"/>
-            </button>
+            </orbisButton>
           </div>
         </div>
       </div>
@@ -43,16 +39,8 @@
                   class="text-center"/>
     </div>
     <div>
-      <button id="submit"
-              @click="submit"
-              class="small-button bg-gray-700 mx-2 mt-2">
-        {{ submitText }}
-      </button>
-      <button id="cancel"
-              @click="cancel"
-              class="small-button bg-gray-700 mx-2 mt-2">
-        {{ cancelText }}
-      </button>
+      <OrbisButton id="submit" @click="submit">{{ submitText }}</orbisButton>
+      <OrbisButton id="cancel" @click="cancel">{{ cancelText }}</orbisButton>
     </div>
   </div>
 </template>

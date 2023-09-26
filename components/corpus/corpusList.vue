@@ -5,9 +5,9 @@
         <div class="card-title flex">
           <div>Corpora</div>
           <div class="grow"></div>
-          <button class="btn btn-square bg-neutral border-none">
-            <OhVueIcon name="bi-plus" scale="2" @click="emit('openCreateCorpus')"/>
-          </button>
+          <OrbisButton @click="emit('openCreateCorpus')">
+            <OhVueIcon name="bi-plus" scale="2"/>
+          </OrbisButton>
         </div>
         <ul class="mt-5">
           <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
@@ -15,10 +15,9 @@
               {{ corpus.name }}
             </NuxtLink>
             <div class="flex-grow"></div>
-            <button class="text-white hover:text-purple-400 mr-3.5"
-                    @click="emit('openDeleteCorpus', corpus)">
+            <OrbisButton @click="emit('openDeleteCorpus', corpus)" size="sm">
               <OhVueIcon name="md-deleteforever-outlined"/>
-            </button>
+            </OrbisButton>
           </li>
         </ul>
       </div>

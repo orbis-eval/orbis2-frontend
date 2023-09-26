@@ -9,14 +9,8 @@
           {{ message }}
         </div>
         <div class="flex justify-center">
-          <button class="small-button mr-2"
-                  @click="confirmClicked">
-            {{ confirmText }}
-          </button>
-          <button class="small-button"
-                  @click="declineClicked">
-            {{ declineText }}
-          </button>
+          <OrbisButton @click="confirmClicked">{{ confirmText }}</OrbisButton>
+          <OrbisButton @click="declineClicked">{{ declineText }}</OrbisButton>
         </div>
       </div>
     </div>

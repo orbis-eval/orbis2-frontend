@@ -1,15 +1,13 @@
 <template>
   <div v-if="selectedRun && currentDocument" class="p-4">
     Document: {{ currentDocument._id }}
-    <button class="small-button" @click="previousDocument">
-      <OhVueIcon name="md-navigatebefore-twotone"/>
-      previous
-    </button>
+    <OrbisButton @click="previousDocument">
+      <OhVueIcon name="md-navigatebefore-twotone"/> previous
+    </OrbisButton>
     |
-    <button class="small-button" @click="nextDocument">
-      next
-      <OhVueIcon name="md-navigatenext-twotone"/>
-    </button>
+    <OrbisButton @click="nextDocument">
+      next <OhVueIcon name="md-navigatenext-twotone"/>
+    </OrbisButton>
     Total Documents in Run: {{ nrOfDocuments }}
   </div>
 </template>

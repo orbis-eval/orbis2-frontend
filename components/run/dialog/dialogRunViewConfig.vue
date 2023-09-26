@@ -12,21 +12,20 @@
           <span>{{ run.timestamp }}</span>
         </div>
 
-        <button class="text-white hover:text-purple-400 col-span-1" @click="$emit('editRun', run)">
+        <OrbisButton @click="$emit('editRun', run)">
           <OhVueIcon name="co-pencil"/>
-        </button>
+        </OrbisButton>
 
-        <button class="text-white hover:text-purple-400 col-span-1" @click="$emit('removeRun', run)">
+        <OrbisButton @click="$emit('removeRun', run)">
           <OhVueIcon name="md-deleteforever-outlined"/>
-        </button>
+        </OrbisButton>
 
       </div>
     </template>
     <div class="grid grid-cols-4 gap-4 mt-40">
-      <button class="btn" @click="$emit('createRun')">Create Run</button>
-      <button class="btn">Export Run</button>
-      <button class="btn">Compare Runs</button>
-      <button class="btn" @click="$emit('closeModal')">Close</button>
+      <OrbisButton @click="$emit('createRun')">Export Run</orbisButton>
+      <OrbisButton @click="undefined">Compare Runs</orbisButton>
+      <OrbisButton @click="$emit('closeModal')">Close</orbisButton>
     </div>
   </div>
 </template>

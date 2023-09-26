@@ -10,8 +10,8 @@
         <input v-model="newRunDesc" class="input w-full bg-white text-black" required type="text"/>
       </div>
       <div class="flex justify-end mt-4">
-        <button class="btn btn-primary mr-2" @click="createRun">Create</button>
-        <button class="btn" @click="emit('cancelledCreateRun')">Cancel</button>
+        <OrbisButton @click="createRun">Create</OrbisButton>
+        <OrbisButton @click="emit('cancelledCreateRun')">Cancel</OrbisButton>
       </div>
     </div>
 </template>
