@@ -21,7 +21,7 @@ export async function addAnnotation(annotationToAdd: NestedSetNode, selectedNode
 
         let nodeToInsert = selectedNode;
         // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
-        if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME) {
+        if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME && selectedNode.parent) {
             nodeToInsert = selectedNode.parent;
         }
 
