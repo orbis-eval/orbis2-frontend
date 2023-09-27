@@ -9,11 +9,10 @@ import {Annotator} from "~/lib/model/annotator";
 import {AddAnnotationCommand} from "~/lib/utils/annotation/addAnnotationCommand";
 import {CommandHistory} from "~/lib/utils/annotation/AnnotationCommandHistory";
 import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
-import {Run} from "~/lib/model/run";
 
 export const useAnnotationStore = defineStore('annotation', () => {
     const annotations = ref([] as NestedSetNode[]);
-    const nestedSetRootNode = ref({} as NestedSetNode);
+    const nestedSetRootNode = ref({} as NestedSetNode | null);
     const annotationHistory = new CommandHistory();
 
     const isUndoDisabled = ref(true);
@@ -32,8 +31,9 @@ export const useAnnotationStore = defineStore('annotation', () => {
             let annotationsFromDb = await orbisApiService.getAnnotations(runId,
                 documentId);
             if (Array.isArray(annotationsFromDb)) {
-                annotations.value = annotationsFromDb.map(annotation => {
-                    const annotationType = annotationTypes.find(annotationType => annotationType.name === annotation.annotation_type.name);
+                const mappedAnnotations = annotationsFromDb.map(annotation => {
+                    const annotationType = annotationTypes.find(annotationType =>
+                        annotationType.name === annotation.annotation_type.name);
                     if (annotationType) {
                         annotation.annotation_type.color_id = annotationType.color_id
                     } else {
@@ -42,15 +42,22 @@ export const useAnnotationStore = defineStore('annotation', () => {
                     return annotation;
                 });
 
-                nestedSetRootNode.value = NestedSet.toTree(
-                    annotations.value,
-                    documentContent,
-                    runId,
-                    1,
-                    new Date(),
-                    parseErrorCallBack
-                );
-                annotationHistory.reset();
+                if (mappedAnnotations) {
+                    annotations.value = mappedAnnotations.map(annotation => new NestedSetNode(annotation));
+
+                    nestedSetRootNode.value = NestedSet.toTree(
+                        annotations.value,
+                        documentContent,
+                        runId,
+                        1,
+                        new Date(),
+                        parseErrorCallBack
+                    );
+                    console.log(nestedSetRootNode.value);
+                    annotationHistory.reset();
+                } else {
+                    console.error("Annotations could not be loaded")
+                }
             } else {
                 console.error(annotationsFromDb.errorMessage);
             }
