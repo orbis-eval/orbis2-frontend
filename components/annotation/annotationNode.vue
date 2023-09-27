@@ -106,7 +106,7 @@ function onMouseUp() {
   }
 }
 
-const updateAnnotations = (selection, selectedNode: NestedSetNode) => {
+const updateAnnotations = (selection: any, selectedNode: NestedSetNode) => {
   emit('updateAnnotations', selection, selectedNode);
 };
 
