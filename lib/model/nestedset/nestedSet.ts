@@ -43,35 +43,6 @@ export class NestedSet {
         _id: 1001
     });
 
-    static generateRootNode(
-        documentString: string,
-        start: number,
-        end: number,
-        runId: number,
-        documentId: number,
-        timestamp: Date) {
-        return new NestedSetNode(new Annotation({
-            key: "",
-            surface_forms: [documentString],
-            start_indices: [start],
-            end_indices: [end],
-            annotation_type: this.ROOT_ANNOTATION_TYPE,
-            annotator: this.ROOT_ANNOTATOR,
-            run_id: runId,
-            document_id: documentId,
-            metadata: [],
-            timestamp: timestamp,
-            _id: -1
-        }));
-    }
-
-    static annotationCompare = (a: Annotation, b: Annotation) => {
-        if (a.start_indices[0] == b.start_indices[0]) {
-            return b.end_indices[0] - a.end_indices[0];
-        }
-        return a.start_indices[0] - b.start_indices[0];
-    };
-
     static toTree(
         annotations: NestedSetNode[],
         documentString: string,
@@ -217,6 +188,35 @@ export class NestedSet {
         }
         return annotation;
     }
+
+    private static generateRootNode(
+        documentString: string,
+        start: number,
+        end: number,
+        runId: number,
+        documentId: number,
+        timestamp: Date) {
+        return new NestedSetNode(new Annotation({
+            key: "",
+            surface_forms: [documentString],
+            start_indices: [start],
+            end_indices: [end],
+            annotation_type: this.ROOT_ANNOTATION_TYPE,
+            annotator: this.ROOT_ANNOTATOR,
+            run_id: runId,
+            document_id: documentId,
+            metadata: [],
+            timestamp: timestamp,
+            _id: -1
+        }));
+    }
+
+    private static annotationCompare = (a: Annotation, b: Annotation) => {
+        if (a.start_indices[0] == b.start_indices[0]) {
+            return b.end_indices[0] - a.end_indices[0];
+        }
+        return a.start_indices[0] - b.start_indices[0];
+    };
 
     private static addGapAnnotation(
         surfaceForm: string,
