@@ -47,6 +47,8 @@ async function previousDocument() {
 
 async function reloadAnnotations() {
   annotationStore.resetAnnotationStack();
-  await annotationStore.loadAnnotations($orbisApiService);
+  await annotationStore.loadAnnotations(currentDocument.value._id,
+      currentDocument.value.content, selectedRun.value._id,
+      selectedRun.value.corpus.supported_annotation_types, $orbisApiService);
 }
 </script>
