@@ -4,8 +4,8 @@
       <div class="card-body">
         <div class="card-title flex">
           <div>Corpora</div>
-          <div class="grow"></div>
-          <OrbisButton @click="emit('openCreateCorpus')">
+          <div class="flex-grow"></div>
+          <OrbisButton @click="emit('openCreateCorpus')" transparent>
             <OhVueIcon name="bi-plus" scale="2"/>
           </OrbisButton>
         </div>
@@ -15,7 +15,7 @@
               {{ corpus.name }}
             </NuxtLink>
             <div class="flex-grow"></div>
-            <OrbisButton @click="emit('openDeleteCorpus', corpus)" size="sm">
+            <OrbisButton @click="emit('openDeleteCorpus', corpus)" size="sm" transparent>
               <OhVueIcon name="md-deleteforever-outlined"/>
             </OrbisButton>
           </li>

@@ -1,18 +1,23 @@
 <template>
     <button
         @click.prevent="clickEvent"
-        :class="classes"
-        :disabled="disabled"
+        :class="classesAsString"
+        :disabled="disabled || isLoading"
     >
+        <span v-if="isLoading" class="loading loading-spinner w-4 h-4"></span>
         <slot></slot>    
     </button>
 </template>
 
 <script setup lang="ts">
 
+const isLoading = ref(false)
+const classlist = ref(['btn'])
+
 const props = defineProps({
     disabled: Boolean,
     active: Boolean,
+    transparent: Boolean,
     size: {
         validator: (value: string) => ['xs', 'sm', 'md', 'lg'].includes(value),
         default: 'md'
@@ -22,16 +27,20 @@ const props = defineProps({
 const emit = defineEmits(['click'])
 
 const clickEvent = () => {
+    isLoading.value = true
     emit('click')
+    isLoading.value = false
 }
 
-const classes = computed(() => {
-    let _classes = ['btn']
-    if (props.disabled) {
-        _classes.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300')
+const classesAsString = computed(() => {
+    if (props.disabled || isLoading.value) {
+        classlist.value.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300')
     }
     if (props.active) {
-        _classes.push('btn-active')
+        classlist.value.push('btn-active')
+    }
+    if (props.transparent) {
+        classlist.value.push('btn-ghost')
     }
     if (props.size && typeof props.size === 'string') {
         let sizes: { [key: string]: string } = {
@@ -41,12 +50,12 @@ const classes = computed(() => {
             lg: 'btn-lg',
         };
 
-        _classes.push(sizes[props.size])
+        classlist.value.push(sizes[props.size])
     }
     if (props.join) {
-        _classes.push('join-item')
+        classlist.value.push('join-item')
     }
-    return _classes.join(' ')
+    return classlist.value.join(' ')
 })
 </script>
 
