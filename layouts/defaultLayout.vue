@@ -19,7 +19,7 @@
       <main class="p-4 overflow-auto grow">
         <slot/>
       </main>
-      <aside class="overflow-auto">
+      <aside :class="{ 'min-w-[25%]': $slots.sidebar }" class="overflow-auto">
         <!-- Sidebar -->
         <slot name="sidebar"/>
       </aside>
