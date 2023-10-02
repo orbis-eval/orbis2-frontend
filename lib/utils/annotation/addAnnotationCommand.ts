@@ -8,23 +8,22 @@ import {deleteAnnotation} from "~/lib/utils/annotation/deleteAnnotation";
 
 export class AddAnnotationCommand implements IAnnotationCommand {
 
-    annotation?: NestedSetNode;
-    selectedNode: NestedSetNode;
+    annotation: NestedSetNode;
+    rootNode: NestedSetNode;
     orbisApiService: OrbisApiService;
 
     constructor(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
-                annotator: Annotator, runId: number, documentId: number, selectedNode: NestedSetNode,
+                annotator: Annotator, runId: number, documentId: number, rootNode: NestedSetNode,
                 orbisApiService: OrbisApiService) {
         this.annotation = createNestedSetNode(surfaceForm, start, end, 1, runId, documentId, annotationType,
             annotator);
-        this.selectedNode = selectedNode;
+        this.rootNode = rootNode;
         this.orbisApiService = orbisApiService;
     }
 
     async execute() {
         if (this.annotation) {
-            const newAnnotation = await addAnnotation(this.annotation, this.selectedNode,
-                this.orbisApiService);
+            const newAnnotation = await addAnnotation(this.annotation, this.rootNode, this.orbisApiService);
             if (newAnnotation) {
                 this.annotation = newAnnotation;
             }

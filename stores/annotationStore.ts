@@ -11,7 +11,6 @@ import {CommandHistory} from "~/lib/utils/annotation/AnnotationCommandHistory";
 import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
 
 export const useAnnotationStore = defineStore('annotation', () => {
-    const annotations = ref([] as NestedSetNode[]);
     const nestedSetRootNode = ref({} as NestedSetNode | null);
     const annotationHistory = new CommandHistory();
 
@@ -19,7 +18,6 @@ export const useAnnotationStore = defineStore('annotation', () => {
     const isRedoDisabled = ref(true);
 
     function reset() {
-        annotations.value = [];
         annotationHistory.reset();
         isUndoDisabled.value = true;
         isRedoDisabled.value = true;
@@ -43,17 +41,16 @@ export const useAnnotationStore = defineStore('annotation', () => {
                 });
 
                 if (mappedAnnotations) {
-                    annotations.value = mappedAnnotations.map(annotation => new NestedSetNode(annotation));
+                    let annotations = mappedAnnotations.map(annotation => new NestedSetNode(annotation));
 
                     nestedSetRootNode.value = NestedSet.toTree(
-                        annotations.value,
+                        annotations,
                         documentContent,
                         runId,
                         1,
                         new Date(),
                         parseErrorCallBack
                     );
-                    console.log(nestedSetRootNode.value);
                     annotationHistory.reset();
                 } else {
                     console.error("Annotations could not be loaded")
@@ -68,23 +65,28 @@ export const useAnnotationStore = defineStore('annotation', () => {
 
     function parseErrorCallBack() {
         //TODO: Only placeholder for the moment
+         console.error("Creating nestedNodeSet failed");
     }
 
     async function addAnnotation(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
-                                 annotator: Annotator, runId: number, documentId: number, selectedNode: NestedSetNode,
+                                 annotator: Annotator, runId: number, documentId: number,
                                  orbisApiService: OrbisApiService) {
-        const addCommand = new AddAnnotationCommand(surfaceForm, start, end, annotationType,
-            annotator, runId, documentId, selectedNode, orbisApiService);
-        await annotationHistory.execute(addCommand);
-        isRedoDisabled.value = true;
-        isUndoDisabled.value = false;
+        if (nestedSetRootNode.value) {
+            const addCommand = new AddAnnotationCommand(surfaceForm, start, end, annotationType,
+                annotator, runId, documentId, nestedSetRootNode.value, orbisApiService);
+            await annotationHistory.execute(addCommand);
+            isRedoDisabled.value = true;
+            isUndoDisabled.value = false;
+        }
     }
 
     async function deleteAnnotation(annotation: NestedSetNode, orbisApiService: OrbisApiService) {
-        const deleteCommand = new DeleteAnnotationCommand(annotation, orbisApiService);
-        await annotationHistory.execute(deleteCommand);
-        isRedoDisabled.value = true;
-        isUndoDisabled.value = false;
+        if (nestedSetRootNode.value) {
+            const deleteCommand = new DeleteAnnotationCommand(annotation, nestedSetRootNode.value, orbisApiService);
+            await annotationHistory.execute(deleteCommand);
+            isRedoDisabled.value = true;
+            isUndoDisabled.value = false;
+        }
     }
 
     async function undoAnnotation() {
@@ -99,7 +101,7 @@ export const useAnnotationStore = defineStore('annotation', () => {
 
 
     return {
-        annotations, nestedSetRootNode, isUndoDisabled, isRedoDisabled, loadAnnotations, addAnnotation,
+        nestedSetRootNode, isUndoDisabled, isRedoDisabled, loadAnnotations, addAnnotation,
         deleteAnnotation, undoAnnotation, redoAnnotation, resetAnnotationStack: reset
     };
 });

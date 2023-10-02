@@ -6,13 +6,13 @@ import {deleteAnnotation} from "~/lib/utils/annotation/deleteAnnotation";
 
 export class DeleteAnnotationCommand implements IAnnotationCommand {
     annotation: NestedSetNode;
-    parentNode: NestedSetNode | null;
+    rootNode: NestedSetNode;
     orbisApiService: OrbisApiService;
 
-    constructor(annotation: NestedSetNode,
+    constructor(annotation: NestedSetNode, rootNode: NestedSetNode,
                 orbisApiService: OrbisApiService) {
         this.annotation = annotation;
-        this.parentNode = annotation.parent;
+        this.rootNode = rootNode;
         this.orbisApiService = orbisApiService;
     }
 
@@ -26,13 +26,7 @@ export class DeleteAnnotationCommand implements IAnnotationCommand {
 
     async undo() {
         if (this.annotation) {
-            if (this.parentNode) {
-                await addAnnotation(this.annotation, this.parentNode,
-                    this.orbisApiService);
-            } else {
-                await addAnnotation(this.annotation, this.annotation,
-                    this.orbisApiService);
-            }
+            await addAnnotation(this.annotation, this.rootNode, this.orbisApiService);
         } else {
             console.warn("No annotation in undo remove annotation command");
         }

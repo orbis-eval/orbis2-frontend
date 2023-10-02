@@ -1,5 +1,3 @@
-import {Annotation} from "~/lib/model/annotation";
-
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
@@ -11,7 +9,7 @@ export class NestedSetNodeRemover {
                                        errorCallback: (parseError: NestedSetParseError) => void) {
         let nodeToUpdate = this.getNodeToUpdate(annotationToRemove);
         let annotations = nodeToUpdate.allAnnotationNodes();
-        annotations = this.removeAnnotation(annotations, annotationToRemove);
+        this.removeAnnotation(annotations, annotationToRemove);
         nodeToUpdate.children = []; // remove all childs before re-calculating the tree
         let rootNode = NestedSet.toTree(
             annotations,
@@ -34,7 +32,7 @@ export class NestedSetNodeRemover {
         return annotationToRemove;
     }
 
-    private static removeAnnotation(annotations: NestedSetNode[], idAnnotationToRemove: NestedSetNode): NestedSetNode[] {
+    private static removeAnnotation(annotations: NestedSetNode[], idAnnotationToRemove: NestedSetNode) {
         annotations.filter((annotation, index, annotations) => {
             if (annotation._id === idAnnotationToRemove._id) {
                 // Removes the value from the original array
@@ -43,6 +41,5 @@ export class NestedSetNodeRemover {
             }
             return false;
         });
-        return annotations;
     }
 }

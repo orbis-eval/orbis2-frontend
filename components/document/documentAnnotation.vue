@@ -73,7 +73,6 @@ const colorPalettesStore = useColorPalettesStore();
 const {currentColorPalette} = storeToRefs(colorPalettesStore);
 
 const annotationTypeModal = ref(null);
-const selectedNode = ref(null);
 const wrongRunSelectedEnabled = ref(false);
 
 onBeforeMount(() => {
@@ -145,7 +144,6 @@ function updateAnnotations(currentSelection, node: NestedSetNode) {
     mousePosX.value = x;
     mousePosY.value = y;
     // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
-    selectedNode.value = node;
   }
 }
 
@@ -153,7 +151,7 @@ function updateAnnotations(currentSelection, node: NestedSetNode) {
 async function addAnnotation(annotationType: AnnotationType) {
   try {
     await annotationStore.addAnnotation(selection.value.word, selection.value.start, selection.value.end,
-        annotationType, annotator, selectedRun.value._id, Number(route.params.id), selectedNode.value, $orbisApiService);
+        annotationType, annotator, selectedRun.value._id, Number(route.params.id), $orbisApiService);
   } finally {
     showAnnotationModal.value = false;
   }

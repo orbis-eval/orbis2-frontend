@@ -46,64 +46,6 @@ export class NestedSetNode extends Annotation {
         return this.getAnnotationNodes(annotations);
     }
 
-    /**
-     * insert NestedSetNode as child to this node
-     * @param annotationNode
-     * @param errorCallback
-     */
-    public insertAnnotationNode(
-        annotationNode: NestedSetNode,
-        errorCallback: (parseError: NestedSetParseError) => void) {
-        let annotationNodes = this.allAnnotationNodes();
-        annotationNode.parent = this;
-        annotationNodes.push(annotationNode);
-        this.children = []; // remove all childs before re-calculating the tree
-        // recalculate the subtree of this node
-        let rootNode = NestedSet.toTree(
-            annotationNodes,
-            this.surface_forms[0],
-            this.run_id,
-            this.document_id,
-            this.timestamp,
-            errorCallback,
-            this,
-            false);
-        if(rootNode) {
-            this.children = rootNode.children;
-            for(const child of this.children) {
-                child.parent = this;
-            }
-            return;
-        }
-        console.warn('could not insert annotation'); // TODO: handle/throw exception
-    }
-
-    public removeAnnotationNode(annotationToRemove: NestedSetNode, errorCallback: (parseError: NestedSetParseError) => void) {
-        let annotations = this.allAnnotationNodes();
-        annotations.filter((annotation, index, annotations)=>{
-            if (annotation._id === annotationToRemove._id) {
-                // Removes the value from the original array
-                annotations.splice(index, 1);
-                return true;
-            }
-            return false;
-        });
-        this.children = []; // remove all childs before re-calculating the tree
-        let rootNode = NestedSet.toTree(
-            annotations,
-            this.surface_forms[0],
-            this.run_id,
-            this.document_id,
-            this.timestamp,
-            errorCallback,
-            this,
-            false);
-        if(rootNode) {
-            this.children = rootNode.children;
-            return;
-        }
-    }
-
     public toAnnotation():Annotation {
         return new Annotation({
             key: this.key,

@@ -5,8 +5,9 @@ import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {NestedSetNodeInserter} from "~/lib/model/nestedset/nestedSetNodeInserter";
 
-export async function addAnnotation(annotationToAdd: NestedSetNode, selectedNode: NestedSetNode,
+export async function addAnnotation(annotationToAdd: NestedSetNode, rootNode: NestedSetNode,
                                     orbisApiService: OrbisApiService) {
     let annotation = annotationToAdd.toAnnotation();
 
@@ -19,14 +20,8 @@ export async function addAnnotation(annotationToAdd: NestedSetNode, selectedNode
             annotationNode.annotation_type.color_id = annotation.annotation_type.color_id;
         }
 
-        let nodeToInsert = selectedNode;
-        // if the selection was made in a GAP_ANNOTATION, we need to add it to the parent of the gap-annotation
-        if (nodeToInsert.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME && selectedNode.parent) {
-            nodeToInsert = selectedNode.parent;
-        }
-
         // add the new node as child
-        nodeToInsert.insertAnnotationNode(annotationNode, (parseError: NestedSetParseError) => {
+        NestedSetNodeInserter.insertAnnotationNode(rootNode, annotationNode, (parseError: NestedSetParseError) => {
             // TODO: do proper error handling
             console.warn(`could not update the tree, error: ${JSON.stringify(parseError)}`);
         });

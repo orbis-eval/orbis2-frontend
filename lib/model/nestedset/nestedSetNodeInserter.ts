@@ -1,5 +1,3 @@
-import {Annotation} from "~/lib/model/annotation";
-
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";

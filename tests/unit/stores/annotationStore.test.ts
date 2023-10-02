@@ -10,12 +10,12 @@ import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
 let mockedAnnotation: NestedSetNode;
 
-const createMockedAnnotations = function (annotationId: number) {
+const createMockedAnnotations = function (annotationId: number, startIndex: number, endIndex: number) {
     return new Annotation({
         key: 'my-key' + annotationId,
         surface_forms: ['surfaceForm'],
-        start_indices: [0],
-        end_indices: [12],
+        start_indices: [startIndex],
+        end_indices: [endIndex],
         annotation_type: new AnnotationType({
             color_id: -1,
             name: 'type1',
@@ -35,9 +35,9 @@ const createMockedAnnotations = function (annotationId: number) {
 };
 
 const annotations: Annotation[] = Array.from([
-    createMockedAnnotations(1),
-    createMockedAnnotations(2),
-    createMockedAnnotations(3)
+    createMockedAnnotations(1, 0, 5),
+    createMockedAnnotations(2, 5, 7),
+    createMockedAnnotations(3, 8, 10)
 ]);
 
 jest.mock("~/lib/orbisApi/orbisApiService", () => {
@@ -65,7 +65,7 @@ describe('AnnotationStore.loadAnnotations()', () => {
             const annotationStore = useAnnotationStore();
             const documentId = 1;
             const runId = 1;
-            const documentContent = 'test';
+            const documentContent = 'test und noch ein test und noch ein test';
             const annotationTypes = [new AnnotationType({
                 color_id: 1,
                 name: 'type1',
@@ -76,8 +76,30 @@ describe('AnnotationStore.loadAnnotations()', () => {
             await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
                 mockedOrbisApiService);
 
-            const nestedSetNodeAnnotations = annotations.map(annotation => new NestedSetNode(annotation));
-            expect(annotationStore.annotations).toEqual(nestedSetNodeAnnotations);
+            // check that the parent was set correctly
+            expect(annotationStore.nestedSetRootNode).not.toBeNull();
+
+            // check if child of root-node is correct, only child should be the line-node
+            let lineNode = annotationStore?.nestedSetRootNode?.children[0];
+            expect(lineNode?.children.length).toEqual(5);
+            expect(lineNode?.start_indices[0]).toEqual(0);
+            expect(lineNode?.end_indices[0]).toEqual(40);
         });
 
+});
+
+describe('Complex undo/redo patterns', () => {
+    test('Delete a nested annotation and execute undo/redo',
+        async () => {
+            const annotationStore = useAnnotationStore();
+            const documentId = 1;
+            const runId = 1;
+            const documentContent = 'test';
+            const annotationTypes = [new AnnotationType({
+                color_id: 1,
+                name: 'type1',
+                _id: 1
+            })];
+
+        });
 });
