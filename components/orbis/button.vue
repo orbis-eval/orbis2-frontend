@@ -10,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+const { $busEmit } = useNuxtApp()
 
 const isLoading = ref(false)
 const classlist = ref(['btn'])
@@ -22,13 +23,21 @@ const props = defineProps({
         validator: (value: string) => ['xs', 'sm', 'md', 'lg'].includes(value),
         default: 'md'
     },
-    join: Boolean
+    join: Boolean,
+    eventBus: { type: String, default: '' }
 })
 const emit = defineEmits(['click'])
+
+const handleEventBus = () => {
+    if (props.eventBus && props.eventBus.length > 0) {
+        $busEmit(props.eventBus)
+    }
+}
 
 const clickEvent = () => {
     isLoading.value = true
     emit('click')
+    handleEventBus()
     isLoading.value = false
 }
 
@@ -58,7 +67,3 @@ const classesAsString = computed(() => {
     return classlist.value.join(' ')
 })
 </script>
-
-<style lang="scss">
-    
-</style>

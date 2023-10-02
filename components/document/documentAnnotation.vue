@@ -32,7 +32,7 @@
       </ul>
     </div>
     <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
-      <Warning confirmText="ok"
+      <DialogWarning confirmText="ok"
                declineText="cancel"
                message="No run or default run is selected, in both cases annotation is not possible"
                title="Please select a run."

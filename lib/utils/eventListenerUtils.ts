@@ -5,8 +5,5 @@ export class EventListenerUtils {
         if (event.key === 'Enter') {
             submit();
         }
-        if (event.key === 'Escape') {
-            cancel();
-        }
     }
 }

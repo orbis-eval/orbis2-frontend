@@ -23,8 +23,9 @@
   },
   "dependencies": {
     "@pinia/nuxt": "^0.4.6",
+    "daisyui": "^3.2.1",
+    "mitt": "^3.0.1",
     "oh-vue-icons": "^1.0.0-rc3",
-    "pinia": "^2.0.29",
-    "daisyui": "^3.2.1"
+    "pinia": "^2.0.29"
   }
 }

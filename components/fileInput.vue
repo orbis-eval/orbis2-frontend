@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full overflow-hidden justify-between flex-col p-6 border border-gray-400">
+  <div class="flex justify-between flex-col">
     <div class="flex justify-between mb-6">
       <div class="text-lg font-medium p-1">
         Name of Corpus
@@ -38,7 +38,7 @@
                   :nofPages="nofPages"
                   class="text-center"/>
     </div>
-    <div>
+    <div class="flex gap-4 mt-5">
       <OrbisButton id="submit" @click="submit">{{ submitText }}</orbisButton>
       <OrbisButton id="cancel" @click="cancel">{{ cancelText }}</orbisButton>
     </div>
@@ -48,7 +48,6 @@
 <script setup lang="ts">
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
-import {EventListenerUtils} from "~/lib/utils/eventListenerUtils";
 
 addIcons(MdDeleteforeverOutlined);
 
@@ -70,16 +69,6 @@ const displayedFiles = computed(() => {
   const endIndex = startIndex + filesPerPage.value;
   return selectedFiles.value.slice(startIndex, endIndex);
 })
-
-onBeforeMount(() => {
-  window.addEventListener('keydown',
-      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, submit, cancel));
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown',
-      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, submit, cancel));
-});
 
 function openFileInput() {
   fileInput.value.click();

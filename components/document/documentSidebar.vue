@@ -37,7 +37,7 @@
           <td class="p-2">{{ nestedSetNode.surface_forms[0] }}</td>
           <td class="p-2">{{ nestedSetNode.annotation_type.name }}</td>
           <td class="p-2">
-            <OrbisButton @click="deleteAnnotation(nestedSetNode)">
+            <OrbisButton @click="deleteAnnotation(nestedSetNode)" size="xs">
               Delete <OhVueIcon name="md-deleteforever-outlined"/>
             </OrbisButton>
           </td>
