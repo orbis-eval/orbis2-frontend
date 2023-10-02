@@ -12,13 +12,15 @@
           <span>{{ run.timestamp }}</span>
         </div>
 
-        <OrbisButton @click="$emit('editRun', run)">
-          <OhVueIcon name="co-pencil"/>
-        </OrbisButton>
+        <div class="join">
+          <OrbisButton @click="$emit('editRun', run)" size="sm" join>
+            <OhVueIcon name="co-pencil"/>
+          </OrbisButton>
 
-        <OrbisButton @click="$emit('removeRun', run)">
-          <OhVueIcon name="md-deleteforever-outlined"/>
-        </OrbisButton>
+          <OrbisButton @click="$emit('removeRun', run)" size="sm" join>
+            <OhVueIcon name="md-deleteforever-outlined"/>
+          </OrbisButton>
+        </div>
 
       </div>
     </template>

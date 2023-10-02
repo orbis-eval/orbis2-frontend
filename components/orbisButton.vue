@@ -16,7 +16,8 @@ const props = defineProps({
     size: {
         validator: (value: string) => ['xs', 'sm', 'md', 'lg'].includes(value),
         default: 'md'
-    }
+    },
+    join: Boolean
 })
 const emit = defineEmits(['click'])
 
@@ -41,6 +42,9 @@ const classes = computed(() => {
         };
 
         _classes.push(sizes[props.size])
+    }
+    if (props.join) {
+        _classes.push('join-item')
     }
     return _classes.join(' ')
 })
