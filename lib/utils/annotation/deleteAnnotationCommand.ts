@@ -17,22 +17,13 @@ export class DeleteAnnotationCommand implements IAnnotationCommand {
     }
 
     async execute() {
-        if (this.annotation) {
-            await deleteAnnotation(this.annotation, this.orbisApiService);
-        } else {
-            console.warn("No annotation in remove annotation command");
-        }
+        await deleteAnnotation(this.annotation, this.orbisApiService);
     }
 
     async undo() {
-        if (this.annotation) {
-            let newAnnotation = await addAnnotation(this.annotation, this.rootNode, this.orbisApiService);
-            if (newAnnotation) {
-                this.annotation = newAnnotation;
-            }
-        } else {
-            console.warn("No annotation in undo remove annotation command");
+        let newAnnotation = await addAnnotation(this.annotation, this.rootNode, this.orbisApiService);
+        if (newAnnotation) {
+            this.annotation = newAnnotation;
         }
-
     }
 }
