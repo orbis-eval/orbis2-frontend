@@ -2,7 +2,8 @@
   <NuxtLayout name="default-layout">
     <LoadingSpinner v-if="loading" class="mt-20"/>
     <div v-else class="mt-20">
-      <DocumentNavHeader>
+      <DocumentNavHeader @loadingFinished="loading = false"
+                         @loadingStarted="loading = true">
       </DocumentNavHeader>
       <DocumentAnnotation :highlightedNestedSetNodeId="highlightedNestedSetNodeId">
       </DocumentAnnotation>

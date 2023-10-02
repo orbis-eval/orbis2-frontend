@@ -16,6 +16,8 @@
 
 <script lang="ts" setup>
 
+const route = useRoute();
+
 import {
   MdNavigatebeforeTwotone,
   MdNavigatenextTwotone,
@@ -23,8 +25,9 @@ import {
 import {useDocumentStore} from "~/stores/documentStore";
 import {storeToRefs} from "pinia";
 import {useRunStore} from "~/stores/runStore";
-import {useAnnotationStore} from "~/stores/annotationStore";
 import {addIcons, OhVueIcon} from "oh-vue-icons";
+
+const emit = defineEmits(['loadingStarted', 'loadingFinished']);
 
 const {$orbisApiService} = useNuxtApp();
 addIcons(MdNavigatenextTwotone, MdNavigatebeforeTwotone);
@@ -33,22 +36,18 @@ const documentStore = useDocumentStore();
 const {currentDocument, nrOfDocuments} = storeToRefs(documentStore);
 const runStore = useRunStore();
 const {selectedRun} = storeToRefs(runStore);
-const annotationStore = useAnnotationStore();
 
 async function nextDocument() {
+  emit('loadingStarted');
   await documentStore.nextDocument(selectedRun.value._id, $orbisApiService);
-  await reloadAnnotations();
+  await navigateTo('/corpora/' + route.params.corpusId + '/documents/' + currentDocument.value._id);
+  emit('loadingFinished');
 }
 
 async function previousDocument() {
+  emit('loadingStarted');
   await documentStore.previousDocument(selectedRun.value._id, $orbisApiService);
-  await reloadAnnotations();
-}
-
-async function reloadAnnotations() {
-  annotationStore.resetAnnotationStack();
-  await annotationStore.loadAnnotations(currentDocument.value._id,
-      currentDocument.value.content, selectedRun.value._id,
-      selectedRun.value.corpus.supported_annotation_types, $orbisApiService);
+  await navigateTo('/corpora/' + route.params.corpusId + '/documents/' + currentDocument.value._id);
+  emit('loadingFinished');
 }
 </script>
