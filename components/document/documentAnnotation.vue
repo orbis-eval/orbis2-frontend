@@ -36,8 +36,9 @@
                declineText="cancel"
                message="No run or default run is selected, in both cases annotation is not possible"
                title="Please select a run."
-               @confirm="wrongRunSelectedEnabled = false"
-               @decline="wrongRunSelectedEnabled = false"/>
+               :onConfirm="async () => wrongRunSelectedEnabled = false"
+               :onDecline="async () => wrongRunSelectedEnabled = false"
+      />
     </div>
   </div>
 </template>

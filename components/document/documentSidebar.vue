@@ -1,10 +1,10 @@
 <template>
   <div v-if="!loading">
     <div class="mt-20">
-      <OrbisButton @click="undoAnnotation" :disabled="isUndoDisabled">
+      <OrbisButton :onClick="undoAnnotation" :disabled="isUndoDisabled">
         <OhVueIcon name="la-undo-alt-solid"/>
       </OrbisButton>
-      <OrbisButton @click="redoAnnotation" :disabled="isRedoDisabled">
+      <OrbisButton :onClick="redoAnnotation" :disabled="isRedoDisabled">
         <OhVueIcon name="la-redo-alt-solid"/>
       </OrbisButton>
     </div>
@@ -37,7 +37,7 @@
           <td class="p-2">{{ nestedSetNode.surface_forms[0] }}</td>
           <td class="p-2">{{ nestedSetNode.annotation_type.name }}</td>
           <td class="p-2">
-            <OrbisButton @click="deleteAnnotation(nestedSetNode)" size="xs">
+            <OrbisButton :onClick="async () => deleteAnnotation(nestedSetNode)" size="xs">
               Delete <OhVueIcon name="md-deleteforever-outlined"/>
             </OrbisButton>
           </td>

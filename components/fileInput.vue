@@ -15,7 +15,7 @@
       </label>
       <div>
         <input type="file" id="file-input" ref="fileInput" @change="inputChanged" multiple class="hidden"/>
-        <OrbisButton @click="openFileInput">Choose File</orbisButton>
+        <OrbisButton :onClick="openFileInput">Choose File</orbisButton>
       </div>
     </div>
     <div @drop.prevent="dropHandler" @dragover.prevent="dragOverHandler"
@@ -27,7 +27,7 @@
         <div v-else class="p-1">
           <div v-for="(file, index) in displayedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
             <p id= index>{{ file.name }}</p>
-            <OrbisButton @click="removeFile(index)">
+            <OrbisButton :onClick="() => removeFile(index)">
               <OhVueIcon name="md-deleteforever-outlined"/>
             </orbisButton>
           </div>
@@ -39,8 +39,8 @@
                   class="text-center"/>
     </div>
     <div class="flex gap-4 mt-5">
-      <OrbisButton id="submit" @click="submit">{{ submitText }}</orbisButton>
-      <OrbisButton id="cancel" @click="cancel">{{ cancelText }}</orbisButton>
+      <OrbisButton id="submit" :onClick="submit">{{ submitText }}</orbisButton>
+      <OrbisButton id="cancel" :onClick="cancel">{{ cancelText }}</orbisButton>
     </div>
   </div>
 </template>
@@ -59,7 +59,9 @@ const corpusNameToCreate = ref("");
 const props = defineProps({
   corpusName: String,
   submitText: String,
-  cancelText: String
+  cancelText: String,
+  onSubmit: { type: Function, default: () => { } },
+  onCancel: { type: Function, default: () => { } },
 });
 const emit = defineEmits(['submitted', 'cancelled']);
 
@@ -98,14 +100,12 @@ function dropHandler(event: DragEvent) {
   }
 }
 
-function submit() {
-  emit('submitted', corpusNameToCreate.value, selectedFiles.value);
+async function submit() {
+
+  await props.onSubmit(corpusNameToCreate.value, selectedFiles.value);
   selectedFiles.value = [];
 }
 
-function cancel() {
-  selectedFiles.value = [];
-  emit('cancelled');
-}
+const cancel = () => props.onCancel();
 
 </script>

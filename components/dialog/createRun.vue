@@ -1,5 +1,5 @@
 <template>
-  <OrbisDialog title="Create Run" :event-bus="props.eventBus">
+  <OrbisDialog title="Create Run" :event-bus="props.eventBus" :isLoading="isLoading">
     <template v-slot:body>
       <div class="mb-4">
         <label class="text-white block mb-1 ">Name:</label>
@@ -11,7 +11,7 @@
       </div>
     </template>
     <template v-slot:footer>
-      <OrbisButton @click="createRun">Create</OrbisButton>
+      <OrbisButton :onClick="createRun">Create</OrbisButton>
       <OrbisButton :event-bus="props.eventBus">Cancel</OrbisButton>
     </template>
   </OrbisDialog>
@@ -24,8 +24,8 @@ import { Run } from "~/lib/model/run";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { useCorpusStore } from "~/stores/corpusStore";
 
-const { $busEmit } = useNuxtApp()
 const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
+const { $busEmit } = useNuxtApp()
 
 const runStore = useRunStore();
 
@@ -34,6 +34,7 @@ const { corpus } = storeToRefs(corpusStore);
 
 const newRunName = ref("");
 const newRunDesc = ref("");
+const isLoading = ref(false);
 
 const handleEventBus = () => {
   if (props.eventBus && props.eventBus.length > 0) {
@@ -43,6 +44,7 @@ const handleEventBus = () => {
 
 async function createRun() {
   try {
+    isLoading.value = true;
     const newRun = new Run({ name: newRunName.value, description: newRunDesc.value, corpus: corpus.value });
     await runStore.createRun(newRun, corpus.value, $orbisApiService);
   } catch (error) {
@@ -50,6 +52,7 @@ async function createRun() {
     console.error(error);
   }
   finally {
+    isLoading.value = false;
     handleEventBus();
   }
 }

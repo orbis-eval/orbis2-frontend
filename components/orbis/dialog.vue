@@ -21,7 +21,7 @@ const randomId = "orbisDialog-" + Math.random().toString(8)
 const el = ref(null)
 const props = defineProps({
     title: String,
-    eventBus: { type: String, default: '' },
+    eventBus: { type: String, default: '' }
 })
 
 if (props.eventBus && props.eventBus.length > 0) {

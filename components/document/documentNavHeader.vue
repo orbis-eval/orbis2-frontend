@@ -1,11 +1,11 @@
 <template>
   <div v-if="selectedRun && currentDocument" class="p-4 flex items-center">
     Document: {{ currentDocument._id }}
-    <OrbisButton class="ml-2" @click="previousDocument" size="xs" transparent>
+    <OrbisButton class="ml-2" :onClick="previousDocument" size="xs" transparent>
       <OhVueIcon name="md-navigatebefore-twotone"/> previous
     </OrbisButton>
     |
-    <OrbisButton class="mr-2" @click="nextDocument" size="xs" transparent>
+    <OrbisButton class="mr-2" :onClick="nextDocument" size="xs" transparent>
       next <OhVueIcon name="md-navigatenext-twotone"/>
     </OrbisButton>
     Total Documents in Run: {{ nrOfDocuments }}

@@ -24,7 +24,8 @@ const props = defineProps({
         default: 'md'
     },
     join: Boolean,
-    eventBus: { type: String, default: '' }
+    eventBus: { type: String, default: '' },
+    onClick: { type: Function }
 })
 const emit = defineEmits(['click'])
 
@@ -36,9 +37,18 @@ const handleEventBus = () => {
 
 const clickEvent = () => {
     isLoading.value = true
-    emit('click')
-    handleEventBus()
-    isLoading.value = false
+    if (props.onClick && props.onClick.constructor.name === "AsyncFunction") {
+        props.onClick().then(() => {
+            handleEventBus()
+            isLoading.value = false
+        })
+    } else {
+        if (props.onClick) {
+            props.onClick()
+        }
+        handleEventBus()
+        isLoading.value = false
+    }
 }
 
 const classesAsString = computed(() => {

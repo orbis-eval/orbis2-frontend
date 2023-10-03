@@ -12,7 +12,7 @@
             <span>{{ run.timestamp }}</span>
           </div>
 
-          <OrbisButton @click="$emit('editRun', run)" size="sm" transparent>
+          <OrbisButton :onClick="() => $emit('editRun', run)" size="sm" transparent>
             <OhVueIcon name="co-pencil" />
           </OrbisButton>
 
@@ -27,7 +27,7 @@
       <OrbisButton event-bus="dialogCreateRun">Create Run</OrbisButton>
       <DialogCreateRun event-bus="dialogCreateRun" />
 
-      <OrbisButton @click="undefined">Compare Runs</orbisButton>
+      <OrbisButton :onClick="() => {}">Compare Runs</orbisButton>
       <OrbisButton :event-bus="props.eventBus">Close</orbisButton>      
     </template>
   </OrbisDialog>

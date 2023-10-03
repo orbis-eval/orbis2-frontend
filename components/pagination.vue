@@ -1,16 +1,16 @@
 <template>
   <div class="my-2">
-    <OrbisButton @click="changePage(currentPage - 1)" :disabled="isFirstPage">
+    <OrbisButton :onClick="() => changePage(currentPage - 1)" :disabled="isFirstPage">
       prev
     </OrbisButton>
     <OrbisButton v-for="pageNumber in totalPages"
-                 @click="changePage(pageNumber)"
+                 :onClick="() => changePage(pageNumber)"
                  :active="currentPage === pageNumber" 
                  :disabled="isFirstPage"
     >
       {{ pageNumber }}
     </OrbisButton>
-    <OrbisButton @click="changePage(currentPage + 1)" :disabled="isLastPage">
+    <OrbisButton :onClick="() => changePage(currentPage + 1)" :disabled="isLastPage">
       next
     </OrbisButton>
   </div>
