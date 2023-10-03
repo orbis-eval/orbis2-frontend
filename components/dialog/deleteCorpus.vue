@@ -6,7 +6,7 @@
     declineText="cancel"
     :onConfirm="confirm"
     :onDecline="decline"
-    :event-bus="props.eventBus"
+    :event-bus-name="props.eventBusName"
   />
 </template>
 
@@ -19,7 +19,7 @@ const corpusStore = useCorpusStore();
 
 const props = defineProps({
   corpus: Corpus,
-  eventBus: { type: String, default: '' }
+  eventBusName: { type: String, default: '' }
 });
 
 async function confirm() {

@@ -1,5 +1,5 @@
 <template>
-  <OrbisDialog title="Create Run" :event-bus="props.eventBus" :isLoading="isLoading">
+  <OrbisDialog title="Create Run" :event-bus-name="props.eventBusName" :isLoading="isLoading">
     <template v-slot:body>
       <div class="mb-4">
         <label class="text-white block mb-1 ">Name:</label>
@@ -12,7 +12,7 @@
     </template>
     <template v-slot:footer>
       <OrbisButton :onClick="createRun">Create</OrbisButton>
-      <OrbisButton :event-bus="props.eventBus">Cancel</OrbisButton>
+      <OrbisButton :event-bus-name="props.eventBusName">Cancel</OrbisButton>
     </template>
   </OrbisDialog>
 </template>
@@ -36,9 +36,9 @@ const newRunName = ref("");
 const newRunDesc = ref("");
 const isLoading = ref(false);
 
-const handleEventBus = () => {
-  if (props.eventBus && props.eventBus.length > 0) {
-    $busEmit(props.eventBus)
+const handleeventBusName = () => {
+  if (props.eventBusName && props.eventBusName.length > 0) {
+    $busEmit(props.eventBusName)
   }
 }
 
@@ -53,12 +53,12 @@ async function createRun() {
   }
   finally {
     isLoading.value = false;
-    handleEventBus();
+    handleeventBusName();
   }
 }
 
 const props = defineProps({
-    eventBus: { type: String, default: '' }
+    eventBusName: { type: String, default: '' }
 })
 
 </script>

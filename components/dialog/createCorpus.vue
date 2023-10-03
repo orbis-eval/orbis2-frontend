@@ -1,5 +1,5 @@
 <template>
-  <OrbisDialog :event-bus="props.eventBus">
+  <OrbisDialog :event-bus-name="props.eventBusName">
     <template v-slot:body>
       <FileInput cancelText="cancel" submitText="import" :onSubmit="createCorpus" :onCancel="cancel" />
     </template>
@@ -12,14 +12,14 @@ import { useCorpusStore } from "~/stores/corpusStore";
 const { $orbisApiService, $busEmit } = useNuxtApp();
 const corpusStore = useCorpusStore();
 
-const handleEventBus = () => {
-  if (props.eventBus && props.eventBus.length > 0) {
-    $busEmit(props.eventBus)
+const handleeventBusName = () => {
+  if (props.eventBusName && props.eventBusName.length > 0) {
+    $busEmit(props.eventBusName)
   }
 }
 
 const props = defineProps({
-  eventBus: { type: String, default: '' }
+  eventBusName: { type: String, default: '' }
 });
 
 async function createCorpus(corpusName: string, chosenFiles: File[]) {
@@ -28,8 +28,8 @@ async function createCorpus(corpusName: string, chosenFiles: File[]) {
   } catch (Error) {
     // Todo: Add Error Message
   } finally {
-    handleEventBus()
+    handleeventBusName()
   }
 }
-const cancel = () => handleEventBus()
+const cancel = () => handleeventBusName()
 </script>

@@ -1,5 +1,5 @@
 <template>
-    <OrbisDialog :title="title" :event-bus="processedEventBus">
+    <OrbisDialog :title="title" :event-bus-name="processedeventBusName">
         <template v-slot:body>
             <div class="flex flex-col">
                 <div class="flex">
@@ -27,24 +27,24 @@ const props = defineProps({
     declineText: String,
     onConfirm: { type: Function, default: () => { } },
     onDecline: { type: Function, default: () => { } },
-    eventBus: { type: String, default: '' },
+    eventBusName: { type: String, default: '' },
 });
 
-const processedEventBus = computed(() => {
-    if (props.eventBus && props.eventBus.length > 0) {
-        return props.eventBus
+const processedeventBusName = computed(() => {
+    if (props.eventBusName && props.eventBusName.length > 0) {
+        return props.eventBusName
     }
-    return "warningDialog-no-event-bus-" + Math.random().toString(8)
+    return "warningDialog-no-event-bus-name-" + Math.random().toString(8)
 })
 
-const handleEventBus = () => {
-    $busEmit(processedEventBus.value)
+const handleeventBusName = () => {
+    $busEmit(processedeventBusName.value)
 }
 
 // Show dialog if no event bus is given on props
 onMounted(() => {
-    if (processedEventBus.value.includes("no-event-bus")) {
-        handleEventBus()
+    if (processedeventBusName.value.includes("no-event-bus-name")) {
+        handleeventBusName()
     }
 })
 
@@ -58,7 +58,7 @@ const confirmWrapper = async () => {
     } catch (error) {
         console.error(error)
     } finally {
-        handleEventBus()
+        handleeventBusName()
     }
 }
 const declineWrapper = async () => {
@@ -71,7 +71,7 @@ const declineWrapper = async () => {
     } catch (error) {
         console.error(error)
     } finally {
-        handleEventBus()
+        handleeventBusName()
     }
 }
 </script>

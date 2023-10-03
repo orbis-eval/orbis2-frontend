@@ -13,8 +13,8 @@
         </li>
       </ul>
     </details>
-    <OrbisButton event-bus="dialogListRuns">Runs</OrbisButton>
-    <DialogListRuns event-bus="dialogListRuns" />
+    <OrbisButton event-bus-name="dialogListRuns">Runs</OrbisButton>
+    <DialogListRuns event-bus-name="dialogListRuns" />
   </div>
 </template>
 

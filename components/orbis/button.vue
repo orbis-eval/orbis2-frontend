@@ -23,14 +23,14 @@ const props = defineProps({
         default: 'md'
     },
     join: Boolean,
-    eventBus: { type: String, default: '' },
+    eventBusName: { type: String, default: '' },
     onClick: { type: Function }
 })
 const emit = defineEmits(['click'])
 
-const handleEventBus = () => {
-    if (props.eventBus && props.eventBus.length > 0) {
-        $busEmit(props.eventBus)
+const handleeventBusName = () => {
+    if (props.eventBusName && props.eventBusName.length > 0) {
+        $busEmit(props.eventBusName)
     }
 }
 
@@ -57,7 +57,7 @@ const clickEvent = async () => {
     }
     finally {
         isLoading.value = false
-        handleEventBus()
+        handleeventBusName()
     }
 }
 

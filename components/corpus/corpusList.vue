@@ -5,10 +5,10 @@
         <div class="card-title flex">
           <div>Corpora</div>
           <div class="flex-grow"></div>
-          <OrbisButton event-bus="dialogCreateCorpus" size="sm" transparent>
+          <OrbisButton event-bus-name="dialogCreateCorpus" size="sm" transparent>
             <OhVueIcon name="hi-plus"/>
           </OrbisButton>
-          <DialogCreateCorpus event-bus="dialogCreateCorpus" />
+          <DialogCreateCorpus event-bus-name="dialogCreateCorpus" />
         </div>
         <ul class="mt-5">
           <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
@@ -16,10 +16,10 @@
               {{ corpus.name }}
             </NuxtLink>
             <div class="flex-grow"></div>
-            <OrbisButton :event-bus="'dialogDeleteCorpus_' + corpus._id" size="sm" transparent>
+            <OrbisButton :event-bus-name="'dialogDeleteCorpus_' + corpus._id" size="sm" transparent>
               <OhVueIcon name="md-deleteforever-outlined"/>
             </OrbisButton>
-            <DialogDeleteCorpus :event-bus="'dialogDeleteCorpus_' + corpus._id" :corpus="corpus" />
+            <DialogDeleteCorpus :event-bus-name="'dialogDeleteCorpus_' + corpus._id" :corpus="corpus" />
           </li>
         </ul>
       </div>

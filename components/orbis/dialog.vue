@@ -24,11 +24,11 @@ const randomId = "orbisDialog-" + Math.random().toString(8)
 const el = ref(null)
 const props = defineProps({
     title: String,
-    eventBus: { type: String, default: '' }
+    eventBusName: { type: String, default: '' }
 })
 
-if (props.eventBus && props.eventBus.length > 0) {
-    $busListen(props.eventBus, () => {
+if (props.eventBusName && props.eventBusName.length > 0) {
+    $busListen(props.eventBusName, () => {
         if (el && el.value) {
             if (el.value.hasAttribute("open")) {
                 el.value.close()

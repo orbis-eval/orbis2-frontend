@@ -6,7 +6,7 @@
     title="Delete run?"
     :onConfirm="confirm"
     :onDecline="decline"
-    :event-bus="props.eventBus"
+    :event-bus-name="props.eventBusName"
   />
 </template>
 
@@ -16,7 +16,7 @@ import {Run} from "~/lib/model/run";
 
 const props = defineProps({
   run: Run,
-  eventBus: { type: String, default: '' }
+  eventBusName: { type: String, default: '' }
 });
 
 const { $orbisApiService } = useNuxtApp();
