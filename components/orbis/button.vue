@@ -13,7 +13,6 @@
 const { $busEmit } = useNuxtApp()
 
 const isLoading = ref(false)
-const classlist = ref(['btn'])
 
 const props = defineProps({
     disabled: Boolean,
@@ -35,31 +34,43 @@ const handleEventBus = () => {
     }
 }
 
-const clickEvent = () => {
-    isLoading.value = true
-    if (props.onClick && props.onClick.constructor.name === "AsyncFunction") {
-        props.onClick().then(() => {
-            handleEventBus()
-            isLoading.value = false
-        })
-    } else {
-        if (props.onClick) {
-            props.onClick()
+/**
+ * @description 
+ * By clicking on the button, the loading spinner is shown and depending on the function type (async or not) 
+ * the function is executed. As soon as the function is finished, the loading spinner is hidden again.
+ * IMPORTANT: Implement callbacks as async await functions, otherwise the loading spinner will not mirror 
+ *            the duration of the function.
+ */
+const clickEvent = async () => {
+    try {
+        isLoading.value = true
+        if (props.onClick && props.onClick.constructor.name === "AsyncFunction") {
+            await props.onClick();
+        } else {
+            if (props.onClick) {
+                props.onClick()
+            }
         }
-        handleEventBus()
+    }
+    catch {
+
+    }
+    finally {
         isLoading.value = false
+        handleEventBus()
     }
 }
 
 const classesAsString = computed(() => {
+    let classlist = ['btn']
     if (props.disabled || isLoading.value) {
-        classlist.value.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300')
+        classlist.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300')
     }
     if (props.active) {
-        classlist.value.push('btn-active')
+        classlist.push('btn-active')
     }
     if (props.transparent) {
-        classlist.value.push('btn-ghost')
+        classlist.push('btn-ghost')
     }
     if (props.size && typeof props.size === 'string') {
         let sizes: { [key: string]: string } = {
@@ -69,11 +80,11 @@ const classesAsString = computed(() => {
             lg: 'btn-lg',
         };
 
-        classlist.value.push(sizes[props.size])
+        classlist.push(sizes[props.size])
     }
     if (props.join) {
-        classlist.value.push('join-item')
+        classlist.push('join-item')
     }
-    return classlist.value.join(' ')
+    return classlist.join(' ')
 })
 </script>

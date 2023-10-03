@@ -27,6 +27,7 @@ onMounted(async () => {
 async function loadCorpora() {
   loading.value = true;
   try {
+    corpusStore.reset();
     await corpusStore.loadCorpora($orbisApiService);
     // TODO, 06.01.2023 anf: correct error handling
   } finally {

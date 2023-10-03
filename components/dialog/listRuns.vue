@@ -4,11 +4,11 @@
       <template v-for="run in runs" :key="run._id" class="mb-20">
         <div class="flex py-2 items-center">
 
-          <div class="flex-1 w-4/6">
+          <div :class="['flex-1', 'w-4/6', selectedRun == run ? 'text-primary' : '']">
             <span>{{ run.name }}</span>
           </div>
 
-          <div class="w-1/6">
+          <div :class="['w-2/6', selectedRun == run ? 'text-primary' : '']">
             <span>{{ run.timestamp }}</span>
           </div>
 
@@ -44,7 +44,7 @@ addIcons(MdDeleteforeverOutlined, CoPencil);
 const emit = defineEmits(['editRun', 'removeRun', 'createRun']);
 
 const runStore = useRunStore();
-const { runs } = storeToRefs(runStore);
+const { runs, selectedRun } = storeToRefs(runStore);
 
 const props = defineProps({
   eventBus: { type: String, default: '' }

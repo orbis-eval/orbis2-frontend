@@ -1,5 +1,5 @@
 <template>
-  <div class="my-2">
+  <div class="mb-10">
     <OrbisButton :onClick="() => changePage(currentPage - 1)" :disabled="isFirstPage">
       prev
     </OrbisButton>

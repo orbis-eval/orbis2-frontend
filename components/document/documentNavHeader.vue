@@ -1,5 +1,5 @@
 <template>
-  <div v-if="selectedRun && currentDocument" class="p-4 flex items-center">
+  <div v-if="selectedRun && currentDocument" class="px-4 pb-4 flex items-center">
     Document: {{ currentDocument._id }}
     <OrbisButton class="ml-2" :onClick="previousDocument" size="xs" transparent>
       <OhVueIcon name="md-navigatebefore-twotone"/> previous

@@ -1,13 +1,16 @@
 <template>
     <dialog :id="randomId" class="modal" ref="el">
-        <div class="modal-box bg-neutral max-w-6xl">
+        <div class="modal-box bg-neutral">
             <h2 class="font-bold text-3xl mb-5">{{ title }}</h2>
             <slot name="body"></slot>
 
-            <div v-if="hasFooter" class="flex gap-4">
+            <div v-if="hasFooter" class="grid grid-cols-3 gap-4 mt-10">
                 <slot name="footer"></slot>
             </div>
         </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
     </dialog>
 </template>
   
@@ -37,4 +40,11 @@ if (props.eventBus && props.eventBus.length > 0) {
 }
 
 </script>
+
+<style lang="scss">
+.modal-backdrop {
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(10px);
+}
+</style>
   

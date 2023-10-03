@@ -38,26 +38,41 @@ const processedEventBus = computed(() => {
 })
 
 const handleEventBus = () => {
-    if (processedEventBus.value.includes("no-event-bus")) {
-        $busEmit(processedEventBus.value)
-    }
+    $busEmit(processedEventBus.value)
 }
 
-const confirmWrapper = async () => {
-    if (props.onConfirm.constructor.name === "AsyncFunction") {
-        await props.onConfirm()
-    } else {
-        props.onConfirm()
+// Show dialog if no event bus is given on props
+onMounted(() => {
+    if (processedEventBus.value.includes("no-event-bus")) {
+        handleEventBus()
     }
-    handleEventBus()
+})
+
+const confirmWrapper = async () => {
+    try {
+        if (props.onConfirm.constructor.name === "AsyncFunction") {
+        await props.onConfirm()
+        } else {
+            props.onConfirm()
+        }
+    } catch (error) {
+        console.error(error)
+    } finally {
+        handleEventBus()
+    }
 }
 const declineWrapper = async () => {
-    if (props.onDecline.constructor.name === "AsyncFunction") {
-        await props.onDecline()
-    } else {
-        props.onDecline()
+    try {
+        if (props.onDecline.constructor.name === "AsyncFunction") {
+            await props.onDecline()
+        } else {
+            props.onDecline()
+        }
+    } catch (error) {
+        console.error(error)
+    } finally {
+        handleEventBus()
     }
-    handleEventBus()
 }
 </script>
   

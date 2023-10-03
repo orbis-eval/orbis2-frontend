@@ -13,6 +13,9 @@ module.exports = {
                     "success": "#36d399",
                     "warning": "#fbbd23",
                     "error": "#f87272",
+                    "--rounded-box": "0.5rem",
+                    "--rounded-btn": "0.2rem",
+                    "--rounded-badge": "1.3rem",
                 },
             }
         ],

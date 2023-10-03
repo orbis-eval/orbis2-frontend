@@ -22,10 +22,10 @@ const props = defineProps({
   eventBus: { type: String, default: '' }
 });
 
-function confirm() {
+async function confirm() {
   if (props.corpus instanceof Corpus) {
     try {
-      corpusStore.deleteCorpora(props.corpus, $orbisApiService);
+      await corpusStore.deleteCorpora(props.corpus, $orbisApiService);
     } catch (Error) {
       // Todo: Add Error Message
     }
