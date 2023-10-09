@@ -30,7 +30,7 @@
           <td class="p-2">
             <div
                 :style="{background: '#'+currentColorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id)}"
-                class="rounded w-10 h-10"></div>
+                class="rounded-lg w-10 h-10"></div>
           </td>
           <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>
           <td class="p-2">{{ nestedSetNode.end_indices[0] }}</td>

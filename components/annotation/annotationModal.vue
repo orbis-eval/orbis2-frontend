@@ -1,6 +1,6 @@
 <template>
   <div v-bind:class="{annotationTypeModalHidden: !props.isVisible}">
-    <div class="absolute bg-gray-300 rounded border-2 border-gray-600"
+    <div class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
          :style="{left: leftPosition + 'px', top: topPosition + 'px' }">
       <div class="text-center font-bold text-2xl">
               "{{shortenText(props.selectionSurfaceForm)}}"

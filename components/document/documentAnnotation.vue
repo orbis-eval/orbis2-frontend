@@ -2,7 +2,7 @@
   <div>
     <div v-if="nestedSetRootNode">
       <div ref="relativeDiv" class="relative">
-        <div class="rounded border border-gray-600 p-6">
+        <div class="rounded-lg border border-gray-600 p-6">
           <!-- context modal gui for selecting the type -->
           <AnnotationModal
               ref="annotationTypeModal"
