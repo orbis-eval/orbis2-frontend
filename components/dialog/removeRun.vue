@@ -13,13 +13,14 @@
 <script lang="ts" setup>
 import {useRunStore} from "~/stores/runStore";
 import {Run} from "~/lib/model/run";
+import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 
 const props = defineProps({
   run: Run,
   eventBusName: { type: String, default: '' }
 });
 
-const { $orbisApiService } = useNuxtApp();
+const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
 const runStore = useRunStore();
 
@@ -32,5 +33,5 @@ async function confirm() {
   }
 }
 
-const decline = () => {}
+const decline = () => {};
 </script>

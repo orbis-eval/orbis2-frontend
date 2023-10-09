@@ -39,14 +39,14 @@ import { useRunStore } from "~/stores/runStore";
 import { storeToRefs } from "pinia";
 import { CoPencil, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 
+const props = defineProps({
+  eventBusName: { type: String, default: '' }
+});
+
 addIcons(MdDeleteforeverOutlined, CoPencil);
 
 const emit = defineEmits(['editRun', 'removeRun', 'createRun']);
 
 const runStore = useRunStore();
 const { runs, selectedRun } = storeToRefs(runStore);
-
-const props = defineProps({
-  eventBusName: { type: String, default: '' }
-})
 </script>

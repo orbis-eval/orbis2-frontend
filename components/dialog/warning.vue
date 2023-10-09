@@ -1,5 +1,5 @@
 <template>
-    <OrbisDialog :title="title" :event-bus-name="processedeventBusName">
+    <OrbisDialog :title="title" :event-bus-name="processedEventBusName">
         <template v-slot:body>
             <div class="flex flex-col">
                 <div class="flex">
@@ -18,7 +18,7 @@
   
 <script lang="ts" setup>
 
-const { $busEmit } = useNuxtApp()
+const { $busEmit } = useNuxtApp() as { $busEmit: (event: string) => void };
 
 const props = defineProps({
     title: String,
@@ -30,49 +30,47 @@ const props = defineProps({
     eventBusName: { type: String, default: '' },
 });
 
-const processedeventBusName = computed(() => {
-    if (props.eventBusName && props.eventBusName.length > 0) {
-        return props.eventBusName
+const processedEventBusName = computed(() => {
+    if (props.eventBusName.length > 0) {
+        return props.eventBusName;
     }
-    return "warningDialog-no-event-bus-name-" + Math.random().toString(8)
+    return "warningDialog-no-event-bus-name-" + Math.random().toString(8);
 })
 
-const handleeventBusName = () => {
-    $busEmit(processedeventBusName.value)
-}
+const handleEventBusName = () => $busEmit(processedEventBusName.value);
 
 // Show dialog if no event bus is given on props
 onMounted(() => {
-    if (processedeventBusName.value.includes("no-event-bus-name")) {
-        handleeventBusName()
+    if (processedEventBusName.value.includes("no-event-bus-name")) {
+        handleEventBusName();
     }
-})
+});
 
 const confirmWrapper = async () => {
     try {
         if (props.onConfirm.constructor.name === "AsyncFunction") {
-        await props.onConfirm()
+        await props.onConfirm();
         } else {
-            props.onConfirm()
+            props.onConfirm();
         }
     } catch (error) {
-        console.error(error)
+        console.error(error);
     } finally {
-        handleeventBusName()
+        handleEventBusName();
     }
-}
+};
 const declineWrapper = async () => {
     try {
         if (props.onDecline.constructor.name === "AsyncFunction") {
-            await props.onDecline()
+            await props.onDecline();
         } else {
-            props.onDecline()
+            props.onDecline();
         }
     } catch (error) {
-        console.error(error)
+        console.error(error);
     } finally {
-        handleeventBusName()
+        handleEventBusName();
     }
-}
+};
 </script>
   

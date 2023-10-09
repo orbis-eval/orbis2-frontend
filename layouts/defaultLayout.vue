@@ -8,10 +8,6 @@
         </NuxtLink>
         <div class="ml-4 text-lg">
           <NuxtLink :to="'/'">Orbis NG</NuxtLink>
-          <span v-if="Object.keys(corpus).length">
-            <span class="mx-3">|</span>
-            <span class="font-bold">Corpus: {{ corpus.name }}</span>
-          </span>
         </div>
       </div>
     </header>

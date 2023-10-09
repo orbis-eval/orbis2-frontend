@@ -49,13 +49,6 @@
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 
-addIcons(MdDeleteforeverOutlined);
-
-const currentPage = ref(1);
-const filesPerPage = ref(5);
-const fileInput = ref(null);
-const selectedFiles = ref([]);
-const corpusNameToCreate = ref("");
 const props = defineProps({
   corpusName: String,
   submitText: String,
@@ -63,6 +56,14 @@ const props = defineProps({
   onSubmit: { type: Function, default: () => { } },
   onCancel: { type: Function, default: () => { } },
 });
+
+addIcons(MdDeleteforeverOutlined);
+
+const currentPage = ref(1);
+const filesPerPage = ref(5);
+const fileInput = ref(null);
+const selectedFiles = ref([]);
+const corpusNameToCreate = ref("");
 const emit = defineEmits(['submitted', 'cancelled']);
 
 const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
@@ -70,14 +71,14 @@ const displayedFiles = computed(() => {
   const startIndex = (currentPage.value - 1) * filesPerPage.value;
   const endIndex = startIndex + filesPerPage.value;
   return selectedFiles.value.slice(startIndex, endIndex);
-})
+});
 
 function openFileInput() {
   fileInput.value.click();
 }
 
 function removeFile(index: number) {
-  selectedFiles.value.splice(index, 1)
+  selectedFiles.value.splice(index, 1);
 }
 
 function inputChanged() {

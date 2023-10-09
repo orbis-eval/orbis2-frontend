@@ -24,8 +24,11 @@ import { Run } from "~/lib/model/run";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { useCorpusStore } from "~/stores/corpusStore";
 
-const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
-const { $busEmit } = useNuxtApp()
+const props = defineProps({
+    eventBusName: { type: String, default: '' }
+});
+
+const { $orbisApiService, $busEmit } = useNuxtApp() as { $orbisApiService: OrbisApiService, $busEmit: (event: string) => void };
 
 const runStore = useRunStore();
 
@@ -36,9 +39,9 @@ const newRunName = ref("");
 const newRunDesc = ref("");
 const isLoading = ref(false);
 
-const handleeventBusName = () => {
-  if (props.eventBusName && props.eventBusName.length > 0) {
-    $busEmit(props.eventBusName)
+const handleEventBusName = () => {
+  if (props.eventBusName.length > 0) {
+    $busEmit(props.eventBusName);
   }
 }
 
@@ -53,12 +56,8 @@ async function createRun() {
   }
   finally {
     isLoading.value = false;
-    handleeventBusName();
+    handleEventBusName();
   }
 }
-
-const props = defineProps({
-    eventBusName: { type: String, default: '' }
-})
 
 </script>

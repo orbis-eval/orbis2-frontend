@@ -2,18 +2,13 @@
     <button
         @click.prevent="clickEvent"
         :class="classesAsString"
-        :disabled="disabled || isLoading"
-    >
+        :disabled="disabled || isLoading">
         <span v-if="isLoading" class="loading loading-spinner w-4 h-4"></span>
         <slot></slot>    
     </button>
 </template>
 
 <script setup lang="ts">
-const { $busEmit } = useNuxtApp()
-
-const isLoading = ref(false)
-
 const props = defineProps({
     disabled: Boolean,
     active: Boolean,
@@ -22,17 +17,19 @@ const props = defineProps({
         validator: (value: string) => ['xs', 'sm', 'md', 'lg'].includes(value),
         default: 'md'
     },
-    join: Boolean,
+    join: Boolean, // Join button description
     eventBusName: { type: String, default: '' },
     onClick: { type: Function }
-})
-const emit = defineEmits(['click'])
+});
 
-const handleeventBusName = () => {
-    if (props.eventBusName && props.eventBusName.length > 0) {
-        $busEmit(props.eventBusName)
+const { $busEmit } = useNuxtApp();
+const isLoading = ref(false);
+
+const handleEventBusName = () => {
+    if (props.eventBusName.length > 0) {
+        $busEmit(props.eventBusName);
     }
-}
+};
 
 /**
  * @description 
@@ -43,34 +40,31 @@ const handleeventBusName = () => {
  */
 const clickEvent = async () => {
     try {
-        isLoading.value = true
+        isLoading.value = true;
         if (props.onClick && props.onClick.constructor.name === "AsyncFunction") {
             await props.onClick();
         } else {
             if (props.onClick) {
-                props.onClick()
+                props.onClick();
             }
         }
     }
-    catch {
-
-    }
     finally {
-        isLoading.value = false
-        handleeventBusName()
+        isLoading.value = false;
+        handleEventBusName();
     }
 }
 
 const classesAsString = computed(() => {
-    let classlist = ['btn']
+    let classList = ['btn'];
     if (props.disabled || isLoading.value) {
-        classlist.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300')
+        classList.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300');
     }
     if (props.active) {
-        classlist.push('btn-active')
+        classList.push('btn-active');
     }
     if (props.transparent) {
-        classlist.push('btn-ghost')
+        classList.push('btn-ghost');
     }
     if (props.size && typeof props.size === 'string') {
         let sizes: { [key: string]: string } = {
@@ -80,11 +74,11 @@ const classesAsString = computed(() => {
             lg: 'btn-lg',
         };
 
-        classlist.push(sizes[props.size])
+        classList.push(sizes[props.size]);
     }
     if (props.join) {
-        classlist.push('join-item')
+        classList.push('join-item');
     }
-    return classlist.join(' ')
+    return classList.join(' ');
 })
 </script>
