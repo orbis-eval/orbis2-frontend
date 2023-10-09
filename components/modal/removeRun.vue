@@ -1,5 +1,5 @@
 <template>
-  <DialogWarning
+  <ModalWarning
     :message="`Deleting run with ${run.name} will remove the run from this corpus! Do you want to continue?`"
     confirm-text="ok"
     declineText="cancel"

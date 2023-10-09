@@ -1,9 +1,9 @@
 <template>
-  <OrbisDialog :event-bus-name="props.eventBusName">
+  <OrbisModal :event-bus-name="props.eventBusName">
     <template v-slot:body>
       <FileInput cancelText="cancel" submitText="import" :onSubmit="createCorpus" :onCancel="cancel" />
     </template>
-  </OrbisDialog>
+  </OrbisModal>
 </template>
 
 <script lang="ts" setup>

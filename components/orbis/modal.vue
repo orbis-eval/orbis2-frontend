@@ -1,5 +1,5 @@
 <template>
-    <dialog :id="randomId" class="modal" ref="el">
+    <dialog :id="randomId" class="modal orbis-modal" ref="el">
         <div class="modal-box bg-neutral">
             <h2 class="font-bold text-3xl mb-5">{{ title }}</h2>
             <slot name="body"></slot>
@@ -24,7 +24,7 @@ const slots = useSlots();
 
 const hasFooter = slots.footer !== undefined;
 
-const randomId = "orbisDialog-" + Math.random().toString(8);
+const randomId = "orbisModal-" + Math.random().toString(8);
 const el = ref(null);
 
 if (props.eventBusName.length > 0) {
@@ -44,8 +44,14 @@ if (props.eventBusName.length > 0) {
 
 <style lang="scss">
 .modal-backdrop {
-    background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(10px);
+}
+.orbis-modal {
+    animation: none !important;
+    transition: none !important;
+    .modal-box {
+        transform: none !important;
+    }
 }
 </style>
   

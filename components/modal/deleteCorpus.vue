@@ -1,5 +1,5 @@
 <template>
-  <DialogWarning 
+  <ModalWarning 
     title="Delete corpus?" 
     :message="`Deleting corpus with ${corpus.name} will remove all documents and runs of this corpus! Do you want to continue?`" 
     confirm-text="ok" 

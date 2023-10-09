@@ -1,5 +1,5 @@
 <template>
-  <OrbisDialog title="Runs" :event-bus-name="props.eventBusName">
+  <OrbisModal title="Runs" :event-bus-name="props.eventBusName">
     <template v-slot:body>
       <template v-for="run in runs" :key="run._id" class="mb-20">
         <div class="flex py-2 items-center">
@@ -16,21 +16,21 @@
             <OhVueIcon name="co-pencil" />
           </OrbisButton>
 
-          <OrbisButton :event-bus-name="'dialogRemoveRun_' + run._id" size="sm" transparent>
+          <OrbisButton :event-bus-name="'modalRemoveRun_' + run._id" size="sm" transparent>
             <OhVueIcon name="md-deleteforever-outlined" />
           </OrbisButton>
-          <dialogRemoveRun :event-bus-name="'dialogRemoveRun_' + run._id" :run="run" />
+          <ModalRemoveRun :event-bus-name="'modalRemoveRun_' + run._id" :run="run" />
         </div>
       </template>
     </template>
     <template v-slot:footer>
-      <OrbisButton event-bus-name="dialogCreateRun">Create Run</OrbisButton>
-      <DialogCreateRun event-bus-name="dialogCreateRun" />
+      <OrbisButton event-bus-name="modalCreateRun">Create Run</OrbisButton>
+      <ModalCreateRun event-bus-name="modalCreateRun" />
 
       <OrbisButton :onClick="() => {}">Compare Runs</orbisButton>
       <OrbisButton :event-bus-name="props.eventBusName">Close</orbisButton>      
     </template>
-  </OrbisDialog>
+  </OrbisModal>
 </template>
 
 <script lang="ts" setup>

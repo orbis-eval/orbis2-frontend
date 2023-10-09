@@ -1,5 +1,5 @@
 <template>
-    <OrbisDialog :title="title" :event-bus-name="processedEventBusName">
+    <OrbisModal :title="title" :event-bus-name="processedEventBusName">
         <template v-slot:body>
             <div class="flex flex-col">
                 <div class="flex">
@@ -13,7 +13,7 @@
             <OrbisButton :onClick="confirmWrapper">{{ confirmText }}</OrbisButton>
             <OrbisButton :onClick="declineWrapper">{{ declineText }}</OrbisButton>
         </template>
-    </OrbisDialog>
+    </OrbisModal>
 </template>
   
 <script lang="ts" setup>
@@ -34,12 +34,12 @@ const processedEventBusName = computed(() => {
     if (props.eventBusName.length > 0) {
         return props.eventBusName;
     }
-    return "warningDialog-no-event-bus-name-" + Math.random().toString(8);
+    return "warningModal-no-event-bus-name-" + Math.random().toString(8);
 })
 
 const handleEventBusName = () => $busEmit(processedEventBusName.value);
 
-// Show dialog if no event bus is given on props
+// Show modal if no event bus is given on props
 onMounted(() => {
     if (processedEventBusName.value.includes("no-event-bus-name")) {
         handleEventBusName();

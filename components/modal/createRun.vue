@@ -1,5 +1,5 @@
 <template>
-  <OrbisDialog title="Create Run" :event-bus-name="props.eventBusName" :isLoading="isLoading">
+  <OrbisModal title="Create Run" :event-bus-name="props.eventBusName" :isLoading="isLoading">
     <template v-slot:body>
       <div class="mb-4">
         <label class="text-white block mb-1 ">Name:</label>
@@ -14,7 +14,7 @@
       <OrbisButton :onClick="createRun">Create</OrbisButton>
       <OrbisButton :event-bus-name="props.eventBusName">Cancel</OrbisButton>
     </template>
-  </OrbisDialog>
+  </OrbisModal>
 </template>
 
 <script lang="ts" setup>
