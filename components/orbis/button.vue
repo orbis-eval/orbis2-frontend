@@ -55,8 +55,18 @@ const clickEvent = async () => {
     }
 }
 
+const sizeMapping: { [key: string]: string } = {
+    xs: 'btn-xs',
+    sm: 'btn-sm',
+    md: '',
+    lg: 'btn-lg',
+};
+
 const classesAsString = computed(() => {
     let classList = ['btn'];
+
+    classList.push(sizeMapping[props.size]);
+
     if (props.disabled || isLoading.value) {
         classList.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300');
     }
@@ -65,16 +75,6 @@ const classesAsString = computed(() => {
     }
     if (props.transparent) {
         classList.push('btn-ghost');
-    }
-    if (props.size && typeof props.size === 'string') {
-        let sizes: { [key: string]: string } = {
-            xs: 'btn-xs',
-            sm: 'btn-sm',
-            md: '',
-            lg: 'btn-lg',
-        };
-
-        classList.push(sizes[props.size]);
     }
     if (props.join) {
         classList.push('join-item');
