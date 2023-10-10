@@ -6,6 +6,9 @@ export default {
     test: {
         globals: true,
         environment: 'jsdom',
+        coverage: {
+            provider: 'v8'
+        }
     },
     resolve: {
         alias: {
