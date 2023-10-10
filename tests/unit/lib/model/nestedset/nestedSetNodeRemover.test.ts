@@ -1,7 +1,5 @@
-import {describe, expect, test} from "@jest/globals";
-import {Annotation} from "~/lib/model/annotation";
+import {describe, expect, it} from "vitest";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
-import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {
     annotationType,
     annotator,
@@ -11,7 +9,7 @@ import {
 import {NestedSetNodeRemover} from "~/lib/model/nestedset/nestedSetNodeRemover";
 
 describe('NestedSetNodeRemover.removeAnnotationNode(...)', () => {
-    test('testing remove node', () => {
+    it('testing remove node', () => {
 
         let documentString = 'AA BB CC DD EE';
 

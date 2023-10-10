@@ -1,4 +1,4 @@
-import {describe, test, expect, beforeEach, jest} from "@jest/globals";
+import {describe, it, expect, beforeEach, vi} from "vitest";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Annotation} from "~/lib/model/annotation";
 import {AnnotationType} from "~/lib/model/annotationType";
@@ -40,9 +40,9 @@ const annotations: Annotation[] = Array.from([
     createMockedAnnotations(3, 8, 10)
 ]);
 
-jest.mock("~/lib/orbisApi/orbisApiService", () => {
+vi.mock("~/lib/orbisApi/orbisApiService", () => {
     return {
-        OrbisApiService: jest.fn().mockImplementation(() => ({
+        OrbisApiService: vi.fn().mockImplementation(() => ({
             getAnnotations: async (documentId: number, documentContent: string, runId: number,
                                    annotationTypes: AnnotationType[], orbisApiService: OrbisApiService):
                 Promise<Annotation[] | Error> => {
@@ -60,7 +60,7 @@ beforeEach(() => {
 });
 
 describe('AnnotationStore.loadAnnotations()', () => {
-    test('load all annotations for document and a specific run',
+    it('load all annotations for document and a specific run',
         async () => {
             const annotationStore = useAnnotationStore();
             const documentId = 1;
@@ -89,7 +89,7 @@ describe('AnnotationStore.loadAnnotations()', () => {
 });
 
 describe('Complex undo/redo patterns', () => {
-    test('Delete a nested annotation and execute undo/redo',
+    it('Delete a nested annotation and execute undo/redo',
         async () => {
             const annotationStore = useAnnotationStore();
             const documentId = 1;

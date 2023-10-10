@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, it} from "vitest";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {createPinia, setActivePinia} from "pinia";
 import {Error} from "~/lib/model/error";
@@ -39,9 +39,9 @@ const corpora = Array.from([
 ]);
 
 // Create a mock class for OrbisApiService with all required methods for this test suite
-jest.mock("~/lib/orbisApi/orbisApiService", () => {
+vi.mock("~/lib/orbisApi/orbisApiService", () => {
     return {
-        OrbisApiService: jest.fn().mockImplementation(() => ({
+        OrbisApiService: vi.fn().mockImplementation(() => ({
             getCorpus: async (corpusId: number): Promise<Corpus | Error> => {
                 return Parser.parse(Corpus, Promise.resolve(corpus));
             },
@@ -59,13 +59,13 @@ describe("Corpus Store", () => {
         setActivePinia(createPinia());
     });
 
-    test('Initial state should return default state values', () => {
+    it('Initial state should return default state values', () => {
         const corpusStore = useCorpusStore();
         expect(corpusStore.corpus).toEqual({} as Corpus);
         expect(corpusStore.corpora).toEqual([] as Corpus[]);
     });
 
-    test('Resetting the state should return default initial state values', () => {
+    it('Resetting the state should return default initial state values', () => {
         const corpusStore = useCorpusStore();
         corpusStore.reset();
 
@@ -73,7 +73,7 @@ describe("Corpus Store", () => {
         expect(corpusStore.corpora).toEqual([] as Corpus[]);
     });
 
-    test("loadCorpus should fetch and update a corpus", async () => {
+    it("loadCorpus should fetch and update a corpus", async () => {
         const corpusStore = useCorpusStore();
         const corpusId = 1;
 
@@ -82,7 +82,7 @@ describe("Corpus Store", () => {
         expect(corpusStore.corpus).toEqual(corpus);
     });
 
-    test("loadCorpora should fetch and update a corpus", async () => {
+    it("loadCorpora should fetch and update a corpus", async () => {
         const corpusStore = useCorpusStore();
         const corpusId = 1;
 

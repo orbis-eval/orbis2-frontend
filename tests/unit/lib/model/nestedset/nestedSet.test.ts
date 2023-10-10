@@ -1,4 +1,4 @@
-import {describe, expect, test} from "@jest/globals";
+import {describe, expect, it} from "vitest";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {
@@ -9,7 +9,7 @@ import {
 } from "~/tests/unit/lib/model/nestedset/nestedSetUtils";
 
 describe('NestedSet.toTree(...)', () => {
-    test('test calculating the tree', () => {
+    it('test calculating the tree', () => {
 
         let mockAnnotationNodes: NestedSetNode[] = [
             mockAnnotationNode('AABB', 0, 4, 1, annotationType, annotator),
@@ -62,7 +62,7 @@ describe('NestedSet.toTree(...)', () => {
         }
     });
 
-    test('test small example', () => {
+    it('test small example', () => {
         let mockAnnotations = [
             mockAnnotationNode('AA', 0, 2, 1, annotationType, annotator),
             mockAnnotationNode('CC DD EE', 6, 14, 2, annotationType, annotator),
@@ -93,7 +93,7 @@ describe('NestedSet.toTree(...)', () => {
         }
     });
 
-    test('test creating tree from incorrect overlapping annotations', () => {
+    it('test creating tree from incorrect overlapping annotations', () => {
 
         let documentString = 'ABCD';
         let mockAnnotations = [
@@ -115,7 +115,7 @@ describe('NestedSet.toTree(...)', () => {
         expect(currentParseError.nodes[1].end_indices[0]).toEqual(3);
     });
 
-    test('test creating tree from annotations without space between', () => {
+    it('test creating tree from annotations without space between', () => {
         let documentString = 'AB';
         let mockAnnotations = [
             mockAnnotationNode('A', 0, 1, 1, annotationType, annotator),
@@ -144,7 +144,7 @@ describe('NestedSet.toTree(...)', () => {
 
 
 describe('NestedSet.generateLineNodes(...)', () => {
-    test('NestedSet.generateLineNodes()', () => {
+    it('NestedSet.generateLineNodes()', () => {
         let document = `line1
 line2
 line3`;
@@ -161,7 +161,7 @@ line3`;
 
 describe('NestedSet.trimWhiteSpaces(...)', () => {
 
-    test('mock with whitespaces in the beginning and end', () => {
+    it('mock with whitespaces in the beginning and end', () => {
         let nodeWithWhiteSpace = new NestedSetNode(
             mockAnnotationNode('  A  ', 0, 5, 1, annotationType, annotator)
         );
@@ -170,7 +170,7 @@ describe('NestedSet.trimWhiteSpaces(...)', () => {
         expect(nodeWithWhiteSpace.start_indices[0]).toEqual(2);
     });
 
-    test('mock with whitespaces in the beginning', () => {
+    it('mock with whitespaces in the beginning', () => {
         let nodeWithWhiteSpace = new NestedSetNode(
             mockAnnotationNode('  A', 0, 3, 1, annotationType, annotator)
         );
@@ -179,7 +179,7 @@ describe('NestedSet.trimWhiteSpaces(...)', () => {
         expect(nodeWithWhiteSpace.end_indices[0]).toEqual(3);
     });
 
-    test('mock with whitespaces in the end', () => {
+    it('mock with whitespaces in the end', () => {
         let nodeWithWhiteSpace = new NestedSetNode(
             mockAnnotationNode('A   ', 0, 4, 1, annotationType, annotator)
         );
@@ -190,7 +190,7 @@ describe('NestedSet.trimWhiteSpaces(...)', () => {
 });
 
 describe('test json serialization', () => {
-    test('test annotation json serialization', () => {
+    it('test annotation json serialization', () => {
         let annotationNode = mockAnnotationNode('A   ', 0, 4, 1, annotationType, annotator);
         expect(('_id' in annotationNode)).toBeTruthy();
         expect(('_id' in annotationNode.annotation_type)).toBeTruthy();

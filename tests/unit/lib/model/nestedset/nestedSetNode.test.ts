@@ -1,4 +1,4 @@
-import {describe, expect, test} from "@jest/globals";
+import {describe, expect, it} from "vitest";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {
     annotationType,
@@ -8,7 +8,7 @@ import {
 } from "~/tests/unit/lib/model/nestedset/nestedSetUtils";
 
 describe('NestedSetNode.getAnnotations(...)', () => {
-    test('get all annotations from a node', () => {
+    it('get all annotations from a node', () => {
         let mockAnnotations = [
             mockAnnotationNode('AA', 0, 2, 1, annotationType, annotator),
             mockAnnotationNode('CC DD EE', 6, 14, 2, annotationType, annotator),
@@ -36,7 +36,7 @@ describe('NestedSetNode.getAnnotations(...)', () => {
 });
 
 describe('test json serialization', () => {
-    test('test annotation json serialization', () => {
+    it('test annotation json serialization', () => {
         let annotationNode = mockAnnotationNode('A   ', 0, 4, 1, annotationType, annotator);
         expect(('_id' in annotationNode)).toBeTruthy();
         expect(('_id' in annotationNode.annotation_type)).toBeTruthy();

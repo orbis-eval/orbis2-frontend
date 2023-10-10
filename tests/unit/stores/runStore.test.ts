@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, it} from "vitest";
 import {useRunStore} from "~/stores/runStore";
 import {createPinia, setActivePinia} from "pinia";
 import {Run} from "~/lib/model/run";
@@ -28,9 +28,9 @@ const runs : Run[] = Array.from([
 ]);
 
 // Create a mock class for OrbisApiService with all required methods for this test suite
-jest.mock("~/lib/orbisApi/orbisApiService", () => {
+vi.mock("~/lib/orbisApi/orbisApiService", () => {
     return {
-        OrbisApiService: jest.fn().mockImplementation(() => ({
+        OrbisApiService: vi.fn().mockImplementation(() => ({
             getRuns: async (corpusId: number): Promise<Run[] | Error> => {
                 return Parser.parseList(Run, Promise.resolve(runs));
             },
@@ -48,14 +48,14 @@ describe('Run Store', () => {
         setActivePinia(createPinia());
     });
 
-    test('Initial state should return default state values', () => {
+    it('Initial state should return default state values', () => {
         const runStore = useRunStore();
         expect(runStore.corpusId).toBe(-1);
         expect(runStore.runs).toEqual([]);
         expect(runStore.selectedRun).toEqual({});
     });
 
-    test('Resetting the state should return default initial state values', () => {
+    it('Resetting the state should return default initial state values', () => {
         const runStore = useRunStore();
         runStore.reset();
 
@@ -65,14 +65,14 @@ describe('Run Store', () => {
     });
 
 
-    test('changeSelectedRun should update selectedRun', () => {
+    it('changeSelectedRun should update selectedRun', () => {
         const runStore = useRunStore();
         const run = createRun(1, "Run 1", "some description");
         runStore.changeSelectedRun(run);
         expect(runStore.selectedRun).toEqual(run);
     });
 
-    test('loadRuns should update corpusId, runs, and selectedRun', async () => {
+    it('loadRuns should update corpusId, runs, and selectedRun', async () => {
         const runStore = useRunStore();
         const corpusId = 1;
         const corpus = runs[0].corpus;
@@ -84,7 +84,7 @@ describe('Run Store', () => {
         expect(runStore.selectedRun).toEqual(runs[0]);
     });
 
-    test('createRun should create a new run', async () => {
+    it('createRun should create a new run', async () => {
         const runStore = useRunStore();
         const corpusId = 1;
         const newRun = createRun(1, "Run 1", "some desc");

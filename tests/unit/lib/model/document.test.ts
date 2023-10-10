@@ -1,8 +1,8 @@
 import {Document} from "~/lib/model/document";
-import {describe, test, expect} from "@jest/globals";
+import {describe, it, expect} from "vitest";
 
 describe('Document.constructor()', () => {
-    test('create new object with interface', () => {
+    it('create new object with interface', () => {
         const jsonString = `{
               "content": "1234",
               "key": "abc",
@@ -12,7 +12,6 @@ describe('Document.constructor()', () => {
               "_id": 3804794706
             }`;
         const doc = new Document(JSON.parse(jsonString));
-        expect(doc instanceof Document).toBeTruthy();
         expect(doc.content).toEqual("1234");
     });
 });

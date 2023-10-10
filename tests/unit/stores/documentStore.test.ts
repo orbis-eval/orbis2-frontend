@@ -1,4 +1,4 @@
-import {beforeEach, describe, expect, jest, test} from "@jest/globals";
+import {beforeEach, describe, expect, vi, it} from "vitest";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {Document} from "~/lib/model/document";
 import {useDocumentStore} from "~/stores/documentStore";
@@ -43,9 +43,9 @@ function findDocumentById(docArray: Document[], targetId: number): Document | Er
 
 
 // Create a mock class for OrbisApiService with all required methods for this test suite
-jest.mock("~/lib/orbisApi/orbisApiService", () => {
+vi.mock("~/lib/orbisApi/orbisApiService", () => {
     return {
-        OrbisApiService: jest.fn().mockImplementation(() => ({
+        OrbisApiService: vi.fn().mockImplementation(() => ({
             getDocuments: async (runId: number, pageSize: number | undefined = undefined, skip: number = 0): Promise<Document[] | Error> => {
                 return Parser.parseList(Document, Promise.resolve(documents));
             },
@@ -71,7 +71,7 @@ describe("Document Store", () => {
         setActivePinia(createPinia());
     });
 
-    test('Initial state should return default state values', () => {
+    it('Initial state should return default state values', () => {
         const documentStore = useDocumentStore();
         expect(documentStore.documents).toEqual([] as Document[]);
         expect(documentStore.nrOfDocuments).toEqual(1);
@@ -79,7 +79,7 @@ describe("Document Store", () => {
         expect(documentStore.currentPage).toEqual(1);
     });
 
-    test('Resetting the state should return default initial state values', () => {
+    it('Resetting the state should return default initial state values', () => {
         const documentStore = useDocumentStore();
         documentStore.reset();
 
@@ -89,7 +89,7 @@ describe("Document Store", () => {
         expect(documentStore.currentPage).toEqual(1);
     });
 
-    test("loadDocuments should fetch and update documents", async () => {
+    it("loadDocuments should fetch and update documents", async () => {
         const documentStore = useDocumentStore();
         const runId = 1;
         const pageSize = 10;
@@ -100,7 +100,7 @@ describe("Document Store", () => {
         expect(documentStore.documents).toEqual(documents);
     });
 
-    test("countDocuments should fetch and update the number of documents", async () => {
+    it("countDocuments should fetch and update the number of documents", async () => {
         const documentStore = useDocumentStore();
         const runId = 1;
         const mockedNumberOfDocuments = documents.length;
@@ -110,7 +110,7 @@ describe("Document Store", () => {
         expect(documentStore.nrOfDocuments).toEqual(mockedNumberOfDocuments);
     });
 
-    test("nextDocument should fetch the next document and update the current document", async () => {
+    it("nextDocument should fetch the next document and update the current document", async () => {
         const documentStore = useDocumentStore();
         documentStore.currentDocument = documents[0];
         const runId = 1;
@@ -120,7 +120,7 @@ describe("Document Store", () => {
         expect(documentStore.currentDocument).toEqual(documents[1]);
     });
 
-    test("previousDocument should fetch the previous document and update the current document", async () => {
+    it("previousDocument should fetch the previous document and update the current document", async () => {
         const documentStore = useDocumentStore();
         documentStore.currentDocument = documents[2];
         const runId = 1;

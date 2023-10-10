@@ -1,10 +1,9 @@
-import {Document} from "~/lib/model/document";
-import {describe, test, expect} from "@jest/globals";
+import {describe, it, expect} from "vitest";
 import {Annotation} from "~/lib/model/annotation";
 import {Annotator} from "~/lib/model/annotator";
 
 describe('Annotation.constructor()', () => {
-    test('create new annotation from object',
+    it('create new annotation from object',
         () => {
 
             let annotationObject = {
@@ -24,7 +23,7 @@ describe('Annotation.constructor()', () => {
                     name: "Type B",
                     color_id: 1,
                     toJSON() {
-                        const { _id, ...json } = this;
+                        const {_id, ...json} = this;
                         return json;
                     }
                 },
@@ -34,7 +33,7 @@ describe('Annotation.constructor()', () => {
                     roles: [],
                     password: "47DEQpj8HB",
                     toJSON() {
-                        const { _id, ...json } = this;
+                        const {_id, ...json} = this;
                         return json;
                     }
                 },
@@ -43,7 +42,7 @@ describe('Annotation.constructor()', () => {
                 metadata: [],
                 timestamp: new Date(),
                 toJSON() {
-                    const { _id, ...json } = this;
+                    const {_id, ...json} = this;
                     return json;
                 }
             };
@@ -56,7 +55,7 @@ describe('Annotation.constructor()', () => {
 
 
 describe('A.constructor()', () => {
-    test('create new A from object',
+    it('create new A from object',
         () => {
 
             let aObject = {
@@ -66,19 +65,19 @@ describe('A.constructor()', () => {
                     name: "my b instance",
                     _id: 1,
                     toJSON() {
-                        const { _id, ...json } = this;
+                        const {_id, ...json} = this;
                         return json;
                     }
                 },
                 toJSON() {
-                    const { _id, ...json } = this;
+                    const {_id, ...json} = this;
                     return json;
                 }
             };
 
             let aInstance = new A(aObject);
             expect(aInstance instanceof A).toBeTruthy();
-            expect(aInstance.b  instanceof B).toBeTruthy();
+            expect(aInstance.b instanceof B).toBeTruthy();
         });
 });
 
@@ -96,7 +95,7 @@ class A {
     }
 
     toJSON() {
-        const { _id, ...json } = this;
+        const {_id, ...json} = this;
         return json;
     }
 }
@@ -111,7 +110,7 @@ class B {
     }
 
     toJSON() {
-        const { _id, ...json } = this;
+        const {_id, ...json} = this;
         return json;
     }
 }

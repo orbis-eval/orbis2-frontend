@@ -1,4 +1,4 @@
-import {describe, expect, test} from "@jest/globals";
+import {describe, expect, it} from "vitest";
 import {Annotation} from "~/lib/model/annotation";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
@@ -11,7 +11,7 @@ import {
 import {NestedSetNodeInserter} from "~/lib/model/nestedset/nestedSetNodeInserter";
 
 describe('NestedSetNodeInserter.insertAnnotationNode(...)', () => {
-    test('testing inserting node into existing tree', () => {
+    it('testing inserting node into existing tree', () => {
 
         let documentString = 'AA BB CC DD EE';
 
@@ -95,7 +95,7 @@ describe('NestedSetNodeInserter.insertAnnotationNode(...)', () => {
         }
     });
 
-    test('testing inserting node into a tree without annotations', () => {
+    it('testing inserting node into a tree without annotations', () => {
         let documentString = 'AA BB CC DD EE';
 
         let rootNode = NestedSet.toTree(

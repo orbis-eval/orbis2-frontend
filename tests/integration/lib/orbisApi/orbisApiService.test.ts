@@ -1,6 +1,6 @@
-import {describe, test, expect} from "@jest/globals";
-import {Document} from "@/lib/model/document";
-import {OrbisApiService} from "@/lib/orbisApi/orbisApiService";
+import {describe, it, expect} from "vitest";
+import {Document} from "~/lib/model/document";
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {TypedInternalResponse} from "nitropack";
 import {Annotation} from "~/lib/model/annotation";
 import {AnnotationType} from "~/lib/model/annotationType";
@@ -31,7 +31,7 @@ class OrbisApiServiceMock extends OrbisApiService {
 }
 
 describe('OrbisApiService.getDocument()', () => {
-    test('get mocked document and parse it into correct document type', async () => {
+    it('get mocked document and parse it into correct document type', async () => {
         const orbisApiServiceMock = new OrbisApiServiceMock(
             {
                 'content': '1234',
@@ -64,7 +64,7 @@ describe('OrbisApiService.getDocument()', () => {
 });
 
 describe('OrbisApiService.getDocuments()', () => {
-    test('get mocked list of documents and parse it into correct list of document types', async () => {
+    it('get mocked list of documents and parse it into correct list of document types', async () => {
         const orbisApiServiceMock = new OrbisApiServiceMock([
             {
                 'content': '1234',
@@ -122,7 +122,7 @@ describe('OrbisApiService.getDocuments()', () => {
 });
 
 describe('OrbisApiService.getCorpora()', () => {
-    test('get mocked list of corpora and parse it into correct list of corpus types', async () => {
+    it('get mocked list of corpora and parse it into correct list of corpus types', async () => {
         const orbisApiServiceMock = new OrbisApiServiceMock([
             {
                 'name': 'corpus1',
@@ -169,7 +169,7 @@ describe('OrbisApiService.getCorpora()', () => {
 
 
 describe('OrbisApiService.annotationCommands', () => {
-    test('test adding annotation with annotation_type and annotator', async () => {
+    it('test adding annotation with annotation_type and annotator', async () => {
 
         let mockAnnotation = new Annotation({
             "key": "",
