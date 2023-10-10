@@ -1,37 +1,43 @@
 <template>
-  <ModalWarning
-    :message="`Deleting run with ${run.name} will remove the run from this corpus! Do you want to continue?`"
-    confirm-text="ok"
-    declineText="cancel"
-    title="Delete run?"
-    :onConfirm="confirm"
-    :onDecline="decline"
-    :event-bus-name="props.eventBusName"
-  />
+  <Warning
+        :message="`Deleting run with ${propsObject.name} will remove the run from this corpus! Do you want to continue?`"
+        confirm-text="ok"
+        declineText="cancel"
+        title="Delete run?"
+        :onConfirm="deletionConfirmed"
+        :onDecline="onDecline"/>
 </template>
 
 <script lang="ts" setup>
+import ModalListRuns from "~/components/modal/listRuns.vue";
+import ModalRemoveRun from "~/components/modal/removeRun.vue";
+
 import {useRunStore} from "~/stores/runStore";
 import {Run} from "~/lib/model/run";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
-
-const props = defineProps({
-  run: Run,
-  eventBusName: { type: String, default: '' }
-});
-
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
+const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
+const message = ref();
 
-async function confirm() {
+const props = defineProps({
+  propsObject: Run
+});
+
+const onDecline = () => {
+  closeModal();
+  openModal(ModalListRuns);
+}
+
+const deletionConfirmed = async () => {
   try {
-    await runStore.removeRun(props.run, $orbisApiService);
+    await runStore.removeRun(props.propsObject, $orbisApiService);
   } catch (error) {
     // @Todo: Show error message to user
     console.error(error);
+  } finally {
+    onDecline()
   }
 }
-
-const decline = () => {};
 </script>

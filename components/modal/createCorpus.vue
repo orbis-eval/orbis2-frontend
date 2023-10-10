@@ -1,35 +1,25 @@
 <template>
-  <OrbisModal :event-bus-name="props.eventBusName">
-    <template v-slot:body>
-      <FileInput cancelText="cancel" submitText="import" :onSubmit="createCorpus" :onCancel="cancel" />
-    </template>
-  </OrbisModal>
+  <div>
+    <h2 class="font-bold text-3xl mb-5">Create Corpus</h2>
+    <FileInput cancelText="cancel" submitText="import" :onSubmit="createCorpus" :onCancel="cancel" />
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { useCorpusStore } from "~/stores/corpusStore";
+import {useCorpusStore} from "~/stores/corpusStore";
 
-const props = defineProps({
-  eventBusName: { type: String, default: '' }
-});
-const { $orbisApiService, $busEmit } = useNuxtApp();
+const { $orbisApiService } = useNuxtApp();
+const { closeModal } = useModal();
 const corpusStore = useCorpusStore();
-
-const handleEventBusName = () => {
-  if (props.eventBusName.length > 0) {
-    $busEmit(props.eventBusName);
-  }
-}
-
-async function createCorpus(corpusName: string, chosenFiles: File[]) {
+const cancel = () => closeModal();
+const createCorpus = async (corpusName: string, chosenFiles: File[]) => {
   try {
     await corpusStore.addCorpus(corpusName, chosenFiles, $orbisApiService);
   } catch (Error) {
     // Todo: Add Error Message
     console.error(Error);
   } finally {
-    handleEventBusName();
+    closeModal();
   }
-}
-const cancel = () => handleEventBusName();
+};
 </script>

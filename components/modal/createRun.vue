@@ -1,53 +1,38 @@
 <template>
-  <OrbisModal title="Create Run" :event-bus-name="props.eventBusName" :isLoading="isLoading">
-    <template v-slot:body>
-      <div class="mb-4">
-        <label class="text-white block mb-1 ">Name:</label>
-        <input v-model="newRunName" class="input w-full bg-white text-black" required type="text" />
-      </div>
-      <div class="mb-4">
-        <label class="text-white block mb-1">Description:</label>
-        <input v-model="newRunDesc" class="input w-full bg-white text-black" required type="text" />
-      </div>
-    </template>
-    <template v-slot:footer>
+  <div>
+    <h2 class="font-bold text-3xl mb-5">Create run</h2>
+    <div class="mb-4">
+      <label class="text-white block mb-1 ">Name:</label>
+      <input v-model="newRunName" class="input w-full bg-white text-black" required type="text" />
+    </div>
+    <div class="mb-4">
+      <label class="text-white block mb-1">Description:</label>
+      <input v-model="newRunDesc" class="input w-full bg-white text-black" required type="text" />
+    </div>
+    <div class="grid grid-cols-3 gap-4 mt-10">
       <OrbisButton :onClick="createRun">Create</OrbisButton>
-      <OrbisButton :event-bus-name="props.eventBusName">Cancel</OrbisButton>
-    </template>
-  </OrbisModal>
+      <OrbisButton :onClick="() => closeModal()">Cancel</OrbisButton>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
-import { useRunStore } from "~/stores/runStore";
-import { storeToRefs } from "pinia";
-import { Run } from "~/lib/model/run";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
-import { useCorpusStore } from "~/stores/corpusStore";
+import ModalCreateRun from "~/components/modal/createRun.vue";
+import {useRunStore} from "~/stores/runStore";
+import {storeToRefs} from "pinia";
+import {Run} from "~/lib/model/run";
+import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {useCorpusStore} from "~/stores/corpusStore";
 
-const props = defineProps({
-    eventBusName: { type: String, default: '' }
-});
-
-const { $orbisApiService, $busEmit } = useNuxtApp() as { $orbisApiService: OrbisApiService, $busEmit: (event: string) => void };
-
+const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
+const {closeModal} = useModal();
 const runStore = useRunStore();
-
 const corpusStore = useCorpusStore();
-const { corpus } = storeToRefs(corpusStore);
-
+const {corpus} = storeToRefs(corpusStore);
 const newRunName = ref("");
 const newRunDesc = ref("");
-const isLoading = ref(false);
-
-const handleEventBusName = () => {
-  if (props.eventBusName.length > 0) {
-    $busEmit(props.eventBusName);
-  }
-}
-
-async function createRun() {
+const createRun = async () => {
   try {
-    isLoading.value = true;
     const newRun = new Run({ name: newRunName.value, description: newRunDesc.value, corpus: corpus.value });
     await runStore.createRun(newRun, corpus.value, $orbisApiService);
   } catch (error) {
@@ -55,9 +40,7 @@ async function createRun() {
     console.error(error);
   }
   finally {
-    isLoading.value = false;
-    handleEventBusName();
+    closeModal();
   }
 }
-
 </script>

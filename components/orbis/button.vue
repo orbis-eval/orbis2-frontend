@@ -18,18 +18,10 @@ const props = defineProps({
         default: 'md'
     },
     join: Boolean, // Join button description
-    eventBusName: { type: String, default: '' },
-    onClick: { type: Function }
+    onClick: { type: Function, required: false }
 });
 
-const { $busEmit } = useNuxtApp();
 const isLoading = ref(false);
-
-const handleEventBusName = () => {
-    if (props.eventBusName.length > 0) {
-        $busEmit(props.eventBusName);
-    }
-};
 
 /**
  * @description 
@@ -51,7 +43,6 @@ const clickEvent = async () => {
     }
     finally {
         isLoading.value = false;
-        handleEventBusName();
     }
 }
 

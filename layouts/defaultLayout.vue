@@ -26,6 +26,7 @@
         <slot name="sidebar"/>
       </aside>
     </div>
+    <OrbisModalContainer/>
   </div>
 </template>
 

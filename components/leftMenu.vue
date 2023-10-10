@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-col justify-start items-center bg-neutral relative h-full">
+  <div class="flex flex-col justify-start items-center bg-neutral border-r-2 border-gray-600 relative h-full">
     <ul class="menu bg-neutral pt-10 absolut inset-y-0 left-0">
       <li>
         <NuxtLink :to="'/'" class="mt-2">

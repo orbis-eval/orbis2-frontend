@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-neutral rounded-xl p-6 overflow-x-auto flex-1 mb-10">
+  <div class="bg-neutral border-2 border-gray-600 rounded-xl p-6 overflow-x-auto flex-1 mb-10">
     <h1 class="text-3xl text-white mb-5">Documents</h1>
     <table class="table text-white">
       <thead class="text-left">

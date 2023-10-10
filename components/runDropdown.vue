@@ -1,5 +1,5 @@
 <template>
-  <div v-if="runs" class="bg-neutral flex items-center gap-4 rounded-xl p-2 mt-20 mb-10">
+  <div v-if="runs" class="bg-neutral border-2 border-gray-600 flex items-center gap-4 rounded-xl p-2 mt-20 mb-10">
     <details id="run_dropdown" class="dropdown">
       <summary class="m-1 btn bg-gray-100 text-black hover:bg-gray-100 hover:text-black w-full">
         {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
@@ -13,8 +13,7 @@
         </li>
       </ul>
     </details>
-    <OrbisButton event-bus-name="modalListRuns">Runs</OrbisButton>
-    <ModalListRuns event-bus-name="modalListRuns" />
+    <OrbisButton :onClick="() => openModal(ModalListRuns)">Runs</OrbisButton>
   </div>
 </template>
 
@@ -24,10 +23,13 @@ import {useRunStore} from "~/stores/runStore";
 import {storeToRefs} from "pinia";
 import {CoPencil, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
 import {Run} from "~/lib/model/run";
+import ModalListRuns from "~/components/modal/listRuns.vue";
 
 addIcons(MdDeleteforeverOutlined, CoPencil);
 
 const emit = defineEmits(['runChanged']);
+
+const { openModal } = useModal();
 
 const runStore = useRunStore();
 const {selectedRun} = storeToRefs(runStore);
