@@ -65,13 +65,13 @@ export const useAnnotationStore = defineStore('annotation', () => {
 
     function parseErrorCallBack() {
         //TODO: Only placeholder for the moment
-         console.error("Creating nestedNodeSet failed");
+        console.error("Creating nestedNodeSet failed");
     }
 
     async function addAnnotation(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
                                  annotator: Annotator, runId: number, documentId: number,
                                  orbisApiService: OrbisApiService) {
-        if (nestedSetRootNode.value) {
+        if (nestedSetRootNode.value instanceof NestedSetNode) {
             const addCommand = new AddAnnotationCommand(surfaceForm, start, end, annotationType,
                 annotator, runId, documentId, nestedSetRootNode.value, orbisApiService);
             await annotationHistory.execute(addCommand);
@@ -81,7 +81,7 @@ export const useAnnotationStore = defineStore('annotation', () => {
     }
 
     async function deleteAnnotation(annotation: NestedSetNode, orbisApiService: OrbisApiService) {
-        if (nestedSetRootNode.value) {
+        if (nestedSetRootNode.value instanceof NestedSetNode) {
             const deleteCommand = new DeleteAnnotationCommand(annotation, nestedSetRootNode.value, orbisApiService);
             await annotationHistory.execute(deleteCommand);
             isRedoDisabled.value = true;

@@ -1,4 +1,4 @@
-import {describe, it, expect, beforeEach, vi} from "vitest";
+import {describe, it, expect, beforeEach, vi, afterEach} from "vitest";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {Annotation} from "~/lib/model/annotation";
 import {AnnotationType} from "~/lib/model/annotationType";
@@ -7,8 +7,6 @@ import {createPinia, setActivePinia} from "pinia";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
-
-let mockedAnnotation: NestedSetNode;
 
 const createMockedAnnotations = function (annotationId: number, startIndex: number, endIndex: number) {
     return new Annotation({
@@ -34,6 +32,10 @@ const createMockedAnnotations = function (annotationId: number, startIndex: numb
     });
 };
 
+const createNestedSetNode = function (annotationId: number, startIndex: number, endIndex: number) {
+    return new NestedSetNode(createMockedAnnotations(annotationId, startIndex, endIndex));
+};
+
 const annotations: Annotation[] = Array.from([
     createMockedAnnotations(1, 0, 5),
     createMockedAnnotations(2, 5, 7),
@@ -50,6 +52,15 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
             }
         }))
     };
+});
+
+const commandHistoryExecuteSpy = vi.fn().mockResolvedValue(null);
+vi.mock('~/lib/utils/annotation/annotationCommandHistory', () => {
+    return {
+        CommandHistory: vi.fn().mockImplementation(() => ({
+            execute: commandHistoryExecuteSpy
+        }))
+    }
 });
 
 const mockedOrbisApiService = new OrbisApiService('');
@@ -86,6 +97,103 @@ describe('AnnotationStore.loadAnnotations()', () => {
             expect(lineNode?.end_indices[0]).toEqual(40);
         });
 
+});
+
+describe('Add annotations', () => {
+
+    afterEach(() => {
+        commandHistoryExecuteSpy.mockClear();
+    });
+
+    it('Add an annotation without calling loadAnnotations() should rise an exception', async () => {
+        const annotationStore = useAnnotationStore();
+        const documentId = 1;
+        const runId = 1;
+        const annotationTypes = [new AnnotationType({
+            color_id: 1,
+            name: 'type1',
+            _id: 1
+        })];
+        const annotator = new Annotator({
+            name: 'name',
+            roles: [],
+            _id: 2
+        });
+
+        await annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
+            annotator, runId, documentId, mockedOrbisApiService);
+
+        expect(commandHistoryExecuteSpy).not.toHaveBeenCalled();
+        expect(annotationStore.isUndoDisabled).toBeTruthy();
+        expect(annotationStore.isRedoDisabled).toBeTruthy();
+
+    });
+
+    it('Add an annotation after calling loadAnnotations()', async () => {
+        const annotationStore = useAnnotationStore();
+        const documentId = 1;
+        const runId = 1;
+        const documentContent = 'test und noch ein test und noch ein test';
+        const annotationTypes = [new AnnotationType({
+            color_id: 1,
+            name: 'type1',
+            _id: 1
+        })];
+        const annotator = new Annotator({
+            name: 'name',
+            roles: [],
+            _id: 2
+        });
+        await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
+            mockedOrbisApiService);
+        await annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
+            annotator, runId, documentId, mockedOrbisApiService);
+
+        expect(commandHistoryExecuteSpy).toHaveBeenCalled();
+        expect(annotationStore.isUndoDisabled).toBeFalsy();
+        expect(annotationStore.isRedoDisabled).toBeTruthy();
+    });
+});
+
+
+describe('Delete annotations', () => {
+
+    afterEach(() => {
+        commandHistoryExecuteSpy.mockClear();
+    });
+
+    it('Delete an annotation without calling loadAnnotations() should rise an exception', async () => {
+        const annotationStore = useAnnotationStore();
+        const annotation = createNestedSetNode(100, 1, 5);
+
+        await annotationStore.deleteAnnotation(annotation, mockedOrbisApiService);
+
+        expect(commandHistoryExecuteSpy).not.toHaveBeenCalled();
+        expect(annotationStore.isUndoDisabled).toBeTruthy();
+        expect(annotationStore.isRedoDisabled).toBeTruthy();
+
+    });
+
+    it('Delete an annotation after calling loadAnnotations()', async () => {
+        const annotationStore = useAnnotationStore();
+        const documentId = 1;
+        const runId = 1;
+        const documentContent = 'test und noch ein test und noch ein test';
+        const annotationTypes = [new AnnotationType({
+            color_id: 1,
+            name: 'type1',
+            _id: 1
+        })];
+        const annotation = createNestedSetNode(100, 1, 5);
+
+        await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
+            mockedOrbisApiService);
+        await annotationStore.deleteAnnotation(annotation, mockedOrbisApiService);
+
+        expect(commandHistoryExecuteSpy).toHaveBeenCalled();
+        expect(annotationStore.isUndoDisabled).toBeFalsy();
+        expect(annotationStore.isRedoDisabled).toBeTruthy();
+    });
 });
 
 describe('Complex undo/redo patterns', () => {
