@@ -58,7 +58,8 @@ const commandHistoryExecuteSpy = vi.fn().mockResolvedValue(null);
 vi.mock('~/lib/utils/annotation/annotationCommandHistory', () => {
     return {
         CommandHistory: vi.fn().mockImplementation(() => ({
-            execute: commandHistoryExecuteSpy
+            execute: commandHistoryExecuteSpy,
+            reset: vi.fn()
         }))
     }
 });
@@ -120,8 +121,9 @@ describe('Add annotations', () => {
             _id: 2
         });
 
-        await annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
-            annotator, runId, documentId, mockedOrbisApiService);
+        await expect(annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
+            annotator, runId, documentId, mockedOrbisApiService))
+            .rejects.toThrowError();
 
         expect(commandHistoryExecuteSpy).not.toHaveBeenCalled();
         expect(annotationStore.isUndoDisabled).toBeTruthy();
@@ -166,7 +168,8 @@ describe('Delete annotations', () => {
         const annotationStore = useAnnotationStore();
         const annotation = createNestedSetNode(100, 1, 5);
 
-        await annotationStore.deleteAnnotation(annotation, mockedOrbisApiService);
+        await expect(annotationStore.deleteAnnotation(annotation, mockedOrbisApiService))
+            .rejects.toThrowError();
 
         expect(commandHistoryExecuteSpy).not.toHaveBeenCalled();
         expect(annotationStore.isUndoDisabled).toBeTruthy();

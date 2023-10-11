@@ -77,6 +77,8 @@ export const useAnnotationStore = defineStore('annotation', () => {
             await annotationHistory.execute(addCommand);
             isRedoDisabled.value = true;
             isUndoDisabled.value = false;
+        } else {
+            throw new Error("addAnnotation: Root node ist not set. Call first loadAnnotations.");
         }
     }
 
@@ -86,6 +88,8 @@ export const useAnnotationStore = defineStore('annotation', () => {
             await annotationHistory.execute(deleteCommand);
             isRedoDisabled.value = true;
             isUndoDisabled.value = false;
+        } else {
+            throw new Error("deleteAnnotation: Root node ist not set. Call first loadAnnotations.");
         }
     }
 
