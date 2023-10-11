@@ -8,22 +8,25 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
+const annotationTypes = [new AnnotationType({
+    color_id: 1,
+    name: 'type1',
+    _id: 1
+})];
+const annotator = new Annotator({
+    name: 'name',
+    roles: [],
+    _id: 2
+});
+
 const createMockedAnnotations = function (annotationId: number, startIndex: number, endIndex: number) {
     return new Annotation({
         key: 'my-key' + annotationId,
         surface_forms: ['surfaceForm'],
         start_indices: [startIndex],
         end_indices: [endIndex],
-        annotation_type: new AnnotationType({
-            color_id: -1,
-            name: 'type1',
-            _id: 1
-        }),
-        annotator: new Annotator({
-            name: 'name',
-            roles: [],
-            _id: 2
-        }),
+        annotation_type: annotationTypes[0],
+        annotator: annotator,
         run_id: 1,
         document_id: 1,
         metadata: [],
@@ -55,11 +58,15 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
 });
 
 const commandHistoryExecuteSpy = vi.fn().mockResolvedValue(null);
+const commandHistoryUndoSpy = vi.fn().mockResolvedValue(true);
+const commandHistoryRedoSpy = vi.fn().mockResolvedValue(true);
 vi.mock('~/lib/utils/annotation/annotationCommandHistory', () => {
     return {
         CommandHistory: vi.fn().mockImplementation(() => ({
             execute: commandHistoryExecuteSpy,
-            reset: vi.fn()
+            reset: vi.fn(),
+            undo: commandHistoryUndoSpy,
+            redo: commandHistoryRedoSpy
         }))
     }
 });
@@ -78,12 +85,6 @@ describe('AnnotationStore.loadAnnotations()', () => {
             const documentId = 1;
             const runId = 1;
             const documentContent = 'test und noch ein test und noch ein test';
-            const annotationTypes = [new AnnotationType({
-                color_id: 1,
-                name: 'type1',
-                _id: 1
-            })];
-
 
             await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
                 mockedOrbisApiService);
@@ -110,16 +111,6 @@ describe('Add annotations', () => {
         const annotationStore = useAnnotationStore();
         const documentId = 1;
         const runId = 1;
-        const annotationTypes = [new AnnotationType({
-            color_id: 1,
-            name: 'type1',
-            _id: 1
-        })];
-        const annotator = new Annotator({
-            name: 'name',
-            roles: [],
-            _id: 2
-        });
 
         await expect(annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
             annotator, runId, documentId, mockedOrbisApiService))
@@ -136,16 +127,7 @@ describe('Add annotations', () => {
         const documentId = 1;
         const runId = 1;
         const documentContent = 'test und noch ein test und noch ein test';
-        const annotationTypes = [new AnnotationType({
-            color_id: 1,
-            name: 'type1',
-            _id: 1
-        })];
-        const annotator = new Annotator({
-            name: 'name',
-            roles: [],
-            _id: 2
-        });
+
         await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
             mockedOrbisApiService);
         await annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
@@ -182,11 +164,6 @@ describe('Delete annotations', () => {
         const documentId = 1;
         const runId = 1;
         const documentContent = 'test und noch ein test und noch ein test';
-        const annotationTypes = [new AnnotationType({
-            color_id: 1,
-            name: 'type1',
-            _id: 1
-        })];
         const annotation = createNestedSetNode(100, 1, 5);
 
         await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
@@ -199,18 +176,30 @@ describe('Delete annotations', () => {
     });
 });
 
-describe('Complex undo/redo patterns', () => {
-    it('Delete a nested annotation and execute undo/redo',
-        async () => {
-            const annotationStore = useAnnotationStore();
-            const documentId = 1;
-            const runId = 1;
-            const documentContent = 'test';
-            const annotationTypes = [new AnnotationType({
-                color_id: 1,
-                name: 'type1',
-                _id: 1
-            })];
+describe('Test undo and redo', () => {
+    afterEach(() => {
+        commandHistoryRedoSpy.mockClear();
+        commandHistoryUndoSpy.mockClear();
+    });
 
-        });
+
+    it('Undo previous command', async () => {
+        const annotationStore = useAnnotationStore();
+
+        await annotationStore.undoAnnotation();
+        expect(commandHistoryUndoSpy).toHaveBeenCalled();
+        expect(annotationStore.isUndoDisabled).toBeTruthy();
+        expect(annotationStore.isRedoDisabled).toBeFalsy();
+
+    });
+
+    it('Redo previous command', async () => {
+        const annotationStore = useAnnotationStore();
+
+        await annotationStore.redoAnnotation();
+        expect(commandHistoryRedoSpy).toHaveBeenCalled();
+        expect(annotationStore.isUndoDisabled).toBeFalsy();
+        expect(annotationStore.isRedoDisabled).toBeTruthy();
+
+    });
 });
