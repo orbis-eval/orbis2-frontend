@@ -9,6 +9,7 @@ import {Annotator} from "~/lib/model/annotator";
 import {AddAnnotationCommand} from "~/lib/utils/annotation/addAnnotationCommand";
 import {AnnotationCommandHistory} from "~/lib/utils/annotation/annotationCommandHistory";
 import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
+import {Annotation} from "~/lib/model/annotation";
 
 export const useAnnotationStore = defineStore('annotation', () => {
     const nestedSetRootNode = ref({} as NestedSetNode | null);
@@ -29,16 +30,7 @@ export const useAnnotationStore = defineStore('annotation', () => {
             let annotationsFromDb = await orbisApiService.getAnnotations(runId,
                 documentId);
             if (Array.isArray(annotationsFromDb)) {
-                const mappedAnnotations = annotationsFromDb.map(annotation => {
-                    const annotationType = annotationTypes.find(annotationType =>
-                        annotationType.name === annotation.annotation_type.name);
-                    if (annotationType) {
-                        annotation.annotation_type.color_id = annotationType.color_id
-                    } else {
-                        console.error("Missing annotation type " + annotation.annotation_type.name);
-                    }
-                    return annotation;
-                });
+                const mappedAnnotations = mapAnnotations(annotationsFromDb, annotationTypes);
 
                 if (mappedAnnotations) {
                     let annotations = mappedAnnotations.map(annotation => new NestedSetNode(annotation));
@@ -61,6 +53,19 @@ export const useAnnotationStore = defineStore('annotation', () => {
         } catch (error) {
             return new Error("An error occurred while loading annotations");
         }
+    }
+
+    function mapAnnotations(annotationsFromDb: Annotation[], annotationTypes: AnnotationType[]) {
+        return annotationsFromDb.map(annotation => {
+            const annotationType = annotationTypes.find(annotationType =>
+                annotationType.name === annotation.annotation_type.name);
+            if (annotationType) {
+                annotation.annotation_type.color_id = annotationType.color_id
+            } else {
+                console.error("Missing annotation type " + annotation.annotation_type.name);
+            }
+            return annotation;
+        });
     }
 
     function parseErrorCallBack() {
