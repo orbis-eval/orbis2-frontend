@@ -13,8 +13,6 @@ import {Corpus} from "~/lib/model/corpus";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
-import ModalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
-
 const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const corpusStore = useCorpusStore();
 const { closeModal } = useModal();

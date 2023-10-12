@@ -32,8 +32,6 @@ import {storeToRefs} from "pinia";
 import ModalCreateCorpus from "~/components/modal/createCorpus.vue";
 import ModalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
-const emit = defineEmits(['openCreateCorpus', 'openDeleteCorpus']);
-
 import {Corpus} from "~/lib/model/corpus";
 const corpusStore = useCorpusStore();
 const {corpora} = storeToRefs(corpusStore);

@@ -39,8 +39,6 @@ const props = defineProps({
     }
 });
 
-const emit = defineEmits(['confirm', 'decline']);
-
 onBeforeMount(() => {
     window.addEventListener('keydown',
         (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, confirmClicked, declineClicked));

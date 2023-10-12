@@ -64,7 +64,6 @@ const filesPerPage = ref(5);
 const fileInput = ref(null);
 const selectedFiles = ref([]);
 const corpusNameToCreate = ref("");
-const emit = defineEmits(['submitted', 'cancelled']);
 
 const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
 const displayedFiles = computed(() => {
