@@ -20,6 +20,7 @@ describe('CommandHistory', () => {
 
   it('Undo a command', async () => {
     await commandHistory.execute(mockCommand);
+
     const undoIsEmpty = await commandHistory.undo();
 
     expect(mockCommand.undo).toHaveBeenCalled();
@@ -28,6 +29,7 @@ describe('CommandHistory', () => {
 
   it('Redo a command after undoing', async () => {
     await commandHistory.execute(mockCommand);
+
     await commandHistory.undo();
     const redoIsEmpty = await commandHistory.redo();
 
@@ -51,10 +53,19 @@ describe('CommandHistory', () => {
     expect(isEmpty).toBe(true);
   });
 
+  it('Should not redo if no command was previously executed', async () => {
+    const isEmpty = await commandHistory.redo();
+
+    expect(mockCommand.execute).not.toHaveBeenCalled();
+    expect(isEmpty).toBe(true);
+  });
+
   it('Should reset and not allow undo or redo', () => {
     commandHistory.reset();
 
     expect(commandHistory.undo()).resolves.toBe(true);
     expect(commandHistory.redo()).resolves.toBe(true);
+    expect(mockCommand.undo).not.toHaveBeenCalled();
+    expect(mockCommand.execute).not.toHaveBeenCalled();
   });
 });
