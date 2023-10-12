@@ -7,6 +7,9 @@ export default defineNuxtConfig({
     build: {
         transpile: ["oh-vue-icons"]
     },
+    typescript: {
+        typeCheck: true,
+    },
     tailwindcss: {
         // add '~tailwind.config` alias
         exposeConfig: true
