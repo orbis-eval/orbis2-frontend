@@ -44,7 +44,7 @@ const clickEvent = async () => {
     finally {
         isLoading.value = false;
     }
-}
+};
 
 const sizeMapping: { [key: string]: string } = {
     xs: 'btn-xs',
