@@ -1,14 +1,14 @@
-import { CommandHistory } from '~/lib/utils/annotation/annotationCommandHistory';
+import { AnnotationCommandHistory } from '~/lib/utils/annotation/annotationCommandHistory';
 import { IAnnotationCommand } from "~/lib/utils/annotation/iAnnotationCommand";
 import { describe, it, expect, beforeEach } from 'vitest';
 import { mock } from 'vitest-mock-extended';
 
 describe('CommandHistory', () => {
-  let commandHistory: CommandHistory;
+  let commandHistory: AnnotationCommandHistory;
   let mockCommand: IAnnotationCommand;
 
   beforeEach(() => {
-    commandHistory = new CommandHistory();
+    commandHistory = new AnnotationCommandHistory();
     mockCommand = mock<IAnnotationCommand>();
   });
 

@@ -1,6 +1,6 @@
 import {IAnnotationCommand} from "~/lib/utils/annotation/iAnnotationCommand";
 
-export class CommandHistory {
+export class AnnotationCommandHistory {
     private undoStack: IAnnotationCommand[] = [];
     private redoStack: IAnnotationCommand[] = [];
 

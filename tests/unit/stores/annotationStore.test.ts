@@ -62,7 +62,7 @@ const commandHistoryUndoSpy = vi.fn().mockResolvedValue(true);
 const commandHistoryRedoSpy = vi.fn().mockResolvedValue(true);
 vi.mock('~/lib/utils/annotation/annotationCommandHistory', () => {
     return {
-        CommandHistory: vi.fn().mockImplementation(() => ({
+        AnnotationCommandHistory: vi.fn().mockImplementation(() => ({
             execute: commandHistoryExecuteSpy,
             reset: vi.fn(),
             undo: commandHistoryUndoSpy,

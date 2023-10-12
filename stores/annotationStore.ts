@@ -7,12 +7,12 @@ import {Error} from "~/lib/model/error";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {AddAnnotationCommand} from "~/lib/utils/annotation/addAnnotationCommand";
-import {CommandHistory} from "~/lib/utils/annotation/annotationCommandHistory";
+import {AnnotationCommandHistory} from "~/lib/utils/annotation/annotationCommandHistory";
 import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
 
 export const useAnnotationStore = defineStore('annotation', () => {
     const nestedSetRootNode = ref({} as NestedSetNode | null);
-    const annotationHistory = new CommandHistory();
+    const annotationHistory = new AnnotationCommandHistory();
 
     const isUndoDisabled = ref(true);
     const isRedoDisabled = ref(true);
