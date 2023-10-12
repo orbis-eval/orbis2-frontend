@@ -17,7 +17,6 @@
 </template>
 
 <script lang="ts" setup>
-import ModalCreateRun from "~/components/modal/createRun.vue";
 import {useRunStore} from "~/stores/runStore";
 import {storeToRefs} from "pinia";
 import {Run} from "~/lib/model/run";

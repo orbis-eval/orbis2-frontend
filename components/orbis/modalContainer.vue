@@ -5,7 +5,7 @@
                 <component 
                     :is="modalComponent(modal)"
                     :propsObject="modal.getProps()"
-                    v-show="isModalOpen(modal)" 
+                    v-show="isModalOpen(modal)"
                     v-if="modal.isPropsValid()" />
             </template>
         </div>
@@ -16,9 +16,11 @@
 </template>
   
 <script lang="ts" setup>
+import {Modal} from "~/lib/modal/modal";
+
 const { modals, closeModal, isAnyOpen, isModalOpen } = useModal();
 const modalEl = ref<HTMLDialogElement>();
-const modalComponent = (modal) => {
+const modalComponent = (modal: Modal) => {
   return toRaw(modal.getComponent());
 };
 watch(isAnyOpen, (isOpen) => {
