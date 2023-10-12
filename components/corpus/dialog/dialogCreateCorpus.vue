@@ -18,7 +18,7 @@ defineExpose({showDialog});
 const {$orbisApiService} = useNuxtApp();
 const corpusStore = useCorpusStore();
 
-const createCorpusDialog = ref(null);
+const createCorpusDialog = ref({} as HTMLDialogElement);
 
 function showDialog() {
   createCorpusDialog.value.showModal();

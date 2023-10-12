@@ -1,6 +1,6 @@
 <template>
   <div>
-    <dialog id="delete_corpus" ref="deleteCorpus" class="modal">
+    <dialog id="delete_corpus" ref="deleteCorpusModal" class="modal">
       <form class="modal-box" method="dialog">
         <Warning :message="String(deletionMessage)"
                  :title="String(deletionTitle)"
@@ -23,15 +23,15 @@ const corpusStore = useCorpusStore();
 
 const deletionTitle = ref("");
 const deletionMessage = ref("");
-const corpusUnderDeletion = ref(null);
-const deleteCorpus = ref(null);
+const corpusUnderDeletion = ref({} as Corpus | null);
+const deleteCorpusModal = ref({} as HTMLDialogElement);
 
 function showDialog(corpus: Corpus) {
   deletionTitle.value = "Delete corpus?";
   deletionMessage.value = `Deleting corpus with "${corpus.name}" will remove all documents and runs of this corpus!
   Do you want to continue?`;
   corpusUnderDeletion.value = corpus;
-  deleteCorpus.value.showModal();
+  deleteCorpusModal.value.showModal();
 }
 
 async function deletionConfirmed() {

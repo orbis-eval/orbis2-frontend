@@ -30,7 +30,7 @@
         </div>
         <div v-else class="p-1">
           <div v-for="(file, index) in displayedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
-            <p id= index>{{ file.name }}</p>
+            <p id=index>{{ file.name }}</p>
             <button @click="removeFile(index)" class="text-gray-400 hover:text-white">
               <OhVueIcon name="md-deleteforever-outlined"/>
             </button>
@@ -58,22 +58,18 @@
 </template>
 
 <script setup lang="ts">
-import { OhVueIcon, addIcons } from "oh-vue-icons";
-import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+import {OhVueIcon, addIcons} from "oh-vue-icons";
+import {MdDeleteforeverOutlined} from "oh-vue-icons/icons";
 import {EventListenerUtils} from "~/lib/utils/eventListenerUtils";
 
 addIcons(MdDeleteforeverOutlined);
 
 const currentPage = ref(1);
 const filesPerPage = ref(5);
-const fileInput = ref(null);
-const selectedFiles = ref([]);
+const fileInput = ref({} as HTMLInputElement);
+const selectedFiles = ref([] as File[]);
 const corpusNameToCreate = ref("");
-const props = defineProps({
-  corpusName: String,
-  submitText: String,
-  cancelText: String
-});
+
 const emit = defineEmits(['submitted', 'cancelled']);
 
 const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
@@ -81,7 +77,7 @@ const displayedFiles = computed(() => {
   const startIndex = (currentPage.value - 1) * filesPerPage.value;
   const endIndex = startIndex + filesPerPage.value;
   return selectedFiles.value.slice(startIndex, endIndex);
-})
+});
 
 onBeforeMount(() => {
   window.addEventListener('keydown',
@@ -102,8 +98,10 @@ function removeFile(index: number) {
 }
 
 function inputChanged() {
-  for (const file of fileInput.value.files) {
-    selectedFiles.value.push(file);
+  if (fileInput.value.files) {
+    for (const file of fileInput.value.files) {
+      selectedFiles.value.push(file);
+    }
   }
 }
 
@@ -116,8 +114,10 @@ function dragOverHandler(event: Event) {
 }
 
 function dropHandler(event: DragEvent) {
-  for (const file of event.dataTransfer.files) {
-    selectedFiles.value.push(file);
+  if (event.dataTransfer) {
+    for (const file of event.dataTransfer.files) {
+      selectedFiles.value.push(file);
+    }
   }
 }
 

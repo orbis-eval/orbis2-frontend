@@ -24,7 +24,7 @@ import {Run} from "~/lib/model/run";
 
 defineExpose({showDialog});
 
-const runsDialogModal = ref(null);
+const runsDialogModal = ref({} as HTMLDialogElement);
 const activeView = ref("runView");
 const activeRun = ref<Run>();
 

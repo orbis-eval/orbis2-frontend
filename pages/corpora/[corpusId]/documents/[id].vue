@@ -33,20 +33,30 @@ const {selectedRun} = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
 const colorPalettesStore = useColorPalettesStore();
 
-const highlightedNestedSetNodeId = ref(null);
+const highlightedNestedSetNodeId = ref(-1);
 
 
 onMounted(async () => {
   loading.value = true;
   try {
-    await runStore.loadRuns(route.params.corpusId, $orbisApiService);
-    await documentStore.loadDocument(route.params.id, $orbisApiService);
-    await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
-    await colorPalettesStore.loadColorPalettes($orbisApiService);
-    await annotationStore.loadAnnotations(documentStore.currentDocument._id,
-        documentStore.currentDocument.content, selectedRun.value._id,
-        selectedRun.value.corpus.supported_annotation_types,
-        $orbisApiService);
+    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
+    await documentStore.loadDocument(Number(route.params.id), $orbisApiService);
+
+    if (selectedRun.value._id) {
+      await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
+      await colorPalettesStore.loadColorPalettes($orbisApiService);
+
+      if (documentStore.currentDocument._id) {
+        await annotationStore.loadAnnotations(documentStore.currentDocument._id,
+            documentStore.currentDocument.content, selectedRun.value._id,
+            selectedRun.value.corpus.supported_annotation_types,
+            $orbisApiService);
+      } else {
+        console.log("Id of current document was not set.");
+      }
+    } else {
+      console.log("Id of selected run was not set.");
+    }
   } catch (Error) {
     // Todo: Error Message for user
   } finally {
