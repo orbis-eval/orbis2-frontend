@@ -1,5 +1,5 @@
 <template>
-    <dialog id="modalContainer" class="modal orbis-modal" ref="modalEl" @cancel.prevent="closeModal">
+    <dialog id="modalContainer" class="modal orbis-modal" ref="modalEl" @cancel.prevent="onCancel">
         <div class="modal-box bg-neutral border-2 border-gray-600">
             <template v-for="modal in modals" :key="modal.getId()">
                 <component 
@@ -9,7 +9,7 @@
                     v-if="modal.isPropsValid()" />
             </template>
         </div>
-        <form method="dialog" class="modal-backdrop" @submit.prevent="closeModal()">
+        <form method="dialog" class="modal-backdrop" @submit.prevent="onSubmit">
             <button>close</button>
         </form>
     </dialog>
@@ -33,6 +33,15 @@ watch(isAnyOpen, (isOpen) => {
     }
     
 });
+const onCancel = (e) => {
+    // Bug fix: clicking on the close button of file input should not close the modal
+    // https://stackoverflow.com/questions/76400460/html-dialog-closes-automatically-when-file-input-is-cancelled-how-to-prevent
+    if (e.target.matches("input#file-input.hidden")) {
+        return;
+    }
+    closeModal();
+};
+const onSubmit = () => closeModal();
 </script>
 
 <style lang="scss">

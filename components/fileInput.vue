@@ -101,7 +101,6 @@ function dropHandler(event: DragEvent) {
 }
 
 async function submit() {
-  console.log("submitting");
   await props.onSubmit(corpusNameToCreate.value, selectedFiles.value);
   selectedFiles.value = [];
 }
