@@ -27,8 +27,6 @@ export class Modal {
     public isPropsValid() {
         if (this.component.props?.propsObject) {
             if (!this.props?.propsObject) {
-                console.log('component props: ', this.component.props);
-                console.log('modal props: ', this.props);
                 return false;
             }
         }
