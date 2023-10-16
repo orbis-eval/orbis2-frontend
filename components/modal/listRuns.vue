@@ -49,7 +49,7 @@ const {runs, selectedRun} = storeToRefs(runStore);
 const onRemoveRun = async (run: Run) => {
   try {
     closeModal();
-    openModal(ModalRemoveRun, run);
+    openModal(ModalRemoveRun, toRaw(run));
   } catch (error) {
     console.error(error);
   }

@@ -21,7 +21,11 @@ export class Modal {
     }
 
     public setProps(props: any) {
-        this.props = props;
+        this.props = { propsObject: props };
+    }
+
+    public getPropsObject() {
+        return this.props?.propsObject;
     }
 
     public isPropsValid() {

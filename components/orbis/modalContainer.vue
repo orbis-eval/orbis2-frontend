@@ -4,7 +4,7 @@
             <template v-for="modal in modals" :key="modal.getId()">
                 <component 
                     :is="modalComponent(modal)"
-                    :propsObject="modal.getProps()"
+                    :propsObject="modal.getPropsObject()"
                     v-show="isModalOpen(modal)"
                     v-if="modal.isPropsValid()" />
             </template>

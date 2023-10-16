@@ -38,7 +38,7 @@ const {corpora} = storeToRefs(corpusStore);
 
 const { openModal } = useModal();
 const onDeleteCorpus = (corpus: Corpus) => {
-  openModal(ModalDeleteCorpus, corpus);
+  openModal(ModalDeleteCorpus, toRaw(corpus));
 }
 
 </script>
