@@ -18,7 +18,7 @@ const modalManagerInstance = reactive(new ModalManager([
 export const useModal = () => {
     const isAnyOpen = computed(() => modalManagerInstance.isAnyOpen());
     const currentModal = computed(() => modalManagerInstance.getCurrentModal());
-    const modals = computed(() => modalManagerInstance.getModals());
+    const modals = computed(() => modalManagerInstance.modals);
     const openModal = (component: any, props?: any) => modalManagerInstance.openModal(component, props);
     const closeModal = () => modalManagerInstance.closeModal();
     const isModalOpen = (modal: Modal) => {
