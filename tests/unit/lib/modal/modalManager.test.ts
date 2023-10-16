@@ -50,10 +50,10 @@ describe('ModalManager', () => {
         expect(modalManager.renderStack).toEqual([modalListRuns]);
     });
 
-    it('should open a modal with props', () => {
-        const props = { propsObject: 'value1' };
-        modalManager.openModal(ModalDeleteCorpus, props);
-        expect(modalDeleteCorpus.getProps()).toEqual(props);
+    it('should open a modal with propsObject', () => {
+        const propsObject = { var1: 'value1' };
+        modalManager.openModal(ModalDeleteCorpus, propsObject);
+        expect(modalDeleteCorpus.getPropsObject()).toEqual(propsObject);
     });
 
     it('should not open a modal if not in the modals list', () => {

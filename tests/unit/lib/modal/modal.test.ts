@@ -16,31 +16,31 @@ describe('Modal', () => {
     expect(modal.getComponent()).toBe(componentMock);
   });
 
-  it('should get and set props correctly', () => {
-    expect(modal.getProps()).toBeUndefined();
+  it('should get and set propsObject correctly', () => {
+    expect(modal.getPropsObject()).toBeUndefined();
 
-    const props = { prop1: 'value1', prop2: 'value2' };
-    modal.setProps(props);
+    const propsObject = { var1: 'value1', var2: 'value2' };
+    modal.setPropsObject(propsObject);
 
-    expect(modal.getProps()).toEqual(props);
+    expect(modal.getPropsObject()).toEqual(propsObject);
   });
 
   it('should validate props correctly', () => {
-    expect(modal.isPropsValid()).toBe(true);
+    expect(modal.validatePropsObject()).toBe(true);
 
     // When component has propsObject
-    modal.getComponent().props = { propsObject: true };
-    modal.setProps({ propsObject: true });
-    expect(modal.isPropsValid()).toBe(true);
+    modal.getComponent().props = { propsObject: { var1: 'value1' } };
+    modal.setPropsObject({ var1: 'value1' });
+    expect(modal.validatePropsObject()).toBe(true);
 
-    modal.setProps({});
-    expect(modal.isPropsValid()).toBe(false);
+    modal.setPropsObject({});
+    expect(modal.validatePropsObject()).toBe(false);
 
     modal.getComponent().props = {};
-    modal.setProps({ prop1: 'value1' });
-    expect(modal.isPropsValid()).toBe(true);
+    modal.setPropsObject({ prop1: 'value1' });
+    expect(modal.validatePropsObject()).toBe(true);
 
-    modal.setProps({})
-    expect(modal.isPropsValid()).toBe(true);
+    modal.setPropsObject({})
+    expect(modal.validatePropsObject()).toBe(true);
   });
 });

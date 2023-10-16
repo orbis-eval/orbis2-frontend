@@ -6,7 +6,7 @@
                     :is="modalComponent(modal)"
                     :propsObject="modal.getPropsObject()"
                     v-show="isModalOpen(modal)"
-                    v-if="modal.isPropsValid()" />
+                    v-if="modal.validatePropsObject()" />
             </template>
         </div>
         <form method="dialog" class="modal-backdrop" @submit.prevent="onSubmit">

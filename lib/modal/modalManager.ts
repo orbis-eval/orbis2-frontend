@@ -19,11 +19,11 @@ export class ModalManager {
         return null;
     }
 
-    public openModal(component: any, props?: any) {
+    public openModal(component: any, propsObject?: any) {
         const modalIdx = this.getModalIndex(component);
         if (modalIdx >= 0) {
-            if (props) {
-                this.modals[modalIdx].setProps(props);
+            if (propsObject) {
+                this.modals[modalIdx].setPropsObject(propsObject);
             }
             this.renderStack.push(this.modals[modalIdx]);
         }

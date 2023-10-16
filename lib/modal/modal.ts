@@ -1,7 +1,7 @@
 export class Modal {
     private readonly id: string;
     private readonly component: any;
-    private props?: any;
+    private propsObject?: any;
 
     constructor(id: string, component: any) {
         this.id = id;
@@ -16,21 +16,17 @@ export class Modal {
         return this.component;
     }
 
-    public getProps() {
-        return this.props;
-    }
-
-    public setProps(props: any) {
-        this.props = { propsObject: props };
-    }
-
     public getPropsObject() {
-        return this.props?.propsObject;
+        return this.propsObject;
     }
 
-    public isPropsValid() {
+    public setPropsObject(propsObject: any) {
+        this.propsObject = propsObject;
+    }
+
+    public validatePropsObject() {
         if (this.component.props?.propsObject) {
-            if (!this.props?.propsObject) {
+            if (!this.propsObject) {
                 return false;
             }
         }
