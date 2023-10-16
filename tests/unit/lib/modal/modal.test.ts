@@ -33,14 +33,14 @@ describe('Modal', () => {
     modal.setPropsObject({ var1: 'value1' });
     expect(modal.validatePropsObject()).toBe(true);
 
-    modal.setPropsObject({});
+    modal.setPropsObject(null);
     expect(modal.validatePropsObject()).toBe(false);
 
     modal.getComponent().props = {};
     modal.setPropsObject({ prop1: 'value1' });
     expect(modal.validatePropsObject()).toBe(true);
 
-    modal.setPropsObject({})
+    modal.setPropsObject(null)
     expect(modal.validatePropsObject()).toBe(true);
   });
 });
