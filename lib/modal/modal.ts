@@ -8,23 +8,23 @@ export class Modal {
         this.component = component;
     }
 
-    getId() {
+    public getId() {
         return this.id;
     }
 
-    getComponent() {
+    public getComponent() {
         return this.component;
     }
 
-    getProps() {
+    public getProps() {
         return this.props;
     }
 
-    setProps(props: any) {
+    public setProps(props: any) {
         this.props = props;
     }
 
-    isPropsValid() {
+    public isPropsValid() {
         if (this.component.props?.propsObject) {
             return !!(this.props && Object.keys(this.props).length > 0);
         }

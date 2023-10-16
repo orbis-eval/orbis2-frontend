@@ -22,8 +22,6 @@
 </template>
   
 <script setup lang="ts">
-import { EventListenerUtils } from "~/lib/utils/eventListenerUtils";
-
 const props = defineProps({
     title: String,
     message: String,
@@ -37,16 +35,6 @@ const props = defineProps({
         type: Function,
         default: () => {},
     }
-});
-
-onBeforeMount(() => {
-    window.addEventListener('keydown',
-        (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, confirmClicked, declineClicked));
-});
-
-onBeforeUnmount(() => {
-    window.removeEventListener('keydown',
-        (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, confirmClicked, declineClicked));
 });
 </script>
   
