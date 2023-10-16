@@ -6,7 +6,8 @@
     "start": "node .output/server/index.mjs",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
+    "postinstall": "nuxt prepare",
+    "test": "vitest"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "^6.1.3",
