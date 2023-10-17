@@ -1,6 +1,6 @@
 <template>
   <Warning
-        :message="`Deleting corpus with ${propsObject.name} will remove all documents and runs of this corpus! Do you want to continue?`"
+        :message="`Deleting corpus with '${propsObject.name}' will remove all documents and runs of this corpus! Do you want to continue?`"
         confirm-text="ok"
         declineText="cancel"
         title="Delete corpus?"
