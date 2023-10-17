@@ -7,7 +7,7 @@ import ModalCreateCorpus from "~/components/modal/createCorpus.vue";
 import ModalCreateRun from "~/components/modal/createRun.vue";
 import ModalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 import ModalListRuns from "~/components/modal/listRuns.vue";
-import ModalRemoveRun from "~/components/modal/removeRun.vue";
+import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 
 //  Non-modal components
 import Warning from "~/components/warning.vue";
@@ -17,7 +17,7 @@ describe('ModalManager', () => {
     let modalDeleteCorpus: Modal;
     let modalCreateRun: Modal;
     let modalListRuns: Modal;
-    let modalRemoveRun: Modal;
+    let modalDeleteRun: Modal;
     let modalManager: ModalManager;
 
     beforeEach(() => {
@@ -25,13 +25,13 @@ describe('ModalManager', () => {
         modalDeleteCorpus = new Modal('deleteCorpus', ModalDeleteCorpus);
         modalCreateRun = new Modal('createRun', ModalCreateRun);
         modalListRuns = new Modal('listRuns', ModalListRuns);
-        modalRemoveRun = new Modal('removeRun', ModalRemoveRun);
+        modalDeleteRun = new Modal('deleteRun', ModalDeleteRun);
         modalManager = new ModalManager([
             modalCreateCorpus, 
             modalDeleteCorpus, 
             modalCreateRun, 
             modalListRuns, 
-            modalRemoveRun
+            modalDeleteRun
         ]);
     });
 
@@ -41,7 +41,7 @@ describe('ModalManager', () => {
             modalDeleteCorpus, 
             modalCreateRun, 
             modalListRuns, 
-            modalRemoveRun
+            modalDeleteRun
         ]);
     });
 
@@ -70,9 +70,9 @@ describe('ModalManager', () => {
     });
 
     it('should return the current modal', () => {
-        modalManager.openModal(ModalRemoveRun);
+        modalManager.openModal(ModalDeleteRun);
         const currentModal = modalManager.getCurrentModal();
-        expect(currentModal).toEqual(modalRemoveRun);
+        expect(currentModal).toEqual(modalDeleteRun);
     });
 
     it('should return null when no modal is open', () => {

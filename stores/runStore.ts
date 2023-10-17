@@ -60,14 +60,14 @@ export const useRunStore = defineStore('run', () => {
         }
     }
 
-    async function removeRun(run: Run, orbisApiService: OrbisApiService) {
+    async function deleteRun(run: Run, orbisApiService: OrbisApiService) {
         if (run === undefined) {
             console.error("No run provided!");
             return;
         }
 
         try {
-            const response = await orbisApiService.removeRun(run);
+            const response = await orbisApiService.deleteRun(run);
 
             if (response instanceof Error) {
                 console.error(response);
@@ -82,5 +82,5 @@ export const useRunStore = defineStore('run', () => {
         }
     }
 
-    return {corpusId, runs, selectedRun, reset, removeRun, loadRuns, createRun, changeSelectedRun};
+    return {corpusId, runs, selectedRun, reset, deleteRun, loadRuns, createRun, changeSelectedRun};
 });

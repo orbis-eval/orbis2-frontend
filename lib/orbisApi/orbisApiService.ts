@@ -33,7 +33,7 @@ export class OrbisApiService {
             this.apiGet(`getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`));
     }
 
-    async getNumberOfDocuments(corpusId: number, // TODO: change to runId and countDocuments api call, remove the getNofDocuments api call
+    async getNumberOfDocuments(corpusId: number, // TODO: change to runId and countDocuments api call, delete the getNofDocuments api call
                                pageSize: number | undefined = undefined,
                                skip: number = 0): Promise<Number | Error> {
         let pageSizeParam = '';
@@ -78,16 +78,16 @@ export class OrbisApiService {
                 corpus));
     }
 
-    async removeRun(run: Run): Promise<boolean | Error> {
-        return Parser.parseEmptyResponse(this.apiDelete(`removeRun`, run));
+    async deleteRun(run: Run): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`deleteRun`, run));
     }
 
-    async removeAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {
-        return Parser.parseEmptyResponse(this.apiDelete(`removeAnnotationFromDocument`, annotation));
+    async deleteAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`deleteAnnotationFromDocument`, annotation));
     }
 
-    async removeCorpus(corpus: Corpus): Promise<boolean | Error> {
-        return Parser.parseEmptyResponse(this.apiDelete(`removeCorpus`, corpus));
+    async deleteCorpus(corpus: Corpus): Promise<boolean | Error> {
+        return Parser.parseEmptyResponse(this.apiDelete(`deleteCorpus`, corpus));
     }
 
     async apiGet(query: string): Promise<TypedInternalResponse<string>> {
