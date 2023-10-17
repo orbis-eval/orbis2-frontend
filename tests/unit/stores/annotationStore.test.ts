@@ -8,11 +8,12 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 
-const annotationTypes = [new AnnotationType({
-    color_id: 1,
-    name: 'type1',
-    _id: 1
-})];
+const annotationTypes = [
+    new AnnotationType({
+        color_id: 1,
+        name: 'type1',
+        _id: 1
+    })];
 const annotator = new Annotator({
     name: 'name',
     roles: [],
