@@ -1,18 +1,18 @@
 <template>
     <div class="flex flex-col">
         <div class="flex justify-center">
-            <div class="text-center">
-                <div class="font-bold text-lg mb-4">
+            <div>
+                <div class="font-bold text-3xl mb-5">
                     {{ title }}
                 </div>
                 <div class="mb-4">
                     {{ message }}
                 </div>
-                <div class="flex justify-center">
-                    <OrbisButton class="mr-2" :onClick="onConfirm" size="sm">
+                <div class="flex">
+                    <OrbisButton class="mr-2" :onClick="onConfirm">
                         {{ confirmText }}
                     </OrbisButton>
-                    <OrbisButton class="mr-2" :onClick="onDecline" size="sm">
+                    <OrbisButton class="mr-2" :onClick="onDecline">
                         {{ declineText }}
                     </OrbisButton>
                 </div>

@@ -1,6 +1,6 @@
 <template>
   <Warning
-        :message="`Deleting run with ${propsObject.name} will remove the run from this corpus! Do you want to continue?`"
+        :message="`Deleting run with '${propsObject.name}' will remove the run from this corpus! Do you want to continue?`"
         confirm-text="ok"
         declineText="cancel"
         title="Delete run?"
