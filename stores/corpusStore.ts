@@ -4,7 +4,7 @@ import {Corpus} from "~/lib/model/corpus";
 import {Error} from "~/lib/model/error";
 import {ref} from 'vue';
 import {Document} from "~/lib/model/document";
-import {ApiUtils} from "~/lib/utils/apiUtils";
+import {DocumentFileReader} from "~/lib/utils/documentFileReader";
 
 export const useCorpusStore = defineStore("corpus", () => {
     const corpora = ref([] as Corpus[]);
@@ -57,12 +57,12 @@ export const useCorpusStore = defineStore("corpus", () => {
             let newCorpus: Corpus | Error = new Corpus({
                 "name": corpusName,
                 "supported_annotation_types": []
-            })
-            if (chosenFiles.length == 0) {
-                newCorpus = await ApiUtils.addCorpus(newCorpus, [], orbisApiService);
-            } else {
-                newCorpus = await ApiUtils.readAndStoreDocuments(chosenFiles, newCorpus, orbisApiService);
+            });
+            let docs: Document[] = [];
+            if (chosenFiles.length > 0) {
+                docs = await DocumentFileReader.readFiles(chosenFiles);
             }
+            newCorpus = await orbisApiService.addCorpus(newCorpus, docs);
             if (newCorpus instanceof Corpus) {
                 corpora.value.push(newCorpus)
             } else {
