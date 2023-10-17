@@ -11,14 +11,13 @@ export class Parser {
      * @param promise the promise delivering the response, which only contains a status code
      * @return Returns true if status code = 200 or an error if something went wrong.
      */
-    static parseEmptyResponse(promise: Promise<TypedInternalResponse<string>>): Promise<boolean | Error> {
-        return promise
-            .then(data => {
-                return true
-            })
-            .catch(error => {
-                return new Error(error);
-            });
+    static async parseEmptyResponse(promise: Promise<TypedInternalResponse<string>>): Promise<boolean | Error> {
+        try {
+            await promise;
+            return true;
+        } catch (error) {
+            return new Error("Error while parsing empty response.");
+        }
     }
 
     /**
@@ -29,18 +28,21 @@ export class Parser {
      * @param promise the promise delivering the response, which contains the data in form of the interface (T).
      * @return Returns a promise containing the data (U) or an error if something went wrong.
      */
-    static parse<T, U extends T>(constructor: new (data: T) => U,
-                                 promise: Promise<TypedInternalResponse<string>>): Promise<U | Error> {
-        return promise
-            .then(data => {
-                if ((data as T) !== undefined) {
-                    return new constructor(data as T);
-                }
-                return new Error(`Response in Promise is expected to be of type ${typeof data}`)
-            })
-            .catch(error => {
-                return new Error(error);
-            });
+    static async parse<T, U extends T>(constructor: new (data: T) => U, promise: Promise<TypedInternalResponse<string>>): Promise<U | Error> {
+        try {
+            const data = await promise;
+
+            if ((data as T) !== undefined) {
+                return new constructor(data as T);
+            }
+
+            return new Error(`Response in Promise is expected to be of type ${typeof data}`);
+        } catch (error) {
+            if (error instanceof Error) {
+                return error;
+            }
+            return new Error(String(error));
+        }
     }
 
     /**
@@ -51,21 +53,24 @@ export class Parser {
      * @param promise the promise delivering the response, which contains the data in form of the interface (T).
      * @return Returns a promise containing a list of the data (U) or an error if something went wrong.
      */
-    static parseList<T, U extends T>(constructor: new (data: T) => U,
-                                     promise: Promise<TypedInternalResponse<string>>): Promise<U[] | Error> {
-        return promise
-            .then(data => {
-                if (Array.isArray(data)) {
-                    const result: U[] = [];
-                    for (let d of data) {
-                        result.push(new constructor(d));
-                    }
-                    return result;
+    static async parseList<T, U extends T>(constructor: new (data: T) => U, promise: Promise<TypedInternalResponse<string>>): Promise<U[] | Error> {
+        try {
+            const data = await promise;
+
+            if (Array.isArray(data)) {
+                const result: U[] = [];
+                for (let d of data) {
+                    result.push(new constructor(d));
                 }
-                return new Error('Response in Promise is expected to be a list.');
-            })
-            .catch(error => {
-                return new Error(error);
-            });
+                return result;
+            }
+
+            return new Error('Response in Promise is expected to be a list.');
+        } catch (error) {
+            if (error instanceof Error) {
+                return error;
+            }
+            return new Error(String(error));
+        }
     }
 }

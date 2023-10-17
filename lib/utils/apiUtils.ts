@@ -42,15 +42,13 @@ export class ApiUtils {
         return await apiService.addCorpus(corpus, documents);
     }
 
-    static getRuns(corpusId: number, documentRuns: Ref, apiService: OrbisApiService) {
-        apiService.getRuns(Number(corpusId))
-            .then(runs => {
-                if (Array.isArray(runs)) {
-                    documentRuns.value = runs;
-                } else {
-                    console.error(runs.errorMessage);
-                    documentRuns.value = [];
-                }
-            });
+    static async getRuns(corpusId: number, documentRuns: Ref, apiService: OrbisApiService) {
+        let runs = await apiService.getRuns(Number(corpusId));
+        if (Array.isArray(runs)) {
+            documentRuns.value = runs;
+        } else {
+            console.error(runs.errorMessage);
+            documentRuns.value = [];
+        }
     }
 }
