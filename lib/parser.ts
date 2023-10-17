@@ -1,8 +1,5 @@
 import {Error} from "~/lib/model/error";
 import {TypedInternalResponse} from "nitropack";
-import {Annotation} from "~/lib/model/annotation";
-import {AnnotationType} from "~/lib/model/annotationType";
-import {Annotator} from "~/lib/model/annotator";
 
 export class Parser {
 
