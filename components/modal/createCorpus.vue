@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="font-bold text-3xl mb-5">Create Corpus</h2>
-    <FileInput cancelText="cancel" submitText="import" :onSubmit="createCorpus" :onCancel="cancel" />
+    <FileInput cancelText="cancel" submitText="Create" :onSubmit="createCorpus" :onCancel="cancel" />
   </div>
 </template>
 
