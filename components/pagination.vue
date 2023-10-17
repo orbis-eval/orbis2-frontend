@@ -1,23 +1,18 @@
 <template>
-  <div class="my-2">
-    <button @click="changePage(currentPage - 1)"
-            class="pagination-button"
-            :class="(isFirstPage)?'':'pagination-button button-enabled'"
-            :disabled="isFirstPage">
+  <div class="mb-10">
+    <OrbisButton :onClick="() => changePage(currentPage - 1)" :disabled="isFirstPage">
       prev
-    </button>
-    <button v-for="pageNumber in totalPages"
-            @click="changePage(pageNumber)"
-            class="pagination-button button-enabled"
-            :class="(currentPage === pageNumber)?'highlighted':''">
+    </OrbisButton>
+    <OrbisButton v-for="pageNumber in totalPages"
+                 :onClick="() => changePage(pageNumber)"
+                 :active="currentPage === pageNumber" 
+                 :disabled="isFirstPage"
+    >
       {{ pageNumber }}
-    </button>
-    <button @click="changePage(currentPage + 1)"
-            class="pagination-button"
-            :class="(isLastPage)?'':'pagination-button button-enabled'"
-            :disabled="isLastPage">
+    </OrbisButton>
+    <OrbisButton :onClick="() => changePage(currentPage + 1)" :disabled="isLastPage">
       next
-    </button>
+    </OrbisButton>
   </div>
 </template>
 

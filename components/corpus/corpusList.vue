@@ -1,13 +1,13 @@
 <template>
   <div class="grow max-w-xl">
-    <div class="content-card">
+    <div class="content-card border-2 border-gray-600">
       <div class="card-body">
         <div class="card-title flex">
           <div>Corpora</div>
-          <div class="grow"></div>
-          <button class="btn btn-square bg-neutral border-none">
-            <OhVueIcon name="bi-plus" scale="2" @click="emit('openCreateCorpus')"/>
-          </button>
+          <div class="flex-grow"></div>
+          <OrbisButton :onClick="() => openModal(ModalCreateCorpus)" size="sm" transparent>
+            <OhVueIcon name="hi-plus"/>
+          </OrbisButton>
         </div>
         <ul class="mt-5">
           <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
@@ -15,10 +15,9 @@
               {{ corpus.name }}
             </NuxtLink>
             <div class="flex-grow"></div>
-            <button class="text-white hover:text-purple-400 mr-3.5"
-                    @click="emit('openDeleteCorpus', corpus)">
+            <OrbisButton :onClick="() => onDeleteCorpus(corpus)" size="sm" transparent>
               <OhVueIcon name="md-deleteforever-outlined"/>
-            </button>
+            </OrbisButton>
           </li>
         </ul>
       </div>
@@ -30,10 +29,16 @@
 import {OhVueIcon} from "oh-vue-icons";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {storeToRefs} from "pinia";
+import ModalCreateCorpus from "~/components/modal/createCorpus.vue";
+import ModalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
-const emit = defineEmits(['openCreateCorpus', 'openDeleteCorpus']);
-
+import {Corpus} from "~/lib/model/corpus";
 const corpusStore = useCorpusStore();
 const {corpora} = storeToRefs(corpusStore);
+
+const { openModal } = useModal();
+const onDeleteCorpus = (corpus: Corpus) => {
+  openModal(ModalDeleteCorpus, toRaw(corpus));
+}
 
 </script>

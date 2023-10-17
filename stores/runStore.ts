@@ -32,14 +32,13 @@ export const useRunStore = defineStore('run', () => {
             const response = await orbisApiService.addRun(newRun, corpus);
 
             if (response instanceof Error) {
+                console.log(response)
                 return new Error("Something is wrong with the response");
-            } else {
-                // Reload the runs in the store after creating a new one
-                // Todo: Add run directly without loading it from server.
-                await loadRuns(corpus._id, orbisApiService);
             }
         } catch (error) {
             return new Error("An error occurred while creating a run.");
+        } finally {
+            await loadRuns(corpus._id, orbisApiService);
         }
     }
 
@@ -72,14 +71,14 @@ export const useRunStore = defineStore('run', () => {
 
             if (response instanceof Error) {
                 console.error(response);
-            } else {
-                if (run.corpus._id) {
-                    await loadRuns(run.corpus._id, orbisApiService);
-                }
             }
 
         } catch (error) {
             return new Error("An error occurred while fetching runs.");
+        } finally {
+            if (run.corpus._id) {
+                await loadRuns(run.corpus._id, orbisApiService);
+            }
         }
     }
 

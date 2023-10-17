@@ -1,7 +1,7 @@
 <template>
   <NuxtLayout name="default-layout">
-    <LoadingSpinner v-if="loading" class="mt-20"/>
-    <div v-else class="mt-20">
+    <LoadingSpinner v-if="loading" class="mt-5"/>
+    <div v-else class="mt-5">
       <DocumentNavHeader @loadingFinished="loading = false"
                          @loadingStarted="loading = true">
       </DocumentNavHeader>
