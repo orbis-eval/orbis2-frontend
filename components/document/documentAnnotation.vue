@@ -2,7 +2,7 @@
   <div>
     <div v-if="nestedSetRootNode">
       <div ref="relativeDiv" class="relative">
-        <div class="rounded-lg border border-gray-600 p-6">
+        <div class="rounded-lg border-2 border-gray-600 p-6">
           <!-- context modal gui for selecting the type -->
           <AnnotationModal
               ref="annotationTypeModal"
@@ -36,8 +36,8 @@
                declineText="cancel"
                message="No run or default run is selected, in both cases annotation is not possible"
                title="Please select a run."
-               @confirm="wrongRunSelectedEnabled = false"
-               @decline="wrongRunSelectedEnabled = false"/>
+               :onConfirm="() => wrongRunSelectedEnabled = false"
+               :onDecline=" () => wrongRunSelectedEnabled = false"/>
     </div>
   </div>
 </template>

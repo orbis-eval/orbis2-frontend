@@ -1,5 +1,5 @@
 <template>
-  <div class="flex h-full overflow-hidden justify-between flex-col p-6 border border-gray-400">
+  <div class="flex justify-between flex-col">
     <div class="flex justify-between mb-6">
       <div class="text-lg font-medium p-1">
         Name of Corpus
@@ -15,11 +15,7 @@
       </label>
       <div>
         <input type="file" id="file-input" ref="fileInput" @change="inputChanged" multiple class="hidden"/>
-        <button @click="openFileInput" class="flex items-center justify-between">
-          <div class="small-button bg-gray-700 ">
-            Choose File
-          </div>
-        </button>
+        <OrbisButton :onClick="openFileInput">Choose File</orbisButton>
       </div>
     </div>
     <div @drop.prevent="dropHandler" @dragover.prevent="dragOverHandler"
@@ -31,9 +27,9 @@
         <div v-else class="p-1">
           <div v-for="(file, index) in displayedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
             <p id= index>{{ file.name }}</p>
-            <button @click="removeFile(index)" class="text-gray-400 hover:text-white">
+            <OrbisButton :onClick="() => removeFile(index)">
               <OhVueIcon name="md-deleteforever-outlined"/>
-            </button>
+            </orbisButton>
           </div>
         </div>
       </div>
@@ -42,17 +38,9 @@
                   :nofPages="nofPages"
                   class="text-center"/>
     </div>
-    <div>
-      <button id="submit"
-              @click="submit"
-              class="small-button bg-gray-700 mx-2 mt-2">
-        {{ submitText }}
-      </button>
-      <button id="cancel"
-              @click="cancel"
-              class="small-button bg-gray-700 mx-2 mt-2">
-        {{ cancelText }}
-      </button>
+    <div class="flex gap-4 mt-5">
+      <OrbisButton id="submit" :onClick="submit">{{ submitText }}</orbisButton>
+      <OrbisButton id="cancel" :onClick="cancel">{{ cancelText }}</orbisButton>
     </div>
   </div>
 </template>
@@ -60,7 +48,14 @@
 <script setup lang="ts">
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
-import {EventListenerUtils} from "~/lib/utils/eventListenerUtils";
+
+const props = defineProps({
+  corpusName: String,
+  submitText: String,
+  cancelText: String,
+  onSubmit: { type: Function, default: () => { } },
+  onCancel: { type: Function, default: () => { } },
+});
 
 addIcons(MdDeleteforeverOutlined);
 
@@ -69,28 +64,12 @@ const filesPerPage = ref(5);
 const fileInput = ref(null);
 const selectedFiles = ref([]);
 const corpusNameToCreate = ref("");
-const props = defineProps({
-  corpusName: String,
-  submitText: String,
-  cancelText: String
-});
-const emit = defineEmits(['submitted', 'cancelled']);
 
 const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
 const displayedFiles = computed(() => {
   const startIndex = (currentPage.value - 1) * filesPerPage.value;
   const endIndex = startIndex + filesPerPage.value;
   return selectedFiles.value.slice(startIndex, endIndex);
-})
-
-onBeforeMount(() => {
-  window.addEventListener('keydown',
-      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, submit, cancel));
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener('keydown',
-      (event: KeyboardEvent) => EventListenerUtils.listenKeyboard(event, submit, cancel));
 });
 
 function openFileInput() {
@@ -98,7 +77,7 @@ function openFileInput() {
 }
 
 function removeFile(index: number) {
-  selectedFiles.value.splice(index, 1)
+  selectedFiles.value.splice(index, 1);
 }
 
 function inputChanged() {
@@ -121,14 +100,11 @@ function dropHandler(event: DragEvent) {
   }
 }
 
-function submit() {
-  emit('submitted', corpusNameToCreate.value, selectedFiles.value);
+async function submit() {
+  await props.onSubmit(corpusNameToCreate.value, selectedFiles.value);
   selectedFiles.value = [];
 }
 
-function cancel() {
-  selectedFiles.value = [];
-  emit('cancelled');
-}
+const cancel = () => props.onCancel();
 
 </script>
