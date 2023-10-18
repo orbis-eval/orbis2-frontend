@@ -1,14 +1,5 @@
 <template>
   <div class="flex justify-between flex-col">
-    <div class="flex justify-between mb-6">
-      <div class="text-lg font-medium p-1">
-        Name of Corpus
-      </div>
-      <input v-if="!corpusName" class="bg-gray-700 p-1" @input="setCorpusName"/>
-      <div v-else class="p-1">
-        {{ corpusName }}
-      </div>
-    </div>
     <div class="flex items-center justify-between mb-6">
       <label for="file-input" class="text-lg font-medium">
         Import Data:
@@ -39,10 +30,6 @@
                   @pageChanged="pageChanged"
                   class="text-center"/>
     </div>
-    <div class="flex gap-4 mt-5">
-      <OrbisButton id="submit" :onClick="submit">{{ submitText }}</orbisButton>
-      <OrbisButton id="cancel" :onClick="cancel">{{ cancelText }}</orbisButton>
-    </div>
   </div>
 </template>
 
@@ -50,13 +37,7 @@
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 
-const props = defineProps({
-  corpusName: String,
-  submitText: String,
-  cancelText: String,
-  onSubmit: { type: Function, default: () => { } },
-  onCancel: { type: Function, default: () => { } },
-});
+const emit = defineEmits(['fileChange']);
 
 addIcons(MdDeleteforeverOutlined);
 
@@ -64,7 +45,6 @@ const currentPage = ref(1);
 const filesPerPage = ref(5);
 const fileInput = ref({} as HTMLInputElement);
 const selectedFiles = ref([] as File[]);
-const corpusNameToCreate = ref("");
 
 const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
 const displayedFiles = computed(() => {
@@ -79,6 +59,7 @@ function openFileInput() {
 
 function removeFile(index: number) {
   selectedFiles.value.splice(index, 1);
+  emit('fileChange', selectedFiles.value);
 }
 
 function inputChanged() {
@@ -86,12 +67,7 @@ function inputChanged() {
     for (const file of fileInput.value.files) {
       selectedFiles.value.push(file);
     }
-  }
-}
-
-function setCorpusName(event: Event) {
-  if (event.target instanceof HTMLInputElement) {
-    corpusNameToCreate.value = event.target.value;
+    emit('fileChange', selectedFiles.value);
   }
 }
 
@@ -108,14 +84,8 @@ function dropHandler(event: DragEvent) {
     for (const file of event.dataTransfer.files) {
       selectedFiles.value.push(file);
     }
+    emit('fileChange', selectedFiles.value);
   }
 }
-
-async function submit() {
-  await props.onSubmit(corpusNameToCreate.value, selectedFiles.value);
-  selectedFiles.value = [];
-}
-
-const cancel = () => props.onCancel();
 
 </script>
