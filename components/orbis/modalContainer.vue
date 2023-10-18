@@ -3,9 +3,9 @@
         <div class="modal-box bg-neutral border-2 border-gray-600">
             <template v-for="modal in modals" :key="modal.getId()">
                 <component 
-                    :is="modalComponent(modal)"
+                    :is="modalComponent(<Modal>modal)"
                     :propsObject="modal.getPropsObject()"
-                    v-show="isModalOpen(modal)"
+                    v-show="isModalOpen(<Modal>modal)"
                     v-if="modal.validatePropsObject()" />
             </template>
         </div>
@@ -33,10 +33,10 @@ watch(isAnyOpen, (isOpen) => {
     }
     
 });
-const onCancel = (e) => {
+const onCancel = (e: Event) => {
     // Bug fix: clicking on the close button of file input should not close the modal
     // https://stackoverflow.com/questions/76400460/html-dialog-closes-automatically-when-file-input-is-cancelled-how-to-prevent
-    if (e.target.matches("input#file-input.hidden")) {
+    if (e.target instanceof Element && e.target.matches("input#file-input.hidden")) {
         return;
     }
     closeModal();

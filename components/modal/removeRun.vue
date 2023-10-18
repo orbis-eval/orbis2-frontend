@@ -18,10 +18,12 @@ const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService
 
 const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
-const message = ref();
 
 const props = defineProps({
-  propsObject: Run
+  propsObject: {
+    type: Run,
+    required: true
+  }
 });
 
 const onDecline = () => {

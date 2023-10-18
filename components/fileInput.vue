@@ -4,7 +4,7 @@
       <div class="text-lg font-medium p-1">
         Name of Corpus
       </div>
-      <input v-if="!corpusName" @input="event => corpusNameToCreate = event.target.value" class="bg-gray-700 p-1"/>
+      <input v-if="!corpusName" class="bg-gray-700 p-1" @input="setCorpusName"/>
       <div v-else class="p-1">
         {{ corpusName }}
       </div>
@@ -34,8 +34,9 @@
         </div>
       </div>
       <Pagination v-if="nofPages"
+                  :currentPage="currentPage"
+                  :totalPages="nofPages"
                   @pageChanged="pageChanged"
-                  :nofPages="nofPages"
                   class="text-center"/>
     </div>
     <div class="flex gap-4 mt-5">
@@ -85,6 +86,12 @@ function inputChanged() {
     for (const file of fileInput.value.files) {
       selectedFiles.value.push(file);
     }
+  }
+}
+
+function setCorpusName(event: Event) {
+  if (event.target instanceof HTMLInputElement) {
+    corpusNameToCreate.value = event.target.value;
   }
 }
 
