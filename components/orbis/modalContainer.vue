@@ -3,9 +3,9 @@
         <div class="modal-box bg-neutral border-2 border-gray-600">
             <template v-for="modal in modals" :key="modal.getId()">
                 <component 
-                    :is="modalComponent(<Modal>modal)"
+                    :is="modalComponent(modal)"
                     :propsObject="modal.getPropsObject()"
-                    v-show="isModalOpen(<Modal>modal)"
+                    v-show="isModalOpen(modal)"
                     v-if="modal.validatePropsObject()" />
             </template>
         </div>
