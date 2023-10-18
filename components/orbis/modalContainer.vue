@@ -2,11 +2,10 @@
     <dialog id="modalContainer" class="modal orbis-modal" ref="modalEl" @cancel.prevent="onCancel">
         <div class="modal-box bg-neutral border-2 border-gray-600">
             <template v-for="modal in modals" :key="modal.getId()">
-                <component 
+                <component
                     :is="modalComponent(modal)"
                     :propsObject="modal.getPropsObject()"
-                    v-show="isModalOpen(modal)"
-                    v-if="modal.validatePropsObject()" />
+                    v-if="isModalOpen(modal) && modal.validatePropsObject()"/>
             </template>
         </div>
         <form method="dialog" class="modal-backdrop" @submit.prevent="onSubmit">
@@ -14,7 +13,7 @@
         </form>
     </dialog>
 </template>
-  
+
 <script lang="ts" setup>
 import {Modal} from "~/lib/modal/modal";
 
@@ -31,7 +30,7 @@ watch(isAnyOpen, (isOpen) => {
             modalEl.value.close();
         }
     }
-    
+
 });
 const onCancel = (e: Event) => {
     // Bug fix: clicking on the close button of file input should not close the modal
