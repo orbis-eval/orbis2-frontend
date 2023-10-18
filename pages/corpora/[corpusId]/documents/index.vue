@@ -51,8 +51,8 @@ const {totalPages} = storeToRefs(documentStore);
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(route.params.corpusId, $orbisApiService);
-    await runStore.loadRuns(route.params.corpusId, $orbisApiService);
+    await corpusStore.loadCorpus(Number(route.params.corpusId), $orbisApiService);
+    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
@@ -64,20 +64,23 @@ onMounted(async () => {
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
-  console.log(selectedRun.value._id);
-  loading.value = true;
-  documentStore.currentPage = nextPage;
-  const startIndex = (currentPage.value - 1) * pageSize.value;
-  try {
-    await documentStore.loadDocuments(
-        selectedRun.value._id,
-        $orbisApiService,
-        pageSize.value,
-        startIndex)
-  } catch (error) {
-    console.error(error);
-  } finally {
-    loading.value = false;
+  if (selectedRun.value._id) {
+    loading.value = true;
+    documentStore.currentPage = nextPage;
+    const startIndex = (currentPage.value - 1) * pageSize.value;
+    try {
+      await documentStore.loadDocuments(
+          selectedRun.value._id,
+          $orbisApiService,
+          pageSize.value,
+          startIndex)
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.value = false;
+    }
+  } else {
+    console.warn("Id of selected run was not set in pageChanged.");
   }
 }
 
@@ -86,8 +89,12 @@ async function runChanged() {
 }
 
 async function countDocuments() {
-  await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
-  documentStore.totalPages = Math.ceil(documentStore.nrOfDocuments / pageSize.value);
+  if (selectedRun.value._id) {
+    await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
+    documentStore.totalPages = Math.ceil(documentStore.nrOfDocuments / pageSize.value);
+  } else {
+    console.warn("Id of selected run was not set in countDocuments.");
+  }
 }
 
 async function loadDocuments() {

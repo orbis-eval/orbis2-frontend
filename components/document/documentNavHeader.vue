@@ -37,15 +37,23 @@ const {selectedRun} = storeToRefs(runStore);
 
 async function nextDocument() {
   emit('loadingStarted');
-  await documentStore.nextDocument(selectedRun.value._id, $orbisApiService);
-  await navigateTo('/corpora/' + route.params.corpusId + '/documents/' + currentDocument.value._id);
+  if (selectedRun.value._id) {
+    await documentStore.nextDocument(selectedRun.value._id, $orbisApiService);
+    await navigateTo('/corpora/' + route.params.corpusId + '/documents/' + currentDocument.value._id);
+  } else {
+    console.warn("Id of selected run was not set in nextDocument.");
+  }
   emit('loadingFinished');
 }
 
 async function previousDocument() {
   emit('loadingStarted');
-  await documentStore.previousDocument(selectedRun.value._id, $orbisApiService);
-  await navigateTo('/corpora/' + route.params.corpusId + '/documents/' + currentDocument.value._id);
+  if (selectedRun.value._id) {
+    await documentStore.previousDocument(selectedRun.value._id, $orbisApiService);
+    await navigateTo('/corpora/' + route.params.corpusId + '/documents/' + currentDocument.value._id);
+  } else {
+    console.warn("Id of selected run was not set in previousDocument.");
+  }
   emit('loadingFinished');
 }
 </script>

@@ -1,7 +1,7 @@
 <template>
-  <div v-if="nestedSetNode.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME">
-      <span v-if="nestedSetNode.children.length===0" class="p-1" v-on:mouseup="onMouseUp">
-        {{ nestedSetNode.surface_forms[0] }}
+  <div v-if="nestedSetNode?.annotation_type.name===NestedSet.LINE_ANNOTATION_TYPE_NAME">
+      <span v-if="nestedSetNode?.children.length===0" class="p-1" v-on:mouseup="onMouseUp">
+        {{ nestedSetNode?.surface_forms[0] }}
       </span>
     <AnnotationNode
         v-for="nestedSetChildNode in nestedSetNode.children"
@@ -13,16 +13,17 @@
         @deleteAnnotation="deleteAnnotation"
     />
   </div>
-  <span v-else-if="nestedSetNode.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME"
+  <span v-else-if="nestedSetNode?.annotation_type.name===NestedSet.GAP_ANNOTATION_TYPE_NAME"
         v-on:mouseup="onMouseUp"
         class="pt-1 pb-1 text-lg tracking-wider">
       {{ nestedSetNode.surface_forms[0] }}
     </span>
-  <span v-else-if="nestedSetNode.parent"
+  <span v-else-if="nestedSetNode?.parent"
         :class="{ 'bg-neutral-400 text-white rounded-t': nestedSetNode._id === highlightedNestedSetNodeId ,}"
-        :style="{borderColor: '#' + colorPalette.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id) }"
+        :style="{borderColor: '#' + colorPalette?.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id) }"
         class="border-solid border-b-4 pt-1 text-lg tracking-wider"
-        v-bind:class="(visibilityMap && visibilityMap[nestedSetNode._id] !== true) ? 'annotation': ''">
+        v-bind:class="(visibilityMap && nestedSetNode._id &&
+        visibilityMap[nestedSetNode._id] !== true) ? 'annotation': ''">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
@@ -38,7 +39,7 @@
     </span>
   <span v-else class="p-1">
       <AnnotationNode
-          v-for="nestedSetChildNode in nestedSetNode.children"
+          v-for="nestedSetChildNode in nestedSetNode?.children"
           :nestedSetNode="nestedSetChildNode"
           :colorPalette="colorPalette"
           :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
@@ -100,14 +101,13 @@ function onMouseUp() {
             left: left,
             top: top,
             selectionElement: selection.anchorNode.parentElement // the element where the selection was done
-          },
-          props.nestedSetNode);
+          });
     }
   }
 }
 
-const updateAnnotations = (selection: any, selectedNode: NestedSetNode) => {
-  emit('updateAnnotations', selection, selectedNode);
+const updateAnnotations = (selection: any) => {
+  emit('updateAnnotations', selection);
 };
 
 </script>

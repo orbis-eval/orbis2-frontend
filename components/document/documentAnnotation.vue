@@ -52,19 +52,21 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {storeToRefs} from "pinia";
 import {useRunStore} from "~/stores/runStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
+import {Annotation} from "~/lib/model/annotation";
+import AnnotationModal from "~/components/annotation/annotationModal.vue";
 
 defineProps({highlightedNestedSetNodeId: Number});
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();
 
-const selection = ref(null);
+const selection = ref(null as any);
 const selectionSurfaceForm = ref('');
-const relativeDiv = ref(null);
+const relativeDiv = ref({} as HTMLDivElement);
 const mousePosX = ref(0);
 const mousePosY = ref(0);
 const showAnnotationModal = ref(false);
-const errorNodes = ref([]);
+const errorNodes = ref([] as Annotation[]);
 const runStore = useRunStore();
 const {selectedRun} = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
@@ -72,7 +74,7 @@ const {nestedSetRootNode} = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
 const {currentColorPalette} = storeToRefs(colorPalettesStore);
 
-const annotationTypeModal = ref(null);
+const annotationTypeModal = ref({} as InstanceType<typeof AnnotationModal>);
 const wrongRunSelectedEnabled = ref(false);
 
 onBeforeMount(() => {
@@ -102,12 +104,12 @@ const undoEventListener = (event: KeyboardEvent) => {
   }
 };
 
-const clickOutsideListener = (event) => {
+const clickOutsideListener = (event: MouseEvent) => {
   if (showAnnotationModal.value) {
     if (event.target === annotationTypeModal.value.$el || event.composedPath().includes(annotationTypeModal.value.$el)) {
       return;
     }
-    if (event.target !== selection.value.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
+    if (event.target !== selection.value?.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
       showAnnotationModal.value = false;
     }
   }
@@ -129,29 +131,35 @@ function hideAnnotationModal() {
   showAnnotationModal.value = false;
 }
 
-function updateAnnotations(currentSelection, node: NestedSetNode) {
+function updateAnnotations(currentSelection: any) {
   if (!(selectedRun.value instanceof Run) || selectedRun.value.name.includes('default')) {
     console.log("wrong run selected");
     wrongRunSelectedEnabled.value = true;
   } else {
-    selection.value = currentSelection;
-    selectionSurfaceForm.value = selection.value.word;
-    showAnnotationModal.value = true;
-    let relativeDivRect = relativeDiv.value.getBoundingClientRect();
-    // console.log(`rect bounding: (left:${relativeDivRect.left}, top:${relativeDivRect.top}), selection: (x:${selection.event.clientX} y:${selection.event.clientY})`);
-    let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
-    let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
-    mousePosX.value = x;
-    mousePosY.value = y;
-    // console.log(`${selection.word}:${selection.start}/${selection.end}, ${content.value.substring(selection.start, selection.end)}`);
+    if (currentSelection) {
+      selection.value = currentSelection;
+      selectionSurfaceForm.value = currentSelection.word;
+      showAnnotationModal.value = true;
+      let relativeDivRect = relativeDiv.value.getBoundingClientRect();
+      let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
+      let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
+      mousePosX.value = x;
+      mousePosY.value = y;
+    } else {
+      console.error("no current selection");
+    }
   }
 }
 
 // called when adding a new annotation
 async function addAnnotation(annotationType: AnnotationType) {
   try {
-    await annotationStore.addAnnotation(selection.value.word, selection.value.start, selection.value.end,
-        annotationType, annotator, selectedRun.value._id, Number(route.params.id), $orbisApiService);
+    if (selectedRun.value._id) {
+      await annotationStore.addAnnotation(selection.value.word, selection.value.start, selection.value.end,
+          annotationType, annotator, selectedRun.value._id, Number(route.params.id), $orbisApiService);
+    } else {
+      console.error("no run id defined in addAnnotation");
+    }
   } finally {
     showAnnotationModal.value = false;
   }

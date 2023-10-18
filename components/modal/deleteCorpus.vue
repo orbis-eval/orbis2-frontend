@@ -16,10 +16,12 @@ import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const corpusStore = useCorpusStore();
 const { closeModal } = useModal();
-const message = ref();
 
 const props = defineProps({
-  propsObject: Corpus
+  propsObject: {
+    type: Corpus,
+    required: true
+  }
 });
 
 const deletionConfirmed = async () => {

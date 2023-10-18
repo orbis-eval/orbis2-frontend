@@ -19,8 +19,14 @@
 <script setup lang="ts">
 
 const props = defineProps({
-  currentPage: Number,
-  totalPages: Number
+  currentPage: {
+    type: Number,
+    required: true
+  },
+  totalPages: {
+    type: Number,
+    required: true
+  }
 });
 const totalPages = toRef(props, 'totalPages');
 const emit = defineEmits(['pageChanged']);
@@ -30,7 +36,9 @@ const isFirstPage = computed(() => props.currentPage == 1);
 
 watch(totalPages, newValue => {
   // when nofPages changed go to last page
-  changePage(newValue);
+  if (newValue) {
+    changePage(newValue);
+  }
 })
 
 function changePage(nextPage: number) {
