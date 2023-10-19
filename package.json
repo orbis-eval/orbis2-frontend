@@ -29,6 +29,9 @@
     "sass": "^1.57.1",
     "sass-loader": "^13.2.0",
     "typescript": "^5.2.2",
-    "vue-tsc": "^1.8.19"
+    "vue-tsc": "^1.8.19",
+    "vee-validate": "^4.11.8",
+    "zod": "^3.22.4",
+    "@vee-validate/zod": "^4.11.8"
   }
 }
