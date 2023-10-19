@@ -7,7 +7,8 @@ export default {
         globals: true,
         environment: 'jsdom',
         coverage: {
-            provider: 'v8'
+            provider: 'v8',
+            reporter: ['text', 'lcov']
         }
     },
     resolve: {
