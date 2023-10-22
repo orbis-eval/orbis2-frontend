@@ -2,15 +2,15 @@ import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
-export class NestedSetNodeRemover {
+export class NestedSetNodeDeleter {
 
 
-    public static removeAnnotationNode(annotationToRemove: NestedSetNode,
+    public static deleteAnnotationNode(annotationToDelete: NestedSetNode,
                                        errorCallback: (parseError: NestedSetParseError) => void) {
-        let nodeToUpdate = this.getNodeToUpdate(annotationToRemove);
+        let nodeToUpdate = this.getNodeToUpdate(annotationToDelete);
         let annotations = nodeToUpdate.allAnnotationNodes();
-        this.removeAnnotation(annotations, annotationToRemove);
-        nodeToUpdate.children = []; // remove all childs before re-calculating the tree
+        this.deleteAnnotation(annotations, annotationToDelete);
+        nodeToUpdate.children = []; // delete all childs before re-calculating the tree
         let rootNode = NestedSet.toTree(
             annotations,
             nodeToUpdate.surface_forms[0],
@@ -25,17 +25,17 @@ export class NestedSetNodeRemover {
         }
     }
 
-    private static getNodeToUpdate(annotationToRemove: NestedSetNode): NestedSetNode {
-        if (annotationToRemove.parent) {
-            return annotationToRemove.parent;
+    private static getNodeToUpdate(annotationToDelete: NestedSetNode): NestedSetNode {
+        if (annotationToDelete.parent) {
+            return annotationToDelete.parent;
         }
-        return annotationToRemove;
+        return annotationToDelete;
     }
 
-    private static removeAnnotation(annotations: NestedSetNode[], idAnnotationToRemove: NestedSetNode) {
+    private static deleteAnnotation(annotations: NestedSetNode[], idAnnotationToDelete: NestedSetNode) {
         annotations.filter((annotation, index, annotations) => {
-            if (annotation._id === idAnnotationToRemove._id) {
-                // Removes the value from the original array
+            if (annotation._id === idAnnotationToDelete._id) {
+                // Deletes the value from the original array
                 annotations.splice(index, 1);
                 return true;
             }

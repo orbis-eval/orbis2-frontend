@@ -16,7 +16,7 @@
           <OhVueIcon name="co-pencil" />
         </OrbisButton>
 
-        <OrbisButton :onClick="() => onRemoveRun(run)" size="sm" transparent>
+        <OrbisButton :onClick="() => onDeleteRun(run)" size="sm" transparent>
           <OhVueIcon name="md-deleteforever-outlined" />
         </OrbisButton>
       </div>
@@ -32,7 +32,7 @@
 
 <script lang="ts" setup>
 import ModalCreateRun from "~/components/modal/createRun.vue";
-import ModalRemoveRun from "~/components/modal/removeRun.vue";
+import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 
 import {addIcons, OhVueIcon} from "oh-vue-icons";
 import {Run} from "~/lib/model/run";
@@ -40,16 +40,16 @@ import {useRunStore} from "~/stores/runStore";
 import {storeToRefs} from "pinia";
 import {CoPencil, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
 
-const emit = defineEmits(['editRun', 'removeRun', 'createRun']);
+const emit = defineEmits(['editRun', 'deleteRun', 'createRun']);
 
 addIcons(MdDeleteforeverOutlined, CoPencil);
 const {openModal, closeModal} = useModal();
 const runStore = useRunStore();
 const {runs, selectedRun} = storeToRefs(runStore);
-const onRemoveRun = async (run: Run) => {
+const onDeleteRun = async (run: Run) => {
   try {
     closeModal();
-    openModal(ModalRemoveRun, toRaw(run));
+    openModal(ModalDeleteRun, toRaw(run));
   } catch (error) {
     console.error(error);
   }

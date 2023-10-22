@@ -7,11 +7,11 @@ import {Annotator} from "~/lib/model/annotator";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {NestedSetNodeInserter} from "~/lib/model/nestedset/nestedSetNodeInserter";
 
-export async function addAnnotation(annotationToAdd: NestedSetNode, rootNode: NestedSetNode,
+export async function createAnnotation(annotationToCreate: NestedSetNode, rootNode: NestedSetNode,
                                     orbisApiService: OrbisApiService) {
-    let annotation = annotationToAdd.toAnnotation();
+    let annotation = annotationToCreate.toAnnotation();
 
-    const annotationResponse = await orbisApiService.addAnnotation(annotation);
+    const annotationResponse = await orbisApiService.createAnnotation(annotation);
 
     if (annotationResponse instanceof Annotation) {
         let annotationNode = new NestedSetNode(annotationResponse);

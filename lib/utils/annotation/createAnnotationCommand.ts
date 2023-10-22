@@ -3,10 +3,10 @@ import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
-import {addAnnotation, createNestedSetNode} from "~/lib/utils/annotation/addAnnotation";
+import {createAnnotation, createNestedSetNode} from "~/lib/utils/annotation/createAnnotation";
 import {deleteAnnotation} from "~/lib/utils/annotation/deleteAnnotation";
 
-export class AddAnnotationCommand implements IAnnotationCommand {
+export class CreateAnnotationCommand implements IAnnotationCommand {
 
     annotation: NestedSetNode;
     rootNode: NestedSetNode;
@@ -22,7 +22,7 @@ export class AddAnnotationCommand implements IAnnotationCommand {
     }
 
     async execute() {
-        const newAnnotation = await addAnnotation(this.annotation, this.rootNode, this.orbisApiService);
+        const newAnnotation = await createAnnotation(this.annotation, this.rootNode, this.orbisApiService);
         if (newAnnotation) {
             this.annotation = newAnnotation;
         }
