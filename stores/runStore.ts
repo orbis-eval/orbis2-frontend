@@ -29,7 +29,7 @@ export const useRunStore = defineStore('run', () => {
         }
 
         try {
-            const response = await orbisApiService.addRun(newRun, corpus);
+            const response = await orbisApiService.createRun(newRun, corpus);
 
             if (response instanceof Error) {
                 console.log(response)

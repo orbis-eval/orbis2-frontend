@@ -58,23 +58,23 @@ export class OrbisApiService {
             this.apiGet(`getAnnotations?run_id=${runId}&document_id=${documentId}`));
     }
 
-    async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
+    async createAnnotation(annotation: Annotation): Promise<Annotation | Error> {
         return Parser.parse(Annotation,
-            this.apiPost(`addAnnotation`, annotation));
+            this.apiPost(`createAnnotation`, annotation));
     }
 
-    async addCorpus(corpus: Corpus, documents: Document[] = []): Promise<Corpus | Error> {
+    async createCorpus(corpus: Corpus, documents: Document[] = []): Promise<Corpus | Error> {
         let body = {"corpus": corpus} as any;
         if (documents.length > 0) {
             body.documents = documents;
         }
         return Parser.parse(Corpus,
-            this.apiPost('addCorpus', body));
+            this.apiPost('createCorpus', body));
     }
 
-    async addRun(newRun: Run, corpus: Corpus): Promise<Run | Error> {
+    async createRun(newRun: Run, corpus: Corpus): Promise<Run | Error> {
         return Parser.parse(Run,
-            this.apiPost(`addRun?run_name=${newRun.name}&run_description=${newRun.description}`,
+            this.apiPost(`createRun?run_name=${newRun.name}&run_description=${newRun.description}`,
                 corpus));
     }
 

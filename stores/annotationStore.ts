@@ -6,7 +6,7 @@ import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {Error} from "~/lib/model/error";
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
-import {AddAnnotationCommand} from "~/lib/utils/annotation/addAnnotationCommand";
+import {CreateAnnotationCommand} from "~/lib/utils/annotation/createAnnotationCommand";
 import {AnnotationCommandHistory} from "~/lib/utils/annotation/annotationCommandHistory";
 import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
 import {Annotation} from "~/lib/model/annotation";
@@ -73,17 +73,17 @@ export const useAnnotationStore = defineStore('annotation', () => {
         console.error("Creating nestedNodeSet failed");
     }
 
-    async function addAnnotation(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
+    async function createAnnotation(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
                                  annotator: Annotator, runId: number, documentId: number,
                                  orbisApiService: OrbisApiService) {
         if (nestedSetRootNode.value instanceof NestedSetNode) {
-            const addCommand = new AddAnnotationCommand(surfaceForm, start, end, annotationType,
+            const addCommand = new CreateAnnotationCommand(surfaceForm, start, end, annotationType,
                 annotator, runId, documentId, nestedSetRootNode.value, orbisApiService);
             await annotationHistory.execute(addCommand);
             isRedoDisabled.value = true;
             isUndoDisabled.value = false;
         } else {
-            throw new Error("addAnnotation: Root node ist not set. Call first loadAnnotations.");
+            throw new Error("createAnnotation: Root node ist not set. Call first loadAnnotations.");
         }
     }
 
@@ -110,7 +110,7 @@ export const useAnnotationStore = defineStore('annotation', () => {
 
 
     return {
-        nestedSetRootNode, isUndoDisabled, isRedoDisabled, loadAnnotations, addAnnotation,
+        nestedSetRootNode, isUndoDisabled, isRedoDisabled, loadAnnotations, createAnnotation,
         deleteAnnotation, undoAnnotation, redoAnnotation, resetAnnotationStack: reset
     };
 });

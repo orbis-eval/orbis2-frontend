@@ -23,7 +23,7 @@ class OrbisApiServiceMock extends OrbisApiService {
         });
     }
 
-    async addAnnotation(annotation: Annotation): Promise<Annotation | Error> {
+    async createAnnotation(annotation: Annotation): Promise<Annotation | Error> {
         return Parser.parse(Annotation, new Promise((resolve) => {
             resolve(this.mockedApiCallResponse);
         }));
@@ -229,7 +229,7 @@ describe('OrbisApiService.annotationCommands', () => {
                 "_id": 142117042
             }
         );
-        let result = await orbisApiServiceMock.addAnnotation(mockAnnotation);
+        let result = await orbisApiServiceMock.createAnnotation(mockAnnotation);
         let annotation: Annotation;
         if (result instanceof Annotation) {
             annotation = result;
