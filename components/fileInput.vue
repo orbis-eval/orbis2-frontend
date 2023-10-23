@@ -5,7 +5,8 @@
         Import Data:
       </label>
       <div>
-        <input type="file" id="file-input" ref="fileInput" @change="inputChanged" multiple class="hidden"/>
+        <input id="file-input" ref="fileInput" :accept="props.acceptedFileTypes" class="hidden" multiple
+               type="file" @change="inputChanged"/>
         <OrbisButton :onClick="openFileInput">Choose File</orbisButton>
       </div>
     </div>
@@ -36,6 +37,7 @@
 <script setup lang="ts">
 import { OhVueIcon, addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+import {Corpus} from "~/lib/model/corpus";
 
 const emit = defineEmits(['fileChange']);
 
@@ -45,6 +47,13 @@ const currentPage = ref(1);
 const filesPerPage = ref(5);
 const fileInput = ref({} as HTMLInputElement);
 const selectedFiles = ref([] as File[]);
+
+const props = defineProps({
+  acceptedFileTypes: {
+    type: String,
+    required: true
+  }
+});
 
 const nofPages = computed(() => Math.ceil(selectedFiles.value.length / filesPerPage.value));
 const displayedFiles = computed(() => {

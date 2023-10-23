@@ -10,7 +10,7 @@
                type="text"/>
         <ErrorMessage class="text-red-400" name="corpusName"/>
       </div>
-      <FileInput @fileChange="fileChanged"/>
+      <FileInput acceptedFileTypes=".json" @fileChange="fileChanged"/>
       <div class="flex gap-4 mt-5">
         <OrbisButton id="submit" :isFormButton="true">Create</orbisButton>
         <OrbisButton id="cancel" :onClick="cancel">cancel</orbisButton>
