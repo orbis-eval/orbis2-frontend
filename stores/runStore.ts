@@ -45,9 +45,12 @@ export const useRunStore = defineStore('run', () => {
         try {
             const loadedRuns = await orbisApiService.getRuns(id);
             if (Array.isArray(loadedRuns) && loadedRuns.length > 0) {
-                corpusId.value = id;
                 runs.value = loadedRuns;
-                selectedRun.value = loadedRuns[0];
+                const isSelectedRunInLoadedRuns = loadedRuns.some(run => run._id === selectedRun.value._id);
+                if (!isSelectedRunInLoadedRuns || corpusId.value !== id) {
+                    selectedRun.value = loadedRuns[0];
+                }
+                corpusId.value = id;
             }
         } catch (error) {
             return new Error("An error occurred while fetching runs.");
