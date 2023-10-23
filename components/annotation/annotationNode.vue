@@ -8,7 +8,6 @@
         :nestedSetNode="nestedSetChildNode"
         :colorPalette="colorPalette"
         :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-        :visibilityMap="visibilityMap"
         @updateAnnotations="updateAnnotations"
         @deleteAnnotation="deleteAnnotation"
     />
@@ -22,8 +21,7 @@
         :class="{ 'bg-neutral-400 text-white rounded-t': nestedSetNode._id === highlightedNestedSetNodeId ,}"
         :style="{borderColor: '#' + colorPalette?.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id) }"
         class="border-solid border-b-4 pt-1 text-lg tracking-wider"
-        v-bind:class="(visibilityMap && nestedSetNode._id &&
-        visibilityMap[nestedSetNode._id] !== true) ? 'annotation': ''">
+        v-bind:class="nestedSetNode._id ? 'annotation': ''">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
@@ -32,7 +30,6 @@
           :nestedSetNode="nestedSetChildNode"
           :colorPalette="colorPalette"
           :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-          :visibilityMap="visibilityMap"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -43,7 +40,6 @@
           :nestedSetNode="nestedSetChildNode"
           :colorPalette="colorPalette"
           :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-          :visibilityMap="visibilityMap"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -58,8 +54,7 @@ import {ColorPalette} from "~/lib/model/colorpalette";
 interface IAnnotationNodeProps {
   nestedSetNode: NestedSetNode
   colorPalette: ColorPalette
-  highlightedNestedSetNodeId: Number
-  visibilityMap?: Object
+  highlightedNestedSetNodeId: number
 }
 
 const props = defineProps<IAnnotationNodeProps>();

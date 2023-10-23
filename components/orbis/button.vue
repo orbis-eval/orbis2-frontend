@@ -13,6 +13,7 @@
 import { useIsSubmitting} from 'vee-validate';
 
 interface IButtonProps {
+  name?: string
   disabled?: boolean
   active?: boolean
   transparent?: boolean

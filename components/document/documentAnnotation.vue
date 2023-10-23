@@ -56,7 +56,7 @@ import {Annotation} from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
 
 interface IDocumentAnnotationProps {
-  highlightedNestedSetNodeId: Number
+  highlightedNestedSetNodeId: number
 }
 
 const props = defineProps<IDocumentAnnotationProps>();

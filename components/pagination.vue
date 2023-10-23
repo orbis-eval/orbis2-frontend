@@ -18,8 +18,8 @@
 
 <script setup lang="ts">
 interface IPaginationProps {
-  currentPage: Number
-  totalPages: Number
+  currentPage: number
+  totalPages: number
 }
 const props = defineProps<IPaginationProps>();
 const totalPages = toRef(props, 'totalPages');

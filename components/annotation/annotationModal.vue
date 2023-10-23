@@ -23,8 +23,8 @@
 import {AnnotationType} from "~/lib/model/annotationType";
 
 interface IAnnotationModalProps {
-  leftPosition: Number
-  topPosition: Number
+  leftPosition: number
+  topPosition: number
   isVisible: boolean
   selectionSurfaceForm: string
   annotationTypes: AnnotationType[]
@@ -37,7 +37,7 @@ const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
 const selectedAnnotationIndex = ref(0);
 
 const filterValue = ref('');
-const filterInputField = ref(null);
+const filterInputField = ref({} as HTMLElement);
 
 const isVisibleRef = toRef(props, "isVisible");
 
@@ -53,7 +53,7 @@ function filterAnnotationTypes() {
 
 
 // prevent keydown/keyup to trigger the scrolling
-function arrow_keys_handler(e) {
+function arrow_keys_handler(e: KeyboardEvent) {
   switch(e.code){
     case "ArrowUp": case "ArrowDown": case "ArrowLeft": case "ArrowRight":
     case "Space": e.preventDefault(); break;
@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("keydown", arrow_keys_handler, false);
 });
 
-function handleKeyDown(event) {
+function handleKeyDown(event: KeyboardEvent) {
   if (event.code === "ArrowUp") {
     prevAnnotationType();
   } else if (event.code === "ArrowDown") {
@@ -110,7 +110,7 @@ function commitAnnotationType() {
   selectedAnnotationIndex.value = 0;
 }
 
-function annotationClicked(annotationType) {
+function annotationClicked(annotationType: AnnotationType) {
   emit('commitAnnotationType', annotationType);
 }
 
@@ -144,7 +144,7 @@ watch(selectionSurfaceForm, (oldSelection, newSelection) => {
     }
 );
 
-function shortenText(text) {
+function shortenText(text: string) {
   if (text) {
     let maxLength = 15;
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
