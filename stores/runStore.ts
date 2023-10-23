@@ -29,16 +29,15 @@ export const useRunStore = defineStore('run', () => {
         }
 
         try {
-            const response = await orbisApiService.createRun(newRun, corpus);
+            const run = await orbisApiService.createRun(newRun, corpus);
 
-            if (response instanceof Error) {
-                console.log(response)
-                return new Error("Something is wrong with the response");
+            if (run instanceof Error) {
+                console.log(run);
+                return new Error("Something is wrong with the run response");
             }
+            runs.value.push(run);
         } catch (error) {
             return new Error("An error occurred while creating a run.");
-        } finally {
-            await loadRuns(corpus._id, orbisApiService);
         }
     }
 
@@ -60,6 +59,12 @@ export const useRunStore = defineStore('run', () => {
         }
     }
 
+    function changeToFirstRunIfSelectedRunIsDeleted(run: Run) {
+        if (selectedRun.value._id === run._id) {
+            changeSelectedRun(runs.value[0]);
+        }
+    }
+
     async function deleteRun(run: Run, orbisApiService: OrbisApiService) {
         if (run === undefined) {
             console.error("No run provided!");
@@ -71,14 +76,15 @@ export const useRunStore = defineStore('run', () => {
 
             if (response instanceof Error) {
                 console.error(response);
+            } else if (response) {
+                runs.value = runs.value.filter(r => r._id !== run._id);
+                changeToFirstRunIfSelectedRunIsDeleted(run);
+            } else {
+                console.error("Something went wrong while deleting the run");
             }
 
         } catch (error) {
             return new Error("An error occurred while fetching runs.");
-        } finally {
-            if (run.corpus._id) {
-                await loadRuns(run.corpus._id, orbisApiService);
-            }
         }
     }
 

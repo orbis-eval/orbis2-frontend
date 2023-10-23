@@ -37,6 +37,9 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
             createRun: async (newRun: Run, corpus: Corpus): Promise<Run | Error> => {
                 return Parser.parse(Run, Promise.resolve(newRun));
             },
+            deleteRun: async (run: Run): Promise<boolean | Error> => {
+                return true;
+            }
         })),
     };
 });
@@ -75,7 +78,6 @@ describe('Run Store', () => {
     it('loadRuns should update corpusId, runs, and selectedRun', async () => {
         const runStore = useRunStore();
         const corpusId = 1;
-        const corpus = runs[0].corpus;
 
         await runStore.loadRuns(corpusId, mockedOrbisApiService);
 
@@ -86,15 +88,41 @@ describe('Run Store', () => {
 
     it('createRun should create a new run', async () => {
         const runStore = useRunStore();
-        const corpusId = 1;
         const newRun = createRun(1, "Run 1", "some desc");
         const corpus = newRun.corpus;
 
         await runStore.createRun(newRun, corpus, mockedOrbisApiService);
 
-        expect(runStore.corpusId).toBe(corpusId);
-        expect(runStore.runs.length).toBeGreaterThan(0);
+        expect(runStore.runs.length).equals(1);
         expect(runStore.runs).toContainEqual(newRun);
+    });
+
+    it('delete an existing run which is not selected', async () => {
+        const runStore = useRunStore();
+        const run1 = createRun(1, "Run 1", "some desc");
+        const run2 = createRun(2, "Run 2", "some desc2");
+        runStore.runs = [run1, run2];
+        runStore.selectedRun = run1;
+
+        await runStore.deleteRun(run2, mockedOrbisApiService);
+
+        expect(runStore.runs.length).equals(1);
+        expect(runStore.runs).toContainEqual(run1);
+        expect(runStore.selectedRun).toEqual(run1);
+    });
+
+    it('delete an existing run which is selected', async () => {
+        const runStore = useRunStore();
+        const run1 = createRun(1, "Run 1", "some desc");
+        const run2 = createRun(2, "Run 2", "some desc2");
+        runStore.runs = [run1, run2];
+        runStore.selectedRun = run1;
+
+        await runStore.deleteRun(run1, mockedOrbisApiService);
+
+        expect(runStore.runs.length).equals(1);
+        expect(runStore.runs).toContainEqual(run2);
+        expect(runStore.selectedRun).toEqual(run2);
     });
 
 });
