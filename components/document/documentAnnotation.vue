@@ -11,7 +11,7 @@
               :leftPosition="mousePosX"
               :selectionSurfaceForm="selectionSurfaceForm"
               :topPosition="mousePosY"
-              @commitAnnotationType="addAnnotation"
+              @commitAnnotationType="createAnnotation"
               @hideAnnotationModal="hideAnnotationModal"/>
 
           <AnnotationNode :colorPalette="currentColorPalette"
@@ -151,14 +151,14 @@ function updateAnnotations(currentSelection: any) {
   }
 }
 
-// called when adding a new annotation
-async function addAnnotation(annotationType: AnnotationType) {
+// called when creating a new annotation
+async function createAnnotation(annotationType: AnnotationType) {
   try {
     if (selectedRun.value._id) {
-      await annotationStore.addAnnotation(selection.value.word, selection.value.start, selection.value.end,
+      await annotationStore.createAnnotation(selection.value.word, selection.value.start, selection.value.end,
           annotationType, annotator, selectedRun.value._id, Number(route.params.id), $orbisApiService);
     } else {
-      console.error("no run id defined in addAnnotation");
+      console.error("no run id defined in createAnnotation");
     }
   } finally {
     showAnnotationModal.value = false;

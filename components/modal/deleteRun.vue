@@ -33,7 +33,7 @@ const onDecline = () => {
 
 const deletionConfirmed = async () => {
   try {
-    await runStore.removeRun(props.propsObject, $orbisApiService);
+    await runStore.deleteRun(props.propsObject, $orbisApiService);
   } catch (error) {
     // @Todo: Show error message to user
     console.error(error);

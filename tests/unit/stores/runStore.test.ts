@@ -34,7 +34,7 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
             getRuns: async (corpusId: number): Promise<Run[] | Error> => {
                 return Parser.parseList(Run, Promise.resolve(runs));
             },
-            addRun: async (newRun: Run, corpus: Corpus): Promise<Run | Error> => {
+            createRun: async (newRun: Run, corpus: Corpus): Promise<Run | Error> => {
                 return Parser.parse(Run, Promise.resolve(newRun));
             },
         })),

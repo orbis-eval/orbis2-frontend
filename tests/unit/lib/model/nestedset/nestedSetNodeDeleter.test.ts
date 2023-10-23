@@ -6,10 +6,10 @@ import {
     errorCallBack,
     mockAnnotationNode
 } from "~/tests/unit/lib/model/nestedset/nestedSetUtils";
-import {NestedSetNodeRemover} from "~/lib/model/nestedset/nestedSetNodeRemover";
+import {NestedSetNodeDeleter} from "~/lib/model/nestedset/nestedSetNodeDeleter";
 
-describe('NestedSetNodeRemover.removeAnnotationNode(...)', () => {
-    it('testing remove node', () => {
+describe('NestedSetNodeDeleter.deleteAnnotationNode(...)', () => {
+    it('testing delete node', () => {
 
         let documentString = 'AA BB CC DD EE';
 
@@ -28,9 +28,9 @@ describe('NestedSetNodeRemover.removeAnnotationNode(...)', () => {
             errorCallBack);
 
         if (rootNode) {
-            // remove a new annotation
-            let annotationToRemove = rootNode.children[0].children[2];
-            NestedSetNodeRemover.removeAnnotationNode(annotationToRemove, errorCallBack);
+            // dekete a new annotation
+            let annotationToDelete = rootNode.children[0].children[2];
+            NestedSetNodeDeleter.deleteAnnotationNode(annotationToDelete, errorCallBack);
 
             // check if child of root-node is correct, only child should be the line-node
             let lineNode = rootNode.children[0];

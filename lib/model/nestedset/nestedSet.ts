@@ -63,7 +63,7 @@ export class NestedSet {
                 new Date());
         }
 
-        // remove all existing line-annotations and calculate them freshly, then add them to the existing annotations
+        // delete all existing line-annotations and calculate them freshly, then add them to the existing annotations
         annotations = annotations.filter((node) => {
             return node.annotation_type.name !== NestedSet.LINE_ANNOTATION_TYPE_NAME;
         });

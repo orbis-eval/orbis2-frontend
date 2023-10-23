@@ -113,7 +113,7 @@ describe('Add annotations', () => {
         const documentId = 1;
         const runId = 1;
 
-        await expect(annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
+        await expect(annotationStore.createAnnotation('test', 0, 5, annotationTypes[0],
             annotator, runId, documentId, mockedOrbisApiService))
             .rejects.toThrowError();
 
@@ -131,7 +131,7 @@ describe('Add annotations', () => {
 
         await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
             mockedOrbisApiService);
-        await annotationStore.addAnnotation('test', 0, 5, annotationTypes[0],
+        await annotationStore.createAnnotation('test', 0, 5, annotationTypes[0],
             annotator, runId, documentId, mockedOrbisApiService);
 
         expect(commandHistoryExecuteSpy).toHaveBeenCalled();

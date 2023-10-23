@@ -2,7 +2,7 @@ import ModalCreateCorpus from "~/components/modal/createCorpus.vue";
 import ModalCreateRun from "~/components/modal/createRun.vue";
 import ModalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 import ModalListRuns from "~/components/modal/listRuns.vue";
-import ModalRemoveRun from "~/components/modal/removeRun.vue";
+import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 
 import {Modal} from "~/lib/modal/modal";
 import {ModalManager} from "~/lib/modal/modalManager";
@@ -12,7 +12,7 @@ const modalManagerInstance = reactive(new ModalManager([
     new Modal('deleteCorpus', ModalDeleteCorpus),
     new Modal('createRun', ModalCreateRun),
     new Modal('listRuns', ModalListRuns),
-    new Modal('removeRun', ModalRemoveRun)
+    new Modal('deleteRun', ModalDeleteRun)
 ]));
 
 export const useModal = () => {

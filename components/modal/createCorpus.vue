@@ -39,7 +39,7 @@ function setCorpusName(event: Event) {
 
 const createCorpus = async () => {
   try {
-    await corpusStore.addCorpus(corpusNameToCreate.value, chosenFiles.value, $orbisApiService);
+    await corpusStore.createCorpus(corpusNameToCreate.value, chosenFiles.value, $orbisApiService);
   } catch (Error) {
     // Todo: Add Error Message
     console.error(Error);

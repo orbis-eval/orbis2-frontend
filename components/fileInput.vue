@@ -18,7 +18,7 @@
         <div v-else class="p-1">
           <div v-for="(file, index) in displayedFiles" class="overflow-auto flex items-center justify-between m-2 px-1">
             <p id= index>{{ file.name }}</p>
-            <OrbisButton :onClick="() => removeFile(index)">
+            <OrbisButton :onClick="() => deleteFile(index)">
               <OhVueIcon name="md-deleteforever-outlined"/>
             </orbisButton>
           </div>
@@ -57,7 +57,7 @@ function openFileInput() {
   fileInput.value.click();
 }
 
-function removeFile(index: number) {
+function deleteFile(index: number) {
   selectedFiles.value.splice(index, 1);
   emit('fileChange', selectedFiles.value);
 }

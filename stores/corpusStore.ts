@@ -31,9 +31,9 @@ export const useCorpusStore = defineStore("corpus", () => {
         }
     }
 
-    async function deleteCorpora(corpusToDelete: Corpus, orbisApiService: OrbisApiService) {
+    async function deleteCorpus(corpusToDelete: Corpus, orbisApiService: OrbisApiService) {
         try {
-            await orbisApiService.removeCorpus(corpusToDelete);
+            await orbisApiService.deleteCorpus(corpusToDelete);
             corpora.value = corpora.value.filter(corpus => corpus._id !== corpusToDelete._id);
         } catch (error) {
             return new Error("An error occurred while deleting a corpus");
@@ -52,7 +52,7 @@ export const useCorpusStore = defineStore("corpus", () => {
         }
     }
 
-    async function addCorpus(corpusName: string, chosenFiles: File[], orbisApiService: OrbisApiService) {
+    async function createCorpus(corpusName: string, chosenFiles: File[], orbisApiService: OrbisApiService) {
         try {
             let newCorpus: Corpus | Error = new Corpus({
                 "name": corpusName,
@@ -62,7 +62,7 @@ export const useCorpusStore = defineStore("corpus", () => {
             if (chosenFiles.length > 0) {
                 docs = await DocumentFileReader.readFiles(chosenFiles);
             }
-            newCorpus = await orbisApiService.addCorpus(newCorpus, docs);
+            newCorpus = await orbisApiService.createCorpus(newCorpus, docs);
             if (newCorpus instanceof Corpus) {
                 corpora.value.push(newCorpus)
             } else {
@@ -73,5 +73,5 @@ export const useCorpusStore = defineStore("corpus", () => {
         }
     }
 
-    return {corpora, corpus, reset, loadCorpora, deleteCorpora, loadCorpus, addCorpus};
+    return {corpora, corpus, reset, loadCorpora, deleteCorpus, loadCorpus, createCorpus};
 });

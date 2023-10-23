@@ -26,7 +26,7 @@ const props = defineProps({
 
 const deletionConfirmed = async () => {
   try {
-    await corpusStore.deleteCorpora(props.propsObject, $orbisApiService);
+    await corpusStore.deleteCorpus(props.propsObject, $orbisApiService);
   } catch (Error) {
     // Todo: Add Error Message
     console.error(Error);

@@ -1,15 +1,15 @@
 import {Error} from "~/lib/model/error";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-import {NestedSetNodeRemover} from "~/lib/model/nestedset/nestedSetNodeRemover";
+import {NestedSetNodeDeleter} from "~/lib/model/nestedset/nestedSetNodeDeleter";
 
 export async function deleteAnnotation(annotation: NestedSetNode, orbisApiService: OrbisApiService) {
-    const response = await orbisApiService.removeAnnotationFromDocument(annotation.toAnnotation());
+    const response = await orbisApiService.deleteAnnotationFromDocument(annotation.toAnnotation());
     if (response instanceof Error) {
         console.error(response.errorMessage);
     } else {
-        // remove the annotation from the tree
-        NestedSetNodeRemover.removeAnnotationNode(annotation, parseErrorCallBack);
+        // delete the annotation from the tree
+        NestedSetNodeDeleter.deleteAnnotationNode(annotation, parseErrorCallBack);
     }
 }
 
