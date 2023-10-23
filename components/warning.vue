@@ -22,7 +22,14 @@
 </template>
   
 <script setup lang="ts">
-import {IWarningProps} from "~/lib/props";
+interface IWarningProps {
+  title: string
+  message: string
+  confirmText: string
+  declineText: string
+  onConfirm: Function
+  onDecline: Function
+}
 
 const props = defineProps<IWarningProps>();
 </script>

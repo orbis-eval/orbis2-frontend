@@ -54,7 +54,13 @@
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {ColorPalette} from "~/lib/model/colorpalette";
-import {IAnnotationNodeProps} from "~/lib/props";
+
+interface IAnnotationNodeProps {
+  nestedSetNode: NestedSetNode
+  colorPalette: ColorPalette
+  highlightedNestedSetNodeId: Number
+  visibilityMap?: Object
+}
 
 const props = defineProps<IAnnotationNodeProps>();
 

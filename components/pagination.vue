@@ -17,8 +17,10 @@
 </template>
 
 <script setup lang="ts">
-import {IPaginationProps} from "~/lib/props";
-
+interface IPaginationProps {
+  currentPage: Number
+  totalPages: Number
+}
 const props = defineProps<IPaginationProps>();
 const totalPages = toRef(props, 'totalPages');
 const emit = defineEmits(['pageChanged']);

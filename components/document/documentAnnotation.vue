@@ -54,7 +54,10 @@ import {useRunStore} from "~/stores/runStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {Annotation} from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
-import {IDocumentAnnotationProps} from "~/lib/props";
+
+interface IDocumentAnnotationProps {
+  highlightedNestedSetNodeId: Number
+}
 
 const props = defineProps<IDocumentAnnotationProps>();
 

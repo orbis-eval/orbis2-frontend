@@ -62,9 +62,12 @@ import {useRunStore} from "~/stores/runStore";
 import {useDocumentStore} from "~/stores/documentStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-import {IDocumentSidebarProps} from "~/lib/props";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdDeleteforeverOutlined);
+
+interface IDocumentSidebarProps {
+  loading: boolean
+}
 
 const props = defineProps<IDocumentSidebarProps>();
 const emit = defineEmits(['setHighlightNestedSetNode']);

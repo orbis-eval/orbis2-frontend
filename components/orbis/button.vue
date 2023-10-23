@@ -11,7 +11,16 @@
 
 <script setup lang="ts">
 import { useIsSubmitting} from 'vee-validate';
-import {IButtonProps} from "~/lib/props";
+
+interface IButtonProps {
+  disabled?: boolean
+  active?: boolean
+  transparent?: boolean
+  size?: string
+  join?: boolean
+  isFormButton?: boolean
+  onClick: Function
+}
 
 const props = withDefaults(defineProps<IButtonProps>(), {
     size: 'md',

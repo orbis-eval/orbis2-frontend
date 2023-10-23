@@ -20,7 +20,15 @@
 </template>
 
 <script setup lang="ts">
-import {IAnnotationModalProps} from "~/lib/props";
+import {AnnotationType} from "~/lib/model/annotationType";
+
+interface IAnnotationModalProps {
+  leftPosition: Number
+  topPosition: Number
+  isVisible: boolean
+  selectionSurfaceForm: string
+  annotationTypes: AnnotationType[]
+}
 
 const props = defineProps<IAnnotationModalProps>();
 

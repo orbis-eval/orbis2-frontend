@@ -12,11 +12,17 @@
 import {Corpus} from "~/lib/model/corpus";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
-import {IDeleteCorpusProps} from "~/lib/props";
 
 const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const corpusStore = useCorpusStore();
 const { closeModal } = useModal();
+
+export interface IDeleteCorpusProps {
+  /**
+   * propsObject is being used by Modal component
+   */
+  propsObject: Corpus
+}
 
 const props = defineProps<IDeleteCorpusProps>();
 
