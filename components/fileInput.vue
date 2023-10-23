@@ -1,7 +1,7 @@
 <template>
   <div class="flex justify-between flex-col">
     <div class="flex items-center justify-between mb-6">
-      <label for="file-input" class="text-lg font-medium">
+      <label class="text-white" for="file-input">
         Import Data:
       </label>
       <div>
