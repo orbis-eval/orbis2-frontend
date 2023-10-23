@@ -19,18 +19,10 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import {IAnnotationModalProps} from "~/lib/props";
 
-const props = defineProps({
-  leftPosition: Number,
-  topPosition: Number,
-  isVisible: Boolean,
-  selectionSurfaceForm: String,
-  annotationTypes: {
-    type: Array,
-    default: () => []
-  }
-});
+const props = defineProps<IAnnotationModalProps>();
 
 const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
 

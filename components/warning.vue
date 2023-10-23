@@ -22,19 +22,8 @@
 </template>
   
 <script setup lang="ts">
-const props = defineProps({
-    title: String,
-    message: String,
-    confirmText: String,
-    declineText: String,
-    onConfirm: {
-        type: Function,
-        default: () => {},
-    },
-    onDecline: {
-        type: Function,
-        default: () => {},
-    }
-});
+import {IWarningProps} from "~/lib/props";
+
+const props = defineProps<IWarningProps>();
 </script>
   

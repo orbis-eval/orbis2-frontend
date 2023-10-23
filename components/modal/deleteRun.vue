@@ -14,17 +14,13 @@ import ModalListRuns from "~/components/modal/listRuns.vue";
 import {useRunStore} from "~/stores/runStore";
 import {Run} from "~/lib/model/run";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {IDeleteRunProps} from "~/lib/props";
 const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
 const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
 
-const props = defineProps({
-  propsObject: {
-    type: Run,
-    required: true
-  }
-});
+const props = defineProps<IDeleteRunProps>();
 
 const onDecline = () => {
   closeModal();

@@ -54,8 +54,9 @@ import {useRunStore} from "~/stores/runStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {Annotation} from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
+import {IDocumentAnnotationProps} from "~/lib/props";
 
-defineProps({highlightedNestedSetNodeId: Number});
+const props = defineProps<IDocumentAnnotationProps>();
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();

@@ -1,10 +1,10 @@
 <template>
   <Warning
         :message="`Deleting corpus with '${propsObject.name}' will remove all documents and runs of this corpus! Do you want to continue?`"
-        confirm-text="ok"
+        :confirm-text="5"
         declineText="cancel"
         title="Delete corpus?"
-        :onConfirm="deletionConfirmed"
+        onConfirm="deletionConfirmed"
         :onDecline="closeModal"/>
 </template>
 
@@ -12,17 +12,13 @@
 import {Corpus} from "~/lib/model/corpus";
 import {useCorpusStore} from "~/stores/corpusStore";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {IDeleteCorpusProps} from "~/lib/props";
 
 const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService };
 const corpusStore = useCorpusStore();
 const { closeModal } = useModal();
 
-const props = defineProps({
-  propsObject: {
-    type: Corpus,
-    required: true
-  }
-});
+const props = defineProps<IDeleteCorpusProps>();
 
 const deletionConfirmed = async () => {
   try {
