@@ -27,7 +27,7 @@
 </template>
 
 <script lang="ts" setup>
-import {Form, Field, ErrorMessage, useForm} from 'vee-validate';
+import {Form, Field, ErrorMessage} from 'vee-validate';
 import {toTypedSchema} from '@vee-validate/zod';
 import * as zod from 'zod';
 import {useRunStore} from "~/stores/runStore";
@@ -41,10 +41,15 @@ const {closeModal} = useModal();
 const runStore = useRunStore();
 const corpusStore = useCorpusStore();
 const {corpus} = storeToRefs(corpusStore);
-const {errors} = useForm();
+const {runs} = storeToRefs(runStore);
+
+const runNotExists = (runName: string) => {
+  return !runs.value.some(run => run.name === runName);
+};
 
 const validationSchema = toTypedSchema(zod.object({
-  runName: zod.string({required_error: 'Run Name is required'}),
+  runName: zod.string({required_error: 'Run Name is required'})
+      .refine(runNotExists, {message: 'Run with this name already exists'}),
   runDesc: zod.string({required_error: 'Run Description is required'})
 }));
 
