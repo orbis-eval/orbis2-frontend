@@ -42,11 +42,6 @@ export const useRunStore = defineStore('run', () => {
     }
 
     async function loadRuns(id: number, orbisApiService: OrbisApiService) {
-        if (id === undefined) {
-            console.error("No corpusId provided!");
-            return;
-        }
-
         try {
             const loadedRuns = await orbisApiService.getRuns(id);
             if (Array.isArray(loadedRuns) && loadedRuns.length > 0) {
@@ -66,11 +61,6 @@ export const useRunStore = defineStore('run', () => {
     }
 
     async function deleteRun(run: Run, orbisApiService: OrbisApiService) {
-        if (run === undefined) {
-            console.error("No run provided!");
-            return;
-        }
-
         try {
             const response = await orbisApiService.deleteRun(run);
 
