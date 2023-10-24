@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import { useIsSubmitting} from 'vee-validate';
 
-let props = defineProps<{
+interface Props{
   disabled: boolean
   active: boolean
   transparent: boolean
@@ -20,9 +20,9 @@ let props = defineProps<{
   join: boolean
   isFormButton: boolean
   onClick?: Function
-}>();
+}
 
-props = withDefaults(props, {
+const props = withDefaults(defineProps<Props>(), {
     size: 'md',
     disabled: false,
     active: false,
