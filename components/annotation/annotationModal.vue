@@ -22,15 +22,13 @@
 <script setup lang="ts">
 import {AnnotationType} from "~/lib/model/annotationType";
 
-interface IAnnotationModalProps {
+const props = defineProps<{
   leftPosition: number
   topPosition: number
   isVisible: boolean
   selectionSurfaceForm: string
   annotationTypes: AnnotationType[]
-}
-
-const props = defineProps<IAnnotationModalProps>();
+}>();
 
 const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
 

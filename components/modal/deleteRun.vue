@@ -19,14 +19,12 @@ const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService
 const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
 
-interface IDeleteRunProps {
+const props = defineProps<{
   /**
    * propsObject is being used by Modal component
    */
   propsObject: Run
-}
-
-const props = defineProps<IDeleteRunProps>();
+}>();
 
 const onDecline = () => {
   closeModal();

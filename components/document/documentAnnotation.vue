@@ -55,11 +55,9 @@ import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {Annotation} from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
 
-interface IDocumentAnnotationProps {
+const props = defineProps<{
   highlightedNestedSetNodeId: number
-}
-
-const props = defineProps<IDocumentAnnotationProps>();
+}>();
 
 const {$orbisApiService} = useNuxtApp();
 const route = useRoute();

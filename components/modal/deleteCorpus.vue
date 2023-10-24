@@ -17,14 +17,12 @@ const { $orbisApiService } = useNuxtApp() as { $orbisApiService: OrbisApiService
 const corpusStore = useCorpusStore();
 const { closeModal } = useModal();
 
-export interface IDeleteCorpusProps {
+const props = defineProps<{
   /**
    * propsObject is being used by Modal component
    */
   propsObject: Corpus
-}
-
-const props = defineProps<IDeleteCorpusProps>();
+}>();
 
 const deletionConfirmed = async () => {
   try {

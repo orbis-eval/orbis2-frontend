@@ -51,13 +51,11 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {ColorPalette} from "~/lib/model/colorpalette";
 
-interface IAnnotationNodeProps {
+const props = defineProps<{
   nestedSetNode: NestedSetNode
   colorPalette: ColorPalette
   highlightedNestedSetNodeId: number
-}
-
-const props = defineProps<IAnnotationNodeProps>();
+}>();
 
 const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);
 

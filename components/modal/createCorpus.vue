@@ -12,7 +12,7 @@
       </div>
       <FileInput acceptedFileTypes=".json" @fileChange="fileChanged"/>
       <div class="flex gap-4 mt-5">
-        <OrbisButton :isFormButton="true" :onClick="() => {}">Create</orbisButton>
+        <OrbisButton :isFormButton="true">Create</orbisButton>
         <OrbisButton :onClick="cancel">cancel</orbisButton>
       </div>
     </Form>

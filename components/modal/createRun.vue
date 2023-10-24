@@ -19,7 +19,7 @@
         <ErrorMessage class="text-red-400" name="runDesc"/>
       </div>
       <div class="grid grid-cols-3 gap-4 mt-10">
-        <OrbisButton :isFormButton="true" :onClick="() => {}">Create</OrbisButton>
+        <OrbisButton :isFormButton="true">Create</OrbisButton>
         <OrbisButton :onClick="() => closeModal()">Cancel</OrbisButton>
       </div>
     </Form>

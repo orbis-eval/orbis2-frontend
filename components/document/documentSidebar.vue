@@ -65,11 +65,10 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdDeleteforeverOutlined);
 
-interface IDocumentSidebarProps {
+const props = defineProps<{
   loading: boolean
-}
+}>();
 
-const props = defineProps<IDocumentSidebarProps>();
 const emit = defineEmits(['setHighlightNestedSetNode']);
 
 const {$orbisApiService} = useNuxtApp();

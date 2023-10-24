@@ -22,15 +22,13 @@
 </template>
   
 <script setup lang="ts">
-interface IWarningProps {
+const props = defineProps<{
   title: string
   message: string
   confirmText: string
   declineText: string
   onConfirm: Function
   onDecline: Function
-}
-
-const props = defineProps<IWarningProps>();
+}>();
 </script>
   

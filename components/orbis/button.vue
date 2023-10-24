@@ -12,18 +12,17 @@
 <script setup lang="ts">
 import { useIsSubmitting} from 'vee-validate';
 
-interface IButtonProps {
-  name?: string
-  disabled?: boolean
-  active?: boolean
-  transparent?: boolean
-  size?: string
-  join?: boolean
-  isFormButton?: boolean
-  onClick: Function
-}
+let props = defineProps<{
+  disabled: boolean
+  active: boolean
+  transparent: boolean
+  size: 'xs' | 'sm' | 'md' | 'lg'
+  join: boolean
+  isFormButton: boolean
+  onClick?: Function
+}>();
 
-const props = withDefaults(defineProps<IButtonProps>(), {
+props = withDefaults(props, {
     size: 'md',
     disabled: false,
     active: false,
