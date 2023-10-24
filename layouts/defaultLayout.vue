@@ -4,6 +4,7 @@
       <div class="flex flex-row items-center">
         <NuxtLink :to="'/'">
           <img src="~/assets/img/Orbis-Logo-Transparent_2.png"
+               alt="Orbis-Eval logo"
                class="w-12 h-12 rounded-full border border-gray-600 bg-white"/>
         </NuxtLink>
         <div class="ml-4 text-lg">
