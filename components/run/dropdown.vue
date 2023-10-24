@@ -36,7 +36,7 @@ const {selectedRun} = storeToRefs(runStore);
 const {runs} = storeToRefs(runStore);
 
 function selectedRunChanged(run: Run) {
-  if (run && run._id) {
+  if (run._id) {
     runStore.changeSelectedRun(run);
     emit('runChanged');
     // close dropdown once clicked
