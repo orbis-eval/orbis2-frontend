@@ -54,6 +54,7 @@ import {useRunStore} from "~/stores/runStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {Annotation} from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
+import {TextSpan} from "~/lib/model/textSpan";
 
 const props = defineProps<{
   highlightedNestedSetNodeId: number
@@ -157,8 +158,9 @@ function updateAnnotations(currentSelection: any) {
 async function createAnnotation(annotationType: AnnotationType) {
   try {
     if (selectedRun.value._id) {
-      await annotationStore.createAnnotation(selection.value.word, selection.value.start, selection.value.end,
-          annotationType, annotator, selectedRun.value._id, Number(route.params.id), $orbisApiService);
+      const textSpan = new TextSpan(selection.value.word, selection.value.start, selection.value.end);
+      await annotationStore.createAnnotation(textSpan, annotationType, annotator, selectedRun.value._id,
+          Number(route.params.id), $orbisApiService);
     } else {
       console.error("no run id defined in createAnnotation");
     }
