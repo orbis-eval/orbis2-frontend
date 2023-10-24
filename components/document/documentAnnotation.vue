@@ -138,19 +138,17 @@ function updateAnnotations(currentSelection: any) {
   if (!(selectedRun.value instanceof Run) || selectedRun.value.name.includes('default')) {
     console.log("wrong run selected");
     wrongRunSelectedEnabled.value = true;
+  } else if (currentSelection) {
+    selection.value = currentSelection;
+    selectionSurfaceForm.value = currentSelection.word;
+    showAnnotationModal.value = true;
+    let relativeDivRect = relativeDiv.value.getBoundingClientRect();
+    let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
+    let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
+    mousePosX.value = x;
+    mousePosY.value = y;
   } else {
-    if (currentSelection) {
-      selection.value = currentSelection;
-      selectionSurfaceForm.value = currentSelection.word;
-      showAnnotationModal.value = true;
-      let relativeDivRect = relativeDiv.value.getBoundingClientRect();
-      let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
-      let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
-      mousePosX.value = x;
-      mousePosY.value = y;
-    } else {
-      console.error("no current selection");
-    }
+    console.error("no current selection");
   }
 }
 
