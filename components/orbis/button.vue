@@ -12,18 +12,23 @@
 <script setup lang="ts">
 import { useIsSubmitting} from 'vee-validate';
 
+let props = defineProps<{
+  disabled: boolean
+  active: boolean
+  transparent: boolean
+  size: 'xs' | 'sm' | 'md' | 'lg'
+  join: boolean
+  isFormButton: boolean
+  onClick?: Function
+}>();
 
-const props = defineProps({
-    disabled: Boolean,
-    active: Boolean,
-    transparent: Boolean,
-    size: {
-        validator: (value: string) => ['xs', 'sm', 'md', 'lg'].includes(value),
-        default: 'md'
-    },
-    join: Boolean, // Join button description
-    isFormButton: Boolean,
-    onClick: { type: Function, required: false }
+props = withDefaults(props, {
+    size: 'md',
+    disabled: false,
+    active: false,
+    transparent: false,
+    join: false,
+    isFormButton: false
 });
 
 const isLoading = ref(false);

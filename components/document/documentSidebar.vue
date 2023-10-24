@@ -65,7 +65,10 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdDeleteforeverOutlined);
 
-defineProps({loading: Boolean});
+const props = defineProps<{
+  loading: boolean
+}>();
+
 const emit = defineEmits(['setHighlightNestedSetNode']);
 
 const {$orbisApiService} = useNuxtApp();

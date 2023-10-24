@@ -8,7 +8,6 @@
         :nestedSetNode="nestedSetChildNode"
         :colorPalette="colorPalette"
         :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-        :visibilityMap="visibilityMap"
         @updateAnnotations="updateAnnotations"
         @deleteAnnotation="deleteAnnotation"
     />
@@ -22,8 +21,7 @@
         :class="{ 'bg-neutral-400 text-white rounded-t': nestedSetNode._id === highlightedNestedSetNodeId ,}"
         :style="{borderColor: '#' + colorPalette?.getHexadecimalColorValue(nestedSetNode.annotation_type.color_id) }"
         class="border-solid border-b-4 pt-1 text-lg tracking-wider"
-        v-bind:class="(visibilityMap && nestedSetNode._id &&
-        visibilityMap[nestedSetNode._id] !== true) ? 'annotation': ''">
+        v-bind:class="nestedSetNode._id ? 'annotation': ''">
       <span v-if="nestedSetNode.children.length===0" v-on:mouseup="onMouseUp">
         {{ nestedSetNode.surface_forms[0] }}
       </span>
@@ -32,7 +30,6 @@
           :nestedSetNode="nestedSetChildNode"
           :colorPalette="colorPalette"
           :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-          :visibilityMap="visibilityMap"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -43,7 +40,6 @@
           :nestedSetNode="nestedSetChildNode"
           :colorPalette="colorPalette"
           :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-          :visibilityMap="visibilityMap"
           @updateAnnotations="updateAnnotations"
           @deleteAnnotation="deleteAnnotation"
       />
@@ -55,14 +51,11 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
 import {ColorPalette} from "~/lib/model/colorpalette";
 
-const props = defineProps({
-  nestedSetNode: NestedSetNode,
-  colorPalette: ColorPalette,
-  highlightedNestedSetNodeId: Number,
-  visibilityMap: {
-    type: Object,
-  }
-});
+const props = defineProps<{
+  nestedSetNode: NestedSetNode
+  colorPalette: ColorPalette
+  highlightedNestedSetNodeId: number
+}>();
 
 const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);
 
@@ -77,7 +70,6 @@ function onMouseUp() {
   if (selection?.anchorNode && selection?.focusNode) {
     let word = selection.toString();
     const range = selection.getRangeAt(0).cloneRange();
-    //console.log(`selected word="${word}", range=(${range.startOffset}:${range.endOffset}), node=(${props.nestedSetNode.start_indices[0]}:${props.nestedSetNode.end_indices[0]}), calculated start/end=(${range.startOffset+props.nestedSetNode.start_indices[0]}/${range.endOffset+props.nestedSetNode.start_indices[0]}), selected nodes equals: ${selection.anchorNode.isEqualNode(selection.focusNode)}`);
     if (word
         &&
         word.trim().length > 0 // only run if more than on character was selected

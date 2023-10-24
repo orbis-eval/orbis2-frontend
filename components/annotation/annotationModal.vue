@@ -19,25 +19,23 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
+import {AnnotationType} from "~/lib/model/annotationType";
 
-const props = defineProps({
-  leftPosition: Number,
-  topPosition: Number,
-  isVisible: Boolean,
-  selectionSurfaceForm: String,
-  annotationTypes: {
-    type: Array,
-    default: () => []
-  }
-});
+const props = defineProps<{
+  leftPosition: number
+  topPosition: number
+  isVisible: boolean
+  selectionSurfaceForm: string
+  annotationTypes: AnnotationType[]
+}>();
 
 const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
 
 const selectedAnnotationIndex = ref(0);
 
 const filterValue = ref('');
-const filterInputField = ref(null);
+const filterInputField = ref({} as HTMLElement);
 
 const isVisibleRef = toRef(props, "isVisible");
 
@@ -53,7 +51,7 @@ function filterAnnotationTypes() {
 
 
 // prevent keydown/keyup to trigger the scrolling
-function arrow_keys_handler(e) {
+function arrow_keys_handler(e: KeyboardEvent) {
   switch(e.code){
     case "ArrowUp": case "ArrowDown": case "ArrowLeft": case "ArrowRight":
     case "Space": e.preventDefault(); break;
@@ -74,7 +72,7 @@ onBeforeUnmount(() => {
   window.removeEventListener("keydown", arrow_keys_handler, false);
 });
 
-function handleKeyDown(event) {
+function handleKeyDown(event: KeyboardEvent) {
   if (event.code === "ArrowUp") {
     prevAnnotationType();
   } else if (event.code === "ArrowDown") {
@@ -92,7 +90,6 @@ function prevAnnotationType() {
   } else {
     selectedAnnotationIndex.value = filterAnnotationTypes().length - 1;
   }
-  //console.log(`previous annotation, index: ${selectedAnnotationIndex.value}`);
 }
 
 function nextAnnotationType() {
@@ -101,16 +98,14 @@ function nextAnnotationType() {
   } else {
     selectedAnnotationIndex.value = 0;
   }
-  //console.log(`next annotation, index: ${selectedAnnotationIndex.value}`);
 }
 
 function commitAnnotationType() {
   emit('commitAnnotationType', filterAnnotationTypes()[selectedAnnotationIndex.value]);
-  // reset the index to 0
   selectedAnnotationIndex.value = 0;
 }
 
-function annotationClicked(annotationType) {
+function annotationClicked(annotationType: AnnotationType) {
   emit('commitAnnotationType', annotationType);
 }
 
@@ -144,7 +139,7 @@ watch(selectionSurfaceForm, (oldSelection, newSelection) => {
     }
 );
 
-function shortenText(text) {
+function shortenText(text: string) {
   if (text) {
     let maxLength = 15;
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text

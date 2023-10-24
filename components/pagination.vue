@@ -17,17 +17,10 @@
 </template>
 
 <script setup lang="ts">
-
-const props = defineProps({
-  currentPage: {
-    type: Number,
-    required: true
-  },
-  totalPages: {
-    type: Number,
-    required: true
-  }
-});
+const props = defineProps<{
+  currentPage: number
+  totalPages: number
+}>();
 const totalPages = toRef(props, 'totalPages');
 const emit = defineEmits(['pageChanged']);
 

@@ -22,19 +22,13 @@
 </template>
   
 <script setup lang="ts">
-const props = defineProps({
-    title: String,
-    message: String,
-    confirmText: String,
-    declineText: String,
-    onConfirm: {
-        type: Function,
-        default: () => {},
-    },
-    onDecline: {
-        type: Function,
-        default: () => {},
-    }
-});
+const props = defineProps<{
+  title: string
+  message: string
+  confirmText: string
+  declineText: string
+  onConfirm: Function
+  onDecline: Function
+}>();
 </script>
   
