@@ -70,7 +70,6 @@ function onMouseUp() {
   if (selection?.anchorNode && selection?.focusNode) {
     let word = selection.toString();
     const range = selection.getRangeAt(0).cloneRange();
-    //console.log(`selected word="${word}", range=(${range.startOffset}:${range.endOffset}), node=(${props.nestedSetNode.start_indices[0]}:${props.nestedSetNode.end_indices[0]}), calculated start/end=(${range.startOffset+props.nestedSetNode.start_indices[0]}/${range.endOffset+props.nestedSetNode.start_indices[0]}), selected nodes equals: ${selection.anchorNode.isEqualNode(selection.focusNode)}`);
     if (word
         &&
         word.trim().length > 0 // only run if more than on character was selected

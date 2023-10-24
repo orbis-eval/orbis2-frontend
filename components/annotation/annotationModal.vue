@@ -90,7 +90,6 @@ function prevAnnotationType() {
   } else {
     selectedAnnotationIndex.value = filterAnnotationTypes().length - 1;
   }
-  //console.log(`previous annotation, index: ${selectedAnnotationIndex.value}`);
 }
 
 function nextAnnotationType() {
@@ -99,12 +98,10 @@ function nextAnnotationType() {
   } else {
     selectedAnnotationIndex.value = 0;
   }
-  //console.log(`next annotation, index: ${selectedAnnotationIndex.value}`);
 }
 
 function commitAnnotationType() {
   emit('commitAnnotationType', filterAnnotationTypes()[selectedAnnotationIndex.value]);
-  // reset the index to 0
   selectedAnnotationIndex.value = 0;
 }
 
