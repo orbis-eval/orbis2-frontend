@@ -13,12 +13,12 @@
 import { useIsSubmitting} from 'vee-validate';
 
 interface Props{
-  disabled: boolean
-  active: boolean
-  transparent: boolean
-  size: 'xs' | 'sm' | 'md' | 'lg'
-  join: boolean
-  isFormButton: boolean
+  disabled?: boolean
+  active?: boolean
+  transparent?: boolean
+  size?: 'xs' | 'sm' | 'md' | 'lg'
+  join?: boolean
+  isFormButton?: boolean
   onClick?: Function
 }
 
