@@ -1,9 +1,11 @@
 import { test, expect, vi } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { mount, VueWrapper } from '@vue/test-utils';
 import OrbisButton from '~/components/orbis/button.vue';
 
 test("check if isLoading is working with async functions", async () => {
-    const wrapper = mount(OrbisButton, {
+    type TestWrapper<T> = VueWrapper<ComponentPublicInstance & T>
+    let wrapper: TestWrapper<Partial<{ isLoading: boolean }>>
+    wrapper = mount(OrbisButton, {
         props: {
             onClick: async () => {
                 // wait for 2 seconds
@@ -12,7 +14,7 @@ test("check if isLoading is working with async functions", async () => {
         }
     });
 
-    const verifyClick = wrapper.get('button').trigger('click');
+    wrapper.get('button').trigger('click');
 
     expect(wrapper.vm.isLoading).toBe(true);
 });
@@ -118,7 +120,9 @@ test("check if isFormButton is inactive, that clickEvent is fully executed", asy
 });
 
 test("check if after executing clickEvent, isLoading is set to false", async () => {
-    const wrapper = mount(OrbisButton, {
+    type TestWrapper<T> = VueWrapper<ComponentPublicInstance & T>
+    let wrapper: TestWrapper<Partial<{ isLoading: boolean }>>
+    wrapper = mount(OrbisButton, {
         props: {
             onClick: async () => {}
         }
