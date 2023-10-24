@@ -58,8 +58,6 @@ import {
 } from "oh-vue-icons/icons";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {storeToRefs} from "pinia";
-import {useRunStore} from "~/stores/runStore";
-import {useDocumentStore} from "~/stores/documentStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
@@ -73,8 +71,6 @@ const emit = defineEmits(['setHighlightNestedSetNode']);
 
 const {$orbisApiService} = useNuxtApp();
 
-const documentStore = useDocumentStore();
-const runStore = useRunStore();
 const annotationStore = useAnnotationStore();
 const {nestedSetRootNode, isUndoDisabled, isRedoDisabled} = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
