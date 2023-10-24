@@ -10,7 +10,8 @@
     </div>
     <div v-if="nestedSetRootNode">
       <h2 class="text-4xl p-2">Annotations</h2>
-      <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
+      <table aria-label="List of annotations"
+             class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
         <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
         <tr>
           <th class="p-2"></th>
