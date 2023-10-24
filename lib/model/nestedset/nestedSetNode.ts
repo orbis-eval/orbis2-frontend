@@ -1,7 +1,6 @@
 import {Annotation} from "~/lib/model/annotation";
 import {IAnnotation} from "~/lib/model/iannotation";
 import {NestedSet} from "~/lib/model/nestedset/nestedSet";
-import {NestedSetParseError} from "~/lib/model/nestedset/nestedSetParseError";
 
 export class NestedSetNode extends Annotation {
 
