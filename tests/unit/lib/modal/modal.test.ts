@@ -16,31 +16,47 @@ describe('Modal', () => {
     expect(modal.getComponent()).toBe(componentMock);
   });
 
-  it('should get and set propsObject correctly', () => {
+  it('should be undefined when no propsObject is set', () => {
     expect(modal.getPropsObject()).toBeUndefined();
+  });
 
+  it('should get and set propsObject correctly', () => {
     const propsObject = { var1: 'value1', var2: 'value2' };
+
     modal.setPropsObject(propsObject);
 
     expect(modal.getPropsObject()).toEqual(propsObject);
   });
 
-  it('should validate props correctly', () => {
+  it('should validate props correctly, if propsObject is not set', () => {
     expect(modal.validatePropsObject()).toBe(true);
+  });
 
-    // When component has propsObject
+  it('should validate props correctly, if propsObject is set', () => {
     modal.getComponent().props = { propsObject: { var1: 'value1' } };
     modal.setPropsObject({ var1: 'value1' });
-    expect(modal.validatePropsObject()).toBe(true);
 
+    expect(modal.validatePropsObject()).toBe(true);
+  });
+
+  it('should not validate props correctly, if propsObject is null and props is set', () => {
+    modal.getComponent().props = { propsObject: { var1: 'value1' } };
     modal.setPropsObject(null);
+
     expect(modal.validatePropsObject()).toBe(false);
+  });
 
+  it('should validate props correctly, if propsObject is set and props are not set', () => {
     modal.getComponent().props = {};
-    modal.setPropsObject({ prop1: 'value1' });
-    expect(modal.validatePropsObject()).toBe(true);
+    modal.setPropsObject({ var1: 'value1' });
 
-    modal.setPropsObject(null)
+    expect(modal.validatePropsObject()).toBe(true);
+  });
+
+  it('should validate props correctly, if propsObject is null and props are not set', () => {
+    modal.getComponent().props = {};
+    modal.setPropsObject(null);
+
     expect(modal.validatePropsObject()).toBe(true);
   });
 });

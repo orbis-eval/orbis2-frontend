@@ -47,18 +47,21 @@ describe('ModalManager', () => {
 
     it('should open a modal', () => {
         modalManager.openModal(ModalListRuns);
+
         expect(modalManager.renderStack).toEqual([modalListRuns]);
     });
 
     it('should open a modal with propsObject', () => {
         const propsObject = { var1: 'value1' };
         modalManager.openModal(ModalDeleteCorpus, propsObject);
+
         expect(modalDeleteCorpus.getPropsObject()).toEqual(propsObject);
     });
 
     it('should not open a modal if not in the modals list', () => {
         const unknownModal = new Modal('unknown', Warning);
         modalManager.openModal(Warning);
+
         expect(modalManager.renderStack).toEqual([]);
     });
 
@@ -66,27 +69,37 @@ describe('ModalManager', () => {
         modalManager.openModal(ModalCreateCorpus);
         modalManager.openModal(ModalDeleteCorpus);
         modalManager.closeModal();
+
         expect(modalManager.renderStack).toEqual([modalCreateCorpus]);
     });
 
     it('should return the current modal', () => {
         modalManager.openModal(ModalDeleteRun);
         const currentModal = modalManager.getCurrentModal();
+
         expect(currentModal).toEqual(modalDeleteRun);
     });
 
     it('should return null when no modal is open', () => {
         const currentModal = modalManager.getCurrentModal();
+
         expect(currentModal).toBeNull();
     });
 
-    it('should check if any modal is open', () => {
+    it('should return false if any modal is open, if no modal is open', () => {
         expect(modalManager.isAnyOpen()).toBe(false);
+    });
 
+    it('should return true if one modal is open', () => {
         modalManager.openModal(ModalListRuns);
-        expect(modalManager.isAnyOpen()).toBe(true);
 
+        expect(modalManager.isAnyOpen()).toBe(true);
+    });
+
+    it('should return false if one modal was open and afterwards closed', () => {
+        modalManager.openModal(ModalListRuns);
         modalManager.closeModal();
+
         expect(modalManager.isAnyOpen()).toBe(false);
     });
 });
