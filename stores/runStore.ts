@@ -65,15 +65,19 @@ export const useRunStore = defineStore('run', () => {
 
     async function deleteRun(run: Run, orbisApiService: OrbisApiService) {
         try {
-            const response = await orbisApiService.deleteRun(run);
+            if (runs.value.length > 1) {
+                const response = await orbisApiService.deleteRun(run);
 
-            if (response instanceof Error) {
-                console.error(response);
-            } else if (response) {
-                runs.value = runs.value.filter(r => r._id !== run._id);
-                changeToFirstRunIfSelectedRunIsDeleted(run);
+                if (response instanceof Error) {
+                    console.error(response);
+                } else if (response) {
+                    runs.value = runs.value.filter(r => r._id !== run._id);
+                    changeToFirstRunIfSelectedRunIsDeleted(run);
+                } else {
+                    console.error("Something went wrong while deleting the run");
+                }
             } else {
-                console.error("Something went wrong while deleting the run");
+                console.error("Cannot delete the last run");
             }
 
         } catch (error) {

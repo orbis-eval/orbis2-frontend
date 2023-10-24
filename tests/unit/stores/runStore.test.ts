@@ -27,6 +27,8 @@ const runs : Run[] = Array.from([
     createRun(3, 'Run 3', 'some desc')
 ]);
 
+const mockedDeleteRun = vi.fn().mockResolvedValue( true);
+
 // Create a mock class for OrbisApiService with all required methods for this test suite
 vi.mock("~/lib/orbisApi/orbisApiService", () => {
     return {
@@ -37,9 +39,7 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
             createRun: async (newRun: Run, corpus: Corpus): Promise<Run | Error> => {
                 return Parser.parse(Run, Promise.resolve(newRun));
             },
-            deleteRun: async (run: Run): Promise<boolean | Error> => {
-                return true;
-            }
+            deleteRun: mockedDeleteRun
         })),
     };
 });
@@ -48,6 +48,7 @@ describe('Run Store', () => {
     const mockedOrbisApiService = new OrbisApiService('');
 
     beforeEach(() => {
+        mockedDeleteRun.mockClear();
         setActivePinia(createPinia());
     });
 
@@ -151,6 +152,20 @@ describe('Run Store', () => {
         expect(runStore.runs.length).equals(1);
         expect(runStore.runs).toContainEqual(run2);
         expect(runStore.selectedRun).toEqual(run2);
+    });
+
+    it('delete the last run is not possible', async () => {
+        const runStore = useRunStore();
+        const run1 = createRun(1, "Run 1", "some desc");
+        runStore.runs = [run1];
+        runStore.selectedRun = run1;
+
+        await runStore.deleteRun(run1, mockedOrbisApiService);
+
+        expect(mockedDeleteRun).not.toHaveBeenCalled();
+        expect(runStore.runs.length).equals(1);
+        expect(runStore.runs).toContainEqual(run1);
+        expect(runStore.selectedRun).toEqual(run1);
     });
 
 });
