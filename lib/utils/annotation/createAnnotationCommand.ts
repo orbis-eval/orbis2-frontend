@@ -5,6 +5,7 @@ import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {createAnnotation, createNestedSetNode} from "~/lib/utils/annotation/createAnnotation";
 import {deleteAnnotation} from "~/lib/utils/annotation/deleteAnnotation";
+import {TextSpan} from "~/lib/model/textSpan";
 
 export class CreateAnnotationCommand implements IAnnotationCommand {
 
@@ -12,10 +13,10 @@ export class CreateAnnotationCommand implements IAnnotationCommand {
     rootNode: NestedSetNode;
     orbisApiService: OrbisApiService;
 
-    constructor(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
+    constructor(textSpan: TextSpan, annotationType: AnnotationType,
                 annotator: Annotator, runId: number, documentId: number, rootNode: NestedSetNode,
                 orbisApiService: OrbisApiService) {
-        this.annotation = createNestedSetNode(surfaceForm, start, end, 1, runId, documentId, annotationType,
+        this.annotation = createNestedSetNode(textSpan, 1, runId, documentId, annotationType,
             annotator);
         this.rootNode = rootNode;
         this.orbisApiService = orbisApiService;

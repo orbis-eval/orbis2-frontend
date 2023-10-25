@@ -59,10 +59,8 @@ const clickEvent = async (event: Event) => {
         isLoading.value = true;
         if (props.onClick && props.onClick.constructor.name === "AsyncFunction") {
             await props.onClick();
-        } else {
-            if (props.onClick) {
-                props.onClick();
-            }
+        } else if (props.onClick) {
+            props.onClick();
         }
     }
     finally {

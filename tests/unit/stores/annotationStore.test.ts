@@ -7,6 +7,7 @@ import {createPinia, setActivePinia} from "pinia";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {Error} from "~/lib/model/error";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
+import {TextSpan} from "~/lib/model/textSpan";
 
 const annotationTypes = [
     new AnnotationType({
@@ -112,8 +113,9 @@ describe('Add annotations', () => {
         const annotationStore = useAnnotationStore();
         const documentId = 1;
         const runId = 1;
+        const textSpan = new TextSpan('test', 0, 5);
 
-        await expect(annotationStore.createAnnotation('test', 0, 5, annotationTypes[0],
+        await expect(annotationStore.createAnnotation(textSpan, annotationTypes[0],
             annotator, runId, documentId, mockedOrbisApiService))
             .rejects.toThrowError();
 
@@ -128,10 +130,11 @@ describe('Add annotations', () => {
         const documentId = 1;
         const runId = 1;
         const documentContent = 'test und noch ein test und noch ein test';
+        const textSpan = new TextSpan('test', 0, 5);
 
         await annotationStore.loadAnnotations(documentId, documentContent, runId, annotationTypes,
             mockedOrbisApiService);
-        await annotationStore.createAnnotation('test', 0, 5, annotationTypes[0],
+        await annotationStore.createAnnotation(textSpan, annotationTypes[0],
             annotator, runId, documentId, mockedOrbisApiService);
 
         expect(commandHistoryExecuteSpy).toHaveBeenCalled();

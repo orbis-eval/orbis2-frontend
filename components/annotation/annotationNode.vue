@@ -54,7 +54,7 @@ import {ColorPalette} from "~/lib/model/colorpalette";
 const props = defineProps<{
   nestedSetNode: NestedSetNode
   colorPalette: ColorPalette
-  highlightedNestedSetNodeId: number
+  highlightedNestedSetNodeId: number | null
 }>();
 
 const emit = defineEmits(['updateAnnotations', 'deleteAnnotation']);

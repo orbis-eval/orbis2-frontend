@@ -54,9 +54,10 @@ import {useRunStore} from "~/stores/runStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {Annotation} from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
+import {TextSpan} from "~/lib/model/textSpan";
 
 const props = defineProps<{
-  highlightedNestedSetNodeId: number
+  highlightedNestedSetNodeId: number | null
 }>();
 
 const {$orbisApiService} = useNuxtApp();
@@ -137,19 +138,17 @@ function updateAnnotations(currentSelection: any) {
   if (!(selectedRun.value instanceof Run) || selectedRun.value.name.includes('default')) {
     console.log("wrong run selected");
     wrongRunSelectedEnabled.value = true;
+  } else if (currentSelection) {
+    selection.value = currentSelection;
+    selectionSurfaceForm.value = currentSelection.word;
+    showAnnotationModal.value = true;
+    let relativeDivRect = relativeDiv.value.getBoundingClientRect();
+    let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
+    let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
+    mousePosX.value = x;
+    mousePosY.value = y;
   } else {
-    if (currentSelection) {
-      selection.value = currentSelection;
-      selectionSurfaceForm.value = currentSelection.word;
-      showAnnotationModal.value = true;
-      let relativeDivRect = relativeDiv.value.getBoundingClientRect();
-      let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
-      let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
-      mousePosX.value = x;
-      mousePosY.value = y;
-    } else {
-      console.error("no current selection");
-    }
+    console.error("no current selection");
   }
 }
 
@@ -157,8 +156,9 @@ function updateAnnotations(currentSelection: any) {
 async function createAnnotation(annotationType: AnnotationType) {
   try {
     if (selectedRun.value._id) {
-      await annotationStore.createAnnotation(selection.value.word, selection.value.start, selection.value.end,
-          annotationType, annotator, selectedRun.value._id, Number(route.params.id), $orbisApiService);
+      const textSpan = new TextSpan(selection.value.word, selection.value.start, selection.value.end);
+      await annotationStore.createAnnotation(textSpan, annotationType, annotator, selectedRun.value._id,
+          Number(route.params.id), $orbisApiService);
     } else {
       console.error("no run id defined in createAnnotation");
     }

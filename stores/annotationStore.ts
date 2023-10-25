@@ -10,6 +10,7 @@ import {CreateAnnotationCommand} from "~/lib/utils/annotation/createAnnotationCo
 import {AnnotationCommandHistory} from "~/lib/utils/annotation/annotationCommandHistory";
 import {DeleteAnnotationCommand} from "~/lib/utils/annotation/deleteAnnotationCommand";
 import {Annotation} from "~/lib/model/annotation";
+import {TextSpan} from "~/lib/model/textSpan";
 
 export const useAnnotationStore = defineStore('annotation', () => {
     const nestedSetRootNode = ref({} as NestedSetNode | null);
@@ -73,11 +74,10 @@ export const useAnnotationStore = defineStore('annotation', () => {
         console.error("Creating nestedNodeSet failed");
     }
 
-    async function createAnnotation(surfaceForm: string, start: number, end: number, annotationType: AnnotationType,
-                                 annotator: Annotator, runId: number, documentId: number,
-                                 orbisApiService: OrbisApiService) {
+    async function createAnnotation(textSpan: TextSpan, annotationType: AnnotationType, annotator: Annotator,
+                                    runId: number, documentId: number, orbisApiService: OrbisApiService) {
         if (nestedSetRootNode.value instanceof NestedSetNode) {
-            const addCommand = new CreateAnnotationCommand(surfaceForm, start, end, annotationType,
+            const addCommand = new CreateAnnotationCommand(textSpan, annotationType,
                 annotator, runId, documentId, nestedSetRootNode.value, orbisApiService);
             await annotationHistory.execute(addCommand);
             isRedoDisabled.value = true;

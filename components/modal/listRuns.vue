@@ -16,7 +16,7 @@
           <OhVueIcon name="co-pencil" />
         </OrbisButton>
 
-        <OrbisButton :onClick="() => onDeleteRun(run)" size="sm" transparent>
+        <OrbisButton :disabled="runs.length <= 1" :onClick="() => onDeleteRun(run)" size="sm" transparent>
           <OhVueIcon name="md-deleteforever-outlined" />
         </OrbisButton>
       </div>

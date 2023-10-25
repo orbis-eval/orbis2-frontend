@@ -10,7 +10,8 @@
     </div>
     <div v-if="nestedSetRootNode">
       <h2 class="text-4xl p-2">Annotations</h2>
-      <table class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
+      <table aria-label="List of annotations"
+             class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400">
         <thead class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left">
         <tr>
           <th class="p-2"></th>
@@ -58,8 +59,6 @@ import {
 } from "oh-vue-icons/icons";
 import {useAnnotationStore} from "~/stores/annotationStore";
 import {storeToRefs} from "pinia";
-import {useRunStore} from "~/stores/runStore";
-import {useDocumentStore} from "~/stores/documentStore";
 import {useColorPalettesStore} from "~/stores/colorPalettesStore";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 
@@ -73,8 +72,6 @@ const emit = defineEmits(['setHighlightNestedSetNode']);
 
 const {$orbisApiService} = useNuxtApp();
 
-const documentStore = useDocumentStore();
-const runStore = useRunStore();
 const annotationStore = useAnnotationStore();
 const {nestedSetRootNode, isUndoDisabled, isRedoDisabled} = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();

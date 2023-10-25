@@ -6,9 +6,10 @@ import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
 import {NestedSetNodeInserter} from "~/lib/model/nestedset/nestedSetNodeInserter";
+import {TextSpan} from "~/lib/model/textSpan";
 
 export async function createAnnotation(annotationToCreate: NestedSetNode, rootNode: NestedSetNode,
-                                    orbisApiService: OrbisApiService) {
+                                       orbisApiService: OrbisApiService) {
     let annotation = annotationToCreate.toAnnotation();
 
     const annotationResponse = await orbisApiService.createAnnotation(annotation);
@@ -33,9 +34,7 @@ export async function createAnnotation(annotationToCreate: NestedSetNode, rootNo
 }
 
 export function createNestedSetNode(
-    surfaceForm: string,
-    start: number,
-    end: number,
+    textSpan: TextSpan,
     id: number,
     runId: number,
     documentId: number,
@@ -43,9 +42,9 @@ export function createNestedSetNode(
     annotator: Annotator): NestedSetNode {
     return new NestedSetNode(NestedSet.trimWithSpaces(new Annotation({
         key: "",
-        surface_forms: [surfaceForm],
-        start_indices: [start],
-        end_indices: [end],
+        surface_forms: [textSpan.surfaceForm],
+        start_indices: [textSpan.start],
+        end_indices: [textSpan.end],
         annotation_type: annotationType,
         annotator: annotator,
         run_id: runId,
