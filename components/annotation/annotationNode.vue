@@ -32,10 +32,6 @@
   </span>
   <span
     v-else-if="nestedSetNode?.parent"
-    :class="{
-      'rounded-t bg-neutral-400 text-white':
-        nestedSetNode._id === highlightedNestedSetNodeId,
-    }"
     :style="{
       borderColor:
         '#' +
@@ -43,8 +39,17 @@
           nestedSetNode.annotation_type.color_id,
         ),
     }"
-    class="border-b-4 border-solid pt-1 text-lg tracking-wider"
-    :class="nestedSetNode._id ? 'annotation' : ''"
+    :class="[
+      nestedSetNode._id === highlightedNestedSetNodeId
+        ? 'rounded-t bg-neutral-400 text-white'
+        : '',
+      'border-b-4',
+      'border-solid',
+      'pt-1',
+      'text-lg',
+      'tracking-wider',
+      nestedSetNode._id ? 'annotation' : '',
+    ]"
   >
     <span v-if="nestedSetNode.children.length === 0" @mouseup="onMouseUp">
       {{ nestedSetNode.surface_forms[0] }}
