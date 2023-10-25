@@ -12,7 +12,7 @@ module.exports = {
     "@nuxtjs/eslint-config-typescript",
     "plugin:vue/vue3-recommended",
     "prettier",
-    "plugin:prettier/recommended"
+    "plugin:prettier/recommended",
   ],
   plugins: ["simple-import-sort"],
   // plugins: [],

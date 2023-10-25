@@ -1,16 +1,23 @@
 <template>
   <div class="mb-10">
-    <OrbisButton :onClick="() => changePage(currentPage - 1)" :disabled="isFirstPage">
+    <OrbisButton
+      :on-click="() => changePage(currentPage - 1)"
+      :disabled="isFirstPage"
+    >
       prev
     </OrbisButton>
-    <OrbisButton v-for="pageNumber in totalPages"
-                 :onClick="() => changePage(pageNumber)"
-                 :active="currentPage === pageNumber" 
-                 :disabled="isFirstPage"
+    <OrbisButton
+      v-for="pageNumber in totalPages"
+      :on-click="() => changePage(pageNumber)"
+      :active="currentPage === pageNumber"
+      :disabled="isFirstPage"
     >
       {{ pageNumber }}
     </OrbisButton>
-    <OrbisButton :onClick="() => changePage(currentPage + 1)" :disabled="isLastPage">
+    <OrbisButton
+      :on-click="() => changePage(currentPage + 1)"
+      :disabled="isLastPage"
+    >
       next
     </OrbisButton>
   </div>
@@ -18,26 +25,25 @@
 
 <script setup lang="ts">
 const props = defineProps<{
-  currentPage: number
-  totalPages: number
+  currentPage: number;
+  totalPages: number;
 }>();
-const totalPages = toRef(props, 'totalPages');
-const emit = defineEmits(['pageChanged']);
+const totalPages = toRef(props, "totalPages");
+const emit = defineEmits(["pageChanged"]);
 
 const isLastPage = computed(() => props.currentPage == props.totalPages);
 const isFirstPage = computed(() => props.currentPage == 1);
 
-watch(totalPages, newValue => {
+watch(totalPages, (newValue) => {
   // when nofPages changed go to last page
   if (newValue) {
     changePage(newValue);
   }
-})
+});
 
 function changePage(nextPage: number) {
   if (nextPage > 0 && nextPage <= props.totalPages) {
-    emit('pageChanged', nextPage);
+    emit("pageChanged", nextPage);
   }
 }
-
 </script>

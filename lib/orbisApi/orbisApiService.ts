@@ -1,132 +1,174 @@
-import {Document} from "~/lib/model/document";
-import {Error} from "~/lib/model/error";
-import {Parser} from "~/lib/parser";
-import {Corpus} from "~/lib/model/corpus";
-import {Annotation} from "~/lib/model/annotation";
-import {Run} from "~/lib/model/run"
-import {TypedInternalResponse} from "nitropack";
-import {ColorPalette} from "~/lib/model/colorpalette";
+import { TypedInternalResponse } from "nitropack";
+import { Document } from "~/lib/model/document";
+import { Error } from "~/lib/model/error";
+import { Parser } from "~/lib/parser";
+import { Corpus } from "~/lib/model/corpus";
+import { Annotation } from "~/lib/model/annotation";
+import { Run } from "~/lib/model/run";
+import { ColorPalette } from "~/lib/model/colorpalette";
 
 export class OrbisApiService {
+  private readonly orbisApiBase: string;
 
-    private readonly orbisApiBase: string;
+  constructor(orbisApiBase: string) {
+    this.orbisApiBase = orbisApiBase;
+  }
 
-    constructor(orbisApiBase: string) {
-        this.orbisApiBase = orbisApiBase;
+  async getCorpora(): Promise<Corpus[] | Error> {
+    return Parser.parseList(Corpus, this.apiGet(`getCorpora`));
+  }
+
+  async getCorpus(corpusId: number): Promise<Corpus | Error> {
+    return Parser.parse(Corpus, this.apiGet(`getCorpus?corpus_id=${corpusId}`));
+  }
+
+  async getDocuments(
+    runId: number,
+    pageSize: number,
+    skip: number = 0,
+  ): Promise<Document[] | Error> {
+    return Parser.parseList(
+      Document,
+      this.apiGet(
+        `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`,
+      ),
+    );
+  }
+
+  async getNumberOfDocuments(
+    corpusId: number, // TODO: change to runId and countDocuments api call, delete the getNofDocuments api call
+    pageSize: number | undefined = undefined,
+    skip: number = 0,
+  ): Promise<Number | Error> {
+    let pageSizeParam = "";
+    if (pageSize) {
+      pageSizeParam = `&page_size=${pageSize}`;
     }
+    return Parser.parse(
+      Number,
+      this.apiGet(
+        `getNofDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`,
+      ),
+    );
+  }
 
-    async getCorpora(): Promise<Corpus[] | Error> {
-        return Parser.parseList(Corpus,
-            this.apiGet(`getCorpora`));
-    }
+  async getDocument(documentId: number): Promise<Document | Error> {
+    return Parser.parse(
+      Document,
+      this.apiGet(`getDocument?document_id=${documentId}`),
+    );
+  }
 
-    async getCorpus(corpusId: number): Promise<Corpus | Error> {
-        return Parser.parse(Corpus,
-            this.apiGet(`getCorpus?corpus_id=${corpusId}`));
-    }
+  async getRuns(corpusId: number): Promise<Run[] | Error> {
+    return Parser.parseList(Run, this.apiGet(`getRuns?corpus_id=${corpusId}`));
+  }
 
-    async getDocuments(
-                       runId: number,
-                       pageSize: number,
-                       skip: number = 0): Promise<Document[] | Error> {
-        return Parser.parseList(Document,
-            this.apiGet(`getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`));
-    }
+  async getAnnotations(
+    runId?: number,
+    documentId?: number,
+  ): Promise<Annotation[] | Error> {
+    return Parser.parseList(
+      Annotation,
+      this.apiGet(`getAnnotations?run_id=${runId}&document_id=${documentId}`),
+    );
+  }
 
-    async getNumberOfDocuments(corpusId: number, // TODO: change to runId and countDocuments api call, delete the getNofDocuments api call
-                               pageSize: number | undefined = undefined,
-                               skip: number = 0): Promise<Number | Error> {
-        let pageSizeParam = '';
-        if (pageSize) {
-            pageSizeParam = `&page_size=${pageSize}`;
-        }
-        return Parser.parse(Number, this.apiGet(`getNofDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`));
-    }
+  async createAnnotation(annotation: Annotation): Promise<Annotation | Error> {
+    return Parser.parse(
+      Annotation,
+      this.apiPost(`createAnnotation`, annotation),
+    );
+  }
 
-    async getDocument(documentId: number): Promise<Document | Error> {
-        return Parser.parse(Document,
-            this.apiGet(`getDocument?document_id=${documentId}`));
+  async createCorpus(
+    corpus: Corpus,
+    documents: Document[] = [],
+  ): Promise<Corpus | Error> {
+    const body = { corpus } as any;
+    if (documents.length > 0) {
+      body.documents = documents;
     }
+    return Parser.parse(Corpus, this.apiPost("createCorpus", body));
+  }
 
-    async getRuns(corpusId: number): Promise<Run[] | Error> {
-        return Parser.parseList(Run,
-            this.apiGet(`getRuns?corpus_id=${corpusId}`));
-    }
+  async createRun(newRun: Run, corpus: Corpus): Promise<Run | Error> {
+    return Parser.parse(
+      Run,
+      this.apiPost(
+        `createRun?run_name=${newRun.name}&run_description=${newRun.description}`,
+        corpus,
+      ),
+    );
+  }
 
-    async getAnnotations(runId?: number, documentId?: number): Promise<Annotation[] | Error> {
-        return Parser.parseList(Annotation,
-            this.apiGet(`getAnnotations?run_id=${runId}&document_id=${documentId}`));
-    }
+  async deleteRun(run: Run): Promise<boolean | Error> {
+    return Parser.parseEmptyResponse(this.apiDelete(`deleteRun`, run));
+  }
 
-    async createAnnotation(annotation: Annotation): Promise<Annotation | Error> {
-        return Parser.parse(Annotation,
-            this.apiPost(`createAnnotation`, annotation));
-    }
+  async deleteAnnotationFromDocument(
+    annotation: Annotation,
+  ): Promise<boolean | Error> {
+    return Parser.parseEmptyResponse(
+      this.apiDelete(`deleteAnnotationFromDocument`, annotation),
+    );
+  }
 
-    async createCorpus(corpus: Corpus, documents: Document[] = []): Promise<Corpus | Error> {
-        let body = {"corpus": corpus} as any;
-        if (documents.length > 0) {
-            body.documents = documents;
-        }
-        return Parser.parse(Corpus,
-            this.apiPost('createCorpus', body));
-    }
+  async deleteCorpus(corpus: Corpus): Promise<boolean | Error> {
+    return Parser.parseEmptyResponse(this.apiDelete(`deleteCorpus`, corpus));
+  }
 
-    async createRun(newRun: Run, corpus: Corpus): Promise<Run | Error> {
-        return Parser.parse(Run,
-            this.apiPost(`createRun?run_name=${newRun.name}&run_description=${newRun.description}`,
-                corpus));
-    }
+  async apiGet(query: string): Promise<TypedInternalResponse<string>> {
+    return $fetch(`${this.orbisApiBase}${query}`, {
+      method: "GET",
+    });
+  }
 
-    async deleteRun(run: Run): Promise<boolean | Error> {
-        return Parser.parseEmptyResponse(this.apiDelete(`deleteRun`, run));
-    }
+  async apiPost(
+    query: string,
+    body: any,
+  ): Promise<TypedInternalResponse<string>> {
+    return $fetch(`${this.orbisApiBase}${query}`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
 
-    async deleteAnnotationFromDocument(annotation: Annotation): Promise<boolean | Error> {
-        return Parser.parseEmptyResponse(this.apiDelete(`deleteAnnotationFromDocument`, annotation));
-    }
+  async apiDelete(
+    query: string,
+    body: any,
+  ): Promise<TypedInternalResponse<string>> {
+    return $fetch(`${this.orbisApiBase}${query}`, {
+      method: "DELETE",
+      body: JSON.stringify(body),
+    });
+  }
 
-    async deleteCorpus(corpus: Corpus): Promise<boolean | Error> {
-        return Parser.parseEmptyResponse(this.apiDelete(`deleteCorpus`, corpus));
-    }
+  async nextDocument(
+    runId: number,
+    documentId: number,
+  ): Promise<Document | Error> {
+    return Parser.parse(
+      Document,
+      this.apiGet(`nextDocument?run_id=${runId}&document_id=${documentId}`),
+    );
+  }
 
-    async apiGet(query: string): Promise<TypedInternalResponse<string>> {
-        return $fetch(`${this.orbisApiBase}${query}`, {
-            method: 'GET'
-        });
-    }
+  async previousDocument(
+    runId: number,
+    documentId: number,
+  ): Promise<Document | Error> {
+    return Parser.parse(
+      Document,
+      this.apiGet(`previousDocument?run_id=${runId}&document_id=${documentId}`),
+    );
+  }
 
-    async apiPost(query: string, body: any): Promise<TypedInternalResponse<string>> {
-        return $fetch(`${this.orbisApiBase}${query}`, {
-            method: 'POST',
-            body: JSON.stringify(body)
-        })
-    }
+  async countDocuments(runId: number): Promise<Number | Error> {
+    // @ts-ignore
+    return this.apiGet(`countDocuments?run_id=${runId}`);
+  }
 
-    async apiDelete(query: string, body: any): Promise<TypedInternalResponse<string>> {
-        return $fetch(`${this.orbisApiBase}${query}`, {
-            method: 'DELETE',
-            body: JSON.stringify(body)
-        })
-    }
-
-    async nextDocument(runId: number, documentId: number): Promise<Document | Error> {
-        return Parser.parse(Document,
-            this.apiGet(`nextDocument?run_id=${runId}&document_id=${documentId}`));
-    }
-
-    async previousDocument(runId: number, documentId: number): Promise<Document | Error> {
-        return Parser.parse(Document,
-            this.apiGet(`previousDocument?run_id=${runId}&document_id=${documentId}`));
-    }
-
-    async countDocuments(runId: number): Promise<Number | Error> {
-        // @ts-ignore
-        return this.apiGet(`countDocuments?run_id=${runId}`);
-    }
-
-    async colorPalettes(): Promise<ColorPalette[] | Error> {
-        return Parser.parseList(ColorPalette,
-            this.apiGet(`colorPalettes`));
-    }
+  async colorPalettes(): Promise<ColorPalette[] | Error> {
+    return Parser.parseList(ColorPalette, this.apiGet(`colorPalettes`));
+  }
 }

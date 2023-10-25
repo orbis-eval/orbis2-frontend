@@ -1,16 +1,16 @@
-import {IRole} from "~/lib/model/irole";
+import { IRole } from "~/lib/model/irole";
 
 export class Role implements IRole {
-    name: string;
-    _id?: number;
+  name: string;
+  _id?: number;
 
-    constructor(role: IRole) {
-        this.name = role.name;
-        this._id = role._id;
-    }
+  constructor(role: IRole) {
+    this.name = role.name;
+    this._id = role._id;
+  }
 
-    toJSON() {
-        const { _id, ...json } = this;
-        return json;
-    }
+  toJSON() {
+    const { _id, ...json } = this;
+    return json;
+  }
 }

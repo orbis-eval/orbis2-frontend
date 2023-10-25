@@ -1,57 +1,62 @@
 <template>
   <NuxtLayout name="default-layout">
     <template #leftMenu>
-      <LeftMenu/>
+      <LeftMenu />
     </template>
-    <LoadingSpinner v-if="loading" class="mt-20"/>
+    <LoadingSpinner v-if="loading" class="mt-20" />
     <div v-else class="flex flex-col h-full ml-10 mr-10">
-
-      <RunDropdown @runChanged="runChanged"/>
+      <RunDropdown @runChanged="runChanged" />
 
       <DocumentsTable></DocumentsTable>
 
-      <Pagination v-if="totalPages"
-                  @pageChanged="pageChanged"
-                  :currentPage="currentPage"
-                  :totalPages="totalPages"
-                  class="text-center"/>
+      <Pagination
+        v-if="totalPages"
+        :current-page="currentPage"
+        :total-pages="totalPages"
+        class="text-center"
+        @pageChanged="pageChanged"
+      />
     </div>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import {addIcons} from "oh-vue-icons";
-import {MdKeyboardarrowdown} from "oh-vue-icons/icons";
-import {useCorpusStore} from "~/stores/corpusStore";
-import {storeToRefs} from "pinia";
-import {OrbisApiService} from "~/lib/orbisApi/orbisApiService";
-import {useDocumentStore} from "~/stores/documentStore";
-import {useRunStore} from "~/stores/runStore";
+import { addIcons } from "oh-vue-icons";
+import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
+import { storeToRefs } from "pinia";
+import { useCorpusStore } from "~/stores/corpusStore";
+import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { useDocumentStore } from "~/stores/documentStore";
+import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
-const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
-
+const { $orbisApiService } = useNuxtApp() as {
+  $orbisApiService: OrbisApiService;
+};
 
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 
 const runStore = useRunStore();
 
-const {selectedRun} = storeToRefs(runStore);
+const { selectedRun } = storeToRefs(runStore);
 
 const pageSize = ref(10);
 const loading = ref(true);
 
-const {currentPage} = storeToRefs(documentStore);
-const {documents} = storeToRefs(documentStore);
-const {totalPages} = storeToRefs(documentStore);
+const { currentPage } = storeToRefs(documentStore);
+const { documents } = storeToRefs(documentStore);
+const { totalPages } = storeToRefs(documentStore);
 
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(Number(route.params.corpusId), $orbisApiService);
+    await corpusStore.loadCorpus(
+      Number(route.params.corpusId),
+      $orbisApiService,
+    );
     await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
     await countDocuments();
     await loadDocuments();
@@ -61,7 +66,6 @@ onMounted(async () => {
   }
 });
 
-
 // called when another page is selected
 async function pageChanged(nextPage: number) {
   if (selectedRun.value._id) {
@@ -70,10 +74,11 @@ async function pageChanged(nextPage: number) {
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
       await documentStore.loadDocuments(
-          selectedRun.value._id,
-          $orbisApiService,
-          pageSize.value,
-          startIndex)
+        selectedRun.value._id,
+        $orbisApiService,
+        pageSize.value,
+        startIndex,
+      );
     } catch (error) {
       console.error(error);
     } finally {
@@ -91,7 +96,9 @@ async function runChanged() {
 async function countDocuments() {
   if (selectedRun.value._id) {
     await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
-    documentStore.totalPages = Math.ceil(documentStore.nrOfDocuments / pageSize.value);
+    documentStore.totalPages = Math.ceil(
+      documentStore.nrOfDocuments / pageSize.value,
+    );
   } else {
     console.warn("Id of selected run was not set in countDocuments.");
   }
@@ -100,5 +107,4 @@ async function countDocuments() {
 async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
-
 </script>

@@ -3,8 +3,9 @@
     <h2 class="font-bold text-3xl mb-5">Runs</h2>
     <template v-for="run in runs" :key="run._id" class="mb-20">
       <div class="flex py-2 items-center">
-
-        <div :class="['flex-1', 'w-4/6', selectedRun == run ? 'text-primary' : '']">
+        <div
+          :class="['flex-1', 'w-4/6', selectedRun == run ? 'text-primary' : '']"
+        >
           <span>{{ run.name }}</span>
         </div>
 
@@ -12,40 +13,51 @@
           <span>{{ run.timestamp }}</span>
         </div>
 
-        <OrbisButton :onClick="() => emit('editRun', run)" size="sm" transparent>
+        <OrbisButton
+          :on-click="() => emit('editRun', run)"
+          size="sm"
+          transparent
+        >
           <OhVueIcon name="co-pencil" />
         </OrbisButton>
 
-        <OrbisButton :disabled="runs.length <= 1" :onClick="() => onDeleteRun(run)" size="sm" transparent>
+        <OrbisButton
+          :disabled="runs.length <= 1"
+          :on-click="() => onDeleteRun(run)"
+          size="sm"
+          transparent
+        >
           <OhVueIcon name="md-deleteforever-outlined" />
         </OrbisButton>
       </div>
     </template>
 
     <div class="grid grid-cols-3 gap-4 mt-10">
-      <OrbisButton :onClick="() => openModal(ModalCreateRun)">Create Run</OrbisButton>
-      <OrbisButton :onClick="() => {}">Compare Runs</orbisButton>
-      <OrbisButton :onClick="() => closeModal()">Close</orbisButton>
+      <OrbisButton :on-click="() => openModal(ModalCreateRun)"
+        >Create Run</OrbisButton
+      >
+      <OrbisButton :on-click="() => {}">Compare Runs</OrbisButton>
+      <OrbisButton :on-click="() => closeModal()">Close</OrbisButton>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
+import { addIcons, OhVueIcon } from "oh-vue-icons";
+import { storeToRefs } from "pinia";
+import { CoPencil, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import ModalCreateRun from "~/components/modal/createRun.vue";
 import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 
-import {addIcons, OhVueIcon} from "oh-vue-icons";
-import {Run} from "~/lib/model/run";
-import {useRunStore} from "~/stores/runStore";
-import {storeToRefs} from "pinia";
-import {CoPencil, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
+import { Run } from "~/lib/model/run";
+import { useRunStore } from "~/stores/runStore";
 
-const emit = defineEmits(['editRun', 'deleteRun', 'createRun']);
+const emit = defineEmits(["editRun", "deleteRun", "createRun"]);
 
 addIcons(MdDeleteforeverOutlined, CoPencil);
-const {openModal, closeModal} = useModal();
+const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
-const {runs, selectedRun} = storeToRefs(runStore);
+const { runs, selectedRun } = storeToRefs(runStore);
 const onDeleteRun = async (run: Run) => {
   try {
     closeModal();

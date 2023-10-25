@@ -1,9 +1,9 @@
-import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
+import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 
 export interface IAnnotationCommand {
-    annotation: NestedSetNode
+  annotation: NestedSetNode;
 
-    execute(): Promise<void>;
+  execute(): Promise<void>;
 
-    undo(): Promise<void>;
+  undo(): Promise<void>;
 }

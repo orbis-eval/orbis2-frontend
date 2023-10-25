@@ -1,44 +1,48 @@
 <template>
-    <button
-        :disabled="disabled || isLoading || isFormLoading"
-        :class="classesAsString"
-        :type="isFormButton ? 'submit' : 'button'"
-        @click="clickEvent">
-        <span v-if="isLoading || isFormLoading" class="loading loading-spinner w-4 h-4"></span>
-        <slot></slot>
-    </button>
+  <button
+    :disabled="disabled || isLoading || isFormLoading"
+    :class="classesAsString"
+    :type="isFormButton ? 'submit' : 'button'"
+    @click="clickEvent"
+  >
+    <span
+      v-if="isLoading || isFormLoading"
+      class="loading loading-spinner w-4 h-4"
+    ></span>
+    <slot></slot>
+  </button>
 </template>
 
 <script setup lang="ts">
-import { useIsSubmitting} from 'vee-validate';
+import { useIsSubmitting } from "vee-validate";
 
-interface Props{
-  disabled?: boolean
-  active?: boolean
-  transparent?: boolean
-  size?: 'xs' | 'sm' | 'md' | 'lg'
-  join?: boolean
-  isFormButton?: boolean
-  onClick?: Function
+interface Props {
+  disabled?: boolean;
+  active?: boolean;
+  transparent?: boolean;
+  size?: "xs" | "sm" | "md" | "lg";
+  join?: boolean;
+  isFormButton?: boolean;
+  onClick?: Function;
 }
 
 const props = withDefaults(defineProps<Props>(), {
-    size: 'md',
-    disabled: false,
-    active: false,
-    transparent: false,
-    join: false,
-    isFormButton: false
+  size: "md",
+  disabled: false,
+  active: false,
+  transparent: false,
+  join: false,
+  isFormButton: false,
 });
 
 const isLoading = ref(false);
 
 const isFormLoading = computed(() => {
-     if (props.isFormButton) {
-        const isSubmitting = useIsSubmitting();
-        return isSubmitting.value;
-     }
-     return false;
+  if (props.isFormButton) {
+    const isSubmitting = useIsSubmitting();
+    return isSubmitting.value;
+  }
+  return false;
 });
 
 /**
@@ -49,49 +53,50 @@ const isFormLoading = computed(() => {
  *            the duration of the function.
  */
 const clickEvent = async (event: Event) => {
-    if(props.isFormButton) {
-        return;
-    }
+  if (props.isFormButton) {
+    return;
+  }
 
-    event.preventDefault();
+  event.preventDefault();
 
-    try {
-        isLoading.value = true;
-        if (props.onClick && props.onClick.constructor.name === "AsyncFunction") {
-            await props.onClick();
-        } else if (props.onClick) {
-            props.onClick();
-        }
+  try {
+    isLoading.value = true;
+    if (props.onClick && props.onClick.constructor.name === "AsyncFunction") {
+      await props.onClick();
+    } else if (props.onClick) {
+      props.onClick();
     }
-    finally {
-        isLoading.value = false;
-    }
+  } finally {
+    isLoading.value = false;
+  }
 };
 
 const sizeMapping: { [key: string]: string } = {
-    xs: 'btn-xs',
-    sm: 'btn-sm',
-    md: '',
-    lg: 'btn-lg',
+  xs: "btn-xs",
+  sm: "btn-sm",
+  md: "",
+  lg: "btn-lg",
 };
 
 const classesAsString = computed(() => {
-    let classList = ['btn'];
+  const classList = ["btn"];
 
-    classList.push(sizeMapping[props.size]);
+  classList.push(sizeMapping[props.size]);
 
-    if (props.disabled || isLoading.value) {
-        classList.push('bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300');
-    }
-    if (props.active) {
-        classList.push('btn-active');
-    }
-    if (props.transparent) {
-        classList.push('btn-ghost');
-    }
-    if (props.join) {
-        classList.push('join-item');
-    }
-    return classList.join(' ');
-})
+  if (props.disabled || isLoading.value) {
+    classList.push(
+      "bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300",
+    );
+  }
+  if (props.active) {
+    classList.push("btn-active");
+  }
+  if (props.transparent) {
+    classList.push("btn-ghost");
+  }
+  if (props.join) {
+    classList.push("join-item");
+  }
+  return classList.join(" ");
+});
 </script>
