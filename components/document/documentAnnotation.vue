@@ -147,7 +147,7 @@ function hideAnnotationModal() {
 }
 
 function updateAnnotations(currentSelection: any) {
-  if (selectedRun.value.name.includes("default")) {
+  if (selectedRun.value.name.includes('default')) {
     // @TODO: use an error alert for the user
     wrongRunSelectedEnabled.value = true;
   } else if (currentSelection) {
