@@ -25,7 +25,7 @@
     v-else-if="
       nestedSetNode?.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME
     "
-    class="pt-1 pb-1 text-lg tracking-wider"
+    class="pb-1 pt-1 text-lg tracking-wider"
     @mouseup="onMouseUp"
   >
     {{ nestedSetNode.surface_forms[0] }}
@@ -33,7 +33,7 @@
   <span
     v-else-if="nestedSetNode?.parent"
     :class="{
-      'bg-neutral-400 text-white rounded-t':
+      'rounded-t bg-neutral-400 text-white':
         nestedSetNode._id === highlightedNestedSetNodeId,
     }"
     :style="{
@@ -43,7 +43,7 @@
           nestedSetNode.annotation_type.color_id,
         ),
     }"
-    class="border-solid border-b-4 pt-1 text-lg tracking-wider"
+    class="border-b-4 border-solid pt-1 text-lg tracking-wider"
     :class="nestedSetNode._id ? 'annotation' : ''"
   >
     <span v-if="nestedSetNode.children.length === 0" @mouseup="onMouseUp">

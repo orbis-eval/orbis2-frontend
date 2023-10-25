@@ -4,7 +4,7 @@
       <LeftMenu />
     </template>
     <LoadingSpinner v-if="loading" class="mt-20" />
-    <div v-else class="flex flex-col h-full ml-10 mr-10">
+    <div v-else class="ml-10 mr-10 flex h-full flex-col">
       <RunDropdown @runChanged="runChanged" />
 
       <DocumentsTable></DocumentsTable>

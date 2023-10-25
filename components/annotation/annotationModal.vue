@@ -1,10 +1,10 @@
 <template>
   <div :class="{ annotationTypeModalHidden: !props.isVisible }">
     <div
-      class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
+      class="absolute rounded-md border-2 border-gray-600 bg-gray-300"
       :style="{ left: leftPosition + 'px', top: topPosition + 'px' }"
     >
-      <div class="text-center font-bold text-2xl">
+      <div class="text-center text-2xl font-bold">
         "{{ shortenText(props.selectionSurfaceForm) }}"
       </div>
       <input

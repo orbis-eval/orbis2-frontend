@@ -1,23 +1,23 @@
 <template>
   <div>
-    <h2 class="font-bold text-3xl mb-5">Create Corpus</h2>
+    <h2 class="mb-5 text-3xl font-bold">Create Corpus</h2>
     <Form
       v-slot="{ errors }"
       :validation-schema="validationSchema"
       @submit="createCorpus"
     >
       <div class="mb-4">
-        <label class="text-white block mb-1">Name of Corpus:</label>
+        <label class="mb-1 block text-white">Name of Corpus:</label>
         <Field
           :class="errors.corpusName ? 'input-bordered input-error' : ''"
-          class="input w-full bg-white text-black mb-2"
+          class="input mb-2 w-full bg-white text-black"
           name="corpusName"
           type="text"
         />
         <ErrorMessage class="text-red-400" name="corpusName" />
       </div>
       <FileInput accepted-file-types=".json" @fileChange="fileChanged" />
-      <div class="flex gap-4 mt-5">
+      <div class="mt-5 flex gap-4">
         <OrbisButton :is-form-button="true">Create</OrbisButton>
         <OrbisButton :on-click="cancel">cancel</OrbisButton>
       </div>

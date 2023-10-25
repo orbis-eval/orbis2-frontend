@@ -1,6 +1,6 @@
 <template>
   <NuxtLayout name="default-layout">
-    <div class="flex items-center justify-center h-full">
+    <div class="flex h-full items-center justify-center">
       <LoadingSpinner v-if="loading" />
       <!-- Todo: Show spinner for creating/deleting in modal  -->
       <CorpusList v-else />

@@ -2,7 +2,7 @@
   <div class="flex flex-col">
     <div class="flex justify-center">
       <div>
-        <div class="font-bold text-3xl mb-5">
+        <div class="mb-5 text-3xl font-bold">
           {{ title }}
         </div>
         <div class="mb-4">

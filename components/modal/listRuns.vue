@@ -1,8 +1,8 @@
 <template>
   <div>
-    <h2 class="font-bold text-3xl mb-5">Runs</h2>
+    <h2 class="mb-5 text-3xl font-bold">Runs</h2>
     <template v-for="run in runs" :key="run._id" class="mb-20">
-      <div class="flex py-2 items-center">
+      <div class="flex items-center py-2">
         <div
           :class="['flex-1', 'w-4/6', selectedRun == run ? 'text-primary' : '']"
         >
@@ -32,7 +32,7 @@
       </div>
     </template>
 
-    <div class="grid grid-cols-3 gap-4 mt-10">
+    <div class="mt-10 grid grid-cols-3 gap-4">
       <OrbisButton :on-click="() => openModal(ModalCreateRun)"
         >Create Run</OrbisButton
       >

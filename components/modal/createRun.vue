@@ -1,32 +1,32 @@
 <template>
   <div>
-    <h2 class="font-bold text-3xl mb-5">Create run</h2>
+    <h2 class="mb-5 text-3xl font-bold">Create run</h2>
     <Form
       v-slot="{ errors }"
       :validation-schema="validationSchema"
       @submit="createRun"
     >
       <div class="mb-4">
-        <label class="text-white block mb-1">Name:</label>
+        <label class="mb-1 block text-white">Name:</label>
         <Field
           :class="errors.runName ? 'input-bordered input-error' : ''"
-          class="input w-full bg-white text-black mb-2"
+          class="input mb-2 w-full bg-white text-black"
           name="runName"
           type="text"
         />
         <ErrorMessage class="text-red-400" name="runName" />
       </div>
       <div class="mb-4">
-        <label class="text-white block mb-1">Description:</label>
+        <label class="mb-1 block text-white">Description:</label>
         <Field
           :class="errors.runDesc ? 'input-bordered input-error' : ''"
-          class="input w-full bg-white text-black mb-2"
+          class="input mb-2 w-full bg-white text-black"
           name="runDesc"
           type="text"
         />
         <ErrorMessage class="text-red-400" name="runDesc" />
       </div>
-      <div class="grid grid-cols-3 gap-4 mt-10">
+      <div class="mt-10 grid grid-cols-3 gap-4">
         <OrbisButton :is-form-button="true">Create</OrbisButton>
         <OrbisButton :on-click="() => closeModal()">Cancel</OrbisButton>
       </div>

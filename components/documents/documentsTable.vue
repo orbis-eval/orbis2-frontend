@@ -1,11 +1,11 @@
 <template>
   <div
-    class="bg-neutral border-2 border-gray-600 rounded-xl p-6 overflow-x-auto flex-1 mb-10"
+    class="mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
   >
-    <h1 class="text-3xl text-white mb-5">Documents</h1>
+    <h1 class="mb-5 text-3xl text-white">Documents</h1>
     <table aria-label="List of documents in corpus" class="table text-white">
       <thead class="text-left">
-        <tr class="text-white text-lg">
+        <tr class="text-lg text-white">
           <th>Nr</th>
           <th>ID</th>
           <th>Content</th>
@@ -19,10 +19,10 @@
             router.push(`/corpora/${corpus._id}/documents/${document._id}`)
           "
         >
-          <td class="pr-5 py-1">
+          <td class="py-1 pr-5">
             {{ pageSize * (currentPage - 1) + index + 1 }}
           </td>
-          <td class="pr-5 py-1">
+          <td class="py-1 pr-5">
             {{ document._id }}
           </td>
           <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>

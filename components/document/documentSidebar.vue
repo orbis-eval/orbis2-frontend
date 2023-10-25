@@ -9,13 +9,13 @@
       </OrbisButton>
     </div>
     <div v-if="nestedSetRootNode">
-      <h2 class="text-4xl p-2">Annotations</h2>
+      <h2 class="p-2 text-4xl">Annotations</h2>
       <table
         aria-label="List of annotations"
         class="table-auto border-spacing-1 text-gray-500 dark:text-gray-400"
       >
         <thead
-          class="text-lg text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400 text-left"
+          class="bg-gray-50 text-left text-lg uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
         >
           <tr>
             <th class="p-2"></th>
@@ -29,7 +29,7 @@
         <tbody>
           <tr
             v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
-            class="bg-gray-50 border-b dark:bg-gray-800 dark:border-gray-700 hover:underline"
+            class="border-b bg-gray-50 hover:underline dark:border-gray-700 dark:bg-gray-800"
             @mouseleave="emit('setHighlightNestedSetNode', null)"
             @mouseout="emit('setHighlightNestedSetNode', null)"
             @mouseover="emit('setHighlightNestedSetNode', nestedSetNode._id)"
@@ -43,7 +43,7 @@
                       nestedSetNode.annotation_type.color_id,
                     ),
                 }"
-                class="rounded-lg w-10 h-10"
+                class="h-10 w-10 rounded-lg"
               ></div>
             </td>
             <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>

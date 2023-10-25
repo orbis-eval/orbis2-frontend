@@ -1,5 +1,5 @@
 <template>
-  <div class="grow max-w-xl">
+  <div class="max-w-xl grow">
     <div class="content-card border-2 border-gray-600">
       <div class="card-body">
         <div class="card-title flex">
