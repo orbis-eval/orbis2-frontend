@@ -38,7 +38,7 @@
     </div>
     <div
       v-if="wrongRunSelectedEnabled"
-      class="fixed inset-0 flex items-center justify-center z-50"
+      class="fixed inset-0 z-50 flex items-center justify-center"
     >
       <Warning
         confirm-text="ok"

@@ -7,7 +7,7 @@
   >
     <span
       v-if="isLoading || isFormLoading"
-      class="loading loading-spinner w-4 h-4"
+      class="loading loading-spinner h-4 w-4"
     ></span>
     <slot></slot>
   </button>

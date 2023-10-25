@@ -1,8 +1,8 @@
 <template>
   <div
-    class="flex flex-col justify-start items-center bg-neutral border-r-2 border-gray-600 relative h-full"
+    class="relative flex h-full flex-col items-center justify-start border-r-2 border-gray-600 bg-neutral"
   >
-    <ul class="menu bg-neutral pt-10 absolut inset-y-0 left-0">
+    <ul class="absolut menu inset-y-0 left-0 bg-neutral pt-10">
       <li>
         <NuxtLink :to="'/'" class="mt-2">
           <OhVueIcon name="hi-home" class="menu-icon" />

@@ -2,10 +2,10 @@
   <dialog
     id="modalContainer"
     ref="modalEl"
-    class="modal orbis-modal"
+    class="orbis-modal modal"
     @cancel.prevent="onCancel"
   >
-    <div class="modal-box bg-neutral border-2 border-gray-600">
+    <div class="modal-box border-2 border-gray-600 bg-neutral">
       <template v-for="modal in modals" :key="modal.getId()">
         <component
           :is="modalComponent(modal)"

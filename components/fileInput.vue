@@ -1,6 +1,6 @@
 <template>
-  <div class="flex justify-between flex-col">
-    <div class="flex items-center justify-between mb-6">
+  <div class="flex flex-col justify-between">
+    <div class="mb-6 flex items-center justify-between">
       <label class="text-white" for="file-input"> Import Data: </label>
       <div>
         <input
@@ -16,7 +16,7 @@
       </div>
     </div>
     <div
-      class="flex flex-col h-full justify-between border border-dashed border-gray-400 max-h-96 overflow-auto"
+      class="flex h-full max-h-96 flex-col justify-between overflow-auto border border-dashed border-gray-400"
       @drop.prevent="dropHandler"
       @dragover.prevent="dragOverHandler"
     >
@@ -27,7 +27,7 @@
         <div v-else class="p-1">
           <div
             v-for="(file, index) in selectedFiles"
-            class="overflow-auto flex items-center justify-between m-2 px-1"
+            class="m-2 flex items-center justify-between overflow-auto px-1"
           >
             <p id="index">{{ file.name }}</p>
             <OrbisButton :on-click="() => deleteFile(index)">

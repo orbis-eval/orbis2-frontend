@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="selectedRun && currentDocument"
-    class="px-4 pb-4 flex items-center"
+    class="flex items-center px-4 pb-4"
   >
     Document: {{ currentDocument._id }}
     <OrbisButton

@@ -1,11 +1,11 @@
 <template>
   <div
     v-if="runs"
-    class="bg-neutral border-2 border-gray-600 flex items-center gap-4 rounded-xl p-2 mt-20 mb-10"
+    class="mb-10 mt-20 flex items-center gap-4 rounded-xl border-2 border-gray-600 bg-neutral p-2"
   >
     <details id="run_dropdown" class="dropdown">
       <summary
-        class="m-1 btn bg-gray-100 text-black hover:bg-gray-100 hover:text-black w-full"
+        class="btn m-1 w-full bg-gray-100 text-black hover:bg-gray-100 hover:text-black"
       >
         {{
           selectedRun && selectedRun.name
@@ -15,11 +15,11 @@
         <OhVueIcon name="md-keyboardarrowdown" />
       </summary>
       <ul
-        class="text-black shadow menu dropdown-content z-[1] bg-gray-100 rounded-md w-full"
+        class="menu dropdown-content z-[1] w-full rounded-md bg-gray-100 text-black shadow"
       >
         <li v-for="run in runs" :key="run._id">
           <NuxtLink
-            class="link hover:text-black hover:bg-gray-200"
+            class="link hover:bg-gray-200 hover:text-black"
             @click="selectedRunChanged(run)"
           >
             {{ run.name }}
