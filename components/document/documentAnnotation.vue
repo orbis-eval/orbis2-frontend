@@ -34,8 +34,8 @@
     <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
       <Warning confirmText="ok"
                declineText="cancel"
-               message="No run or default run is selected, in both cases annotation is not possible"
-               title="Please select a run."
+               message="The default branch cannot be annotated"
+               title="Default run selected"
                :onConfirm="() => wrongRunSelectedEnabled = false"
                :onDecline=" () => wrongRunSelectedEnabled = false"/>
     </div>
@@ -47,7 +47,6 @@
 import {AnnotationType} from "~/lib/model/annotationType";
 import {Annotator} from "~/lib/model/annotator";
 import {useAnnotationStore} from "~/stores/annotationStore";
-import {Run} from "~/lib/model/run";
 import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
 import {storeToRefs} from "pinia";
 import {useRunStore} from "~/stores/runStore";
@@ -135,8 +134,8 @@ function hideAnnotationModal() {
 }
 
 function updateAnnotations(currentSelection: any) {
-  if (!(selectedRun.value instanceof Run) || selectedRun.value.name.includes('default')) {
-    console.log("wrong run selected");
+  if (selectedRun.value.name.includes('default')) {
+    // @TODO: use an error alert for the user
     wrongRunSelectedEnabled.value = true;
   } else if (currentSelection) {
     selection.value = currentSelection;
