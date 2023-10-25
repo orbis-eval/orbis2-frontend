@@ -9,9 +9,12 @@ module.exports = {
     parser: "@typescript-eslint/parser",
   },
   extends: [
-    "@nuxtjs/eslint-config-typescript", 
+    "@nuxtjs/eslint-config-typescript",
+    "plugin:vue/vue3-recommended",
+    "prettier",
     "plugin:prettier/recommended"
   ],
-  plugins: [],
+  plugins: ["simple-import-sort"],
+  // plugins: [],
   rules: {},
 };
