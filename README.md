@@ -1,6 +1,6 @@
 # Orbis Annotator / Orbis 2 Frontend
 
-Orbis Annotator provides a user-friendly, easy to install, web-based software that supports users in efficiently annotating language data. It supports standard and collaborative workflows, reuse of language resources through corpus versioning, and provides built-in tools for assessing corpus quality. 
+Orbis Annotator provides a user-friendly, easy to install, web-based software that supports users in efficiently annotating language data. It supports standard and collaborative workflows, reuse of language resources through corpus versioning, and provides built-in tools for assessing corpus quality.
 
 - [Install and use Orbis Annotator](#install-and-use-orbis-annotator)
   - [Importing corpora](#import-existing-corpora-into-orbis-annotator)
@@ -10,10 +10,9 @@ Orbis Annotator provides a user-friendly, easy to install, web-based software th
 - Developer information on the [Orbis Annotator Frontend](#orbis-annotator-frontend)
 - Developer information on the [Orbis Annotator Backend](https://github.com/orbis-eval/orbis2-backend)
 
-The Orbis 2 Frontend project hosts the Orbis vuejs application, that can be deployed together with the [Orbis 2 backend]. 
+The Orbis 2 Frontend project hosts the Orbis vuejs application, that can be deployed together with the [Orbis 2 backend].
 
 The section below describes how you can use Orbis2 for creating and correcting annotated datasets, and for performing evaluations on them.
-
 
 ## Install and use Orbis Annotator
 
@@ -22,6 +21,7 @@ The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/contai
 ### Start the container
 
 Start and run the container with the following command.
+
 ```bash
 docker run --net host --name orbis2-frontend -p 8090:8090 \
    -e PGDATA=/var/lib/postgresql/data/pgdata \
@@ -35,51 +35,53 @@ Once startup has completed you can access Orbis Annotator under the URL http://l
 
 ![Orbis2 Frontend](orbis-screenshot.png)
 
-###  Import existing corpora into Orbis Annotator
+### Import existing corpora into Orbis Annotator
 
 You can use the Orbis importer tool for importing corpora into Orbis annotator.
 
 #### Importing a local corpus
+
 Orbis currently supports importing NIF turtle files and the CareerCoach JSON format. Its import command always takes two arguments
 
-  1. the name of the corpus to import and
-  2. the run name (i.e., the internal name of the imported *Annotated Corpus*) which is used for distinguishing different versions of the annotations provided for a particular corpus (e.g., gold standard annotations, annotations provided by a human or a machine learning algorithm).
+1. the name of the corpus to import and
+2. the run name (i.e., the internal name of the imported _Annotated Corpus_) which is used for distinguishing different versions of the annotations provided for a particular corpus (e.g., gold standard annotations, annotations provided by a human or a machine learning algorithm).
 
 The command below, for example, imports the file `KORE50.ttl` under the run name `KORE50-version1.0`
+
 ```bash
 docker exec orbis2-frontend /orbis-backend/scripts/importer.py local KORE50.ttl KORE50-version1.0
 ```
 
-
 #### Importing a remote corpus
 
 Run the following command to obtain a list of all available remote corpora:
+
 ```bash
 docker exec orbis2-frontend /orbis-backend/scripts/importer.py list-remote
 ```
 
-
 To import a remote corpus use the `remote` subcommand with the corpus name as provided by `list-remote` (e.g., corpus **N3-RSS-500** with run name **N3-RSS-500-version1**). The run name refers to the name of the AnnotatedCorpus (i.e., the corpus and the corresponding annotations)
+
 ```
 docker exec orbis2-frontend /orbis-backend/scripts/importer.py remote N3-RSS-500 N3-RSS-500-version1
 ```
 
 Please refer to the [Orbis2 Backend Documentation](https://github.com/orbis-eval/orbis2-backend) for a more detailed documentation on the Orbis 2 import tool.
 
-
 ### Exporting annotations
 
 Orbis Annotator currently supports exporting annotations to the CareerCoach 2022 and the NIF turtle format.
 
 The example below exports the annotated corpus (i.e., run) `N3-RSS500-version1` to the file `N3-RSS500-version1.ttl` using the NIF format.
+
 ```bash
 docker exec orbis2-frontend /orbis-backend/scripts/exporter.py N3-Reuters-128-version1 N3-Reuters-128-version1.ttl --export-format NIF
 docker cp orbis2-frontend:/N3-Reuters-128-version1.ttl .
 ```
+
 The first command creates the export file and the second copies it to the user's working directory.
 
-
-### Evaluations 
+### Evaluations
 
 #### Comparing runs - Inter-rater-agreement
 
@@ -89,21 +91,21 @@ Orbis supports computing the following inter-rater agreement (IRR) metrics, whic
 - 'ec_pIRR' (Entity Classification: Inter Rater Agreement; perfect matching)
 - 'er_pIRR' (Entity Recognition: Inter Rater Agreement; perfect matching)
 
-
 The example below computes the inter-rater agreement between the `careercoach2022.v1`, `careercoach2022.v2` and `careercoach2022.v3` corpus annotations.
+
 ```bash
 docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --metrics er_pIRR -- careercoach2022.v1 careercoach2022.v2 careercoach2022.v3
 ```
 
-| Metric | kappa_micro | kappa_macro | average_macro_f1 | average_micro_f1 |
-|-----|-----|-----|-----|-----|
-| Entity Recognition: Inter Rater Agreement; perfect matching.|0.54 | 0.53 | 0.68 | 0.65|
-
+| Metric                                                       | kappa_micro | kappa_macro | average_macro_f1 | average_micro_f1 |
+| ------------------------------------------------------------ | ----------- | ----------- | ---------------- | ---------------- |
+| Entity Recognition: Inter Rater Agreement; perfect matching. | 0.54        | 0.53        | 0.68             | 0.65             |
 
 #### Comparing a run to a gold standard
+
 Orbis Annotator supports the following metrics
 
-- 'content_extraction_f1' (Content Extraction: Precision, Recall and F1) 
+- 'content_extraction_f1' (Content Extraction: Precision, Recall and F1)
 - 'content_classification_f1' (Content Classification: Precision, Recall and F1)
 - 'er_pF1' (Entity Recognition: Precision, Recall and F1; perfect matching)
 - 'er_oF1' (Entity Recognition: Precision, Recall and F1; overlapping matching)
@@ -115,19 +117,20 @@ Orbis Annotator supports the following metrics
 - 'slot_filling_oF1' (Slot filling: Precision, Recall and F1; overlapping matching)
 
 The following example computes precision, recall and F1 metric comparing the corpus annotations in run `careercoach2022-entities.v0` against the `careercoach2022-entities.v1` corpus annotations using the entity linking metric with perfect match (`el_pF1`, i.e., entities must perfectly match to be considered correct), and overlapping match (`el_oF1`, i.e., entities may overlap to be considered correctly).
-```bash
-docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --reference careercoach2022-entities.v1 careercoach2022-entities.v0 --metrics el_pF1 el_oF1 
-```
-The `--reference` parameter specifies the run considered to hold the gold standard annotations.
 
+```bash
+docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --reference careercoach2022-entities.v1 careercoach2022-entities.v0 --metrics el_pF1 el_oF1
+```
+
+The `--reference` parameter specifies the run considered to hold the gold standard annotations.
 
 ### Backup all Orbis data
 
 You can create a backup of the Orbis Postgres database by running the following command, replacing `[password]` with the Postgres password printed at first container startup.
+
 ```bash
 docker exec -i -e PGPASSWORD=[password] orbis2-frontend /bin/bash -c "pg_dump --username postgres orbis" > backup.sql
 ```
-
 
 ## Orbis Annotator Frontend
 
@@ -136,10 +139,12 @@ The following information is intended for developers who want to run the Orbis 2
 ### Setup
 
 Make sure to install the dependencies:
+
 ```bash
 # yarn
 yarn
 ```
+
 We use yarn instead of npm, its faster and has better security features. Further, the pinia framework could not be installed properly with npm.
 IMPORTANT: don't mix npm and yarn, since this could lead to wrong dependencies.
 
@@ -151,7 +156,8 @@ Start the development server on http://localhost:3000
 yarn run dev
 ```
 
-run the unit tests: 
+run the unit tests:
+
 ```shell
 jest
 ```
@@ -172,11 +178,10 @@ yarn run preview
 
 Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
 
-
 ### Vue Hero Icons
-Installed with 
+
+Installed with
+
 ```
 yarn add @heroicons/vue
 ```
-
-

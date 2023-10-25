@@ -1,16 +1,30 @@
 <template>
-  <div v-bind:class="{annotationTypeModalHidden: !props.isVisible}">
-    <div class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
-         :style="{left: leftPosition + 'px', top: topPosition + 'px' }">
+  <div :class="{ annotationTypeModalHidden: !props.isVisible }">
+    <div
+      class="absolute bg-gray-300 rounded-md border-2 border-gray-600"
+      :style="{ left: leftPosition + 'px', top: topPosition + 'px' }"
+    >
       <div class="text-center font-bold text-2xl">
-              "{{shortenText(props.selectionSurfaceForm)}}"
+        "{{ shortenText(props.selectionSurfaceForm) }}"
       </div>
-      <input ref="filterInputField" type="text" v-model="filterValue" placeholder="annotation types..."/>
-      <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-        <li v-for="(annotationType, index) in filteredAnnotationTypes"
-            v-bind:class="{selectedAnnotationType: selectedAnnotationIndex === index}"
-            @click="annotationClicked(annotationType)"
-            v-on:mouseenter="selectedAnnotationIndex=index">
+      <input
+        ref="filterInputField"
+        v-model="filterValue"
+        type="text"
+        placeholder="annotation types..."
+      />
+      <ul
+        class="py-2 text-sm text-gray-700 dark:text-gray-200"
+        aria-labelledby="dropdownDefaultButton"
+      >
+        <li
+          v-for="(annotationType, index) in filteredAnnotationTypes"
+          :class="{
+            selectedAnnotationType: selectedAnnotationIndex === index,
+          }"
+          @click="annotationClicked(annotationType)"
+          @mouseenter="selectedAnnotationIndex = index"
+        >
           <a href="#" class="block px-4 py-2">{{ annotationType.name }}</a>
         </li>
       </ul>
@@ -20,21 +34,21 @@
 </template>
 
 <script setup lang="ts">
-import {AnnotationType} from "~/lib/model/annotationType";
+import { AnnotationType } from "~/lib/model/annotationType";
 
 const props = defineProps<{
-  leftPosition: number
-  topPosition: number
-  isVisible: boolean
-  selectionSurfaceForm: string
-  annotationTypes: AnnotationType[]
+  leftPosition: number;
+  topPosition: number;
+  isVisible: boolean;
+  selectionSurfaceForm: string;
+  annotationTypes: AnnotationType[];
 }>();
 
-const emit = defineEmits(['hideAnnotationModal', 'commitAnnotationType']);
+const emit = defineEmits(["hideAnnotationModal", "commitAnnotationType"]);
 
 const selectedAnnotationIndex = ref(0);
 
-const filterValue = ref('');
+const filterValue = ref("");
 const filterInputField = ref({} as HTMLElement);
 
 const isVisibleRef = toRef(props, "isVisible");
@@ -44,23 +58,28 @@ const selectionSurfaceForm = toRef(props, "selectionSurfaceForm");
 const filteredAnnotationTypes = computed(filterAnnotationTypes);
 
 function filterAnnotationTypes() {
-  return props.annotationTypes
-      .filter(annotationType => annotationType.name.toLowerCase()
-          .includes(filterValue.value.toLowerCase()));
+  return props.annotationTypes.filter((annotationType) =>
+    annotationType.name.toLowerCase().includes(filterValue.value.toLowerCase()),
+  );
 }
-
 
 // prevent keydown/keyup to trigger the scrolling
 function arrow_keys_handler(e: KeyboardEvent) {
-  switch(e.code){
-    case "ArrowUp": case "ArrowDown": case "ArrowLeft": case "ArrowRight":
-    case "Space": e.preventDefault(); break;
-    default: break; // do not block other keys
+  switch (e.code) {
+    case "ArrowUp":
+    case "ArrowDown":
+    case "ArrowLeft":
+    case "ArrowRight":
+    case "Space":
+      e.preventDefault();
+      break;
+    default:
+      break; // do not block other keys
   }
 }
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeyDown);
+  window.addEventListener("keydown", handleKeyDown);
   // prevent keydown/keyup to scroll
   window.addEventListener("keydown", arrow_keys_handler, false);
   // set the focus to the input for the filter
@@ -101,50 +120,61 @@ function nextAnnotationType() {
 }
 
 function commitAnnotationType() {
-  emit('commitAnnotationType', filterAnnotationTypes()[selectedAnnotationIndex.value]);
+  emit(
+    "commitAnnotationType",
+    filterAnnotationTypes()[selectedAnnotationIndex.value],
+  );
   selectedAnnotationIndex.value = 0;
 }
 
 function annotationClicked(annotationType: AnnotationType) {
-  emit('commitAnnotationType', annotationType);
+  emit("commitAnnotationType", annotationType);
 }
 
 function hideAnnotationModal() {
   window.removeEventListener("keydown", arrow_keys_handler, false);
-  emit('hideAnnotationModal');
+  emit("hideAnnotationModal");
 }
 
 // watching the isVisible property so we can set the focus again
 // if we make the component visible
-watch(isVisibleRef, (newIsVisible) => {
-  if (newIsVisible) {
-    nextTick(() => { // wait until dom is fully rendered
-      filterInputField.value.focus();
-    });
-  }
-}, {
-  immediate: true // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
-});
-
-watch(selectionSurfaceForm, (oldSelection, newSelection) => {
-      // watch if the selection has changed -> if it changed, set the focus again to the input-element
-      if (oldSelection && newSelection && (oldSelection !== newSelection)) {
-        nextTick(() => {
-          filterInputField.value.focus();
-        });
-      }
-    },
-    {
-      immediate: true // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
+watch(
+  isVisibleRef,
+  (newIsVisible) => {
+    if (newIsVisible) {
+      nextTick(() => {
+        // wait until dom is fully rendered
+        filterInputField.value.focus();
+      });
     }
+  },
+  {
+    immediate: true, // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
+  },
+);
+
+watch(
+  selectionSurfaceForm,
+  (oldSelection, newSelection) => {
+    // watch if the selection has changed -> if it changed, set the focus again to the input-element
+    if (oldSelection && newSelection && oldSelection !== newSelection) {
+      nextTick(() => {
+        filterInputField.value.focus();
+      });
+    }
+  },
+  {
+    immediate: true, // Passing in immediate: true in the option will trigger the callback immediately with the current value of the expression
+  },
 );
 
 function shortenText(text: string) {
   if (text) {
-    let maxLength = 15;
-    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text
+    const maxLength = 15;
+    return text.length > maxLength
+      ? text.substring(0, maxLength) + "..."
+      : text;
   }
   return text;
 }
-
 </script>

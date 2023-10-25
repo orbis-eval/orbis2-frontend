@@ -5,20 +5,23 @@
         <div class="rounded-lg border-2 border-gray-600 p-6">
           <!-- context modal gui for selecting the type -->
           <AnnotationModal
-              ref="annotationTypeModal"
-              :annotationTypes="selectedRun.corpus.supported_annotation_types"
-              :isVisible="showAnnotationModal"
-              :leftPosition="mousePosX"
-              :selectionSurfaceForm="selectionSurfaceForm"
-              :topPosition="mousePosY"
-              @commitAnnotationType="createAnnotation"
-              @hideAnnotationModal="hideAnnotationModal"/>
+            ref="annotationTypeModal"
+            :annotation-types="selectedRun.corpus.supported_annotation_types"
+            :is-visible="showAnnotationModal"
+            :left-position="mousePosX"
+            :selection-surface-form="selectionSurfaceForm"
+            :top-position="mousePosY"
+            @commitAnnotationType="createAnnotation"
+            @hideAnnotationModal="hideAnnotationModal"
+          />
 
-          <AnnotationNode :colorPalette="currentColorPalette"
-                          :highlightedNestedSetNodeId="highlightedNestedSetNodeId"
-                          :nestedSetNode="nestedSetRootNode"
-                          @deleteAnnotation="deleteAnnotation"
-                          @updateAnnotations="updateAnnotations"/>
+          <AnnotationNode
+            :color-palette="currentColorPalette"
+            :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
+            :nested-set-node="nestedSetRootNode"
+            @deleteAnnotation="deleteAnnotation"
+            @updateAnnotations="updateAnnotations"
+          />
         </div>
       </div>
     </div>
@@ -27,98 +30,108 @@
       Annotations that possibly are overlapping:
       <ul>
         <li v-for="node in errorNodes">
-          {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{ node.end_indices[0] }})
+          {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{
+            node.end_indices[0]
+          }})
         </li>
       </ul>
     </div>
-    <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
-      <Warning confirmText="ok"
-               declineText="cancel"
-               message="The default run cannot be annotated"
-               title="Default run selected"
-               :onConfirm="() => wrongRunSelectedEnabled = false"
-               :onDecline=" () => wrongRunSelectedEnabled = false"/>
+    <div
+      v-if="wrongRunSelectedEnabled"
+      class="fixed inset-0 flex items-center justify-center z-50"
+    >
+      <Warning
+        confirm-text="ok"
+        decline-text="cancel"
+        message="The default run cannot be annotated"
+        title="Default run selected"
+        :on-confirm="() => (wrongRunSelectedEnabled = false)"
+        :on-decline="() => (wrongRunSelectedEnabled = false)"
+      />
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-
-import {AnnotationType} from "~/lib/model/annotationType";
-import {Annotator} from "~/lib/model/annotator";
-import {useAnnotationStore} from "~/stores/annotationStore";
-import {NestedSetNode} from "~/lib/model/nestedset/nestedSetNode";
-import {storeToRefs} from "pinia";
-import {useRunStore} from "~/stores/runStore";
-import {useColorPalettesStore} from "~/stores/colorPalettesStore";
-import {Annotation} from "~/lib/model/annotation";
+import { storeToRefs } from "pinia";
+import { AnnotationType } from "~/lib/model/annotationType";
+import { Annotator } from "~/lib/model/annotator";
+import { useAnnotationStore } from "~/stores/annotationStore";
+import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
+import { useRunStore } from "~/stores/runStore";
+import { useColorPalettesStore } from "~/stores/colorPalettesStore";
+import { Annotation } from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
-import {TextSpan} from "~/lib/model/textSpan";
+import { TextSpan } from "~/lib/model/textSpan";
 
 const props = defineProps<{
-  highlightedNestedSetNodeId: number | null
+  highlightedNestedSetNodeId: number | null;
 }>();
 
-const {$orbisApiService} = useNuxtApp();
+const { $orbisApiService } = useNuxtApp();
 const route = useRoute();
 
 const selection = ref(null as any);
-const selectionSurfaceForm = ref('');
+const selectionSurfaceForm = ref("");
 const relativeDiv = ref({} as HTMLDivElement);
 const mousePosX = ref(0);
 const mousePosY = ref(0);
 const showAnnotationModal = ref(false);
 const errorNodes = ref([] as Annotation[]);
 const runStore = useRunStore();
-const {selectedRun} = storeToRefs(runStore);
+const { selectedRun } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
-const {nestedSetRootNode} = storeToRefs(annotationStore);
+const { nestedSetRootNode } = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
-const {currentColorPalette} = storeToRefs(colorPalettesStore);
+const { currentColorPalette } = storeToRefs(colorPalettesStore);
 
 const annotationTypeModal = ref({} as InstanceType<typeof AnnotationModal>);
 const wrongRunSelectedEnabled = ref(false);
 
 onBeforeMount(() => {
-  window.addEventListener('keydown', undoEventListener);
+  window.addEventListener("keydown", undoEventListener);
 });
 
 onMounted(async () => {
-  window.addEventListener('click', clickOutsideListener);
+  window.addEventListener("click", clickOutsideListener);
 });
 
 onBeforeUnmount(() => {
-  window.removeEventListener('keydown', undoEventListener);
-  window.removeEventListener('click', clickOutsideListener);
+  window.removeEventListener("keydown", undoEventListener);
+  window.removeEventListener("click", clickOutsideListener);
 });
 
 // TODO: use the annotator loaded from the backend
-let annotator: Annotator = new Annotator({
+const annotator: Annotator = new Annotator({
   name: "test annotator",
-  roles: []
+  roles: [],
 });
 
 const undoEventListener = (event: KeyboardEvent) => {
-  if (event.ctrlKey && event.shiftKey && event.key === 'Z') {
+  if (event.ctrlKey && event.shiftKey && event.key === "Z") {
     redoAnnotation();
-  } else if (event.ctrlKey && event.key === 'z') {
+  } else if (event.ctrlKey && event.key === "z") {
     undoAnnotation();
   }
 };
 
 const clickOutsideListener = (event: MouseEvent) => {
   if (showAnnotationModal.value) {
-    if (event.target === annotationTypeModal.value.$el || event.composedPath().includes(annotationTypeModal.value.$el)) {
+    if (
+      event.target === annotationTypeModal.value.$el ||
+      event.composedPath().includes(annotationTypeModal.value.$el)
+    ) {
       return;
     }
-    if (event.target !== selection.value?.selectionElement) { // only hide if the click does NOT come from the element where the text was selected
+    if (event.target !== selection.value?.selectionElement) {
+      // only hide if the click does NOT come from the element where the text was selected
       showAnnotationModal.value = false;
     }
   }
 };
 
 async function undoAnnotation() {
-  await annotationStore.undoAnnotation()
+  await annotationStore.undoAnnotation();
 }
 
 async function redoAnnotation() {
@@ -134,16 +147,16 @@ function hideAnnotationModal() {
 }
 
 function updateAnnotations(currentSelection: any) {
-  if (selectedRun.value.name.includes('default')) {
+  if (selectedRun.value.name.includes("default")) {
     // @TODO: use an error alert for the user
     wrongRunSelectedEnabled.value = true;
   } else if (currentSelection) {
     selection.value = currentSelection;
     selectionSurfaceForm.value = currentSelection.word;
     showAnnotationModal.value = true;
-    let relativeDivRect = relativeDiv.value.getBoundingClientRect();
-    let x = currentSelection.left - relativeDivRect.left;     // x/left position within the element.
-    let y = currentSelection.top - relativeDivRect.top + 25;  // y/top position within the element, add 40px to position it under the selection
+    const relativeDivRect = relativeDiv.value.getBoundingClientRect();
+    const x = currentSelection.left - relativeDivRect.left; // x/left position within the element.
+    const y = currentSelection.top - relativeDivRect.top + 25; // y/top position within the element, add 40px to position it under the selection
     mousePosX.value = x;
     mousePosY.value = y;
   } else {
@@ -155,9 +168,19 @@ function updateAnnotations(currentSelection: any) {
 async function createAnnotation(annotationType: AnnotationType) {
   try {
     if (selectedRun.value._id) {
-      const textSpan = new TextSpan(selection.value.word, selection.value.start, selection.value.end);
-      await annotationStore.createAnnotation(textSpan, annotationType, annotator, selectedRun.value._id,
-          Number(route.params.id), $orbisApiService);
+      const textSpan = new TextSpan(
+        selection.value.word,
+        selection.value.start,
+        selection.value.end,
+      );
+      await annotationStore.createAnnotation(
+        textSpan,
+        annotationType,
+        annotator,
+        selectedRun.value._id,
+        Number(route.params.id),
+        $orbisApiService,
+      );
     } else {
       console.error("no run id defined in createAnnotation");
     }
@@ -165,5 +188,4 @@ async function createAnnotation(annotationType: AnnotationType) {
     showAnnotationModal.value = false;
   }
 }
-
 </script>

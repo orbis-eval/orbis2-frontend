@@ -1,44 +1,58 @@
 <template>
-  <div v-if="runs" class="bg-neutral border-2 border-gray-600 flex items-center gap-4 rounded-xl p-2 mt-20 mb-10">
+  <div
+    v-if="runs"
+    class="bg-neutral border-2 border-gray-600 flex items-center gap-4 rounded-xl p-2 mt-20 mb-10"
+  >
     <details id="run_dropdown" class="dropdown">
-      <summary class="m-1 btn bg-gray-100 text-black hover:bg-gray-100 hover:text-black w-full">
-        {{ selectedRun && selectedRun.name ? selectedRun.name : "Please Select Your Run" }}
-        <OhVueIcon name="md-keyboardarrowdown"/>
+      <summary
+        class="m-1 btn bg-gray-100 text-black hover:bg-gray-100 hover:text-black w-full"
+      >
+        {{
+          selectedRun && selectedRun.name
+            ? selectedRun.name
+            : "Please Select Your Run"
+        }}
+        <OhVueIcon name="md-keyboardarrowdown" />
       </summary>
-      <ul class="text-black shadow menu dropdown-content z-[1] bg-gray-100 rounded-md w-full">
+      <ul
+        class="text-black shadow menu dropdown-content z-[1] bg-gray-100 rounded-md w-full"
+      >
         <li v-for="run in runs" :key="run._id">
-          <NuxtLink class="link hover:text-black hover:bg-gray-200" @click="selectedRunChanged(run)">
+          <NuxtLink
+            class="link hover:text-black hover:bg-gray-200"
+            @click="selectedRunChanged(run)"
+          >
             {{ run.name }}
           </NuxtLink>
         </li>
       </ul>
     </details>
-    <OrbisButton :onClick="() => openModal(ModalListRuns)">Runs</OrbisButton>
+    <OrbisButton :on-click="() => openModal(ModalListRuns)">Runs</OrbisButton>
   </div>
 </template>
 
 <script setup lang="ts">
-import {addIcons, OhVueIcon} from "oh-vue-icons";
-import {useRunStore} from "~/stores/runStore";
-import {storeToRefs} from "pinia";
-import {CoPencil, MdDeleteforeverOutlined} from "oh-vue-icons/icons";
-import {Run} from "~/lib/model/run";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
+import { storeToRefs } from "pinia";
+import { CoPencil, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+import { useRunStore } from "~/stores/runStore";
+import { Run } from "~/lib/model/run";
 import ModalListRuns from "~/components/modal/listRuns.vue";
 
 addIcons(MdDeleteforeverOutlined, CoPencil);
 
-const emit = defineEmits(['runChanged']);
+const emit = defineEmits(["runChanged"]);
 
 const { openModal } = useModal();
 
 const runStore = useRunStore();
-const {selectedRun} = storeToRefs(runStore);
-const {runs} = storeToRefs(runStore);
+const { selectedRun } = storeToRefs(runStore);
+const { runs } = storeToRefs(runStore);
 
 function selectedRunChanged(run: Run) {
   if (run._id) {
     runStore.changeSelectedRun(run);
-    emit('runChanged');
+    emit("runChanged");
     // close dropdown once clicked
     const dropdown = document.getElementById("run_dropdown");
     if (dropdown?.hasAttribute("open")) {

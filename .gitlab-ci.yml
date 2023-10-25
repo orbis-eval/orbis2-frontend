@@ -1,14 +1,14 @@
 include:
-    - project: 'nlp/team/ci-templates'
-      file: 'node-js/.build.yaml'
-    - project: 'nlp/team/ci-templates'
-      file: 'node-js/.test.yaml'
-    - project: 'nlp/team/ci-templates'
-      file: 'node-js/.sonar.yaml'
-    - project: 'nlp/team/ci-templates'
-      file: 'node-js/.docker-build.yaml'
-    - project: 'nlp/team/ci-templates'
-      file: 'node-js/.publish-k8s.yaml'
+  - project: "nlp/team/ci-templates"
+    file: "node-js/.build.yaml"
+  - project: "nlp/team/ci-templates"
+    file: "node-js/.test.yaml"
+  - project: "nlp/team/ci-templates"
+    file: "node-js/.sonar.yaml"
+  - project: "nlp/team/ci-templates"
+    file: "node-js/.docker-build.yaml"
+  - project: "nlp/team/ci-templates"
+    file: "node-js/.publish-k8s.yaml"
 
 cache:
   # following paths are automatically cached and available for subsequent jobs
@@ -24,8 +24,8 @@ variables:
   DOCKERFILEPATH: dockerfile
 
 stages:
-    - build
-    - test
-    - sonar
-    - dockerbuild
-    - publish-k8s
+  - build
+  - test
+  - sonar
+  - dockerbuild
+  - publish-k8s

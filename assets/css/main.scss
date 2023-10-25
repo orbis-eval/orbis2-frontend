@@ -47,23 +47,22 @@
 }
 
 .line {
-  @apply mt-2
+  @apply mt-2;
 }
 
 .line span {
-  @apply mt-1
+  @apply mt-1;
 }
 
 .annotation-icon {
   @apply w-6 h-6;
 }
 
-
 /**
  * styles for annotation type select modal gui
  */
 .selectedAnnotationType {
-  @apply bg-slate-700 text-white
+  @apply bg-slate-700 text-white;
 }
 
 .annotationTypeModalHidden {
@@ -75,9 +74,9 @@
  */
 
 .content-card {
-  @apply card shadow-xl bg-neutral
+  @apply card shadow-xl bg-neutral;
 }
 
 .content-card-title {
-  @apply px-3 py-4 font-medium border-b border-gray-700
+  @apply px-3 py-4 font-medium border-b border-gray-700;
 }
