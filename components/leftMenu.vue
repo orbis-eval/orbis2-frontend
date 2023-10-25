@@ -6,8 +6,8 @@
           <OhVueIcon name="hi-home" class="menu-icon"/>
         </NuxtLink>
       </li>
-      <li>
-        <NuxtLink :to="'/'" class="mt-2">
+      <li v-if="!isHomeRoute && corpus._id">
+        <NuxtLink :to="`/corpora/${corpus._id}/documents/`" class="mt-2">
           <OhVueIcon name="hi-database" class="menu-icon"/>
         </NuxtLink>
       </li>
@@ -18,8 +18,16 @@
 <script setup lang="ts">
 import {OhVueIcon, addIcons} from "oh-vue-icons";
 import {HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome} from 'oh-vue-icons/icons';
+import {storeToRefs} from "pinia";
+import {useCorpusStore} from "~/stores/corpusStore";
 
 addIcons(HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome);
+
+const route = useRoute();
+const corpusStore = useCorpusStore();
+const {corpus} = storeToRefs(corpusStore);
+
+const isHomeRoute = computed(() => route.path === '/');
 
 </script>
 
