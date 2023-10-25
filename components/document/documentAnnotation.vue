@@ -34,7 +34,7 @@
     <div v-if="wrongRunSelectedEnabled" class="fixed inset-0 flex items-center justify-center z-50">
       <Warning confirmText="ok"
                declineText="cancel"
-               message="The default branch cannot be annotated"
+               message="The default run cannot be annotated"
                title="Default run selected"
                :onConfirm="() => wrongRunSelectedEnabled = false"
                :onDecline=" () => wrongRunSelectedEnabled = false"/>
