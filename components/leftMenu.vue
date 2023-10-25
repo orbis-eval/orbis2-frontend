@@ -33,7 +33,7 @@ addIcons(HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome);
 
 const route = useRoute();
 const corpusStore = useCorpusStore();
-const {corpus} = storeToRefs(corpusStore);
+const { corpus } = storeToRefs(corpusStore);
 
 const isHomeRoute = computed(() => route.path === '/');
 
