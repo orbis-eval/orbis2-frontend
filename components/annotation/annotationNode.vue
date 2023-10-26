@@ -7,7 +7,7 @@
   >
     <span
       v-if="nestedSetNode?.children.length === 0"
-      class="p-1"
+      class="pb-1 pt-1 text-lg tracking-wider"
       @mouseup="onMouseUp"
     >
       {{ nestedSetNode?.surface_forms[0] }}
