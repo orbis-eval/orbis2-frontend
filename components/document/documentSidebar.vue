@@ -1,5 +1,5 @@
 <template>
-  <div v-if="!loading">
+  <div v-if="!loading" id="document-sidebar">
     <div class="mt-5">
       <OrbisButton :on-click="undoAnnotation" :disabled="isUndoDisabled">
         <OhVueIcon name="la-undo-alt-solid" />
@@ -55,7 +55,8 @@
                 :on-click="async () => deleteAnnotation(nestedSetNode)"
                 size="xs"
               >
-                Delete <OhVueIcon name="md-deleteforever-outlined" />
+                Delete
+                <OhVueIcon name="md-deleteforever-outlined" />
               </OrbisButton>
             </td>
           </tr>
@@ -105,3 +106,9 @@ async function redoAnnotation() {
   await annotationStore.redoAnnotation();
 }
 </script>
+
+<style lang="scss" scoped>
+#document-sidebar {
+  width: 450px;
+}
+</style>

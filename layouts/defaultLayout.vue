@@ -26,7 +26,7 @@
       <main class="grow overflow-auto p-4 pb-0">
         <slot />
       </main>
-      <aside :class="{ 'w-[25%]': $slots.sidebar }" class="overflow-auto">
+      <aside class="flex-shrink-0 overflow-auto">
         <!-- Sidebar -->
         <slot name="sidebar" />
       </aside>
