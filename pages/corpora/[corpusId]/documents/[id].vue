@@ -2,15 +2,19 @@
   <NuxtLayout name="default-layout">
     <LoadingSpinner v-if="loading" class="mt-5" />
     <div v-else class="mt-5">
-      <DocumentNavHeader
-        @loadingFinished="loading = false"
-        @loadingStarted="loading = true"
+      <div
+        class="mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral mx-10"
       >
-      </DocumentNavHeader>
-      <DocumentAnnotation
-        :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
-      >
-      </DocumentAnnotation>
+        <DocumentNavHeader
+          @loadingFinished="loading = false"
+          @loadingStarted="loading = true"
+        >
+        </DocumentNavHeader>
+        <DocumentAnnotation
+          :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
+        >
+        </DocumentAnnotation>
+      </div>
     </div>
     <template #sidebar>
       <DocumentSidebar

@@ -1,28 +1,26 @@
 <template>
   <div>
     <div v-if="nestedSetRootNode">
-      <div ref="relativeDiv" class="relative">
-        <div class="rounded-lg border-2 border-gray-600 p-6">
-          <!-- context modal gui for selecting the type -->
-          <AnnotationModal
-            ref="annotationTypeModal"
-            :annotation-types="selectedRun.corpus.supported_annotation_types"
-            :is-visible="showAnnotationModal"
-            :left-position="mousePosX"
-            :selection-surface-form="selectionSurfaceForm"
-            :top-position="mousePosY"
-            @commitAnnotationType="createAnnotation"
-            @hideAnnotationModal="hideAnnotationModal"
-          />
+      <div ref="relativeDiv" class="p-6">
+        <!-- context modal gui for selecting the type -->
+        <AnnotationModal
+          ref="annotationTypeModal"
+          :annotation-types="selectedRun.corpus.supported_annotation_types"
+          :is-visible="showAnnotationModal"
+          :left-position="mousePosX"
+          :selection-surface-form="selectionSurfaceForm"
+          :top-position="mousePosY"
+          @commitAnnotationType="createAnnotation"
+          @hideAnnotationModal="hideAnnotationModal"
+        />
 
-          <AnnotationNode
-            :color-palette="currentColorPalette"
-            :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
-            :nested-set-node="nestedSetRootNode"
-            @deleteAnnotation="deleteAnnotation"
-            @updateAnnotations="updateAnnotations"
-          />
-        </div>
+        <AnnotationNode
+          :color-palette="currentColorPalette"
+          :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
+          :nested-set-node="nestedSetRootNode"
+          @deleteAnnotation="deleteAnnotation"
+          @updateAnnotations="updateAnnotations"
+        />
       </div>
     </div>
     <div v-else-if="errorNodes.length > 0">
