@@ -64,7 +64,7 @@ function filterAnnotationTypes() {
 }
 
 // prevent keydown/keyup to trigger the scrolling
-function arrow_keys_handler(e: KeyboardEvent) {
+function arrowKeysHandler(e: KeyboardEvent) {
   switch (e.code) {
     case "ArrowUp":
     case "ArrowDown":
@@ -81,14 +81,14 @@ function arrow_keys_handler(e: KeyboardEvent) {
 onMounted(() => {
   window.addEventListener("keydown", handleKeyDown);
   // prevent keydown/keyup to scroll
-  window.addEventListener("keydown", arrow_keys_handler, false);
+  window.addEventListener("keydown", arrowKeysHandler, false);
   // set the focus to the input for the filter
   filterInputField.value.focus();
 });
 
 onBeforeUnmount(() => {
   window.removeEventListener("keydown", handleKeyDown, false);
-  window.removeEventListener("keydown", arrow_keys_handler, false);
+  window.removeEventListener("keydown", arrowKeysHandler, false);
 });
 
 function handleKeyDown(event: KeyboardEvent) {
@@ -132,7 +132,7 @@ function annotationClicked(annotationType: AnnotationType) {
 }
 
 function hideAnnotationModal() {
-  window.removeEventListener("keydown", arrow_keys_handler, false);
+  window.removeEventListener("keydown", arrowKeysHandler, false);
   emit("hideAnnotationModal");
 }
 
