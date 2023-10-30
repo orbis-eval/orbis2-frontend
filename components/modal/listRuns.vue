@@ -58,7 +58,7 @@ addIcons(MdDeleteforeverOutlined, CoPencil);
 const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
 const { runs, selectedRun } = storeToRefs(runStore);
-const onDeleteRun = async (run: Run) => {
+const onDeleteRun = (run: Run) => {
   try {
     closeModal();
     openModal(ModalDeleteRun, toRaw(run));
