@@ -56,6 +56,7 @@
     </span>
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode.children"
+      :key="nestedSetChildNode._id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -66,6 +67,7 @@
   <span v-else class="p-1">
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode?.children"
+      :key="nestedSetChildNode._id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
