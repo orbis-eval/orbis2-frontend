@@ -1,4 +1,4 @@
-import { describe, it, beforeEach, expect, vi } from "vitest";
+import { describe, it, expect } from "vitest";
 import { DocumentFileReader } from "~/lib/utils/documentFileReader";
 import { Document } from "~/lib/model/document";
 import { Error } from "~/lib/model/error";
