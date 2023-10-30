@@ -15,6 +15,7 @@ describe("Annotation.constructor()", () => {
         name: "Type B",
         color_id: 1,
         toJSON() {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { _id, ...json } = this;
           return json;
         },
@@ -25,6 +26,7 @@ describe("Annotation.constructor()", () => {
         roles: [],
         password: "47DEQpj8HB",
         toJSON() {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { _id, ...json } = this;
           return json;
         },
@@ -34,6 +36,7 @@ describe("Annotation.constructor()", () => {
       metadata: [],
       timestamp: new Date(),
       toJSON() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id, ...json } = this;
         return json;
       },
@@ -54,11 +57,13 @@ describe("A.constructor()", () => {
         name: "my b instance",
         _id: 1,
         toJSON() {
+          // eslint-disable-next-line @typescript-eslint/no-unused-vars
           const { _id, ...json } = this;
           return json;
         },
       },
       toJSON() {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         const { _id, ...json } = this;
         return json;
       },
@@ -83,6 +88,7 @@ class A {
   }
 
   toJSON() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...json } = this;
     return json;
   }
@@ -98,6 +104,7 @@ class B {
   }
 
   toJSON() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...json } = this;
     return json;
   }
