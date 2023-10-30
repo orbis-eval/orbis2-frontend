@@ -29,7 +29,7 @@
       <h2 class="text-4xl">Tree could not be rendered</h2>
       Annotations that possibly are overlapping:
       <ul>
-        <li v-for="node in errorNodes">
+        <li v-for="node in errorNodes" :key="node._id">
           {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{
             node.end_indices[0]
           }})
@@ -93,7 +93,7 @@ onBeforeMount(() => {
   window.addEventListener("keydown", undoEventListener);
 });
 
-onMounted(async () => {
+onMounted(() => {
   window.addEventListener("click", clickOutsideListener);
 });
 
