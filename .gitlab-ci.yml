@@ -1,5 +1,7 @@
 include:
   - project: "nlp/team/ci-templates"
+    file: "node-js/.lint.yaml"
+  - project: "nlp/team/ci-templates"
     file: "node-js/.build.yaml"
   - project: "nlp/team/ci-templates"
     file: "node-js/.test.yaml"
@@ -24,6 +26,7 @@ variables:
   DOCKERFILEPATH: dockerfile
 
 stages:
+  - lint
   - build
   - test
   - sonar
