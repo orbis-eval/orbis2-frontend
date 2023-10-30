@@ -19,6 +19,7 @@ export class Annotator implements IAnnotator {
   }
 
   toJSON() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { _id, ...json } = this;
     return json;
   }

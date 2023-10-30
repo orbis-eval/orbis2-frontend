@@ -40,5 +40,6 @@ import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
 
 const corpusStore = useCorpusStore();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const { corpus } = storeToRefs(corpusStore);
 </script>
