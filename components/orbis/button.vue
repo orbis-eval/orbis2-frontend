@@ -23,9 +23,11 @@ interface Props {
   size?: "xs" | "sm" | "md" | "lg";
   join?: boolean;
   isFormButton?: boolean;
+  // eslint-disable-next-line
   onClick?: {
-    (): void;
-    (): Promise<void>;
+    type: Function;
+    default: () => {};
+    required: false;
   };
 }
 
