@@ -14,6 +14,7 @@
     </span>
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode.children"
+      :key="nestedSetChildNode._id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"

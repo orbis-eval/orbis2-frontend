@@ -8,6 +8,7 @@
     </OrbisButton>
     <OrbisButton
       v-for="pageNumber in totalPages"
+      :key="pageNumber"
       :on-click="() => changePage(pageNumber)"
       :active="currentPage === pageNumber"
       :disabled="isFirstPage"
