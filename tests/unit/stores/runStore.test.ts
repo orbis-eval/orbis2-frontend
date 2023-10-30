@@ -35,11 +35,11 @@ const mockedOrbisApiServiceDeleteRun = vi.fn().mockResolvedValue(true);
 vi.mock("~/lib/orbisApi/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
-      getRuns: async (corpusId: number): Promise<Run[] | Error> => {
-        return Parser.parseList(Run, Promise.resolve(runs));
+      getRuns: async (): Promise<Run[] | Error> => {
+        return await Parser.parseList(Run, Promise.resolve(runs));
       },
-      createRun: async (newRun: Run, corpus: Corpus): Promise<Run | Error> => {
-        return Parser.parse(Run, Promise.resolve(newRun));
+      createRun: async (newRun: Run): Promise<Run | Error> => {
+        return await Parser.parse(Run, Promise.resolve(newRun));
       },
       deleteRun: mockedOrbisApiServiceDeleteRun,
     })),
