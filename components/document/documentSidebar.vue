@@ -29,6 +29,7 @@
         <tbody>
           <tr
             v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
+            :key="nestedSetNode._id"
             class="border-b bg-gray-50 hover:underline dark:border-gray-700 dark:bg-gray-800"
             @mouseleave="emit('setHighlightNestedSetNode', null)"
             @mouseout="emit('setHighlightNestedSetNode', null)"
