@@ -16,5 +16,8 @@ module.exports = {
   ],
   plugins: ["simple-import-sort"],
   // plugins: [],
-  rules: {},
+  rules: {
+    "no-use-before-define": "off",
+    "@typescript-eslint/no-use-before-define": "error",
+  },
 };
