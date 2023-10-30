@@ -12,3 +12,5 @@ dist
 .idea/
 /coverage/
 .vscode/
+auto-imports.d.ts
+components.d.ts
