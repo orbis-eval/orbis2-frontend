@@ -32,8 +32,8 @@ const props = defineProps<{
 const totalPages = toRef(props, "totalPages");
 const emit = defineEmits(["pageChanged"]);
 
-const isLastPage = computed(() => props.currentPage == props.totalPages);
-const isFirstPage = computed(() => props.currentPage == 1);
+const isLastPage = computed(() => props.currentPage === props.totalPages);
+const isFirstPage = computed(() => props.currentPage === 1);
 
 watch(totalPages, (newValue) => {
   // when nofPages changed go to last page
