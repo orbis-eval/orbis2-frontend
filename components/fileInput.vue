@@ -27,6 +27,7 @@
         <div v-else class="p-1">
           <div
             v-for="(file, index) in selectedFiles"
+            :key="index"
             class="m-2 flex items-center justify-between overflow-auto px-1"
           >
             <p id="index">{{ file.name }}</p>
