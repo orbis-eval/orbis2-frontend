@@ -259,7 +259,7 @@ export class NestedSet {
   }
 
   private static annotationCompare = (a: Annotation, b: Annotation) => {
-    if (a.start_indices[0] == b.start_indices[0]) {
+    if (a.start_indices[0] === b.start_indices[0]) {
       return b.end_indices[0] - a.end_indices[0];
     }
     return a.start_indices[0] - b.start_indices[0];
