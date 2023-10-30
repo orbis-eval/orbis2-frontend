@@ -23,7 +23,10 @@ interface Props {
   size?: "xs" | "sm" | "md" | "lg";
   join?: boolean;
   isFormButton?: boolean;
-  onClick?: Function;
+  onClick?: {
+    (): void;
+    (): Promise<void>;
+  };
 }
 
 const props = withDefaults(defineProps<Props>(), {
