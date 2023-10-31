@@ -28,15 +28,18 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useAnnotationStore } from "~/stores/annotationStore";
+import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
+import { useTitle } from "~/composables/title";
 
 const { $orbisApiService } = useNuxtApp();
 const route = useRoute();
 
 const loading = ref(true);
 const documentStore = useDocumentStore();
+const corpusStore = useCorpusStore();
 const runStore = useRunStore();
 const { selectedRun } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
@@ -44,8 +47,12 @@ const colorPalettesStore = useColorPalettesStore();
 
 const highlightedNestedSetNodeId = ref(-1);
 
+const { setTitle } = useTitle();
+const { corpus } = storeToRefs(corpusStore);
+
 onMounted(async () => {
   loading.value = true;
+  setTitle(corpus.value.name);
   try {
     await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
     await documentStore.loadDocument(Number(route.params.id), $orbisApiService);
