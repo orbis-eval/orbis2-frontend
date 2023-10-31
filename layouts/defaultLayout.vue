@@ -12,7 +12,7 @@
           />
         </NuxtLink>
         <div class="ml-4 text-lg">
-          <NuxtLink :to="'/'">Orbis NG</NuxtLink>
+          <NuxtLink :to="'/'">{{ title }}</NuxtLink>
         </div>
       </div>
     </header>
@@ -35,4 +35,7 @@
   </div>
 </template>
 
-<script lang="ts" setup></script>
+<script setup lang="ts">
+import { useTitle } from "~/composables/title";
+const { title } = useTitle("Orbis NG");
+</script>
