@@ -24,6 +24,7 @@
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
+import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { useDocumentStore } from "~/stores/documentStore";
@@ -39,6 +40,8 @@ const { $orbisApiService } = useNuxtApp() as {
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 
+const { corpus } = storeToRefs(corpusStore);
+
 const runStore = useRunStore();
 
 const { selectedRun } = storeToRefs(runStore);
@@ -48,6 +51,24 @@ const loading = ref(true);
 
 const { currentPage } = storeToRefs(documentStore);
 const { totalPages } = storeToRefs(documentStore);
+const { setTitle } = useTitle();
+
+onMounted(async () => {
+  loading.value = true;
+  try {
+    await corpusStore.loadCorpus(
+      Number(route.params.corpusId),
+      $orbisApiService,
+    );
+    setTitle(corpus.value.name);
+    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
+    await countDocuments();
+    await loadDocuments();
+    // @Todo: Error message for user
+  } finally {
+    loading.value = false;
+  }
+});
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {

@@ -22,6 +22,13 @@ export default defineNuxtConfig({
       htmlAttrs: {
         class: "h-full bg-gray-100",
       },
+      link: [
+        {
+          rel: "icon",
+          type: "image/x-icon",
+          href: "/favicon.ico",
+        },
+      ],
     },
   },
   css: ["@/assets/css/main.scss"],
