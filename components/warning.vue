@@ -12,7 +12,7 @@
           <OrbisButton class="mr-2" :on-click="onConfirm">
             {{ confirmText }}
           </OrbisButton>
-          <OrbisButton class="mr-2" :on-click="onDecline">
+          <OrbisButton v-if="declineText" :on-click="onDecline" class="mr-2">
             {{ declineText }}
           </OrbisButton>
         </div>
@@ -26,8 +26,8 @@ const props = defineProps<{
   title: string;
   message: string;
   confirmText: string;
-  declineText: string;
+  declineText?: string;
   onConfirm: Function;
-  onDecline: Function;
+  onDecline?: Function;
 }>();
 </script>
