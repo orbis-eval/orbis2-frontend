@@ -40,11 +40,9 @@
     >
       <Warning
         confirm-text="ok"
-        decline-text="cancel"
-        message="No run or default run is selected, in both cases annotation is not possible"
-        title="Please select a run."
+        message="Default run cannot be annotated."
+        title="Default Run Selected"
         :on-confirm="() => (wrongRunSelectedEnabled = false)"
-        :on-decline="() => (wrongRunSelectedEnabled = false)"
       />
     </div>
   </div>
@@ -146,11 +144,8 @@ function hideAnnotationModal() {
 }
 
 function updateAnnotations(currentSelection: any) {
-  if (
-    !(selectedRun.value instanceof Run) ||
-    selectedRun.value.name.includes("default")
-  ) {
-    console.log("wrong run selected");
+  if (selectedRun.value.name.includes("default")) {
+    console.log("default run selected for annotation");
     wrongRunSelectedEnabled.value = true;
   } else if (currentSelection) {
     selection.value = currentSelection;
