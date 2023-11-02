@@ -31,7 +31,6 @@ module.exports = {
     ],
     "vue/valid-define-props": "error",
   },
-  ignorePatterns: [
-      "node_modules/",
-  ],
+  ignorePatterns: ["node_modules/", "dist/", "coverage/"],
+  overrides: [],
 };
