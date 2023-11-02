@@ -22,7 +22,7 @@ class OrbisApiServiceMock extends OrbisApiService {
     });
   }
 
-  createAnnotation(): Promise<Annotation | Error> {
+  createAnnotation(_annotation: Annotation): Promise<Annotation | Error> {
     return Parser.parse(
       Annotation,
       new Promise((resolve) => {
