@@ -20,10 +20,6 @@ const corpusStore = useCorpusStore();
 
 const loading = ref(true);
 
-onMounted(async () => {
-  await loadCorpora();
-});
-
 async function loadCorpora() {
   loading.value = true;
   try {
@@ -34,4 +30,8 @@ async function loadCorpora() {
     loading.value = false;
   }
 }
+
+onMounted(async () => {
+  await loadCorpora();
+});
 </script>
