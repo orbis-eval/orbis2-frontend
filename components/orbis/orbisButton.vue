@@ -23,12 +23,7 @@ interface Props {
   size?: "xs" | "sm" | "md" | "lg";
   join?: boolean;
   isFormButton?: boolean;
-  // eslint-disable-next-line
-  onClick?: {
-    type: Function;
-    default: () => {};
-    required: false;
-  };
+  onClick?: Function | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -38,6 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
   transparent: false,
   join: false,
   isFormButton: false,
+  onClick: null,
 });
 
 const isLoading = ref(false);
