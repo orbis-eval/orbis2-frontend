@@ -9,7 +9,7 @@
 
       <DocumentsTable></DocumentsTable>
 
-      <Pagination
+      <OrbisPagination
         v-if="totalPages"
         :current-page="currentPage"
         :total-pages="totalPages"
