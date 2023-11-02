@@ -1,11 +1,10 @@
-import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { useAnnotationStore } from "~/stores/annotationStore";
 import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
-import { Error } from "~/lib/model/error";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { TextSpan } from "~/lib/model/textSpan";
 
@@ -61,13 +60,7 @@ const annotations: Annotation[] = Array.from([
 vi.mock("~/lib/orbisApi/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
-      getAnnotations: async (
-        documentId: number,
-        documentContent: string,
-        runId: number,
-        annotationTypes: AnnotationType[],
-        orbisApiService: OrbisApiService,
-      ): Promise<Annotation[] | Error> => {
+      getAnnotations: (): Annotation[] => {
         return annotations;
       },
     })),
