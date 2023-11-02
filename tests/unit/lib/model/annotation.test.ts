@@ -2,6 +2,40 @@ import { describe, it, expect } from "vitest";
 import { Annotation } from "~/lib/model/annotation";
 import { Annotator } from "~/lib/model/annotator";
 
+class B {
+  name: string;
+  _id: number;
+
+  constructor(b: B) {
+    this.name = b.name;
+    this._id = b._id;
+  }
+
+  toJSON() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, ...json } = this;
+    return json;
+  }
+}
+
+class A {
+  name: string;
+  _id: number = 0;
+  b: B;
+
+  constructor(a: A = {} as A) {
+    this.name = a.name;
+    this.b = new B(a.b);
+    this._id = a._id;
+  }
+
+  toJSON() {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { _id, ...json } = this;
+    return json;
+  }
+}
+
 describe("Annotation.constructor()", () => {
   it("create new annotation from object", () => {
     const annotationObject = {
@@ -74,38 +108,3 @@ describe("A.constructor()", () => {
     expect(aInstance.b instanceof B).toBeTruthy();
   });
 });
-
-class A {
-  name: string;
-  _id: number = 0;
-
-  b: B;
-
-  constructor(a: A = {} as A) {
-    this.name = a.name;
-    this.b = new B(a.b);
-    this._id = a._id;
-  }
-
-  toJSON() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _id, ...json } = this;
-    return json;
-  }
-}
-
-class B {
-  name: string;
-  _id: number;
-
-  constructor(b: B) {
-    this.name = b.name;
-    this._id = b._id;
-  }
-
-  toJSON() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _id, ...json } = this;
-    return json;
-  }
-}
