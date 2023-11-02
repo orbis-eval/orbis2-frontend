@@ -48,10 +48,10 @@ const corpora = Array.from([
 vi.mock("~/lib/orbisApi/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
-      getCorpus: async (corpusId: number): Promise<Corpus | Error> => {
+      getCorpus: (): Promise<Corpus | Error> => {
         return Parser.parse(Corpus, Promise.resolve(corpus));
       },
-      getCorpora: async (): Promise<Corpus[] | Error> => {
+      getCorpora: (): Promise<Corpus[] | Error> => {
         return Parser.parseList(Corpus, Promise.resolve(corpora));
       },
     })),
@@ -90,7 +90,6 @@ describe("Corpus Store", () => {
 
   it("loadCorpora should fetch and update a corpus", async () => {
     const corpusStore = useCorpusStore();
-    const corpusId = 1;
 
     await corpusStore.loadCorpora(mockedOrbisApiService);
 
