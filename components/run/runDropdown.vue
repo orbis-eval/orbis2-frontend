@@ -55,10 +55,10 @@ function selectedRunChanged(run: Run) {
     emit("runChanged");
     // close dropdown once clicked
     const dropdown = document.getElementById("run_dropdown");
-    if (dropdown?.hasAttribute("open")) {
-      dropdown.removeAttribute("open");
+    if (runDropDown?.hasAttribute("open")) {
+      runDropDown.removeAttribute("open");
     } else {
-      dropdown?.setAttribute("open", "");
+      runDropDown?.setAttribute("open", "");
     }
   }
 }
