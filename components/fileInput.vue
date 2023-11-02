@@ -6,7 +6,7 @@
         <input
           id="file-input"
           ref="fileInput"
-          :accept="props.acceptedFileTypes"
+          :accept="acceptedFileTypes"
           class="hidden"
           multiple
           type="file"
@@ -52,12 +52,9 @@ addIcons(MdDeleteforeverOutlined);
 const fileInput = ref({} as HTMLInputElement);
 const selectedFiles = ref([] as File[]);
 
-const props = defineProps({
-  acceptedFileTypes: {
-    type: String,
-    required: true,
-  },
-});
+defineProps<{
+  acceptedFileTypes: string;
+}>();
 
 function openFileInput() {
   fileInput.value.click();
