@@ -65,7 +65,7 @@ import { Annotation } from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
 import { TextSpan } from "~/lib/model/textSpan";
 
-const props = defineProps<{
+defineProps<{
   highlightedNestedSetNodeId: number | null;
 }>();
 
@@ -89,6 +89,37 @@ const { currentColorPalette } = storeToRefs(colorPalettesStore);
 const annotationTypeModal = ref({} as InstanceType<typeof AnnotationModal>);
 const wrongRunSelectedEnabled = ref(false);
 
+async function undoAnnotation() {
+  await annotationStore.undoAnnotation();
+}
+
+async function redoAnnotation() {
+  await annotationStore.redoAnnotation();
+}
+
+const clickOutsideListener = (event: MouseEvent) => {
+  if (showAnnotationModal.value) {
+    if (
+      event.target === annotationTypeModal.value.$el ||
+      event.composedPath().includes(annotationTypeModal.value.$el)
+    ) {
+      return;
+    }
+    if (event.target !== selection.value?.selectionElement) {
+      // only hide if the click does NOT come from the element where the text was selected
+      showAnnotationModal.value = false;
+    }
+  }
+};
+
+const undoEventListener = (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.shiftKey && event.key === "Z") {
+    redoAnnotation();
+  } else if (event.ctrlKey && event.key === "z") {
+    undoAnnotation();
+  }
+};
+
 onBeforeMount(() => {
   window.addEventListener("keydown", undoEventListener);
 });
@@ -107,37 +138,6 @@ const annotator: Annotator = new Annotator({
   name: "test annotator",
   roles: [],
 });
-
-const undoEventListener = (event: KeyboardEvent) => {
-  if (event.ctrlKey && event.shiftKey && event.key === "Z") {
-    redoAnnotation();
-  } else if (event.ctrlKey && event.key === "z") {
-    undoAnnotation();
-  }
-};
-
-const clickOutsideListener = (event: MouseEvent) => {
-  if (showAnnotationModal.value) {
-    if (
-      event.target === annotationTypeModal.value.$el ||
-      event.composedPath().includes(annotationTypeModal.value.$el)
-    ) {
-      return;
-    }
-    if (event.target !== selection.value?.selectionElement) {
-      // only hide if the click does NOT come from the element where the text was selected
-      showAnnotationModal.value = false;
-    }
-  }
-};
-
-async function undoAnnotation() {
-  await annotationStore.undoAnnotation();
-}
-
-async function redoAnnotation() {
-  await annotationStore.redoAnnotation();
-}
 
 async function deleteAnnotation(nestedSetNode: NestedSetNode) {
   await annotationStore.deleteAnnotation(nestedSetNode, $orbisApiService);
