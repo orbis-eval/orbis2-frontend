@@ -1,6 +1,6 @@
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 
-export default defineNuxtPlugin((nuxtApp) => {
+export default defineNuxtPlugin((_nuxtApp) => {
   const runtimeConfig = useRuntimeConfig();
   const orbisApiService = new OrbisApiService(
     runtimeConfig.public.orbisApiBase,
