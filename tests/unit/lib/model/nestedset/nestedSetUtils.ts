@@ -16,6 +16,7 @@ export const annotator: Annotator = new Annotator({
   _id: 1,
 });
 
+// eslint-disable-next-line import/no-mutable-exports
 export let currentParseError: NestedSetParseError;
 
 export const errorCallBack = (parseError: NestedSetParseError) => {
