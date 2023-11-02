@@ -16,13 +16,13 @@ class OrbisApiServiceMock extends OrbisApiService {
     this.mockedApiCallResponse = mockedApiCallResponse;
   }
 
-  async apiGet(query: string): Promise<TypedInternalResponse<string>> {
+  apiGet(): Promise<TypedInternalResponse<string>> {
     return new Promise((resolve) => {
       resolve(this.mockedApiCallResponse);
     });
   }
 
-  async createAnnotation(annotation: Annotation): Promise<Annotation | Error> {
+  createAnnotation(): Promise<Annotation | Error> {
     return Parser.parse(
       Annotation,
       new Promise((resolve) => {
