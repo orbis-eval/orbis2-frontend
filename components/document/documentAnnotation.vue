@@ -40,7 +40,7 @@
       v-if="wrongRunSelectedEnabled"
       class="fixed inset-0 z-50 flex items-center justify-center"
     >
-      <Warning
+      <OrbisWarning
         confirm-text="ok"
         decline-text="cancel"
         message="No run or default run is selected, in both cases annotation is not possible"

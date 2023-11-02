@@ -1,5 +1,5 @@
 <template>
-  <Warning
+  <OrbisWarning
     :message="`Deleting run with '${propsObject.name}' will remove the run from this corpus! Do you want to continue?`"
     confirm-text="ok"
     decline-text="cancel"
