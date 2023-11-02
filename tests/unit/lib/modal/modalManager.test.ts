@@ -10,7 +10,7 @@ import ModalListRuns from "~/components/modal/listRuns.vue";
 import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 
 //  Non-modal components
-import Warning from "~/components/warning.vue";
+import Warning from "~/components/orbisWarning.vue";
 
 describe("ModalManager", () => {
   let modalCreateCorpus: Modal;
