@@ -80,7 +80,7 @@ import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid, MdDeleteforeverOutlined);
 
-const props = defineProps<{
+defineProps<{
   loading: boolean;
 }>();
 
