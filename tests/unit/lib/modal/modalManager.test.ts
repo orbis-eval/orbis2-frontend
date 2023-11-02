@@ -59,7 +59,6 @@ describe("ModalManager", () => {
   });
 
   it("should not open a modal if not in the modals list", () => {
-    const unknownModal = new Modal("unknown", Warning);
     modalManager.openModal(Warning);
 
     expect(modalManager.renderStack).toEqual([]);
