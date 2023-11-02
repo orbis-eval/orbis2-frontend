@@ -47,24 +47,7 @@ const pageSize = ref(10);
 const loading = ref(true);
 
 const { currentPage } = storeToRefs(documentStore);
-const { documents } = storeToRefs(documentStore);
 const { totalPages } = storeToRefs(documentStore);
-
-onMounted(async () => {
-  loading.value = true;
-  try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
-    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
-    await countDocuments();
-    await loadDocuments();
-    // @Todo: Error message for user
-  } finally {
-    loading.value = false;
-  }
-});
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
@@ -89,10 +72,6 @@ async function pageChanged(nextPage: number) {
   }
 }
 
-async function runChanged() {
-  await pageChanged(currentPage.value);
-}
-
 async function countDocuments() {
   if (selectedRun.value._id) {
     await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
@@ -105,6 +84,26 @@ async function countDocuments() {
 }
 
 async function loadDocuments() {
+  await pageChanged(currentPage.value);
+}
+
+onMounted(async () => {
+  loading.value = true;
+  try {
+    await corpusStore.loadCorpus(
+      Number(route.params.corpusId),
+      $orbisApiService,
+    );
+    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
+    await countDocuments();
+    await loadDocuments();
+    // @Todo: Error message for user
+  } finally {
+    loading.value = false;
+  }
+});
+
+async function runChanged() {
   await pageChanged(currentPage.value);
 }
 </script>
