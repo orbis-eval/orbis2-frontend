@@ -17,7 +17,30 @@ module.exports = {
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "prettier/prettier": "error",
-    "@typescript-eslint/naming-convention": "error",
+    "@typescript-eslint/naming-convention": [
+      "error",
+      {
+        selector: "variable",
+        format: ["camelCase", "PascalCase", "UPPER_CASE"],
+      },
+      {
+        selector: "property",
+        format: ["camelCase", "PascalCase", "UPPER_CASE"],
+      },
+      {
+        selector: "function",
+        format: ["camelCase"],
+      },
+      {
+        selector: "parameter",
+        format: ["camelCase"],
+        leadingUnderscore: "allow",
+      },
+      {
+        selector: "typeLike",
+        format: ["PascalCase"],
+      },
+    ],
     "vue/component-name-in-template-casing": ["error", "PascalCase"],
     "vue/no-unused-vars": "error",
     "vue/camelcase": [
