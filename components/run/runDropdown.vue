@@ -54,11 +54,11 @@ function selectedRunChanged(run: Run) {
     runStore.changeSelectedRun(run);
     emit("runChanged");
     // close dropdown once clicked
-    const dropdown = document.getElementById("run_dropdown");
-    if (runDropDown?.hasAttribute("open")) {
-      runDropDown.removeAttribute("open");
+    const runDropdown = document.getElementById("run_dropdown");
+    if (runDropdown?.hasAttribute("open")) {
+      runDropdown.removeAttribute("open");
     } else {
-      runDropDown?.setAttribute("open", "");
+      runDropdown?.setAttribute("open", "");
     }
   }
 }
