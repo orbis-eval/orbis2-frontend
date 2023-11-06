@@ -244,16 +244,16 @@ describe("test json serialization", () => {
       annotationType,
       annotator,
     );
-    expect("_id" in annotationNode).toBeTruthy();
-    expect("_id" in annotationNode.annotationType).toBeTruthy();
-    expect("_id" in annotationNode.annotator).toBeTruthy();
+    expect("id" in annotationNode).toBeTruthy();
+    expect("id" in annotationNode.annotationType).toBeTruthy();
+    expect("id" in annotationNode.annotator).toBeTruthy();
     // serialize to json
     const annotationJsonString = JSON.stringify(annotationNode);
     // parse back to object
     const parsedAnnotation = JSON.parse(annotationJsonString);
     // the id's should NOT be contained anymore in the objects
-    expect(!("_id" in parsedAnnotation)).toBeTruthy();
-    expect(!("_id" in parsedAnnotation.annotation_type)).toBeTruthy();
-    expect(!("_id" in parsedAnnotation.annotator)).toBeTruthy();
+    expect(!("id" in parsedAnnotation)).toBeTruthy();
+    expect(!("id" in parsedAnnotation.annotation_type)).toBeTruthy();
+    expect(!("id" in parsedAnnotation.annotator)).toBeTruthy();
   });
 });
