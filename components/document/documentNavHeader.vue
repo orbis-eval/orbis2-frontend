@@ -3,7 +3,6 @@
     v-if="selectedRun && currentDocument"
     class="flex items-center px-4 pb-4 pt-5 text-lg"
   >
-    Document: {{ currentDocument.id }}
     <OrbisButton
       :disabled="nrOfDocuments <= 1"
       :on-click="previousDocument"
