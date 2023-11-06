@@ -30,7 +30,6 @@ export class JSONTransformer {
         const value = obj[key];
 
         if (key === "id") {
-          transformedObj._id = value;
           continue;
         }
 
