@@ -1,18 +1,21 @@
-import { test, expect, vi } from "vitest";
+import { expect, test, vi } from "vitest";
 import { mount, VueWrapper } from "@vue/test-utils";
-import OrbisButton from "~/components/orbis/button.vue";
+import { ComponentPublicInstance } from "vue";
+import OrbisButton from "~/components/orbis/orbisButton.vue";
 
-test("check if isLoading is working with async functions", async () => {
+test("check if isLoading is working with async functions", () => {
   type TestWrapper<T> = VueWrapper<ComponentPublicInstance & T>;
-  let wrapper: TestWrapper<Partial<{ isLoading: boolean }>>;
-  wrapper = mount(OrbisButton, {
-    props: {
-      onClick: async () => {
-        // wait for 2 seconds
-        await new Promise((resolve) => setTimeout(resolve, 100));
+  const wrapper: TestWrapper<Partial<{ isLoading: boolean }>> = mount(
+    OrbisButton,
+    {
+      props: {
+        onClick: async () => {
+          // wait for 2 seconds
+          await new Promise((resolve) => setTimeout(resolve, 100));
+        },
       },
     },
-  });
+  );
 
   wrapper.get("button").trigger("click");
 
@@ -29,12 +32,12 @@ test("check if clicking on disabled button doesn't trigger onClick", async () =>
     },
   });
 
-  const verifyClick = wrapper.get("button").trigger("click");
+  await wrapper.get("button").trigger("click");
 
   expect(wrapper.emitted("click")).toBeFalsy();
 });
 
-test("check if an active button has active class", async () => {
+test("check if an active button has active class", () => {
   const wrapper = mount(OrbisButton, {
     props: {
       active: true,
@@ -44,7 +47,7 @@ test("check if an active button has active class", async () => {
   expect(wrapper.get("button").classes()).toContain("btn-active");
 });
 
-test("check if an transparent button has ghost class", async () => {
+test("check if an transparent button has ghost class", () => {
   const wrapper = mount(OrbisButton, {
     props: {
       transparent: true,
@@ -54,7 +57,7 @@ test("check if an transparent button has ghost class", async () => {
   expect(wrapper.get("button").classes()).toContain("btn-ghost");
 });
 
-test("check if an join button has join class", async () => {
+test("check if an join button has join class", () => {
   const wrapper = mount(OrbisButton, {
     props: {
       join: true,
@@ -64,7 +67,7 @@ test("check if an join button has join class", async () => {
   expect(wrapper.get("button").classes()).toContain("join-item");
 });
 
-test("check if given a size prop, the button has the correct size class", async () => {
+test("check if given a size prop, the button has the correct size class", () => {
   const wrapper = mount(OrbisButton, {
     props: {
       size: "sm",
@@ -121,12 +124,14 @@ test("check if isFormButton is inactive, that clickEvent is fully executed", asy
 
 test("check if after executing clickEvent, isLoading is set to false", async () => {
   type TestWrapper<T> = VueWrapper<ComponentPublicInstance & T>;
-  let wrapper: TestWrapper<Partial<{ isLoading: boolean }>>;
-  wrapper = mount(OrbisButton, {
-    props: {
-      onClick: async () => {},
+  const wrapper: TestWrapper<Partial<{ isLoading: boolean }>> = mount(
+    OrbisButton,
+    {
+      props: {
+        onClick: async () => {},
+      },
     },
-  });
+  );
 
   await wrapper.get("button").trigger("click");
 
