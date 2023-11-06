@@ -35,7 +35,7 @@ export class Annotation implements IAnnotation {
 
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...json } = this;
+    const { id, timestamp, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }
