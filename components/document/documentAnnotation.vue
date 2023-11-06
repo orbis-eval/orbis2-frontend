@@ -5,7 +5,7 @@
         <!-- context modal gui for selecting the type -->
         <AnnotationModal
           ref="annotationTypeModal"
-          :annotation-types="selectedRun.corpus.supported_annotation_types"
+          :annotation-types="selectedRun.corpus.supportedAnnotationTypes"
           :is-visible="showAnnotationModal"
           :left-position="mousePosX"
           :selection-surface-form="selectionSurfaceForm"
@@ -27,9 +27,9 @@
       <h2 class="text-4xl">Tree could not be rendered</h2>
       Annotations that possibly are overlapping:
       <ul>
-        <li v-for="node in errorNodes">
-          {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{
-            node.end_indices[0]
+        <li v-for="node in errorNodes" :key="node.id">
+          {{ node.surfaceForms[0] }}:({{ node.startIndices[0] }}/{{
+            node.endIndices[0]
           }})
         </li>
       </ul>
@@ -38,7 +38,7 @@
       v-if="wrongRunSelectedEnabled"
       class="fixed inset-0 z-50 flex items-center justify-center"
     >
-      <Warning
+      <OrbisWarning
         confirm-text="ok"
         message="Default run cannot be annotated."
         title="Default Run Selected"
@@ -61,7 +61,7 @@ import { Annotation } from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
 import { TextSpan } from "~/lib/model/textSpan";
 
-const props = defineProps<{
+defineProps<{
   highlightedNestedSetNodeId: number | null;
 }>();
 
@@ -85,32 +85,13 @@ const { currentColorPalette } = storeToRefs(colorPalettesStore);
 const annotationTypeModal = ref({} as InstanceType<typeof AnnotationModal>);
 const wrongRunSelectedEnabled = ref(false);
 
-onBeforeMount(() => {
-  window.addEventListener("keydown", undoEventListener);
-});
+async function undoAnnotation() {
+  await annotationStore.undoAnnotation();
+}
 
-onMounted(async () => {
-  window.addEventListener("click", clickOutsideListener);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", undoEventListener);
-  window.removeEventListener("click", clickOutsideListener);
-});
-
-// TODO: use the annotator loaded from the backend
-const annotator: Annotator = new Annotator({
-  name: "test annotator",
-  roles: [],
-});
-
-const undoEventListener = (event: KeyboardEvent) => {
-  if (event.ctrlKey && event.shiftKey && event.key === "Z") {
-    redoAnnotation();
-  } else if (event.ctrlKey && event.key === "z") {
-    undoAnnotation();
-  }
-};
+async function redoAnnotation() {
+  await annotationStore.redoAnnotation();
+}
 
 const clickOutsideListener = (event: MouseEvent) => {
   if (showAnnotationModal.value) {
@@ -127,13 +108,32 @@ const clickOutsideListener = (event: MouseEvent) => {
   }
 };
 
-async function undoAnnotation() {
-  await annotationStore.undoAnnotation();
-}
+const undoEventListener = (event: KeyboardEvent) => {
+  if (event.ctrlKey && event.shiftKey && event.key === "Z") {
+    redoAnnotation();
+  } else if (event.ctrlKey && event.key === "z") {
+    undoAnnotation();
+  }
+};
 
-async function redoAnnotation() {
-  await annotationStore.redoAnnotation();
-}
+onBeforeMount(() => {
+  window.addEventListener("keydown", undoEventListener);
+});
+
+onMounted(() => {
+  window.addEventListener("click", clickOutsideListener);
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", undoEventListener);
+  window.removeEventListener("click", clickOutsideListener);
+});
+
+// TODO: use the annotator loaded from the backend
+const annotator: Annotator = new Annotator({
+  name: "test annotator",
+  roles: [],
+});
 
 async function deleteAnnotation(nestedSetNode: NestedSetNode) {
   await annotationStore.deleteAnnotation(nestedSetNode, $orbisApiService);
@@ -164,7 +164,7 @@ function updateAnnotations(currentSelection: any) {
 // called when creating a new annotation
 async function createAnnotation(annotationType: AnnotationType) {
   try {
-    if (selectedRun.value._id) {
+    if (selectedRun.value.id) {
       const textSpan = new TextSpan(
         selection.value.word,
         selection.value.start,
@@ -174,7 +174,7 @@ async function createAnnotation(annotationType: AnnotationType) {
         textSpan,
         annotationType,
         annotator,
-        selectedRun.value._id,
+        selectedRun.value.id,
         Number(route.params.id),
         $orbisApiService,
       );

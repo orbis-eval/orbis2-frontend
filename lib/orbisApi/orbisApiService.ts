@@ -15,11 +15,14 @@ export class OrbisApiService {
   }
 
   async getCorpora(): Promise<Corpus[] | Error> {
-    return Parser.parseList(Corpus, this.apiGet(`getCorpora`));
+    return await Parser.parseList(Corpus, this.apiGet(`getCorpora`));
   }
 
   async getCorpus(corpusId: number): Promise<Corpus | Error> {
-    return Parser.parse(Corpus, this.apiGet(`getCorpus?corpus_id=${corpusId}`));
+    return await Parser.parse(
+      Corpus,
+      this.apiGet(`getCorpus?corpus_id=${corpusId}`),
+    );
   }
 
   async getDocuments(
@@ -27,7 +30,7 @@ export class OrbisApiService {
     pageSize: number,
     skip: number = 0,
   ): Promise<Document[] | Error> {
-    return Parser.parseList(
+    return await Parser.parseList(
       Document,
       this.apiGet(
         `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`,
@@ -44,7 +47,7 @@ export class OrbisApiService {
     if (pageSize) {
       pageSizeParam = `&page_size=${pageSize}`;
     }
-    return Parser.parse(
+    return await Parser.parse(
       Number,
       this.apiGet(
         `getNofDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`,
@@ -53,28 +56,31 @@ export class OrbisApiService {
   }
 
   async getDocument(documentId: number): Promise<Document | Error> {
-    return Parser.parse(
+    return await Parser.parse(
       Document,
       this.apiGet(`getDocument?document_id=${documentId}`),
     );
   }
 
   async getRuns(corpusId: number): Promise<Run[] | Error> {
-    return Parser.parseList(Run, this.apiGet(`getRuns?corpus_id=${corpusId}`));
+    return await Parser.parseList(
+      Run,
+      this.apiGet(`getRuns?corpus_id=${corpusId}`),
+    );
   }
 
   async getAnnotations(
     runId?: number,
     documentId?: number,
   ): Promise<Annotation[] | Error> {
-    return Parser.parseList(
+    return await Parser.parseList(
       Annotation,
       this.apiGet(`getAnnotations?run_id=${runId}&document_id=${documentId}`),
     );
   }
 
   async createAnnotation(annotation: Annotation): Promise<Annotation | Error> {
-    return Parser.parse(
+    return await Parser.parse(
       Annotation,
       this.apiPost(`createAnnotation`, annotation),
     );
@@ -88,11 +94,11 @@ export class OrbisApiService {
     if (documents.length > 0) {
       body.documents = documents;
     }
-    return Parser.parse(Corpus, this.apiPost("createCorpus", body));
+    return await Parser.parse(Corpus, this.apiPost("createCorpus", body));
   }
 
   async createRun(newRun: Run, corpus: Corpus): Promise<Run | Error> {
-    return Parser.parse(
+    return await Parser.parse(
       Run,
       this.apiPost(
         `createRun?run_name=${newRun.name}&run_description=${newRun.description}`,
@@ -102,23 +108,25 @@ export class OrbisApiService {
   }
 
   async deleteRun(run: Run): Promise<boolean | Error> {
-    return Parser.parseEmptyResponse(this.apiDelete(`deleteRun`, run));
+    return await Parser.parseEmptyResponse(this.apiDelete(`deleteRun`, run));
   }
 
   async deleteAnnotationFromDocument(
     annotation: Annotation,
   ): Promise<boolean | Error> {
-    return Parser.parseEmptyResponse(
+    return await Parser.parseEmptyResponse(
       this.apiDelete(`deleteAnnotationFromDocument`, annotation),
     );
   }
 
   async deleteCorpus(corpus: Corpus): Promise<boolean | Error> {
-    return Parser.parseEmptyResponse(this.apiDelete(`deleteCorpus`, corpus));
+    return await Parser.parseEmptyResponse(
+      this.apiDelete(`deleteCorpus`, corpus),
+    );
   }
 
   async apiGet(query: string): Promise<TypedInternalResponse<string>> {
-    return $fetch(`${this.orbisApiBase}${query}`, {
+    return await $fetch(`${this.orbisApiBase}${query}`, {
       method: "GET",
     });
   }
@@ -127,7 +135,7 @@ export class OrbisApiService {
     query: string,
     body: any,
   ): Promise<TypedInternalResponse<string>> {
-    return $fetch(`${this.orbisApiBase}${query}`, {
+    return await $fetch(`${this.orbisApiBase}${query}`, {
       method: "POST",
       body: JSON.stringify(body),
     });
@@ -137,7 +145,7 @@ export class OrbisApiService {
     query: string,
     body: any,
   ): Promise<TypedInternalResponse<string>> {
-    return $fetch(`${this.orbisApiBase}${query}`, {
+    return await $fetch(`${this.orbisApiBase}${query}`, {
       method: "DELETE",
       body: JSON.stringify(body),
     });
@@ -147,7 +155,7 @@ export class OrbisApiService {
     runId: number,
     documentId: number,
   ): Promise<Document | Error> {
-    return Parser.parse(
+    return await Parser.parse(
       Document,
       this.apiGet(`nextDocument?run_id=${runId}&document_id=${documentId}`),
     );
@@ -157,7 +165,7 @@ export class OrbisApiService {
     runId: number,
     documentId: number,
   ): Promise<Document | Error> {
-    return Parser.parse(
+    return await Parser.parse(
       Document,
       this.apiGet(`previousDocument?run_id=${runId}&document_id=${documentId}`),
     );
@@ -165,10 +173,10 @@ export class OrbisApiService {
 
   async countDocuments(runId: number): Promise<Number | Error> {
     // @ts-ignore
-    return this.apiGet(`countDocuments?run_id=${runId}`);
+    return await this.apiGet(`countDocuments?run_id=${runId}`);
   }
 
   async colorPalettes(): Promise<ColorPalette[] | Error> {
-    return Parser.parseList(ColorPalette, this.apiGet(`colorPalettes`));
+    return await Parser.parseList(ColorPalette, this.apiGet(`colorPalettes`));
   }
 }

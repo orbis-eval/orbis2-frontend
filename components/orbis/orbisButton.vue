@@ -23,7 +23,7 @@ interface Props {
   size?: "xs" | "sm" | "md" | "lg";
   join?: boolean;
   isFormButton?: boolean;
-  onClick?: Function;
+  onClick?: Function | null;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -33,6 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
   transparent: false,
   join: false,
   isFormButton: false,
+  onClick: null,
 });
 
 const isLoading = ref(false);

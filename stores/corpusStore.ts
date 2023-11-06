@@ -38,7 +38,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     try {
       await orbisApiService.deleteCorpus(corpusToDelete);
       corpora.value = corpora.value.filter(
-        (corpus) => corpus._id !== corpusToDelete._id,
+        (corpus) => corpus.id !== corpusToDelete.id,
       );
     } catch (error) {
       return new Error("An error occurred while deleting a corpus");
@@ -68,7 +68,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     try {
       let newCorpus: Corpus | Error = new Corpus({
         name: corpusName,
-        supported_annotation_types: [],
+        supportedAnnotationTypes: [],
       });
       let docs: Document[] = [];
       if (chosenFiles.length > 0) {

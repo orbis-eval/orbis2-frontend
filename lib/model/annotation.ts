@@ -2,38 +2,40 @@ import { Metadata } from "~/lib/model/metadata";
 import { IAnnotation } from "~/lib/model/iannotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
+import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Annotation implements IAnnotation {
   key: string;
-  surface_forms: string[];
-  start_indices: number[];
-  end_indices: number[];
-  annotation_type: AnnotationType;
+  surfaceForms: string[];
+  startIndices: number[];
+  endIndices: number[];
+  annotationType: AnnotationType;
   annotator: Annotator;
-  run_id: number;
-  document_id: number;
+  runId: number;
+  documentId: number;
   metadata: Metadata[];
   timestamp: Date;
-  _id?: number;
+  id?: number;
 
   constructor(annotation: IAnnotation) {
     this.key = annotation.key;
-    this.surface_forms = annotation.surface_forms;
-    this.start_indices = annotation.start_indices;
-    this.end_indices = annotation.end_indices;
-    this.annotation_type = new AnnotationType(annotation.annotation_type);
+    this.surfaceForms = annotation.surfaceForms;
+    this.startIndices = annotation.startIndices;
+    this.endIndices = annotation.endIndices;
+    this.annotationType = new AnnotationType(annotation.annotationType);
     this.annotator = new Annotator(annotation.annotator);
-    this.run_id = annotation.run_id;
-    this.document_id = annotation.document_id;
+    this.runId = annotation.runId;
+    this.documentId = annotation.documentId;
     this.metadata = annotation.metadata.map(
       (metadata) => new Metadata(metadata),
     );
     this.timestamp = annotation.timestamp;
-    this._id = annotation._id;
+    this.id = annotation.id;
   }
 
   toJSON() {
-    const { _id, ...json } = this;
-    return json;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, timestamp, ...json } = this;
+    return JSONTransformer.transformFromCamelCase(json);
   }
 }

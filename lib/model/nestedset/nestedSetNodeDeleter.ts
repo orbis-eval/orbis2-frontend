@@ -13,9 +13,9 @@ export class NestedSetNodeDeleter {
     nodeToUpdate.children = []; // delete all childs before re-calculating the tree
     const rootNode = NestedSet.toTree(
       annotations,
-      nodeToUpdate.surface_forms[0],
-      nodeToUpdate.run_id,
-      nodeToUpdate.document_id,
+      nodeToUpdate.surfaceForms[0],
+      nodeToUpdate.runId,
+      nodeToUpdate.documentId,
       nodeToUpdate.timestamp,
       errorCallback,
       nodeToUpdate,
@@ -40,7 +40,7 @@ export class NestedSetNodeDeleter {
     idAnnotationToDelete: NestedSetNode,
   ) {
     annotations.filter((annotation, index, annotations) => {
-      if (annotation._id === idAnnotationToDelete._id) {
+      if (annotation.id === idAnnotationToDelete.id) {
         // Deletes the value from the original array
         annotations.splice(index, 1);
         return true;

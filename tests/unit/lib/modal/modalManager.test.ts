@@ -10,7 +10,7 @@ import ModalListRuns from "~/components/modal/listRuns.vue";
 import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 
 //  Non-modal components
-import Warning from "~/components/warning.vue";
+import Warning from "~/components/orbisWarning.vue";
 
 describe("ModalManager", () => {
   let modalCreateCorpus: Modal;
@@ -59,7 +59,6 @@ describe("ModalManager", () => {
   });
 
   it("should not open a modal if not in the modals list", () => {
-    const unknownModal = new Modal("unknown", Warning);
     modalManager.openModal(Warning);
 
     expect(modalManager.renderStack).toEqual([]);

@@ -19,6 +19,7 @@
       >
         <li
           v-for="(annotationType, index) in filteredAnnotationTypes"
+          :key="annotationType.id"
           :class="{
             selectedAnnotationType: selectedAnnotationIndex === index,
           }"
@@ -55,16 +56,16 @@ const isVisibleRef = toRef(props, "isVisible");
 
 const selectionSurfaceForm = toRef(props, "selectionSurfaceForm");
 
-const filteredAnnotationTypes = computed(filterAnnotationTypes);
-
 function filterAnnotationTypes() {
   return props.annotationTypes.filter((annotationType) =>
     annotationType.name.toLowerCase().includes(filterValue.value.toLowerCase()),
   );
 }
 
+const filteredAnnotationTypes = computed(filterAnnotationTypes);
+
 // prevent keydown/keyup to trigger the scrolling
-function arrow_keys_handler(e: KeyboardEvent) {
+function arrowKeysHandler(e: KeyboardEvent) {
   switch (e.code) {
     case "ArrowUp":
     case "ArrowDown":
@@ -75,31 +76,6 @@ function arrow_keys_handler(e: KeyboardEvent) {
       break;
     default:
       break; // do not block other keys
-  }
-}
-
-onMounted(() => {
-  window.addEventListener("keydown", handleKeyDown);
-  // prevent keydown/keyup to scroll
-  window.addEventListener("keydown", arrow_keys_handler, false);
-  // set the focus to the input for the filter
-  filterInputField.value.focus();
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("keydown", handleKeyDown, false);
-  window.removeEventListener("keydown", arrow_keys_handler, false);
-});
-
-function handleKeyDown(event: KeyboardEvent) {
-  if (event.code === "ArrowUp") {
-    prevAnnotationType();
-  } else if (event.code === "ArrowDown") {
-    nextAnnotationType();
-  } else if (event.code === "Enter") {
-    commitAnnotationType();
-  } else if (event.code === "Escape") {
-    hideAnnotationModal();
   }
 }
 
@@ -127,16 +103,41 @@ function commitAnnotationType() {
   selectedAnnotationIndex.value = 0;
 }
 
+function hideAnnotationModal() {
+  window.removeEventListener("keydown", arrowKeysHandler, false);
+  emit("hideAnnotationModal");
+}
+
+function handleKeyDown(event: KeyboardEvent) {
+  if (event.code === "ArrowUp") {
+    prevAnnotationType();
+  } else if (event.code === "ArrowDown") {
+    nextAnnotationType();
+  } else if (event.code === "Enter") {
+    commitAnnotationType();
+  } else if (event.code === "Escape") {
+    hideAnnotationModal();
+  }
+}
+
+onMounted(() => {
+  window.addEventListener("keydown", handleKeyDown);
+  // prevent keydown/keyup to scroll
+  window.addEventListener("keydown", arrowKeysHandler, false);
+  // set the focus to the input for the filter
+  filterInputField.value.focus();
+});
+
+onBeforeUnmount(() => {
+  window.removeEventListener("keydown", handleKeyDown, false);
+  window.removeEventListener("keydown", arrowKeysHandler, false);
+});
+
 function annotationClicked(annotationType: AnnotationType) {
   emit("commitAnnotationType", annotationType);
 }
 
-function hideAnnotationModal() {
-  window.removeEventListener("keydown", arrow_keys_handler, false);
-  emit("hideAnnotationModal");
-}
-
-// watching the isVisible property so we can set the focus again
+// watching the isVisible property, so we can set the focus again
 // if we make the component visible
 watch(
   isVisibleRef,

@@ -6,7 +6,7 @@
         <input
           id="file-input"
           ref="fileInput"
-          :accept="props.acceptedFileTypes"
+          :accept="acceptedFileTypes"
           class="hidden"
           multiple
           type="file"
@@ -27,6 +27,7 @@
         <div v-else class="p-1">
           <div
             v-for="(file, index) in selectedFiles"
+            :key="index"
             class="m-2 flex items-center justify-between overflow-auto px-1"
           >
             <p id="index">{{ file.name }}</p>
@@ -51,12 +52,9 @@ addIcons(MdDeleteforeverOutlined);
 const fileInput = ref({} as HTMLInputElement);
 const selectedFiles = ref([] as File[]);
 
-const props = defineProps({
-  acceptedFileTypes: {
-    type: String,
-    required: true,
-  },
-});
+defineProps<{
+  acceptedFileTypes: string;
+}>();
 
 function openFileInput() {
   fileInput.value.click();

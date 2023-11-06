@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="mb-5 text-3xl font-bold">Runs</h2>
-    <template v-for="run in runs" :key="run._id" class="mb-20">
+    <template v-for="run in runs" :key="run.id">
       <div class="flex items-center py-2">
         <div
           :class="['flex-1', 'w-4/6', selectedRun == run ? 'text-primary' : '']"
@@ -58,7 +58,7 @@ addIcons(MdDeleteforeverOutlined, CoPencil);
 const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
 const { runs, selectedRun } = storeToRefs(runStore);
-const onDeleteRun = async (run: Run) => {
+const onDeleteRun = (run: Run) => {
   try {
     closeModal();
     openModal(ModalDeleteRun, toRaw(run));

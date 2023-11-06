@@ -1,16 +1,18 @@
 import { IRole } from "~/lib/model/irole";
+import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Role implements IRole {
   name: string;
-  _id?: number;
+  id?: number;
 
   constructor(role: IRole) {
     this.name = role.name;
-    this._id = role._id;
+    this.id = role.id;
   }
 
   toJSON() {
-    const { _id, ...json } = this;
-    return json;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...json } = this;
+    return JSONTransformer.transformFromCamelCase(json);
   }
 }

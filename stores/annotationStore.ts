@@ -25,6 +25,31 @@ export const useAnnotationStore = defineStore("annotation", () => {
     isRedoDisabled.value = true;
   }
 
+  function mapAnnotations(
+    annotationsFromDb: Annotation[],
+    annotationTypes: AnnotationType[],
+  ) {
+    return annotationsFromDb.map((annotation) => {
+      const annotationType = annotationTypes.find(
+        (annotationType) =>
+          annotationType.name === annotation.annotationType.name,
+      );
+      if (annotationType) {
+        annotation.annotationType.colorId = annotationType.colorId;
+      } else {
+        console.error(
+          "Missing annotation type " + annotation.annotationType.name,
+        );
+      }
+      return annotation;
+    });
+  }
+
+  function parseErrorCallBack() {
+    // TODO: Only placeholder for the moment
+    console.error("Creating nestedNodeSet failed");
+  }
+
   async function loadAnnotations(
     documentId: number,
     documentContent: string,
@@ -66,31 +91,6 @@ export const useAnnotationStore = defineStore("annotation", () => {
     } catch (error) {
       return new Error("An error occurred while loading annotations");
     }
-  }
-
-  function mapAnnotations(
-    annotationsFromDb: Annotation[],
-    annotationTypes: AnnotationType[],
-  ) {
-    return annotationsFromDb.map((annotation) => {
-      const annotationType = annotationTypes.find(
-        (annotationType) =>
-          annotationType.name === annotation.annotation_type.name,
-      );
-      if (annotationType) {
-        annotation.annotation_type.color_id = annotationType.color_id;
-      } else {
-        console.error(
-          "Missing annotation type " + annotation.annotation_type.name,
-        );
-      }
-      return annotation;
-    });
-  }
-
-  function parseErrorCallBack() {
-    // TODO: Only placeholder for the moment
-    console.error("Creating nestedNodeSet failed");
   }
 
   async function createAnnotation(

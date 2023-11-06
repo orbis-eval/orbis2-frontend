@@ -4,14 +4,14 @@ import { Annotator } from "~/lib/model/annotator";
 
 export interface IAnnotation {
   key: string;
-  surface_forms: string[];
-  start_indices: number[];
-  end_indices: number[];
-  annotation_type: AnnotationType;
+  surfaceForms: string[];
+  startIndices: number[];
+  endIndices: number[];
+  annotationType: AnnotationType;
   annotator: Annotator;
-  run_id: number;
-  document_id: number;
+  runId: number;
+  documentId: number;
   metadata: Metadata[];
   timestamp: Date;
-  _id?: number;
+  id?: number;
 }

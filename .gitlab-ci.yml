@@ -1,5 +1,7 @@
 include:
   - project: "nlp/team/ci-templates"
+    file: "node-js/.lint.yaml"
+  - project: "nlp/team/ci-templates"
     file: "node-js/.build.yaml"
   - project: "nlp/team/ci-templates"
     file: "node-js/.test.yaml"
@@ -9,6 +11,9 @@ include:
     file: "node-js/.docker-build.yaml"
   - project: "nlp/team/ci-templates"
     file: "node-js/.publish-k8s.yaml"
+
+default:
+  interruptible: true
 
 cache:
   # following paths are automatically cached and available for subsequent jobs
@@ -24,6 +29,7 @@ variables:
   DOCKERFILEPATH: dockerfile
 
 stages:
+  - lint
   - build
   - test
   - sonar

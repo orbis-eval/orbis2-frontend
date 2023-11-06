@@ -6,7 +6,7 @@
           <div>Corpora</div>
           <div class="flex-grow"></div>
           <OrbisButton
-            :on-click="() => openModal(ModalCreateCorpus)"
+            :on-click="() => openModal(modalCreateCorpus)"
             size="sm"
             transparent
           >
@@ -14,9 +14,9 @@
           </OrbisButton>
         </div>
         <ul class="mt-5">
-          <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
+          <li v-for="corpus in corpora" :key="corpus.id" class="flex py-2">
             <NuxtLink
-              :to="`/corpora/${corpus._id}/documents`"
+              :to="`/corpora/${corpus.id}/documents`"
               class="hover:text-purple-400"
             >
               {{ corpus.name }}
@@ -40,8 +40,8 @@
 import { OhVueIcon } from "oh-vue-icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
-import ModalCreateCorpus from "~/components/modal/createCorpus.vue";
-import ModalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
+import modalCreateCorpus from "~/components/modal/createCorpus.vue";
+import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
 import { Corpus } from "~/lib/model/corpus";
 const corpusStore = useCorpusStore();
@@ -49,6 +49,6 @@ const { corpora } = storeToRefs(corpusStore);
 
 const { openModal } = useModal();
 const onDeleteCorpus = (corpus: Corpus) => {
-  openModal(ModalDeleteCorpus, toRaw(corpus));
+  openModal(modalDeleteCorpus, toRaw(corpus));
 };
 </script>

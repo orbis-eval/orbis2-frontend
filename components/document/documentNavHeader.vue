@@ -3,6 +3,7 @@
     v-if="selectedRun && currentDocument"
     class="flex items-center px-4 pb-4 pt-5 text-lg"
   >
+    Document: {{ currentDocument.id }}
     <OrbisButton
       :disabled="nrOfDocuments <= 1"
       :on-click="previousDocument"
@@ -51,13 +52,13 @@ const { selectedRun } = storeToRefs(runStore);
 
 async function nextDocument() {
   emit("loadingStarted");
-  if (selectedRun.value._id) {
-    await documentStore.nextDocument(selectedRun.value._id, $orbisApiService);
+  if (selectedRun.value.id) {
+    await documentStore.nextDocument(selectedRun.value.id, $orbisApiService);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/documents/" +
-        currentDocument.value._id,
+        currentDocument.value.id,
     );
   } else {
     console.warn("Id of selected run was not set in nextDocument.");
@@ -67,16 +68,16 @@ async function nextDocument() {
 
 async function previousDocument() {
   emit("loadingStarted");
-  if (selectedRun.value._id) {
+  if (selectedRun.value.id) {
     await documentStore.previousDocument(
-      selectedRun.value._id,
+      selectedRun.value.id,
       $orbisApiService,
     );
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/documents/" +
-        currentDocument.value._id,
+        currentDocument.value.id,
     );
   } else {
     console.warn("Id of selected run was not set in previousDocument.");

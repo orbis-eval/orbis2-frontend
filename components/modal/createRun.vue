@@ -60,8 +60,10 @@ const runNotExists = (runName: string) => {
 const validationSchema = toTypedSchema(
   zod.object({
     runName: zod
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       .string({ required_error: "Run Name is required" })
       .refine(runNotExists, { message: "Run with this name already exists" }),
+    // eslint-disable-next-line @typescript-eslint/naming-convention
     runDesc: zod.string({ required_error: "Run Description is required" }),
   }),
 );

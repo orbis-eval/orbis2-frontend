@@ -28,7 +28,7 @@ describe("Parser", () => {
 
   it("should catch error for empty response", async () => {
     const mockResponse = new Promise<TypedInternalResponse<string>>(
-      (_, reject) => reject(new Error("Mocked Error")),
+      (_resolve, reject) => reject(new Error("Mocked Error")),
     );
 
     const result = await Parser.parseEmptyResponse(mockResponse);
@@ -50,7 +50,7 @@ describe("Parser", () => {
 
   it("should catch error while parsing a given type", async () => {
     const mockResponse = new Promise<TypedInternalResponse<string>>(
-      (_, reject) => reject(new Error("Mocked Error")),
+      (_resolve, reject) => reject(new Error("Mocked Error")),
     );
 
     const result = await Parser.parse(DataModel, mockResponse);
@@ -91,7 +91,7 @@ describe("Parser", () => {
 
   it("should catch error while parsing a list of a given type", async () => {
     const mockResponse = new Promise<TypedInternalResponse<string>>(
-      (_, reject) => reject(new Error("Mocked Error")),
+      (_resolve, reject) => reject(new Error("Mocked Error")),
     );
 
     const result = await Parser.parseList(DataModel, mockResponse);

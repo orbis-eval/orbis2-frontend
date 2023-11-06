@@ -9,7 +9,7 @@
 
       <DocumentsTable></DocumentsTable>
 
-      <Pagination
+      <OrbisPagination
         v-if="totalPages"
         :current-page="currentPage"
         :total-pages="totalPages"
@@ -47,8 +47,45 @@ const pageSize = ref(10);
 const loading = ref(true);
 
 const { currentPage } = storeToRefs(documentStore);
-const { documents } = storeToRefs(documentStore);
 const { totalPages } = storeToRefs(documentStore);
+
+// called when another page is selected
+async function pageChanged(nextPage: number) {
+  if (selectedRun.value.id) {
+    loading.value = true;
+    documentStore.currentPage = nextPage;
+    const startIndex = (currentPage.value - 1) * pageSize.value;
+    try {
+      await documentStore.loadDocuments(
+        selectedRun.value.id,
+        $orbisApiService,
+        pageSize.value,
+        startIndex,
+      );
+    } catch (error) {
+      console.error(error);
+    } finally {
+      loading.value = false;
+    }
+  } else {
+    console.warn("Id of selected run was not set in pageChanged.");
+  }
+}
+
+async function countDocuments() {
+  if (selectedRun.value.id) {
+    await documentStore.countDocuments(selectedRun.value.id, $orbisApiService);
+    documentStore.totalPages = Math.ceil(
+      documentStore.nrOfDocuments / pageSize.value,
+    );
+  } else {
+    console.warn("Id of selected run was not set in countDocuments.");
+  }
+}
+
+async function loadDocuments() {
+  await pageChanged(currentPage.value);
+}
 
 onMounted(async () => {
   loading.value = true;
@@ -66,45 +103,7 @@ onMounted(async () => {
   }
 });
 
-// called when another page is selected
-async function pageChanged(nextPage: number) {
-  if (selectedRun.value._id) {
-    loading.value = true;
-    documentStore.currentPage = nextPage;
-    const startIndex = (currentPage.value - 1) * pageSize.value;
-    try {
-      await documentStore.loadDocuments(
-        selectedRun.value._id,
-        $orbisApiService,
-        pageSize.value,
-        startIndex,
-      );
-    } catch (error) {
-      console.error(error);
-    } finally {
-      loading.value = false;
-    }
-  } else {
-    console.warn("Id of selected run was not set in pageChanged.");
-  }
-}
-
 async function runChanged() {
-  await pageChanged(currentPage.value);
-}
-
-async function countDocuments() {
-  if (selectedRun.value._id) {
-    await documentStore.countDocuments(selectedRun.value._id, $orbisApiService);
-    documentStore.totalPages = Math.ceil(
-      documentStore.nrOfDocuments / pageSize.value,
-    );
-  } else {
-    console.warn("Id of selected run was not set in countDocuments.");
-  }
-}
-
-async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
 </script>

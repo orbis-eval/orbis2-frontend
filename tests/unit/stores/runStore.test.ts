@@ -10,14 +10,14 @@ import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 
 const createRun = (id: number, name: string, description: string): Run => {
   return new Run({
-    _id: id,
+    id,
     name,
     description,
     corpus: new Corpus({
       name: "corpus name",
-      _id: 1,
-      supported_annotation_types: [
-        new AnnotationType({ name: "annotation-type-1", color_id: 1 }),
+      id: 1,
+      supportedAnnotationTypes: [
+        new AnnotationType({ name: "annotation-type-1", colorId: 1 }),
       ],
     }),
   });
@@ -35,11 +35,11 @@ const mockedOrbisApiServiceDeleteRun = vi.fn().mockResolvedValue(true);
 vi.mock("~/lib/orbisApi/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
-      getRuns: async (corpusId: number): Promise<Run[] | Error> => {
-        return Parser.parseList(Run, Promise.resolve(runs));
+      getRuns: async (): Promise<Run[] | Error> => {
+        return await Parser.parseList(Run, Promise.resolve(runs));
       },
-      createRun: async (newRun: Run, corpus: Corpus): Promise<Run | Error> => {
-        return Parser.parse(Run, Promise.resolve(newRun));
+      createRun: async (newRun: Run): Promise<Run | Error> => {
+        return await Parser.parse(Run, Promise.resolve(newRun));
       },
       deleteRun: mockedOrbisApiServiceDeleteRun,
     })),

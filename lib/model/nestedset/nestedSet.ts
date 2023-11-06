@@ -14,32 +14,32 @@ export class NestedSet {
 
   public static GAP_ANNOTATION_TYPE = new AnnotationType({
     name: this.GAP_ANNOTATION_TYPE_NAME,
-    color_id: 1,
-    _id: 1000,
+    colorId: 1,
+    id: 1000,
   });
 
   public static LINE_ANNOTATION_TYPE = new AnnotationType({
     name: this.LINE_ANNOTATION_TYPE_NAME,
-    color_id: 1,
-    _id: 1001,
+    colorId: 1,
+    id: 1001,
   });
 
   public static NESTED_SET_ANNOTATOR = new Annotator({
     name: this.NESTEDSET_ANNOTATOR_NAME,
     roles: [],
-    _id: 1001,
+    id: 1001,
   });
 
   public static ROOT_ANNOTATION_TYPE = new AnnotationType({
     name: "ROOT_NODE_ANNOTATION",
-    color_id: 1,
-    _id: 4000,
+    colorId: 1,
+    id: 4000,
   });
 
   public static ROOT_ANNOTATOR = new Annotator({
     name: this.NESTEDSET_ANNOTATOR_NAME,
     roles: [],
-    _id: 1001,
+    id: 1001,
   });
 
   static toTree(
@@ -66,7 +66,7 @@ export class NestedSet {
 
     // delete all existing line-annotations and calculate them freshly, then add them to the existing annotations
     annotations = annotations.filter((node) => {
-      return node.annotation_type.name !== NestedSet.LINE_ANNOTATION_TYPE_NAME;
+      return node.annotationType.name !== NestedSet.LINE_ANNOTATION_TYPE_NAME;
     });
 
     // push all line-annotations
@@ -98,7 +98,7 @@ export class NestedSet {
         parentNode.addChild(currentNode);
       } else {
         console.warn(
-          `no parent found for child ${currentNode.surface_forms[0]}(${currentNode.start_indices[0]}:${currentNode.end_indices[0]}), ${previousNode.surface_forms[0]}(${previousNode.start_indices[0]}:${previousNode.end_indices[0]})`,
+          `no parent found for child ${currentNode.surfaceForms[0]}(${currentNode.startIndices[0]}:${currentNode.endIndices[0]}), ${previousNode.surfaceForms[0]}(${previousNode.startIndices[0]}:${previousNode.endIndices[0]})`,
         );
         return null; // tree could not be constructed, so return null
       }
@@ -114,10 +114,10 @@ export class NestedSet {
     errorCallback: (parseError: NestedSetParseError) => void,
   ): NestedSetNode | null => {
     if (
-      nodeUnderCheck.start_indices[0] >= potentialParent.start_indices[0] &&
-      nodeUnderCheck.start_indices[0] < potentialParent.end_indices[0]
+      nodeUnderCheck.startIndices[0] >= potentialParent.startIndices[0] &&
+      nodeUnderCheck.startIndices[0] < potentialParent.endIndices[0]
     ) {
-      if (nodeUnderCheck.end_indices[0] <= potentialParent.end_indices[0]) {
+      if (nodeUnderCheck.endIndices[0] <= potentialParent.endIndices[0]) {
         return potentialParent;
       } else {
         errorCallback(
@@ -140,35 +140,35 @@ export class NestedSet {
     for (const childNode of node.children) {
       // determine if we have a gap to the next annotation.
       // if yes, generate an annotation of type "GAP"
-      if (childNode.start_indices[0] > gapStart) {
-        const surfaceForm = node.surface_forms[0].substring(
+      if (childNode.startIndices[0] > gapStart) {
+        const surfaceForm = node.surfaceForms[0].substring(
           gapStart,
-          childNode.start_indices[0] - node.start_indices[0],
+          childNode.startIndices[0] - node.startIndices[0],
         );
         const gapAnnotation = this.addGapAnnotation(
           surfaceForm,
-          gapStart + node.start_indices[0],
-          childNode.start_indices[0],
+          gapStart + node.startIndices[0],
+          childNode.startIndices[0],
           childNode,
         );
         gapAnnotations.push(gapAnnotation);
-        gapStart = childNode.end_indices[0] - node.start_indices[0];
+        gapStart = childNode.endIndices[0] - node.startIndices[0];
       } else {
-        gapStart = childNode.end_indices[0] - node.start_indices[0];
+        gapStart = childNode.endIndices[0] - node.startIndices[0];
       }
       // call function for the child
       this.calculateGapAnnotations(childNode);
     }
-    if (node.children.length > 0 && gapStart < node.end_indices[0]) {
-      const surfaceForm = node.surface_forms[0].substring(
+    if (node.children.length > 0 && gapStart < node.endIndices[0]) {
+      const surfaceForm = node.surfaceForms[0].substring(
         gapStart,
-        node.end_indices[0],
+        node.endIndices[0],
       );
       if (surfaceForm.trim().length > 0) {
         const gapAnnotation = this.addGapAnnotation(
           surfaceForm,
-          gapStart + node.start_indices[0],
-          node.end_indices[0],
+          gapStart + node.startIndices[0],
+          node.endIndices[0],
           node,
         );
         gapAnnotations.push(gapAnnotation);
@@ -196,16 +196,16 @@ export class NestedSet {
         new NestedSetNode(
           new Annotation({
             key: this.LINE_ANNOTATION_KEY,
-            surface_forms: [line],
-            start_indices: [offset],
-            end_indices: [line.length + offset],
-            annotation_type: this.LINE_ANNOTATION_TYPE,
+            surfaceForms: [line],
+            startIndices: [offset],
+            endIndices: [line.length + offset],
+            annotationType: this.LINE_ANNOTATION_TYPE,
             annotator: this.NESTED_SET_ANNOTATOR,
-            run_id: runId,
-            document_id: documentId,
+            runId,
+            documentId,
             metadata: [],
             timestamp: timeStamp,
-            _id: offset,
+            id: offset,
           }),
         ),
       );
@@ -215,19 +215,19 @@ export class NestedSet {
   };
 
   public static trimWithSpaces(annotation: Annotation): Annotation {
-    let surfaceForm = annotation.surface_forms[0];
+    let surfaceForm = annotation.surfaceForms[0];
     const endChar = surfaceForm.charAt(surfaceForm.length - 1);
     if (endChar === " ") {
       surfaceForm = surfaceForm.substring(0, surfaceForm.length - 1);
-      annotation.end_indices[0] = annotation.end_indices[0] - 1;
-      annotation.surface_forms[0] = surfaceForm;
+      annotation.endIndices[0] = annotation.endIndices[0] - 1;
+      annotation.surfaceForms[0] = surfaceForm;
       return this.trimWithSpaces(annotation);
     }
     const startChar = surfaceForm.charAt(0);
     if (startChar === " ") {
       surfaceForm = surfaceForm.substring(1, surfaceForm.length);
-      annotation.start_indices[0] = annotation.start_indices[0] + 1;
-      annotation.surface_forms[0] = surfaceForm;
+      annotation.startIndices[0] = annotation.startIndices[0] + 1;
+      annotation.surfaceForms[0] = surfaceForm;
       return this.trimWithSpaces(annotation);
     }
     return annotation;
@@ -244,25 +244,25 @@ export class NestedSet {
     return new NestedSetNode(
       new Annotation({
         key: "",
-        surface_forms: [documentString],
-        start_indices: [start],
-        end_indices: [end],
-        annotation_type: this.ROOT_ANNOTATION_TYPE,
+        surfaceForms: [documentString],
+        startIndices: [start],
+        endIndices: [end],
+        annotationType: this.ROOT_ANNOTATION_TYPE,
         annotator: this.ROOT_ANNOTATOR,
-        run_id: runId,
-        document_id: documentId,
+        runId,
+        documentId,
         metadata: [],
         timestamp,
-        _id: -1,
+        id: -1,
       }),
     );
   }
 
   private static annotationCompare = (a: Annotation, b: Annotation) => {
-    if (a.start_indices[0] == b.start_indices[0]) {
-      return b.end_indices[0] - a.end_indices[0];
+    if (a.startIndices[0] === b.startIndices[0]) {
+      return b.endIndices[0] - a.endIndices[0];
     }
-    return a.start_indices[0] - b.start_indices[0];
+    return a.startIndices[0] - b.startIndices[0];
   };
 
   private static addGapAnnotation(
@@ -273,16 +273,16 @@ export class NestedSet {
   ): NestedSetNode {
     return new NestedSetNode({
       key: this.GAP_ANNOTATION_KEY,
-      surface_forms: [surfaceForm],
-      start_indices: [gapStart],
-      end_indices: [gapEnd],
-      annotation_type: this.GAP_ANNOTATION_TYPE,
+      surfaceForms: [surfaceForm],
+      startIndices: [gapStart],
+      endIndices: [gapEnd],
+      annotationType: this.GAP_ANNOTATION_TYPE,
       annotator: this.NESTED_SET_ANNOTATOR,
-      run_id: childNode.run_id,
-      document_id: childNode.document_id,
+      runId: childNode.runId,
+      documentId: childNode.documentId,
       metadata: [],
       timestamp: childNode.timestamp,
-      _id: 2000,
+      id: 2000,
     });
   }
 }

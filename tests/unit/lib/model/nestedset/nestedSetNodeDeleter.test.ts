@@ -38,30 +38,30 @@ describe("NestedSetNodeDeleter.deleteAnnotationNode(...)", () => {
       // check if child of root-node is correct, only child should be the line-node
       const lineNode = rootNode.children[0];
       expect(lineNode.children.length).toEqual(4);
-      expect(lineNode.start_indices[0]).toEqual(0);
-      expect(lineNode.end_indices[0]).toEqual(14);
+      expect(lineNode.startIndices[0]).toEqual(0);
+      expect(lineNode.endIndices[0]).toEqual(14);
 
       // child 'AA'
-      expect(lineNode.children[0].start_indices[0]).toEqual(0);
-      expect(lineNode.children[0].end_indices[0]).toEqual(2);
+      expect(lineNode.children[0].startIndices[0]).toEqual(0);
+      expect(lineNode.children[0].endIndices[0]).toEqual(2);
 
       // gap node ' AA to DD '
-      expect(lineNode.children[1].annotation_type.name).toEqual(
+      expect(lineNode.children[1].annotationType.name).toEqual(
         NestedSet.GAP_ANNOTATION_TYPE_NAME,
       );
-      expect(lineNode.children[1].start_indices[0]).toEqual(2);
-      expect(lineNode.children[1].end_indices[0]).toEqual(9);
+      expect(lineNode.children[1].startIndices[0]).toEqual(2);
+      expect(lineNode.children[1].endIndices[0]).toEqual(9);
 
       // child 'DD'
-      expect(lineNode.children[2].start_indices[0]).toEqual(9);
-      expect(lineNode.children[2].end_indices[0]).toEqual(11);
+      expect(lineNode.children[2].startIndices[0]).toEqual(9);
+      expect(lineNode.children[2].endIndices[0]).toEqual(11);
 
       // gap node ' DD to End'
-      expect(lineNode.children[3].annotation_type.name).toEqual(
+      expect(lineNode.children[3].annotationType.name).toEqual(
         NestedSet.GAP_ANNOTATION_TYPE_NAME,
       );
-      expect(lineNode.children[3].start_indices[0]).toEqual(11);
-      expect(lineNode.children[3].end_indices[0]).toEqual(14);
+      expect(lineNode.children[3].startIndices[0]).toEqual(11);
+      expect(lineNode.children[3].endIndices[0]).toEqual(14);
     }
   });
 });

@@ -1,20 +1,20 @@
 import { IAnnotationType } from "~/lib/model/iannotationType";
+import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class AnnotationType implements IAnnotationType {
   name: string;
-
-  color_id: number;
-
-  _id?: number;
+  colorId: number;
+  id?: number;
 
   constructor(annotationType: IAnnotationType) {
     this.name = annotationType.name;
-    this._id = annotationType._id;
-    this.color_id = annotationType.color_id;
+    this.id = annotationType.id;
+    this.colorId = annotationType.colorId;
   }
 
   toJSON() {
-    const { _id, ...json } = this;
-    return json;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...json } = this;
+    return JSONTransformer.transformFromCamelCase(json);
   }
 }

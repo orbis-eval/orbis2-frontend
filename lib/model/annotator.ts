@@ -1,12 +1,13 @@
 import { hash } from "ohash";
 import { IAnnotator } from "~/lib/model/iannotator";
 import { Role } from "~/lib/model/role";
+import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Annotator implements IAnnotator {
   name: string;
   roles: Role[];
   password?: string;
-  _id?: number;
+  id?: number;
 
   constructor(annotator: IAnnotator) {
     this.name = annotator.name;
@@ -15,11 +16,12 @@ export class Annotator implements IAnnotator {
       annotator.password = hash("");
     }
     this.password = annotator.password;
-    this._id = annotator._id;
+    this.id = annotator.id;
   }
 
   toJSON() {
-    const { _id, ...json } = this;
-    return json;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { id, ...json } = this;
+    return JSONTransformer.transformFromCamelCase(json);
   }
 }

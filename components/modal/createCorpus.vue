@@ -46,6 +46,7 @@ const corpusNotExists = (runName: string) => {
 const validationSchema = toTypedSchema(
   zod.object({
     corpusName: zod
+      // eslint-disable-next-line @typescript-eslint/naming-convention
       .string({ required_error: "Corpus Name is required" })
       .refine(corpusNotExists, {
         message: "Corpus with this name already exists",

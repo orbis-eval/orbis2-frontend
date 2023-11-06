@@ -20,9 +20,8 @@ export async function createAnnotation(
   if (annotationResponse instanceof Annotation) {
     const annotationNode = new NestedSetNode(annotationResponse);
 
-    if (annotation.annotation_type.color_id) {
-      annotationNode.annotation_type.color_id =
-        annotation.annotation_type.color_id;
+    if (annotation.annotationType.colorId) {
+      annotationNode.annotationType.colorId = annotation.annotationType.colorId;
     }
 
     // add the new node as child
@@ -55,16 +54,16 @@ export function createNestedSetNode(
     NestedSet.trimWithSpaces(
       new Annotation({
         key: "",
-        surface_forms: [textSpan.surfaceForm],
-        start_indices: [textSpan.start],
-        end_indices: [textSpan.end],
-        annotation_type: annotationType,
+        surfaceForms: [textSpan.surfaceForm],
+        startIndices: [textSpan.start],
+        endIndices: [textSpan.end],
+        annotationType,
         annotator,
-        run_id: runId,
-        document_id: documentId,
+        runId,
+        documentId,
         metadata: [],
         timestamp: new Date(),
-        _id: id,
+        id,
       }),
     ),
   );

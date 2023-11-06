@@ -7,7 +7,7 @@ export class DocumentFileReader {
     const promises = documentFilesToRead.map((file) => {
       return new Promise<void>((resolve, reject) => {
         const reader = new FileReader();
-        reader.onload = async (event: ProgressEvent<FileReader>) => {
+        reader.onload = (event: ProgressEvent<FileReader>) => {
           try {
             if (event.target) {
               const content = event.target.result;
@@ -15,7 +15,7 @@ export class DocumentFileReader {
                 const doc = new Document(JSON.parse(content));
                 doc.done = false;
                 doc.metadata = [];
-                doc.run_id = 0;
+                doc.runId = 0;
                 docs.push(doc);
               }
             }

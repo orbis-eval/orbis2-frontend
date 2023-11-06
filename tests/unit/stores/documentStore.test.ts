@@ -17,10 +17,10 @@ const createDocument = (
   done: boolean,
 ): Document => {
   return new Document({
-    _id: id,
+    id,
     content,
     key,
-    run_id: runId,
+    runId,
     metadata,
     done,
   });
@@ -36,7 +36,7 @@ function findDocumentById(
   docArray: Document[],
   targetId: number,
 ): Document | Error {
-  const doc = docArray.find((doc) => doc._id === targetId);
+  const doc = docArray.find((doc) => doc.id === targetId);
   if (doc) {
     return doc;
   } else {
@@ -48,27 +48,20 @@ function findDocumentById(
 vi.mock("~/lib/orbisApi/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
-      getDocuments: async (
-        runId: number,
-        pageSize: number | undefined = undefined,
-        skip: number = 0,
-      ): Promise<Document[] | Error> => {
+      getDocuments: (): Promise<Document[] | Error> => {
         return Parser.parseList(Document, Promise.resolve(documents));
       },
-      countDocuments: async (runId: number): Promise<Number | Error> => {
+      countDocuments: (): number => {
         return documents.length;
       },
-      nextDocument: async (
-        runId: number,
-        documentId: number,
-      ): Promise<Document | Error> => {
+      nextDocument: (documentId: number): Document | Error => {
         const id = documentId + 1;
         return findDocumentById(documents, id);
       },
-      previousDocument: async (
-        runId: number,
+      previousDocument: (
+        _runId: number,
         documentId: number,
-      ): Promise<Document | Error> => {
+      ): Document | Error => {
         const id = documentId - 1;
         return findDocumentById(documents, id);
       },

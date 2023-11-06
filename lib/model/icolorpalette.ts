@@ -1,5 +1,5 @@
 export interface IColorPalette {
-  palette_id: number;
+  paletteId: number;
   name: string;
   colors: [number];
 }
