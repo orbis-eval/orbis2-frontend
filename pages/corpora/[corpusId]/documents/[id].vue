@@ -46,19 +46,19 @@ onMounted(async () => {
     await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
     await documentStore.loadDocument(Number(route.params.id), $orbisApiService);
 
-    if (selectedRun.value._id) {
+    if (selectedRun.value.id) {
       await documentStore.countDocuments(
-        selectedRun.value._id,
+        selectedRun.value.id,
         $orbisApiService,
       );
       await colorPalettesStore.loadColorPalettes($orbisApiService);
 
-      if (documentStore.currentDocument._id) {
+      if (documentStore.currentDocument.id) {
         await annotationStore.loadAnnotations(
-          documentStore.currentDocument._id,
+          documentStore.currentDocument.id,
           documentStore.currentDocument.content,
-          selectedRun.value._id,
-          selectedRun.value.corpus.supported_annotation_types,
+          selectedRun.value.id,
+          selectedRun.value.corpus.supportedAnnotationTypes,
           $orbisApiService,
         );
       } else {

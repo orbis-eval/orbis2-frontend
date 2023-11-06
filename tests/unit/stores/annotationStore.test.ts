@@ -10,15 +10,15 @@ import { TextSpan } from "~/lib/model/textSpan";
 
 const annotationTypes = [
   new AnnotationType({
-    color_id: 1,
+    colorId: 1,
     name: "type1",
-    _id: 1,
+    id: 1,
   }),
 ];
 const annotator = new Annotator({
   name: "name",
   roles: [],
-  _id: 2,
+  id: 2,
 });
 
 const createMockedAnnotations = function (
@@ -28,16 +28,16 @@ const createMockedAnnotations = function (
 ) {
   return new Annotation({
     key: "my-key" + annotationId,
-    surface_forms: ["surfaceForm"],
-    start_indices: [startIndex],
-    end_indices: [endIndex],
-    annotation_type: annotationTypes[0],
+    surfaceForms: ["surfaceForm"],
+    startIndices: [startIndex],
+    endIndices: [endIndex],
+    annotationType: annotationTypes[0],
     annotator,
-    run_id: 1,
-    document_id: 1,
+    runId: 1,
+    documentId: 1,
     metadata: [],
     timestamp: new Date(),
-    _id: annotationId,
+    id: annotationId,
   });
 };
 
@@ -109,8 +109,8 @@ describe("AnnotationStore.loadAnnotations()", () => {
     // check if child of root-node is correct, only child should be the line-node
     const lineNode = annotationStore?.nestedSetRootNode?.children[0];
     expect(lineNode?.children.length).toEqual(5);
-    expect(lineNode?.start_indices[0]).toEqual(0);
-    expect(lineNode?.end_indices[0]).toEqual(40);
+    expect(lineNode?.startIndices[0]).toEqual(0);
+    expect(lineNode?.endIndices[0]).toEqual(40);
   });
 });
 

@@ -18,29 +18,29 @@ const createCorpus = (
     (annotationType) => new AnnotationType(annotationType),
   );
   return new Corpus({
-    _id: id,
+    id: id,
     name,
-    supported_annotation_types: supportedAnnotationTypes,
+    supportedAnnotationTypes: supportedAnnotationTypes,
   });
 };
 
 const corpus = createCorpus(1, "corpus name", [
-  { name: "annotation-type-1", color_id: 1 },
-  { name: "annotation-type-2", color_id: 2 },
+  { name: "annotation-type-1", colorId: 1 },
+  { name: "annotation-type-2", colorId: 2 },
 ]);
 
 const corpora = Array.from([
   createCorpus(1, "corpus name", [
-    { name: "annotation-type-1", color_id: 1 },
-    { name: "annotation-type-2", color_id: 2 },
+    { name: "annotation-type-1", colorId: 1 },
+    { name: "annotation-type-2", colorId: 2 },
   ]),
   createCorpus(2, "corpus name 2", [
-    { name: "annotation-type-1", color_id: 1 },
-    { name: "annotation-type-2", color_id: 2 },
+    { name: "annotation-type-1", colorId: 1 },
+    { name: "annotation-type-2", colorId: 2 },
   ]),
   createCorpus(3, "corpus name 3", [
-    { name: "annotation-type-1", color_id: 1 },
-    { name: "annotation-type-2", color_id: 2 },
+    { name: "annotation-type-1", colorId: 1 },
+    { name: "annotation-type-2", colorId: 2 },
   ]),
 ]);
 

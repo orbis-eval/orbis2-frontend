@@ -27,7 +27,7 @@ export const useRunStore = defineStore("run", () => {
     corpus: Corpus,
     orbisApiService: OrbisApiService,
   ) {
-    if (corpus._id === undefined) {
+    if (corpus.id === undefined) {
       console.error("No corpusId provided!");
       return;
     }
@@ -51,7 +51,7 @@ export const useRunStore = defineStore("run", () => {
       if (Array.isArray(loadedRuns) && loadedRuns.length > 0) {
         runs.value = loadedRuns;
         const isSelectedRunInLoadedRuns = loadedRuns.some(
-          (run) => run._id === selectedRun.value._id,
+          (run) => run.id === selectedRun.value.id,
         );
         if (!isSelectedRunInLoadedRuns || corpusId.value !== id) {
           selectedRun.value = loadedRuns[0];
@@ -64,7 +64,7 @@ export const useRunStore = defineStore("run", () => {
   }
 
   function changeToFirstRunIfSelectedRunIsDeleted(run: Run) {
-    if (selectedRun.value._id === run._id) {
+    if (selectedRun.value.id === run.id) {
       changeSelectedRun(runs.value[0]);
     }
   }
@@ -77,7 +77,7 @@ export const useRunStore = defineStore("run", () => {
         if (response instanceof Error) {
           console.error(response);
         } else if (response) {
-          runs.value = runs.value.filter((r) => r._id !== run._id);
+          runs.value = runs.value.filter((r) => r.id !== run.id);
           changeToFirstRunIfSelectedRunIsDeleted(run);
         } else {
           console.error("Something went wrong while deleting the run");

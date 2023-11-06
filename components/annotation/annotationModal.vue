@@ -19,7 +19,7 @@
       >
         <li
           v-for="(annotationType, index) in filteredAnnotationTypes"
-          :key="annotationType._id"
+          :key="annotationType.id"
           :class="{
             selectedAnnotationType: selectedAnnotationIndex === index,
           }"

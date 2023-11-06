@@ -15,7 +15,7 @@ export class DocumentFileReader {
                 const doc = new Document(JSON.parse(content));
                 doc.done = false;
                 doc.metadata = [];
-                doc.run_id = 0;
+                doc.runId = 0;
                 docs.push(doc);
               }
             }

@@ -33,52 +33,52 @@ describe("NestedSet.toTree(...)", () => {
 
       // the only children of root should be a line annotation
       const lineAnnotationNode = rootNode.children[0];
-      expect(lineAnnotationNode.annotation_type.name).toEqual(
+      expect(lineAnnotationNode.annotationType.name).toEqual(
         NestedSet.LINE_ANNOTATION_TYPE_NAME,
       );
 
       // check the gap-annotations in the line-node
-      expect(lineAnnotationNode.children[1].annotation_type.name).toEqual(
+      expect(lineAnnotationNode.children[1].annotationType.name).toEqual(
         NestedSet.GAP_ANNOTATION_TYPE_NAME,
       );
-      expect(lineAnnotationNode.children[1].start_indices[0]).toEqual(4);
-      expect(lineAnnotationNode.children[1].end_indices[0]).toEqual(6);
-      expect(lineAnnotationNode.children[3].annotation_type.name).toEqual(
+      expect(lineAnnotationNode.children[1].startIndices[0]).toEqual(4);
+      expect(lineAnnotationNode.children[1].endIndices[0]).toEqual(6);
+      expect(lineAnnotationNode.children[3].annotationType.name).toEqual(
         NestedSet.GAP_ANNOTATION_TYPE_NAME,
       );
-      expect(lineAnnotationNode.children[3].start_indices[0]).toEqual(8);
-      expect(lineAnnotationNode.children[3].end_indices[0]).toEqual(10);
+      expect(lineAnnotationNode.children[3].startIndices[0]).toEqual(8);
+      expect(lineAnnotationNode.children[3].endIndices[0]).toEqual(10);
 
       // check the node "AABB"
-      expect(lineAnnotationNode.children[0]._id).toEqual(
-        mockAnnotationNodes[0]._id,
+      expect(lineAnnotationNode.children[0].id).toEqual(
+        mockAnnotationNodes[0].id,
       );
       // check the childs of "AABB"
-      expect(lineAnnotationNode.children[0].children[0]._id).toEqual(
-        mockAnnotationNodes[1]._id,
+      expect(lineAnnotationNode.children[0].children[0].id).toEqual(
+        mockAnnotationNodes[1].id,
       );
       expect(
-        lineAnnotationNode.children[0].children[1].annotation_type.name,
+        lineAnnotationNode.children[0].children[1].annotationType.name,
       ).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
 
       // check the childs of "AA"
-      expect(
-        lineAnnotationNode.children[0].children[0].children[0]._id,
-      ).toEqual(mockAnnotationNodes[2]._id);
+      expect(lineAnnotationNode.children[0].children[0].children[0].id).toEqual(
+        mockAnnotationNodes[2].id,
+      );
       expect(
         lineAnnotationNode.children[0].children[0].children[0].children.length,
       ).toEqual(0);
       // check the gap annotation
       expect(
-        lineAnnotationNode.children[0].children[0].children[1].start_indices[0],
+        lineAnnotationNode.children[0].children[0].children[1].startIndices[0],
       ).toEqual(1);
       expect(
-        lineAnnotationNode.children[0].children[0].children[1].end_indices[0],
+        lineAnnotationNode.children[0].children[0].children[1].endIndices[0],
       ).toEqual(2);
 
       // check annotation "DD"
-      expect(lineAnnotationNode.children[2]._id).toEqual(
-        mockAnnotationNodes[3]._id,
+      expect(lineAnnotationNode.children[2].id).toEqual(
+        mockAnnotationNodes[3].id,
       );
       expect(lineAnnotationNode.children[2].children.length).toEqual(0);
     }
@@ -104,29 +104,29 @@ describe("NestedSet.toTree(...)", () => {
 
       // first node should be a line annotation
       const lineAnnotationNode = rootNode.children[0];
-      expect(lineAnnotationNode.annotation_type.name).toEqual(
+      expect(lineAnnotationNode.annotationType.name).toEqual(
         NestedSet.LINE_ANNOTATION_TYPE_NAME,
       );
 
       expect(
-        lineAnnotationNode.children[2].children[0].surface_forms[0],
+        lineAnnotationNode.children[2].children[0].surfaceForms[0],
       ).toEqual("CC ");
       expect(
-        lineAnnotationNode.children[2].children[0].start_indices[0],
+        lineAnnotationNode.children[2].children[0].startIndices[0],
       ).toEqual(6);
-      expect(lineAnnotationNode.children[2].children[0].end_indices[0]).toEqual(
+      expect(lineAnnotationNode.children[2].children[0].endIndices[0]).toEqual(
         9,
       );
-      expect(lineAnnotationNode.children[2].children[1]._id).toEqual(
-        mockAnnotations[2]._id,
+      expect(lineAnnotationNode.children[2].children[1].id).toEqual(
+        mockAnnotations[2].id,
       );
       expect(
-        lineAnnotationNode.children[2].children[2].surface_forms[0],
+        lineAnnotationNode.children[2].children[2].surfaceForms[0],
       ).toEqual(" EE");
       expect(
-        lineAnnotationNode.children[2].children[2].start_indices[0],
+        lineAnnotationNode.children[2].children[2].startIndices[0],
       ).toEqual(11);
-      expect(lineAnnotationNode.children[2].children[2].end_indices[0]).toEqual(
+      expect(lineAnnotationNode.children[2].children[2].endIndices[0]).toEqual(
         14,
       );
     }
@@ -148,10 +148,10 @@ describe("NestedSet.toTree(...)", () => {
     );
     expect(rootNode).toBeNull();
     expect(currentParseError.nodes.length).toEqual(2);
-    expect(currentParseError.nodes[0].start_indices[0]).toEqual(0);
-    expect(currentParseError.nodes[0].end_indices[0]).toEqual(2);
-    expect(currentParseError.nodes[1].start_indices[0]).toEqual(1);
-    expect(currentParseError.nodes[1].end_indices[0]).toEqual(3);
+    expect(currentParseError.nodes[0].startIndices[0]).toEqual(0);
+    expect(currentParseError.nodes[0].endIndices[0]).toEqual(2);
+    expect(currentParseError.nodes[1].startIndices[0]).toEqual(1);
+    expect(currentParseError.nodes[1].endIndices[0]).toEqual(3);
   });
 
   it("test creating tree from annotations without space between", () => {
@@ -173,13 +173,13 @@ describe("NestedSet.toTree(...)", () => {
       expect(rootNode.children.length).toEqual(1);
       // first node should be a line annotation
       const lineAnnotationNode = rootNode.children[0];
-      expect(lineAnnotationNode.annotation_type.name).toEqual(
+      expect(lineAnnotationNode.annotationType.name).toEqual(
         NestedSet.LINE_ANNOTATION_TYPE_NAME,
       );
-      expect(lineAnnotationNode.children[0].start_indices[0]).toEqual(0);
-      expect(lineAnnotationNode.children[0].end_indices[0]).toEqual(1);
-      expect(lineAnnotationNode.children[1].start_indices[0]).toEqual(1);
-      expect(lineAnnotationNode.children[1].end_indices[0]).toEqual(2);
+      expect(lineAnnotationNode.children[0].startIndices[0]).toEqual(0);
+      expect(lineAnnotationNode.children[0].endIndices[0]).toEqual(1);
+      expect(lineAnnotationNode.children[1].startIndices[0]).toEqual(1);
+      expect(lineAnnotationNode.children[1].endIndices[0]).toEqual(2);
     }
   });
 });
@@ -196,12 +196,12 @@ line3`;
       new Date(),
     );
     expect(lineNodes.length).toEqual(3);
-    expect(lineNodes[0].start_indices[0]).toEqual(0);
-    expect(lineNodes[0].end_indices[0]).toEqual(5);
-    expect(lineNodes[1].start_indices[0]).toEqual(6);
-    expect(lineNodes[1].end_indices[0]).toEqual(11);
-    expect(lineNodes[2].start_indices[0]).toEqual(12);
-    expect(lineNodes[2].end_indices[0]).toEqual(17);
+    expect(lineNodes[0].startIndices[0]).toEqual(0);
+    expect(lineNodes[0].endIndices[0]).toEqual(5);
+    expect(lineNodes[1].startIndices[0]).toEqual(6);
+    expect(lineNodes[1].endIndices[0]).toEqual(11);
+    expect(lineNodes[2].startIndices[0]).toEqual(12);
+    expect(lineNodes[2].endIndices[0]).toEqual(17);
   });
 });
 
@@ -211,8 +211,8 @@ describe("NestedSet.trimWhiteSpaces(...)", () => {
       mockAnnotationNode("  A  ", 0, 5, 1, annotationType, annotator),
     );
     NestedSet.trimWithSpaces(nodeWithWhiteSpace);
-    expect(nodeWithWhiteSpace.end_indices[0]).toEqual(3);
-    expect(nodeWithWhiteSpace.start_indices[0]).toEqual(2);
+    expect(nodeWithWhiteSpace.endIndices[0]).toEqual(3);
+    expect(nodeWithWhiteSpace.startIndices[0]).toEqual(2);
   });
 
   it("mock with whitespaces in the beginning", () => {
@@ -220,8 +220,8 @@ describe("NestedSet.trimWhiteSpaces(...)", () => {
       mockAnnotationNode("  A", 0, 3, 1, annotationType, annotator),
     );
     NestedSet.trimWithSpaces(nodeWithWhiteSpace);
-    expect(nodeWithWhiteSpace.start_indices[0]).toEqual(2);
-    expect(nodeWithWhiteSpace.end_indices[0]).toEqual(3);
+    expect(nodeWithWhiteSpace.startIndices[0]).toEqual(2);
+    expect(nodeWithWhiteSpace.endIndices[0]).toEqual(3);
   });
 
   it("mock with whitespaces in the end", () => {
@@ -229,8 +229,8 @@ describe("NestedSet.trimWhiteSpaces(...)", () => {
       mockAnnotationNode("A   ", 0, 4, 1, annotationType, annotator),
     );
     NestedSet.trimWithSpaces(nodeWithWhiteSpace);
-    expect(nodeWithWhiteSpace.start_indices[0]).toEqual(0);
-    expect(nodeWithWhiteSpace.end_indices[0]).toEqual(1);
+    expect(nodeWithWhiteSpace.startIndices[0]).toEqual(0);
+    expect(nodeWithWhiteSpace.endIndices[0]).toEqual(1);
   });
 });
 
@@ -245,7 +245,7 @@ describe("test json serialization", () => {
       annotator,
     );
     expect("_id" in annotationNode).toBeTruthy();
-    expect("_id" in annotationNode.annotation_type).toBeTruthy();
+    expect("_id" in annotationNode.annotationType).toBeTruthy();
     expect("_id" in annotationNode.annotator).toBeTruthy();
     // serialize to json
     const annotationJsonString = JSON.stringify(annotationNode);

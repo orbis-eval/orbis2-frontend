@@ -1,22 +1,23 @@
 import { AnnotationType } from "~/lib/model/annotationType";
 import { ICorpus } from "~/lib/model/icorpus";
+import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Corpus implements ICorpus {
   name: string;
-  supported_annotation_types: AnnotationType[];
-  _id?: number;
+  supportedAnnotationTypes: AnnotationType[];
+  id?: number;
 
   constructor(corpus: ICorpus) {
     this.name = corpus.name;
-    this.supported_annotation_types = corpus.supported_annotation_types.map(
+    this.supportedAnnotationTypes = corpus.supportedAnnotationTypes.map(
       (supportedAnnotationType) => new AnnotationType(supportedAnnotationType),
     );
-    this._id = corpus._id;
+    this.id = corpus.id;
   }
 
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { _id, ...json } = this;
-    return json;
+    const { id, ...json } = this;
+    return JSONTransformer.transformFromCamelCase(json);
   }
 }

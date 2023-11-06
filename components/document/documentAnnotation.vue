@@ -6,7 +6,7 @@
           <!-- context modal gui for selecting the type -->
           <AnnotationModal
             ref="annotationTypeModal"
-            :annotation-types="selectedRun.corpus.supported_annotation_types"
+            :annotation-types="selectedRun.corpus.supportedAnnotationTypes"
             :is-visible="showAnnotationModal"
             :left-position="mousePosX"
             :selection-surface-form="selectionSurfaceForm"
@@ -29,9 +29,9 @@
       <h2 class="text-4xl">Tree could not be rendered</h2>
       Annotations that possibly are overlapping:
       <ul>
-        <li v-for="node in errorNodes" :key="node._id">
-          {{ node.surface_forms[0] }}:({{ node.start_indices[0] }}/{{
-            node.end_indices[0]
+        <li v-for="node in errorNodes" :key="node.id">
+          {{ node.surfaceForms[0] }}:({{ node.startIndices[0] }}/{{
+            node.endIndices[0]
           }})
         </li>
       </ul>
@@ -171,7 +171,7 @@ function updateAnnotations(currentSelection: any) {
 // called when creating a new annotation
 async function createAnnotation(annotationType: AnnotationType) {
   try {
-    if (selectedRun.value._id) {
+    if (selectedRun.value.id) {
       const textSpan = new TextSpan(
         selection.value.word,
         selection.value.start,
@@ -181,7 +181,7 @@ async function createAnnotation(annotationType: AnnotationType) {
         textSpan,
         annotationType,
         annotator,
-        selectedRun.value._id,
+        selectedRun.value.id,
         Number(route.params.id),
         $orbisApiService,
       );

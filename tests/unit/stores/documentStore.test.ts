@@ -17,10 +17,10 @@ const createDocument = (
   done: boolean,
 ): Document => {
   return new Document({
-    _id: id,
+    id: id,
     content,
     key,
-    run_id: runId,
+    runId: runId,
     metadata,
     done,
   });
@@ -36,7 +36,7 @@ function findDocumentById(
   docArray: Document[],
   targetId: number,
 ): Document | Error {
-  const doc = docArray.find((doc) => doc._id === targetId);
+  const doc = docArray.find((doc) => doc.id === targetId);
   if (doc) {
     return doc;
   } else {

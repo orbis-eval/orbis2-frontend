@@ -1,8 +1,7 @@
 <template>
   <div
     v-if="
-      nestedSetNode?.annotation_type.name ===
-      NestedSet.LINE_ANNOTATION_TYPE_NAME
+      nestedSetNode?.annotationType.name === NestedSet.LINE_ANNOTATION_TYPE_NAME
     "
   >
     <span
@@ -10,11 +9,11 @@
       class="p-1"
       @mouseup="onMouseUp"
     >
-      {{ nestedSetNode?.surface_forms[0] }}
+      {{ nestedSetNode?.surfaceForms[0] }}
     </span>
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode.children"
-      :key="nestedSetChildNode._id"
+      :key="nestedSetChildNode.id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -24,12 +23,12 @@
   </div>
   <span
     v-else-if="
-      nestedSetNode?.annotation_type.name === NestedSet.GAP_ANNOTATION_TYPE_NAME
+      nestedSetNode?.annotationType.name === NestedSet.GAP_ANNOTATION_TYPE_NAME
     "
     class="pb-1 pt-1 text-lg tracking-wider"
     @mouseup="onMouseUp"
   >
-    {{ nestedSetNode.surface_forms[0] }}
+    {{ nestedSetNode.surfaceForms[0] }}
   </span>
   <span
     v-else-if="nestedSetNode?.parent"
@@ -37,11 +36,11 @@
       borderColor:
         '#' +
         colorPalette?.getHexadecimalColorValue(
-          nestedSetNode.annotation_type.color_id,
+          nestedSetNode.annotationType.colorId,
         ),
     }"
     :class="[
-      nestedSetNode._id === highlightedNestedSetNodeId
+      nestedSetNode.id === highlightedNestedSetNodeId
         ? 'rounded-t bg-neutral-400 text-white'
         : '',
       'border-b-4',
@@ -49,15 +48,15 @@
       'pt-1',
       'text-lg',
       'tracking-wider',
-      nestedSetNode._id ? 'annotation' : '',
+      nestedSetNode.id ? 'annotation' : '',
     ]"
   >
     <span v-if="nestedSetNode.children.length === 0" @mouseup="onMouseUp">
-      {{ nestedSetNode.surface_forms[0] }}
+      {{ nestedSetNode.surfaceForms[0] }}
     </span>
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode.children"
-      :key="nestedSetChildNode._id"
+      :key="nestedSetChildNode.id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -68,7 +67,7 @@
   <span v-else class="p-1">
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode?.children"
-      :key="nestedSetChildNode._id"
+      :key="nestedSetChildNode.id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -114,9 +113,9 @@ function onMouseUp() {
 
       // get start/end index of selected text, correct with offset of selected node
       const selectionStartIndex =
-        range.startOffset + props.nestedSetNode.start_indices[0];
+        range.startOffset + props.nestedSetNode.startIndices[0];
       const selectionEndIndex =
-        range.endOffset + props.nestedSetNode.start_indices[0];
+        range.endOffset + props.nestedSetNode.startIndices[0];
       emit("updateAnnotations", {
         start: selectionStartIndex,
         end: selectionEndIndex,

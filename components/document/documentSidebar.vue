@@ -29,11 +29,11 @@
         <tbody>
           <tr
             v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
-            :key="nestedSetNode._id"
+            :key="nestedSetNode.id"
             class="border-b bg-gray-50 hover:underline dark:border-gray-700 dark:bg-gray-800"
             @mouseleave="emit('setHighlightNestedSetNode', null)"
             @mouseout="emit('setHighlightNestedSetNode', null)"
-            @mouseover="emit('setHighlightNestedSetNode', nestedSetNode._id)"
+            @mouseover="emit('setHighlightNestedSetNode', nestedSetNode.id)"
           >
             <td class="p-2">
               <div
@@ -41,16 +41,16 @@
                   background:
                     '#' +
                     currentColorPalette.getHexadecimalColorValue(
-                      nestedSetNode.annotation_type.color_id,
+                      nestedSetNode.annotationType.colorId,
                     ),
                 }"
                 class="h-10 w-10 rounded-lg"
               ></div>
             </td>
-            <td class="p-2">{{ nestedSetNode.start_indices[0] }}</td>
-            <td class="p-2">{{ nestedSetNode.end_indices[0] }}</td>
-            <td class="p-2">{{ nestedSetNode.surface_forms[0] }}</td>
-            <td class="p-2">{{ nestedSetNode.annotation_type.name }}</td>
+            <td class="p-2">{{ nestedSetNode.startIndices[0] }}</td>
+            <td class="p-2">{{ nestedSetNode.endIndices[0] }}</td>
+            <td class="p-2">{{ nestedSetNode.surfaceForms[0] }}</td>
+            <td class="p-2">{{ nestedSetNode.annotationType.name }}</td>
             <td class="p-2">
               <OrbisButton
                 :on-click="async () => deleteAnnotation(nestedSetNode)"

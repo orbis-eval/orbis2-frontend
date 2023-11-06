@@ -1,5 +1,6 @@
 import { TypedInternalResponse } from "nitropack";
 import { Error } from "~/lib/model/error";
+import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Parser {
   /**
@@ -33,8 +34,9 @@ export class Parser {
     try {
       const data = await promise;
 
-      if ((data as T) !== undefined) {
-        return new constructor(data as T);
+      if (data && (data as T)) {
+        const camelCaseData = JSONTransformer.transformToCamelCase(data);
+        return new constructor(camelCaseData as T);
       }
 
       return new Error(
@@ -61,12 +63,13 @@ export class Parser {
     promise: Promise<TypedInternalResponse<string>>,
   ): Promise<U[] | Error> {
     try {
-      const data = await promise;
+      const response: any = await promise;
 
-      if (Array.isArray(data)) {
+      if (Array.isArray(response)) {
         const result: U[] = [];
-        for (const d of data) {
-          result.push(new constructor(d));
+        for (const item of response) {
+          const transformedItem = JSONTransformer.transformToCamelCase(item);
+          result.push(new constructor(transformedItem as T));
         }
         return result;
       }

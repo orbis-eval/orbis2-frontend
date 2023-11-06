@@ -26,12 +26,12 @@ describe("NestedSetNode.getAnnotations(...)", () => {
     if (rootNode) {
       const annotations = rootNode.allAnnotationNodes();
       expect(annotations.length).toEqual(3);
-      expect(annotations[0].start_indices[0]).toEqual(0);
-      expect(annotations[0].end_indices[0]).toEqual(2);
-      expect(annotations[1].start_indices[0]).toEqual(6);
-      expect(annotations[1].end_indices[0]).toEqual(14);
-      expect(annotations[2].start_indices[0]).toEqual(9);
-      expect(annotations[2].end_indices[0]).toEqual(11);
+      expect(annotations[0].startIndices[0]).toEqual(0);
+      expect(annotations[0].endIndices[0]).toEqual(2);
+      expect(annotations[1].startIndices[0]).toEqual(6);
+      expect(annotations[1].endIndices[0]).toEqual(14);
+      expect(annotations[2].startIndices[0]).toEqual(9);
+      expect(annotations[2].endIndices[0]).toEqual(11);
     }
   });
 });
@@ -47,7 +47,7 @@ describe("test json serialization", () => {
       annotator,
     );
     expect("_id" in annotationNode).toBeTruthy();
-    expect("_id" in annotationNode.annotation_type).toBeTruthy();
+    expect("_id" in annotationNode.annotationType).toBeTruthy();
     expect("_id" in annotationNode.annotator).toBeTruthy();
     // serialize to json
     const annotationJsonString = JSON.stringify(annotationNode);

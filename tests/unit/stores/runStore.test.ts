@@ -10,14 +10,14 @@ import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 
 const createRun = (id: number, name: string, description: string): Run => {
   return new Run({
-    _id: id,
+    id: id,
     name,
     description,
     corpus: new Corpus({
       name: "corpus name",
-      _id: 1,
-      supported_annotation_types: [
-        new AnnotationType({ name: "annotation-type-1", color_id: 1 }),
+      id: 1,
+      supportedAnnotationTypes: [
+        new AnnotationType({ name: "annotation-type-1", colorId: 1 }),
       ],
     }),
   });

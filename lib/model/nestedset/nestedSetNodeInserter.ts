@@ -20,9 +20,9 @@ export class NestedSetNodeInserter {
         nodeToUpdate.children = [];
         const newParentNode = NestedSet.toTree(
           annotationNodes,
-          nodeToUpdate.surface_forms[0],
-          nodeToUpdate.run_id,
-          nodeToUpdate.document_id,
+          nodeToUpdate.surfaceForms[0],
+          nodeToUpdate.runId,
+          nodeToUpdate.documentId,
           nodeToUpdate.timestamp,
           errorCallback,
           nodeToUpdate,
@@ -48,8 +48,8 @@ export class NestedSetNodeInserter {
   ): NestedSetNode {
     for (const child of node.children) {
       if (
-        child.start_indices[0] <= nodeToInsert.start_indices[0] &&
-        child.end_indices[0] >= nodeToInsert.end_indices[0]
+        child.startIndices[0] <= nodeToInsert.startIndices[0] &&
+        child.endIndices[0] >= nodeToInsert.endIndices[0]
       ) {
         return this.findParentNode(child, nodeToInsert);
       }

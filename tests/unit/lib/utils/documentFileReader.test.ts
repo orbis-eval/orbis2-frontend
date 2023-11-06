@@ -41,7 +41,7 @@ describe("DocumentFileReader", () => {
     expect(result[0]).toBeInstanceOf(Document);
     expect(result[0].content).toEqual("value");
     expect(result[0].metadata).toEqual([]);
-    expect(result[0].run_id).toEqual(0);
+    expect(result[0].runId).toEqual(0);
   });
 
   it("should read two files and convert to Documents", async () => {
@@ -61,12 +61,12 @@ describe("DocumentFileReader", () => {
     expect(result[0]).toBeInstanceOf(Document);
     expect(result[0].content).toEqual("value");
     expect(result[0].metadata).toEqual([]);
-    expect(result[0].run_id).toEqual(0);
+    expect(result[0].runId).toEqual(0);
 
     expect(result[1]).toBeInstanceOf(Document);
     expect(result[1].content).toEqual("value2");
     expect(result[1].metadata).toEqual([]);
-    expect(result[1].run_id).toEqual(0);
+    expect(result[1].runId).toEqual(0);
   });
 
   it("should handle FileReader error", async () => {

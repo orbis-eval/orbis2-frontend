@@ -33,16 +33,16 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
     const newAnnotation = new NestedSetNode(
       new Annotation({
         key: "",
-        surface_forms: ["EE"],
-        start_indices: [12],
-        end_indices: [14],
-        annotation_type: annotationType,
+        surfaceForms: ["EE"],
+        startIndices: [12],
+        endIndices: [14],
+        annotationType: annotationType,
         annotator,
-        run_id: 1,
-        document_id: 1,
+        runId: 1,
+        documentId: 1,
         metadata: [],
         timestamp: new Date(),
-        _id: -1,
+        id: -1,
       }),
     );
 
@@ -60,45 +60,45 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
       // check if child of root-node is correct, only child should be the line-node
       const lineNode = rootNode.children[0];
       expect(lineNode.children.length).toEqual(3);
-      expect(lineNode.start_indices[0]).toEqual(0);
-      expect(lineNode.end_indices[0]).toEqual(14);
+      expect(lineNode.startIndices[0]).toEqual(0);
+      expect(lineNode.endIndices[0]).toEqual(14);
 
       // child 'AA'
-      expect(lineNode.children[0].start_indices[0]).toEqual(0);
-      expect(lineNode.children[0].end_indices[0]).toEqual(2);
+      expect(lineNode.children[0].startIndices[0]).toEqual(0);
+      expect(lineNode.children[0].endIndices[0]).toEqual(2);
 
       // gap node ' BB '
-      expect(lineNode.children[1].annotation_type.name).toEqual(
+      expect(lineNode.children[1].annotationType.name).toEqual(
         NestedSet.GAP_ANNOTATION_TYPE_NAME,
       );
-      expect(lineNode.children[1].start_indices[0]).toEqual(2);
-      expect(lineNode.children[1].end_indices[0]).toEqual(6);
+      expect(lineNode.children[1].startIndices[0]).toEqual(2);
+      expect(lineNode.children[1].endIndices[0]).toEqual(6);
 
       // node 'CC DD EE'
       const node2 = lineNode.children[2];
-      expect(node2.start_indices[0]).toEqual(6);
-      expect(node2.end_indices[0]).toEqual(14);
+      expect(node2.startIndices[0]).toEqual(6);
+      expect(node2.endIndices[0]).toEqual(14);
       expect(node2.children.length).toEqual(4);
 
       // gap node 'CC' that was calculated newly after inserting 'EE' as child of 'CC DD EE'
-      expect(node2.children[0].surface_forms[0]).toEqual("CC ");
-      expect(node2.children[0].start_indices[0]).toEqual(6);
-      expect(node2.children[0].end_indices[0]).toEqual(9);
+      expect(node2.children[0].surfaceForms[0]).toEqual("CC ");
+      expect(node2.children[0].startIndices[0]).toEqual(6);
+      expect(node2.children[0].endIndices[0]).toEqual(9);
 
       // annotation 'DD'
-      expect(node2.children[1].surface_forms[0]).toEqual("DD");
-      expect(node2.children[1].start_indices[0]).toEqual(9);
-      expect(node2.children[1].end_indices[0]).toEqual(11);
+      expect(node2.children[1].surfaceForms[0]).toEqual("DD");
+      expect(node2.children[1].startIndices[0]).toEqual(9);
+      expect(node2.children[1].endIndices[0]).toEqual(11);
 
       // gap-annotation
-      expect(node2.children[2].surface_forms[0]).toEqual(" ");
-      expect(node2.children[2].start_indices[0]).toEqual(11);
-      expect(node2.children[2].end_indices[0]).toEqual(12);
+      expect(node2.children[2].surfaceForms[0]).toEqual(" ");
+      expect(node2.children[2].startIndices[0]).toEqual(11);
+      expect(node2.children[2].endIndices[0]).toEqual(12);
 
       // annotation 'EE' that was added after tree was rendered
-      expect(node2.children[3].surface_forms[0]).toEqual("EE");
-      expect(node2.children[3].start_indices[0]).toEqual(12);
-      expect(node2.children[3].end_indices[0]).toEqual(14);
+      expect(node2.children[3].surfaceForms[0]).toEqual("EE");
+      expect(node2.children[3].startIndices[0]).toEqual(12);
+      expect(node2.children[3].endIndices[0]).toEqual(14);
     }
   });
 
@@ -118,16 +118,16 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
     const newAnnotation = new NestedSetNode(
       new Annotation({
         key: "",
-        surface_forms: ["EE"],
-        start_indices: [12],
-        end_indices: [14],
-        annotation_type: annotationType,
+        surfaceForms: ["EE"],
+        startIndices: [12],
+        endIndices: [14],
+        annotationType: annotationType,
         annotator,
-        run_id: 1,
-        document_id: 1,
+        runId: 1,
+        documentId: 1,
         metadata: [],
         timestamp: new Date(),
-        _id: -1,
+        id: -1,
       }),
     );
 
@@ -145,20 +145,20 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
       // check if child of root-node is correct, only child should be the line-node
       const lineNode = rootNode.children[0];
       expect(lineNode.children.length).toEqual(2);
-      expect(lineNode.start_indices[0]).toEqual(0);
-      expect(lineNode.end_indices[0]).toEqual(14);
+      expect(lineNode.startIndices[0]).toEqual(0);
+      expect(lineNode.endIndices[0]).toEqual(14);
 
       // gap node ' EE '
-      expect(lineNode.children[0].annotation_type.name).toEqual(
+      expect(lineNode.children[0].annotationType.name).toEqual(
         NestedSet.GAP_ANNOTATION_TYPE_NAME,
       );
-      expect(lineNode.children[0].start_indices[0]).toEqual(0);
-      expect(lineNode.children[0].end_indices[0]).toEqual(12);
+      expect(lineNode.children[0].startIndices[0]).toEqual(0);
+      expect(lineNode.children[0].endIndices[0]).toEqual(12);
       expect(lineNode.children[0].children.length).toEqual(0);
       // child 'EE'
-      expect(lineNode.children[1].surface_forms[0]).toEqual("EE");
-      expect(lineNode.children[1].start_indices[0]).toEqual(12);
-      expect(lineNode.children[1].end_indices[0]).toEqual(14);
+      expect(lineNode.children[1].surfaceForms[0]).toEqual("EE");
+      expect(lineNode.children[1].startIndices[0]).toEqual(12);
+      expect(lineNode.children[1].endIndices[0]).toEqual(14);
       expect(lineNode.children[1].children.length).toEqual(0);
     }
   });
