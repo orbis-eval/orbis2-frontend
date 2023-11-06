@@ -93,15 +93,12 @@ describe("transformToCamelCase", () => {
         {
           name: "annotation-type1",
           color_id: 1,
-          _id: 123,
         },
         {
           name: "annotation-type2",
           color_id: 2,
-          _id: 123,
         },
       ],
-      _id: 123,
     };
 
     const transformedObject =
