@@ -9,7 +9,7 @@
     "postinstall": "nuxt prepare",
     "test": "vitest",
     "test:coverage": "vitest --coverage",
-    "lint:js": "eslint --ext \".ts,.vue\" --ignore-path .gitignore .",
+    "lint:js": "eslint --ext \".ts,.vue\" .",
     "lint:prettier": "prettier --check .",
     "lint": "yarn lint:js && yarn lint:prettier",
     "lintfix": "prettier --write --list-different . && yarn lint:js --fix"
