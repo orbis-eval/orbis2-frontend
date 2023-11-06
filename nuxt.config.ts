@@ -44,4 +44,5 @@ export default defineNuxtConfig({
       "storeToRefs", // import { storeToRefs } from 'pinia'
     ],
   },
+  ssr: false,
 });
