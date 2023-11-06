@@ -1,12 +1,12 @@
 import { refDebounced } from "@vueuse/core";
 
-const _title = ref("");
-const title = refDebounced(_title, 100);
+const titleIntern = ref("");
+const title = refDebounced(titleIntern, 100);
 
 export const useTitle = (paramTitle?: string) => {
   const setTitle = (newTitle: string) => {
     if (newTitle.length > 0) {
-      _title.value = newTitle;
+      titleIntern.value = newTitle;
       useSeoMeta({
         title: newTitle,
         ogTitle: newTitle,

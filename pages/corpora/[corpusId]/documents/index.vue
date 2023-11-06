@@ -53,23 +53,6 @@ const { currentPage } = storeToRefs(documentStore);
 const { totalPages } = storeToRefs(documentStore);
 const { setTitle } = useTitle();
 
-onMounted(async () => {
-  loading.value = true;
-  try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
-    setTitle(corpus.value.name);
-    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
-    await countDocuments();
-    await loadDocuments();
-    // @Todo: Error message for user
-  } finally {
-    loading.value = false;
-  }
-});
-
 // called when another page is selected
 async function pageChanged(nextPage: number) {
   if (selectedRun.value.id) {
@@ -107,6 +90,23 @@ async function countDocuments() {
 async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
+
+onMounted(async () => {
+  loading.value = true;
+  try {
+    await corpusStore.loadCorpus(
+      Number(route.params.corpusId),
+      $orbisApiService,
+    );
+    setTitle(corpus.value.name);
+    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
+    await countDocuments();
+    await loadDocuments();
+    // @Todo: Error message for user
+  } finally {
+    loading.value = false;
+  }
+});
 
 onMounted(async () => {
   loading.value = true;
