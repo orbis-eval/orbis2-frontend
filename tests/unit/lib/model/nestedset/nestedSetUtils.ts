@@ -43,13 +43,13 @@ export function mockAnnotationNode(
       surfaceForms: [surfaceForm],
       startIndices: [start],
       endIndices: [end],
-      annotationType: annotationType,
+      annotationType,
       annotator,
       runId: 1,
       documentId: 1,
       metadata: [],
       timestamp: new Date(),
-      id: id,
+      id,
     }),
   );
 }

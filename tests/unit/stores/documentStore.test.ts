@@ -17,10 +17,10 @@ const createDocument = (
   done: boolean,
 ): Document => {
   return new Document({
-    id: id,
+    id,
     content,
     key,
-    runId: runId,
+    runId,
     metadata,
     done,
   });

@@ -10,7 +10,7 @@ import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 
 const createRun = (id: number, name: string, description: string): Run => {
   return new Run({
-    id: id,
+    id,
     name,
     description,
     corpus: new Corpus({
