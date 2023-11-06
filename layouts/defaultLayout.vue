@@ -4,7 +4,7 @@
       class="sticky top-0 z-10 col-span-full bg-base-200 px-4 py-2 text-gray-200"
     >
       <div class="flex flex-row items-center">
-        <NuxtLink :to="'/'">
+        <NuxtLink :to="homeLink">
           <img
             src="~/assets/img/Orbis-Logo-Transparent_2.png"
             alt="Orbis-Eval logo"
@@ -12,7 +12,7 @@
           />
         </NuxtLink>
         <div class="ml-4 text-lg">
-          <NuxtLink :to="'/'">{{ title }}</NuxtLink>
+          <NuxtLink :to="homeLink">{{ title }}</NuxtLink>
         </div>
       </div>
     </header>
@@ -36,6 +36,18 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
+import { useCorpusStore } from "~/stores/corpusStore";
+
+const corpusStore = useCorpusStore();
+const { corpus } = storeToRefs(corpusStore);
 const { title } = useTitle("Orbis NG");
+
+const homeLink = computed(() => {
+  if (corpus.value.hasOwnProperty("_id")) {
+    return `/corpora/${corpus.value._id}/documents`;
+  }
+  return "/";
+});
 </script>
