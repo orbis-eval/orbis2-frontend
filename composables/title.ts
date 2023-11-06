@@ -1,7 +1,7 @@
 import { refDebounced } from "@vueuse/core";
 
 const titleIntern = ref("");
-const title = refDebounced(titleIntern, 100);
+const title = refDebounced(titleIntern, 200);
 
 export const useTitle = (paramTitle?: string) => {
   const setTitle = (newTitle: string) => {

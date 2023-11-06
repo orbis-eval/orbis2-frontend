@@ -45,8 +45,8 @@ const { corpus } = storeToRefs(corpusStore);
 const { title } = useTitle("Orbis NG");
 
 const homeLink = computed(() => {
-  if (Object.prototype.hasOwnProperty.call(corpus.value, "_id")) {
-    return `/corpora/${corpus.value._id}/documents`;
+  if (corpus.value && corpus.value.id) {
+    return `/corpora/${corpus.value.id}/documents`;
   }
   return "/";
 });

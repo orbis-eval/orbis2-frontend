@@ -52,10 +52,15 @@ const { corpus } = storeToRefs(corpusStore);
 
 onMounted(async () => {
   loading.value = true;
-  setTitle(corpus.value.name);
   try {
+    await corpusStore.loadCorpus(
+      Number(route.params.corpusId),
+      $orbisApiService,
+    );
     await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
     await documentStore.loadDocument(Number(route.params.id), $orbisApiService);
+
+    setTitle(corpus.value.name);
 
     if (selectedRun.value.id) {
       await documentStore.countDocuments(
