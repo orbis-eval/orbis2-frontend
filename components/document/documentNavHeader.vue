@@ -14,7 +14,7 @@
       <OhVueIcon name="md-navigatebefore-twotone" scale="2.5" />
     </OrbisButton>
     <div class="grow text-center">
-      <span class="font-bold">ID:</span> {{ currentDocument._id }}
+      <span class="font-bold">ID:</span> {{ currentDocument.id }}
     </div>
     <OrbisButton
       :disabled="nrOfDocuments <= 1"
