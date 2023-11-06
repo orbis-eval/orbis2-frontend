@@ -3,7 +3,7 @@
     <LoadingSpinner v-if="loading" class="mt-5" />
     <div v-else class="mt-5">
       <div
-        class="mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral mx-10"
+        class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral"
       >
         <DocumentNavHeader
           @loadingFinished="loading = false"
