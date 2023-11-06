@@ -53,7 +53,6 @@ import { storeToRefs } from "pinia";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { useAnnotationStore } from "~/stores/annotationStore";
-import { Run } from "~/lib/model/run";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { useRunStore } from "~/stores/runStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
