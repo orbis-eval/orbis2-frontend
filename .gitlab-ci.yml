@@ -12,6 +12,9 @@ include:
   - project: "nlp/team/ci-templates"
     file: "node-js/.publish-k8s.yaml"
 
+default:
+  interruptible: true
+
 cache:
   # following paths are automatically cached and available for subsequent jobs
   paths:
