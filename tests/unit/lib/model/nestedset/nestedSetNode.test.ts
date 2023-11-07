@@ -3,7 +3,6 @@ import { NestedSet } from "~/lib/model/nestedset/nestedSet";
 import {
   annotationType,
   annotator,
-  errorCallBack,
   mockAnnotationNode,
 } from "~/tests/unit/lib/model/nestedset/nestedSetUtils";
 
@@ -20,7 +19,6 @@ describe("NestedSetNode.getAnnotations(...)", () => {
       1,
       1,
       new Date(),
-      errorCallBack,
     );
     expect(rootNode).not.toBeNull();
     if (rootNode) {

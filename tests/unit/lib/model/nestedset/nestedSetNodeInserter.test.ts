@@ -5,7 +5,6 @@ import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import {
   annotationType,
   annotator,
-  errorCallBack,
   mockAnnotationNode,
 } from "~/tests/unit/lib/model/nestedset/nestedSetUtils";
 import { NestedSetNodeInserter } from "~/lib/model/nestedset/nestedSetNodeInserter";
@@ -26,7 +25,6 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
       1,
       1,
       new Date(),
-      errorCallBack,
     );
 
     // insert annotation 'EE' into node 'CC DD EE'
@@ -51,7 +49,6 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
       NestedSetNodeInserter.insertAnnotationNode(
         rootNode,
         newAnnotation,
-        errorCallBack,
       );
 
       // check that the parent was set correctly
@@ -111,7 +108,6 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
       1,
       1,
       new Date(),
-      errorCallBack,
     );
 
     // insert annotation 'EE' into node 'CC DD EE'
@@ -136,7 +132,6 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
       NestedSetNodeInserter.insertAnnotationNode(
         rootNode,
         newAnnotation,
-        errorCallBack,
       );
 
       // check that the parent was set correctly

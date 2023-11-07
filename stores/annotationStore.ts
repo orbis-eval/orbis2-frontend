@@ -44,11 +44,6 @@ export const useAnnotationStore = defineStore("annotation", () => {
     });
   }
 
-  function parseErrorCallBack() {
-    // TODO: Only placeholder for the moment
-    console.error("Creating nestedNodeSet failed");
-  }
-
   async function loadAnnotations(
     documentId: number,
     documentContent: string,
@@ -77,7 +72,6 @@ export const useAnnotationStore = defineStore("annotation", () => {
           runId,
           1,
           new Date(),
-          parseErrorCallBack,
         );
         annotationHistory.reset();
       } else {

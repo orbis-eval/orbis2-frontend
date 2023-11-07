@@ -1,12 +1,11 @@
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 
-export class NestedSetParseError {
+export class NestedSetParseError extends Error {
   nodes: NestedSetNode[];
 
-  message: string;
-
-  constructor(nodes: NestedSetNode[], message: string) {
+  constructor(nodes: NestedSetNode[]) {
+    super("Errors in the nested set tree");
+    this.name = "NestedSetParseError";
     this.nodes = nodes;
-    this.message = message;
   }
 }

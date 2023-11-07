@@ -1,7 +1,6 @@
 import { Annotation } from "~/lib/model/annotation";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { NestedSet } from "~/lib/model/nestedset/nestedSet";
-import { NestedSetParseError } from "~/lib/model/nestedset/nestedSetParseError";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
@@ -24,16 +23,7 @@ export async function createAnnotation(
   }
 
   // add the new node as child
-  NestedSetNodeInserter.insertAnnotationNode(
-    rootNode,
-    annotationNode,
-    (parseError: NestedSetParseError) => {
-      // TODO: do proper error handling
-      console.warn(
-        `could not update the tree, error: ${JSON.stringify(parseError)}`,
-      );
-    },
-  );
+  NestedSetNodeInserter.insertAnnotationNode(rootNode, annotationNode);
   return annotationNode;
 }
 

@@ -1,13 +1,13 @@
+import { fail } from "assert";
 import { describe, expect, it } from "vitest";
 import { NestedSet } from "~/lib/model/nestedset/nestedSet";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import {
   annotationType,
   annotator,
-  currentParseError,
-  errorCallBack,
   mockAnnotationNode,
 } from "~/tests/unit/lib/model/nestedset/nestedSetUtils";
+import { NestedSetParseError } from "~/lib/model/nestedset/nestedSetParseError";
 
 describe("NestedSet.toTree(...)", () => {
   it("test calculating the tree", () => {
@@ -24,7 +24,6 @@ describe("NestedSet.toTree(...)", () => {
       1,
       1,
       new Date(),
-      errorCallBack,
     );
     expect(rootNode).not.toBeNull();
     if (rootNode) {
@@ -96,7 +95,6 @@ describe("NestedSet.toTree(...)", () => {
       1,
       1,
       new Date(),
-      errorCallBack,
     );
     expect(rootNode).not.toBeNull();
     if (rootNode) {
@@ -138,20 +136,23 @@ describe("NestedSet.toTree(...)", () => {
       mockAnnotationNode("AB", 0, 2, 1, annotationType, annotator),
       mockAnnotationNode("BC", 1, 3, 2, annotationType, annotator),
     ];
-    const rootNode = NestedSet.toTree(
-      mockAnnotations,
-      documentString,
-      1,
-      1,
-      new Date(),
-      errorCallBack,
-    );
-    expect(rootNode).toBeNull();
-    expect(currentParseError.nodes.length).toEqual(2);
-    expect(currentParseError.nodes[0].startIndices[0]).toEqual(0);
-    expect(currentParseError.nodes[0].endIndices[0]).toEqual(2);
-    expect(currentParseError.nodes[1].startIndices[0]).toEqual(1);
-    expect(currentParseError.nodes[1].endIndices[0]).toEqual(3);
+    try {
+      NestedSet.toTree(mockAnnotations, documentString, 1, 1, new Date());
+      fail(
+        "Expected NestedSet.toTree to throw a NestedSetParseError, but it did not throw",
+      );
+    } catch (error) {
+      expect(error).toBeInstanceOf(NestedSetParseError);
+      if (error instanceof NestedSetParseError) {
+        expect(error.nodes.length).toEqual(2);
+        expect(error.nodes[0].startIndices[0]).toEqual(0);
+        expect(error.nodes[0].endIndices[0]).toEqual(2);
+        expect(error.nodes[1].startIndices[0]).toEqual(1);
+        expect(error.nodes[1].endIndices[0]).toEqual(3);
+      } else {
+        fail("Wrong type of error thrown" + error);
+      }
+    }
   });
 
   it("test creating tree from annotations without space between", () => {
@@ -166,7 +167,6 @@ describe("NestedSet.toTree(...)", () => {
       1,
       1,
       new Date(),
-      errorCallBack,
     );
     expect(rootNode).not.toBeNull();
     if (rootNode) {

@@ -1,7 +1,6 @@
 import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
-import { NestedSetParseError } from "~/lib/model/nestedset/nestedSetParseError";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 
 export const annotationType: AnnotationType = new AnnotationType({
@@ -15,19 +14,6 @@ export const annotator: Annotator = new Annotator({
   roles: [],
   id: 1,
 });
-
-// eslint-disable-next-line import/no-mutable-exports
-export let currentParseError: NestedSetParseError;
-
-export const errorCallBack = (parseError: NestedSetParseError) => {
-  console.warn("the following nodes could not be parsed:");
-  for (const node of parseError.nodes) {
-    console.warn(
-      `${node.surfaceForms[0]}/(${node.startIndices[0]}:${node.endIndices[0]})`,
-    );
-  }
-  currentParseError = parseError;
-};
 
 export function mockAnnotationNode(
   surfaceForm: string,

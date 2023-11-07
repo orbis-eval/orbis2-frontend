@@ -1,28 +1,25 @@
 import { NestedSet } from "~/lib/model/nestedset/nestedSet";
-import { NestedSetParseError } from "~/lib/model/nestedset/nestedSetParseError";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 
 export class NestedSetNodeDeleter {
-  public static deleteAnnotationNode(
-    annotationToDelete: NestedSetNode,
-    errorCallback: (parseError: NestedSetParseError) => void,
-  ) {
+  public static deleteAnnotationNode(annotationToDelete: NestedSetNode) {
     const nodeToUpdate = this.getNodeToUpdate(annotationToDelete);
     const annotations = nodeToUpdate.allAnnotationNodes();
     this.deleteAnnotation(annotations, annotationToDelete);
     nodeToUpdate.children = []; // delete all childs before re-calculating the tree
-    const rootNode = NestedSet.toTree(
-      annotations,
-      nodeToUpdate.surfaceForms[0],
-      nodeToUpdate.runId,
-      nodeToUpdate.documentId,
-      nodeToUpdate.timestamp,
-      errorCallback,
-      nodeToUpdate,
-      false,
-    );
-    if (rootNode) {
+    try {
+      const rootNode = NestedSet.toTree(
+        annotations,
+        nodeToUpdate.surfaceForms[0],
+        nodeToUpdate.runId,
+        nodeToUpdate.documentId,
+        nodeToUpdate.timestamp,
+        nodeToUpdate,
+        false,
+      );
       nodeToUpdate.children = rootNode.children;
+    } catch (e) {
+      console.error("could not delete annotation in tree");
     }
   }
 

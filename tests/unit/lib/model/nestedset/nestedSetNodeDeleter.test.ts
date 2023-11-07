@@ -3,7 +3,6 @@ import { NestedSet } from "~/lib/model/nestedset/nestedSet";
 import {
   annotationType,
   annotator,
-  errorCallBack,
   mockAnnotationNode,
 } from "~/tests/unit/lib/model/nestedset/nestedSetUtils";
 import { NestedSetNodeDeleter } from "~/lib/model/nestedset/nestedSetNodeDeleter";
@@ -24,16 +23,12 @@ describe("NestedSetNodeDeleter.deleteAnnotationNode(...)", () => {
       1,
       1,
       new Date(),
-      errorCallBack,
     );
 
     if (rootNode) {
       // dekete a new annotation
       const annotationToDelete = rootNode.children[0].children[2];
-      NestedSetNodeDeleter.deleteAnnotationNode(
-        annotationToDelete,
-        errorCallBack,
-      );
+      NestedSetNodeDeleter.deleteAnnotationNode(annotationToDelete);
 
       // check if child of root-node is correct, only child should be the line-node
       const lineNode = rootNode.children[0];
