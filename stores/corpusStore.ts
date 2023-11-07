@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
-import { Error } from "~/lib/model/error";
 import { Document } from "~/lib/model/document";
 import { DocumentFileReader } from "~/lib/utils/documentFileReader";
 
@@ -19,15 +18,13 @@ export const useCorpusStore = defineStore("corpus", () => {
     try {
       const response = await orbisApiService.getCorpora();
 
-      if (response instanceof Error) {
-        return new Error("Something is wrong with the response");
-      }
-
       if (Array.isArray(response) && response.length > 0) {
         corpora.value = response;
       }
     } catch (error) {
-      return new Error("An error occurred while fetching corpora.");
+      throw new Error("An error occurred while fetching corpora.", {
+        cause: error,
+      });
     }
   }
 
@@ -41,7 +38,9 @@ export const useCorpusStore = defineStore("corpus", () => {
         (corpus) => corpus.id !== corpusToDelete.id,
       );
     } catch (error) {
-      return new Error("An error occurred while deleting a corpus");
+      throw new Error("An error occurred while deleting a corpus", {
+        cause: error,
+      });
     }
   }
 
@@ -50,13 +49,9 @@ export const useCorpusStore = defineStore("corpus", () => {
     orbisApiService: OrbisApiService,
   ) {
     try {
-      const loadedCorpus = await orbisApiService.getCorpus(corpusId);
-
-      if (loadedCorpus instanceof Corpus) {
-        corpus.value = loadedCorpus;
-      }
+      corpus.value = await orbisApiService.getCorpus(corpusId);
     } catch (error) {
-      return new Error("An error occurred while fetching a corpus.");
+      throw new Error("An error occurred while fetching a corpus.");
     }
   }
 
@@ -66,7 +61,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     orbisApiService: OrbisApiService,
   ) {
     try {
-      let newCorpus: Corpus | Error = new Corpus({
+      let newCorpus: Corpus = new Corpus({
         name: corpusName,
         supportedAnnotationTypes: [],
       });
@@ -75,13 +70,11 @@ export const useCorpusStore = defineStore("corpus", () => {
         docs = await DocumentFileReader.readFiles(chosenFiles);
       }
       newCorpus = await orbisApiService.createCorpus(newCorpus, docs);
-      if (newCorpus instanceof Corpus) {
-        corpora.value.push(newCorpus);
-      } else {
-        return new Error("An error occurred while adding a new corpus");
-      }
+      corpora.value.push(newCorpus);
     } catch (error) {
-      return new Error("An error occurred while adding a new corpus");
+      throw new Error("An error occurred while adding a new corpus", {
+        cause: error,
+      });
     }
   }
 

@@ -1,5 +1,4 @@
 import { TypedInternalResponse } from "nitropack";
-import { Error } from "~/lib/model/error";
 import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Parser {
@@ -10,13 +9,9 @@ export class Parser {
    */
   static async parseEmptyResponse(
     promise: Promise<TypedInternalResponse<string>>,
-  ): Promise<boolean | Error> {
-    try {
-      await promise;
-      return true;
-    } catch (error) {
-      return new Error("Error while parsing empty response.");
-    }
+  ): Promise<boolean> {
+    await promise;
+    return true;
   }
 
   /**
@@ -30,24 +25,17 @@ export class Parser {
   static async parse<T, U extends T>(
     constructor: new (data: T) => U,
     promise: Promise<TypedInternalResponse<string>>,
-  ): Promise<U | Error> {
-    try {
-      const data = await promise;
+  ): Promise<U> {
+    const data = await promise;
 
-      if (data && (data as T)) {
-        const camelCaseData = JSONTransformer.transformToCamelCase(data);
-        return new constructor(camelCaseData as T);
-      }
-
-      return new Error(
-        `Response in Promise is expected to be of type ${typeof data}`,
-      );
-    } catch (error) {
-      if (error instanceof Error) {
-        return error;
-      }
-      return new Error(String(error));
+    if (data && (data as T)) {
+      const camelCaseData = JSONTransformer.transformToCamelCase(data);
+      return new constructor(camelCaseData as T);
     }
+
+    throw new Error(
+      `Response in Promise is expected to be of type ${typeof data}`,
+    );
   }
 
   /**
@@ -61,25 +49,18 @@ export class Parser {
   static async parseList<T, U extends T>(
     constructor: new (data: T) => U,
     promise: Promise<TypedInternalResponse<string>>,
-  ): Promise<U[] | Error> {
-    try {
-      const response: any = await promise;
+  ): Promise<U[]> {
+    const response: any = await promise;
 
-      if (Array.isArray(response)) {
-        const result: U[] = [];
-        for (const item of response) {
-          const transformedItem = JSONTransformer.transformToCamelCase(item);
-          result.push(new constructor(transformedItem as T));
-        }
-        return result;
+    if (Array.isArray(response)) {
+      const result: U[] = [];
+      for (const item of response) {
+        const transformedItem = JSONTransformer.transformToCamelCase(item);
+        result.push(new constructor(transformedItem as T));
       }
-
-      return new Error("Response in Promise is expected to be a list.");
-    } catch (error) {
-      if (error instanceof Error) {
-        return error;
-      }
-      return new Error(String(error));
+      return result;
     }
+
+    throw new Error("Response in Promise is expected to be a list.");
   }
 }

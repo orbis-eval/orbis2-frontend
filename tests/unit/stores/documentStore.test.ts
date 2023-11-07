@@ -3,7 +3,6 @@ import { createPinia, setActivePinia } from "pinia";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Document } from "~/lib/model/document";
 import { useDocumentStore } from "~/stores/documentStore";
-import { Error } from "~/lib/model/error";
 import { Parser } from "~/lib/parser";
 import { Metadata } from "~/lib/model/metadata";
 

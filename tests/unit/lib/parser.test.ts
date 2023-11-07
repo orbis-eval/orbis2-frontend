@@ -1,7 +1,6 @@
 import { TypedInternalResponse } from "nitropack";
 import { describe, it, expect } from "vitest";
 import { Parser } from "~/lib/parser";
-import { Error } from "~/lib/model/error";
 
 interface IData {
   content: string;
@@ -27,13 +26,12 @@ describe("Parser", () => {
   });
 
   it("should catch error for empty response", async () => {
-    const mockResponse = new Promise<TypedInternalResponse<string>>(
-      (_resolve, reject) => reject(new Error("Mocked Error")),
+    const mockError = new Error("Mocked Error");
+    const mockResponse = Promise.reject(mockError);
+
+    await expect(Parser.parseEmptyResponse(mockResponse)).rejects.toThrow(
+      mockError,
     );
-
-    const result = await Parser.parseEmptyResponse(mockResponse);
-
-    expect(result).toEqual(new Error("Error while parsing empty response."));
   });
 
   it("should parse a given type from a promise", async () => {
@@ -49,13 +47,12 @@ describe("Parser", () => {
   });
 
   it("should catch error while parsing a given type", async () => {
-    const mockResponse = new Promise<TypedInternalResponse<string>>(
-      (_resolve, reject) => reject(new Error("Mocked Error")),
+    const mockError = new Error("Mocked Error");
+    const mockResponse = Promise.reject(mockError);
+
+    await expect(Parser.parse(DataModel, mockResponse)).rejects.toThrow(
+      mockError,
     );
-
-    const result = await Parser.parse(DataModel, mockResponse);
-
-    expect(result).toEqual(new Error("Mocked Error"));
   });
 
   it("should parse a list of a given type from a promise", async () => {
@@ -65,10 +62,6 @@ describe("Parser", () => {
     );
 
     const result = await Parser.parseList(DataModel, mockResponse);
-
-    if (result instanceof Error) {
-      throw result;
-    }
 
     expect(result).toHaveLength(2);
     expect(result[0]).toBeInstanceOf(DataModel);
@@ -83,19 +76,17 @@ describe("Parser", () => {
       resolve(mockData as unknown as TypedInternalResponse<string>),
     );
 
-    const result = await Parser.parseList(DataModel, mockResponse);
-    expect(result).toEqual(
-      new Error("Response in Promise is expected to be a list."),
+    await expect(Parser.parseList(DataModel, mockResponse)).rejects.toThrow(
+      "Response in Promise is expected to be a list.",
     );
   });
 
   it("should catch error while parsing a list of a given type", async () => {
-    const mockResponse = new Promise<TypedInternalResponse<string>>(
-      (_resolve, reject) => reject(new Error("Mocked Error")),
+    const mockError = new Error("Mocked Error");
+    const mockResponse = Promise.reject(mockError);
+
+    await expect(Parser.parseList(DataModel, mockResponse)).rejects.toThrow(
+      mockError,
     );
-
-    const result = await Parser.parseList(DataModel, mockResponse);
-
-    expect(result).toEqual(new Error("Mocked Error"));
   });
 });

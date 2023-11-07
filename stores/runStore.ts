@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { Run } from "~/lib/model/run";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
-import { Error } from "~/lib/model/error";
 
 // const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
 
@@ -27,28 +26,20 @@ export const useRunStore = defineStore("run", () => {
     corpus: Corpus,
     orbisApiService: OrbisApiService,
   ) {
-    if (corpus.id === undefined) {
-      console.error("No corpusId provided!");
-      return;
-    }
-
     try {
       const run = await orbisApiService.createRun(newRun, corpus);
-
-      if (run instanceof Error) {
-        console.log(run);
-        return new Error("Something is wrong with the run response");
-      }
       runs.value.push(run);
     } catch (error) {
-      return new Error("An error occurred while creating a run.");
+      throw new Error("An error occurred while creating a run.", {
+        cause: error,
+      });
     }
   }
 
   async function loadRuns(id: number, orbisApiService: OrbisApiService) {
     try {
       const loadedRuns = await orbisApiService.getRuns(id);
-      if (Array.isArray(loadedRuns) && loadedRuns.length > 0) {
+      if (loadedRuns.length > 0) {
         runs.value = loadedRuns;
         const isSelectedRunInLoadedRuns = loadedRuns.some(
           (run) => run.id === selectedRun.value.id,
@@ -59,7 +50,9 @@ export const useRunStore = defineStore("run", () => {
         corpusId.value = id;
       }
     } catch (error) {
-      return new Error("An error occurred while fetching runs.");
+      throw new Error("An error occurred while fetching runs.", {
+        cause: error,
+      });
     }
   }
 
@@ -72,21 +65,16 @@ export const useRunStore = defineStore("run", () => {
   async function deleteRun(run: Run, orbisApiService: OrbisApiService) {
     try {
       if (runs.value.length > 1) {
-        const response = await orbisApiService.deleteRun(run);
-
-        if (response instanceof Error) {
-          console.error(response);
-        } else if (response) {
-          runs.value = runs.value.filter((r) => r.id !== run.id);
-          changeToFirstRunIfSelectedRunIsDeleted(run);
-        } else {
-          console.error("Something went wrong while deleting the run");
-        }
+        await orbisApiService.deleteRun(run);
+        runs.value = runs.value.filter((r) => r.id !== run.id);
+        changeToFirstRunIfSelectedRunIsDeleted(run);
       } else {
         console.error("Cannot delete the last run");
       }
     } catch (error) {
-      return new Error("An error occurred while fetching runs.");
+      throw new Error("An error occurred while fetching runs.", {
+        cause: error,
+      });
     }
   }
 

@@ -4,7 +4,6 @@ import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
 import { Corpus } from "~/lib/model/corpus";
 import { AnnotationType } from "~/lib/model/annotationType";
-import { Error } from "~/lib/model/error";
 import { Parser } from "~/lib/parser";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 

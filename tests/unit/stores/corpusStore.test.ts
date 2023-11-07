@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, vi, it } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
-import { Error } from "~/lib/model/error";
 import { Parser } from "~/lib/parser";
 import { Corpus } from "~/lib/model/corpus";
 import { AnnotationType } from "~/lib/model/annotationType";

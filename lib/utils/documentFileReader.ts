@@ -1,5 +1,4 @@
 import { Document } from "~/lib/model/document";
-import { Error } from "~/lib/model/error";
 
 export class DocumentFileReader {
   static async readFiles(documentFilesToRead: File[]): Promise<Document[]> {

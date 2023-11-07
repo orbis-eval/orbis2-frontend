@@ -3,7 +3,6 @@ import { ref } from "vue";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { NestedSet } from "~/lib/model/nestedset/nestedSet";
-import { Error } from "~/lib/model/error";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { CreateAnnotationCommand } from "~/lib/utils/annotation/createAnnotationCommand";
@@ -62,34 +61,32 @@ export const useAnnotationStore = defineStore("annotation", () => {
         runId,
         documentId,
       );
-      if (Array.isArray(annotationsFromDb)) {
-        const mappedAnnotations = mapAnnotations(
-          annotationsFromDb,
-          annotationTypes,
+      const mappedAnnotations = mapAnnotations(
+        annotationsFromDb,
+        annotationTypes,
+      );
+
+      if (mappedAnnotations) {
+        const annotations = mappedAnnotations.map(
+          (annotation) => new NestedSetNode(annotation),
         );
 
-        if (mappedAnnotations) {
-          const annotations = mappedAnnotations.map(
-            (annotation) => new NestedSetNode(annotation),
-          );
-
-          nestedSetRootNode.value = NestedSet.toTree(
-            annotations,
-            documentContent,
-            runId,
-            1,
-            new Date(),
-            parseErrorCallBack,
-          );
-          annotationHistory.reset();
-        } else {
-          console.error("Annotations could not be loaded");
-        }
+        nestedSetRootNode.value = NestedSet.toTree(
+          annotations,
+          documentContent,
+          runId,
+          1,
+          new Date(),
+          parseErrorCallBack,
+        );
+        annotationHistory.reset();
       } else {
-        console.error(annotationsFromDb.errorMessage);
+        console.error("Annotations could not be loaded");
       }
     } catch (error) {
-      return new Error("An error occurred while loading annotations");
+      throw new Error("An error occurred while loading annotations", {
+        cause: error,
+      });
     }
   }
 

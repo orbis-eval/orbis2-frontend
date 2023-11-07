@@ -2,7 +2,6 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Document } from "~/lib/model/document";
-import { Error } from "~/lib/model/error";
 
 export const useDocumentStore = defineStore("document", () => {
   const documents = ref([] as Document[]);
@@ -26,19 +25,15 @@ export const useDocumentStore = defineStore("document", () => {
     skip: number = 0,
   ) {
     try {
-      const response = await orbisApiService.getDocuments(
+      documents.value = await orbisApiService.getDocuments(
         runId,
         pageSize,
         skip,
       );
-
-      if (Array.isArray(response)) {
-        documents.value = response;
-      } else {
-        return new Error("The response of the documents seems invalid.");
-      }
     } catch (error) {
-      return new Error("An error occurred while fetching documents.");
+      throw new Error("An error occurred while fetching documents.", {
+        cause: error,
+      });
     }
   }
 
@@ -47,36 +42,25 @@ export const useDocumentStore = defineStore("document", () => {
     orbisApiService: OrbisApiService,
   ) {
     try {
-      const document = await orbisApiService.getDocument(documentId);
-      if (document instanceof Document) {
-        currentDocument.value = document;
-      } else {
-        console.error(document.errorMessage);
-        // TODO, 06.01.2023 anf: correct error handling
-        currentDocument.value.content = "ERROR";
-      }
+      currentDocument.value = await orbisApiService.getDocument(documentId);
     } catch (error) {
-      return new Error(
+      throw new Error(
         "An error occurred while fetching document " + documentId,
+        {
+          cause: error,
+        },
       );
     }
   }
 
   async function nextDocument(runId: number, orbisApiService: OrbisApiService) {
     if (!currentDocument.value.id) {
-      return new Error("No valid id for current Document");
+      throw new Error("No valid id for current Document");
     }
-    const document = await orbisApiService.nextDocument(
+    currentDocument.value = await orbisApiService.nextDocument(
       runId,
       currentDocument.value.id,
     );
-    if (document instanceof Document) {
-      currentDocument.value = document;
-    } else {
-      console.error(document.errorMessage);
-      // TODO, 06.01.2023 anf: correct error handling
-      currentDocument.value.content = "ERROR";
-    }
   }
 
   async function previousDocument(
@@ -84,19 +68,12 @@ export const useDocumentStore = defineStore("document", () => {
     orbisApiService: OrbisApiService,
   ) {
     if (!currentDocument.value.id) {
-      return new Error("No valid id for current Document");
+      throw new Error("No valid id for current Document");
     }
-    const document = await orbisApiService.previousDocument(
+    currentDocument.value = await orbisApiService.previousDocument(
       runId,
       currentDocument.value.id,
     );
-    if (document instanceof Document) {
-      currentDocument.value = document;
-    } else {
-      console.error(document.errorMessage);
-      // TODO, 06.01.2023 anf: correct error handling
-      currentDocument.value.content = "ERROR";
-    }
   }
 
   async function countDocuments(
@@ -107,7 +84,9 @@ export const useDocumentStore = defineStore("document", () => {
       const response = await orbisApiService.countDocuments(runId);
       nrOfDocuments.value = Number(response);
     } catch (error) {
-      return new Error("An error occurred while fetching documents.");
+      throw new Error("An error occurred while fetching documents.", {
+        cause: error,
+      });
     }
   }
 

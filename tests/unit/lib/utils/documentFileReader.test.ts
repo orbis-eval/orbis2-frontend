@@ -1,7 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { DocumentFileReader } from "~/lib/utils/documentFileReader";
 import { Document } from "~/lib/model/document";
-import { Error } from "~/lib/model/error";
 
 const mockFileReader = (resultContent: string[], throwError = false) => {
   global.FileReader = class {

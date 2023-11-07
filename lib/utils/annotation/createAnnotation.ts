@@ -17,29 +17,24 @@ export async function createAnnotation(
 
   const annotationResponse = await orbisApiService.createAnnotation(annotation);
 
-  if (annotationResponse instanceof Annotation) {
-    const annotationNode = new NestedSetNode(annotationResponse);
+  const annotationNode = new NestedSetNode(annotationResponse);
 
-    if (annotation.annotationType.colorId) {
-      annotationNode.annotationType.colorId = annotation.annotationType.colorId;
-    }
-
-    // add the new node as child
-    NestedSetNodeInserter.insertAnnotationNode(
-      rootNode,
-      annotationNode,
-      (parseError: NestedSetParseError) => {
-        // TODO: do proper error handling
-        console.warn(
-          `could not update the tree, error: ${JSON.stringify(parseError)}`,
-        );
-      },
-    );
-    return annotationNode;
-  } else {
-    // TODO, 06.01.2023 anf: correct error handling
-    console.error(annotationResponse.errorMessage);
+  if (annotation.annotationType.colorId) {
+    annotationNode.annotationType.colorId = annotation.annotationType.colorId;
   }
+
+  // add the new node as child
+  NestedSetNodeInserter.insertAnnotationNode(
+    rootNode,
+    annotationNode,
+    (parseError: NestedSetParseError) => {
+      // TODO: do proper error handling
+      console.warn(
+        `could not update the tree, error: ${JSON.stringify(parseError)}`,
+      );
+    },
+  );
+  return annotationNode;
 }
 
 export function createNestedSetNode(
