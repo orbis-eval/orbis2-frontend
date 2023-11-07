@@ -46,10 +46,7 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
 
     if (rootNode) {
       // insert a new annotation
-      NestedSetNodeInserter.insertAnnotationNode(
-        rootNode,
-        newAnnotation,
-      );
+      NestedSetNodeInserter.insertAnnotationNode(rootNode, newAnnotation);
 
       // check that the parent was set correctly
       expect(newAnnotation.parent).not.toBeNull();
@@ -102,13 +99,7 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
   it("testing inserting node into a tree without annotations", () => {
     const documentString = "AA BB CC DD EE";
 
-    const rootNode = NestedSet.toTree(
-      [],
-      documentString,
-      1,
-      1,
-      new Date(),
-    );
+    const rootNode = NestedSet.toTree([], documentString, 1, 1, new Date());
 
     // insert annotation 'EE' into node 'CC DD EE'
     const newAnnotation = new NestedSetNode(
@@ -129,10 +120,7 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
 
     if (rootNode) {
       // insert a new annotation
-      NestedSetNodeInserter.insertAnnotationNode(
-        rootNode,
-        newAnnotation,
-      );
+      NestedSetNodeInserter.insertAnnotationNode(rootNode, newAnnotation);
 
       // check that the parent was set correctly
       expect(newAnnotation.parent).not.toBeNull();
