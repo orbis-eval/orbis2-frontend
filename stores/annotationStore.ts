@@ -13,6 +13,7 @@ import { TextSpan } from "~/lib/model/textSpan";
 
 export const useAnnotationStore = defineStore("annotation", () => {
   const nestedSetRootNode = ref({} as NestedSetNode | null);
+  const selectedAnnotation = ref({} as NestedSetNode | null);
   const annotationHistory = new AnnotationCommandHistory();
 
   const isUndoDisabled = ref(true);
@@ -44,6 +45,10 @@ export const useAnnotationStore = defineStore("annotation", () => {
     });
   }
 
+  function setSelectedAnnotation(annotation: NestedSetNode) {
+    selectedAnnotation.value = annotation;
+  }
+
   async function loadAnnotations(
     documentId: number,
     documentContent: string,
@@ -62,7 +67,7 @@ export const useAnnotationStore = defineStore("annotation", () => {
       );
 
       if (mappedAnnotations) {
-        const annotations = mappedAnnotations.map(
+        let annotations = mappedAnnotations.map(
           (annotation) => new NestedSetNode(annotation),
         );
 
@@ -74,6 +79,13 @@ export const useAnnotationStore = defineStore("annotation", () => {
           new Date(),
         );
         annotationHistory.reset();
+
+        annotations = nestedSetRootNode.value.allAnnotationNodes();
+        if (annotations.length > 0) {
+          selectedAnnotation.value = annotations[0];
+        } else {
+          selectedAnnotation.value = null;
+        }
       } else {
         console.error("Annotations could not be loaded");
       }
@@ -146,6 +158,8 @@ export const useAnnotationStore = defineStore("annotation", () => {
     nestedSetRootNode,
     isUndoDisabled,
     isRedoDisabled,
+    selectedAnnotation,
+    setSelectedAnnotation,
     loadAnnotations,
     createAnnotation,
     deleteAnnotation,

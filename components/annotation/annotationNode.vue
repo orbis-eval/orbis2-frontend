@@ -40,7 +40,7 @@
         ),
     }"
     :class="[
-      nestedSetNode.id === highlightedNestedSetNodeId
+      highlightedNestedSetNodeId.includes(Number(nestedSetNode.id))
         ? 'rounded-t bg-neutral-400 text-white'
         : '',
       'border-b-4',
@@ -85,7 +85,7 @@ import { ColorPalette } from "~/lib/model/colorpalette";
 const props = defineProps<{
   nestedSetNode: NestedSetNode;
   colorPalette: ColorPalette;
-  highlightedNestedSetNodeId: number | null;
+  highlightedNestedSetNodeId: number[];
 }>();
 
 const emit = defineEmits(["updateAnnotations", "deleteAnnotation"]);

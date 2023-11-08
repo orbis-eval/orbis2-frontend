@@ -61,7 +61,7 @@ import AnnotationModal from "~/components/annotation/annotationModal.vue";
 import { TextSpan } from "~/lib/model/textSpan";
 
 defineProps<{
-  highlightedNestedSetNodeId: number | null;
+  highlightedNestedSetNodeId: number[];
 }>();
 
 const { $orbisApiService } = useNuxtApp();

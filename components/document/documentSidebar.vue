@@ -1,69 +1,97 @@
 <template>
   <div v-if="!loading" id="document-sidebar" class="flex h-full flex-col">
-    <div class="mt-5 grow-0">
-      <OrbisButton :on-click="undoAnnotation" :disabled="isUndoDisabled">
-        <OhVueIcon name="la-undo-alt-solid" />
-      </OrbisButton>
-      <OrbisButton :on-click="redoAnnotation" :disabled="isRedoDisabled">
-        <OhVueIcon name="la-redo-alt-solid" />
-      </OrbisButton>
-    </div>
-    <div v-if="nestedSetRootNode" class="flex min-h-0 grow flex-col">
-      <h2 class="grow-0 p-2 text-4xl">Annotations</h2>
-      <div class="min-h-0 flex-1 overflow-auto">
-        <table
-          aria-label="List of annotations"
-          class="border-spacing-1 text-gray-500 dark:text-gray-400"
+    <div class="flex h-full w-full flex-col bg-gray-800 pt-5 text-white">
+      <div class="p-4">
+        <div class="text-lg font-bold">Selection Info</div>
+        <div class="mt-2 rounded bg-gray-700 p-2">
+          <div v-if="selectedAnnotation">
+            <div class="flex items-center justify-between">
+              <span
+                :style="{
+                  color:
+                    '#' +
+                    currentColorPalette.getHexadecimalColorValue(
+                      selectedAnnotation.annotationType.colorId,
+                    ),
+                }"
+                class="text-sm"
+                >{{ selectedAnnotation.annotationType.name }}</span
+              >
+            </div>
+            <div class="mt-1">{{ selectedAnnotation.surfaceForms[0] }}</div>
+            <div class="mt-3 flex flex-col">
+              <span class="mb-1 text-sm"
+                >Text section: {{ selectedAnnotation.startIndices[0] }} -
+                {{ selectedAnnotation.endIndices[0] }}</span
+              >
+              <span class="mb-1 text-sm"
+                >Key: {{ selectedAnnotation.key }}</span
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grow-0 pl-4">
+        <OrbisButton
+          :disabled="isUndoDisabled"
+          :on-click="undoAnnotation"
+          class="mr-4"
         >
-          <thead
-            class="bg-gray-50 text-left text-lg uppercase text-gray-700 dark:bg-gray-700 dark:text-gray-400"
+          <OhVueIcon name="la-undo-alt-solid" />
+        </OrbisButton>
+        <OrbisButton :disabled="isRedoDisabled" :on-click="redoAnnotation">
+          <OhVueIcon name="la-redo-alt-solid" />
+        </OrbisButton>
+      </div>
+
+      <div class="flex-1 overflow-auto p-4">
+        <div class="mb-2 text-lg font-bold">Annotations</div>
+        <div v-if="nestedSetRootNode" class="space-y-2">
+          <div
+            v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
+            :key="nestedSetNode.id"
           >
-            <tr>
-              <th class="p-2"></th>
-              <th class="p-2">start</th>
-              <th class="p-2">end</th>
-              <th class="p-2">surface</th>
-              <th class="p-2">type</th>
-              <th class="p-2"></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
-              :key="nestedSetNode.id"
-              class="border-b bg-gray-50 hover:underline dark:border-gray-700 dark:bg-gray-800"
-              @mouseleave="emit('setHighlightNestedSetNode', null)"
-              @mouseout="emit('setHighlightNestedSetNode', null)"
-              @mouseover="emit('setHighlightNestedSetNode', nestedSetNode.id)"
+            <div
+              :class="
+                nestedSetNode === selectedAnnotation
+                  ? 'bg-gray-500'
+                  : 'bg-gray-700'
+              "
+              class="flex cursor-pointer items-center rounded p-2 hover:bg-gray-500"
+              @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
+              @mouseleave="
+                emit('setHighlightNestedSetNode', [selectedAnnotation?.id])
+              "
+              @mouseover="
+                emit('setHighlightNestedSetNode', [
+                  selectedAnnotation?.id,
+                  nestedSetNode.id,
+                ])
+              "
             >
-              <td class="p-2">
-                <div
-                  :style="{
-                    background:
-                      '#' +
-                      currentColorPalette.getHexadecimalColorValue(
-                        nestedSetNode.annotationType.colorId,
-                      ),
-                  }"
-                  class="h-10 w-10 rounded-lg"
-                ></div>
-              </td>
-              <td class="p-2">{{ nestedSetNode.startIndices[0] }}</td>
-              <td class="p-2">{{ nestedSetNode.endIndices[0] }}</td>
-              <td class="p-2">{{ nestedSetNode.surfaceForms[0] }}</td>
-              <td class="p-2">{{ nestedSetNode.annotationType.name }}</td>
-              <td class="p-2">
-                <OrbisButton
-                  :on-click="async () => deleteAnnotation(nestedSetNode)"
-                  size="xs"
-                >
-                  Delete
-                  <OhVueIcon name="md-deleteforever-outlined" />
-                </OrbisButton>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              <div
+                :style="{
+                  background:
+                    '#' +
+                    currentColorPalette.getHexadecimalColorValue(
+                      nestedSetNode.annotationType.colorId,
+                    ),
+                }"
+                class="mr-2 h-4 w-4"
+              ></div>
+              <div class="text-sm">{{ nestedSetNode.surfaceForms[0] }}</div>
+              <div class="flex-grow"></div>
+              <OrbisButton
+                :on-click="() => deleteAnnotation(nestedSetNode)"
+                size="xs"
+                transparent
+              >
+                <OhVueIcon name="md-deleteforever-outlined" />
+              </OrbisButton>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -92,10 +120,20 @@ const emit = defineEmits(["setHighlightNestedSetNode"]);
 const { $orbisApiService } = useNuxtApp();
 
 const annotationStore = useAnnotationStore();
-const { nestedSetRootNode, isUndoDisabled, isRedoDisabled } =
-  storeToRefs(annotationStore);
+const {
+  nestedSetRootNode,
+  selectedAnnotation,
+  isUndoDisabled,
+  isRedoDisabled,
+} = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
 const { currentColorPalette } = storeToRefs(colorPalettesStore);
+
+watch(selectedAnnotation, (newSelectedAnnotation) => {
+  if (newSelectedAnnotation) {
+    emit("setHighlightNestedSetNode", [newSelectedAnnotation.id]);
+  }
+});
 
 async function deleteAnnotation(nestedSetNode: NestedSetNode) {
   await annotationStore.deleteAnnotation(nestedSetNode, $orbisApiService);

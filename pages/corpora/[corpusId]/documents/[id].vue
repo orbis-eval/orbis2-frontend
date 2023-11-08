@@ -45,7 +45,7 @@ const { selectedRun } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
 const colorPalettesStore = useColorPalettesStore();
 
-const highlightedNestedSetNodeId = ref(-1);
+const highlightedNestedSetNodeId = ref([] as number[]);
 
 const { setTitle } = useTitle();
 const { corpus } = storeToRefs(corpusStore);
@@ -94,7 +94,7 @@ onBeforeUnmount(() => {
   annotationStore.resetAnnotationStack();
 });
 
-function setHighlightNestedSetNode(id: number) {
-  highlightedNestedSetNodeId.value = id;
+function setHighlightNestedSetNode(ids: number[]) {
+  highlightedNestedSetNodeId.value = ids;
 }
 </script>
