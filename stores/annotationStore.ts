@@ -137,6 +137,7 @@ export const useAnnotationStore = defineStore("annotation", () => {
       await annotationHistory.execute(deleteCommand);
       isRedoDisabled.value = true;
       isUndoDisabled.value = false;
+      selectedAnnotation.value = null;
     } else {
       throw new TypeError(
         "deleteAnnotation: Root node ist not set. Call first loadAnnotations.",

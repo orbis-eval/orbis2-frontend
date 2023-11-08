@@ -1,6 +1,6 @@
 <template>
   <div v-if="!loading" id="document-sidebar" class="flex h-full flex-col">
-    <div class="flex h-full w-full flex-col bg-gray-800 pt-5 text-white">
+    <div class="flex h-full w-full flex-col bg-gray-800 pt-4 text-white">
       <div class="p-4">
         <div class="text-lg font-bold">Selection Info</div>
         <div class="mt-2 rounded bg-gray-700 p-2">
@@ -18,7 +18,9 @@
                 >{{ selectedAnnotation.annotationType.name }}</span
               >
             </div>
-            <div class="mt-1">{{ selectedAnnotation.surfaceForms[0] }}</div>
+            <div class="mt-1 font-bold">
+              {{ selectedAnnotation.surfaceForms[0] }}
+            </div>
             <div class="mt-3 flex flex-col">
               <span class="mb-1 text-sm"
                 >Text section: {{ selectedAnnotation.startIndices[0] }} -
@@ -29,6 +31,7 @@
               >
             </div>
           </div>
+          <div v-else>No Annotation is selected</div>
         </div>
       </div>
 
@@ -54,12 +57,11 @@
           >
             <div
               :class="
-                nestedSetNode === selectedAnnotation
+                nestedSetNode.id === selectedAnnotation?.id
                   ? 'bg-gray-500'
                   : 'bg-gray-700'
               "
               class="flex cursor-pointer items-center rounded p-2 hover:bg-gray-500"
-              @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
               @mouseleave="
                 emit('setHighlightNestedSetNode', [selectedAnnotation?.id])
               "
@@ -71,17 +73,29 @@
               "
             >
               <div
-                :style="{
-                  background:
-                    '#' +
-                    currentColorPalette.getHexadecimalColorValue(
-                      nestedSetNode.annotationType.colorId,
-                    ),
-                }"
-                class="mr-2 h-4 w-4"
-              ></div>
-              <div class="text-sm">{{ nestedSetNode.surfaceForms[0] }}</div>
-              <div class="flex-grow"></div>
+                class="flex flex-grow"
+                @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
+              >
+                <div
+                  :style="{
+                    background:
+                      '#' +
+                      currentColorPalette.getHexadecimalColorValue(
+                        nestedSetNode.annotationType.colorId,
+                      ),
+                  }"
+                  class="mr-2 h-4 w-4 shrink-0"
+                ></div>
+                <div
+                  :class="{
+                    'font-bold': nestedSetNode.id === selectedAnnotation?.id,
+                  }"
+                  class="text-sm"
+                >
+                  {{ nestedSetNode.surfaceForms[0] }}
+                </div>
+                <div class="flex-grow"></div>
+              </div>
               <OrbisButton
                 :on-click="() => deleteAnnotation(nestedSetNode)"
                 size="xs"
