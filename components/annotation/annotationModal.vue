@@ -18,24 +18,20 @@
         aria-labelledby="dropdownDefaultButton"
       >
         <li
-          v-for="(annotationType, index) in filteredAnnotationTypes"
+          v-for="annotationType in filteredAnnotationTypes"
           :key="annotationType.id"
-          :class="{
-            selectedAnnotationType: selectedAnnotationIndex === index,
-          }"
           @click="annotationClicked(annotationType)"
-          @mouseenter="selectedAnnotationIndex = index"
         >
           <a href="#" class="block px-4 py-2">{{ annotationType.name }}</a>
         </li>
       </ul>
-      <!--{{selectedAnnotationIndex}} / {{filteredAnnotationTypes[selectedAnnotationIndex].name}}-->
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { AnnotationType } from "~/lib/model/annotationType";
+import { useAnnotationStore } from "~/stores/annotationStore";
 
 const props = defineProps<{
   leftPosition: number;
@@ -47,7 +43,7 @@ const props = defineProps<{
 
 const emit = defineEmits(["hideAnnotationModal", "commitAnnotationType"]);
 
-const selectedAnnotationIndex = ref(0);
+const annotationStore = useAnnotationStore();
 
 const filterValue = ref("");
 const filterInputField = ref({} as HTMLElement);
@@ -80,27 +76,11 @@ function arrowKeysHandler(e: KeyboardEvent) {
 }
 
 function prevAnnotationType() {
-  if (selectedAnnotationIndex.value > 0) {
-    selectedAnnotationIndex.value--;
-  } else {
-    selectedAnnotationIndex.value = filterAnnotationTypes().length - 1;
-  }
+  annotationStore.prevSelectedAnnotation();
 }
 
 function nextAnnotationType() {
-  if (selectedAnnotationIndex.value < filterAnnotationTypes().length - 1) {
-    selectedAnnotationIndex.value++;
-  } else {
-    selectedAnnotationIndex.value = 0;
-  }
-}
-
-function commitAnnotationType() {
-  emit(
-    "commitAnnotationType",
-    filterAnnotationTypes()[selectedAnnotationIndex.value],
-  );
-  selectedAnnotationIndex.value = 0;
+  annotationStore.nextSelectedAnnotation();
 }
 
 function hideAnnotationModal() {
@@ -113,8 +93,6 @@ function handleKeyDown(event: KeyboardEvent) {
     prevAnnotationType();
   } else if (event.code === "ArrowDown") {
     nextAnnotationType();
-  } else if (event.code === "Enter") {
-    commitAnnotationType();
   } else if (event.code === "Escape") {
     hideAnnotationModal();
   }

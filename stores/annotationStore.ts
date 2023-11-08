@@ -49,6 +49,34 @@ export const useAnnotationStore = defineStore("annotation", () => {
     selectedAnnotation.value = annotation;
   }
 
+  function moveSelectedAnnotation(condition: Function) {
+    if (selectedAnnotation.value && nestedSetRootNode.value) {
+      const annotations = nestedSetRootNode.value.allAnnotationNodes();
+      const indexAnnotation = annotations.indexOf(selectedAnnotation.value);
+      condition(indexAnnotation, annotations);
+    }
+  }
+
+  function nextSelectedAnnotation() {
+    moveSelectedAnnotation(
+      (indexAnnotation: number, annotations: NestedSetNode[]) => {
+        if (annotations.length - 1 > indexAnnotation) {
+          selectedAnnotation.value = annotations[indexAnnotation + 1];
+        }
+      },
+    );
+  }
+
+  function prevSelectedAnnotation() {
+    moveSelectedAnnotation(
+      (indexAnnotation: number, annotations: NestedSetNode[]) => {
+        if (indexAnnotation > 0) {
+          selectedAnnotation.value = annotations[indexAnnotation - 1];
+        }
+      },
+    );
+  }
+
   function initSelectedAnnotation() {
     if (nestedSetRootNode.value) {
       const annotations = nestedSetRootNode.value.allAnnotationNodes();
@@ -166,6 +194,8 @@ export const useAnnotationStore = defineStore("annotation", () => {
     isRedoDisabled,
     selectedAnnotation,
     setSelectedAnnotation,
+    nextSelectedAnnotation,
+    prevSelectedAnnotation,
     loadAnnotations,
     createAnnotation,
     deleteAnnotation,
