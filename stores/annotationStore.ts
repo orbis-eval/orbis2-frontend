@@ -49,6 +49,17 @@ export const useAnnotationStore = defineStore("annotation", () => {
     selectedAnnotation.value = annotation;
   }
 
+  function initSelectedAnnotation() {
+    if (nestedSetRootNode.value) {
+      const annotations = nestedSetRootNode.value.allAnnotationNodes();
+      if (annotations.length > 0) {
+        selectedAnnotation.value = annotations[0];
+      } else {
+        selectedAnnotation.value = null;
+      }
+    }
+  }
+
   async function loadAnnotations(
     documentId: number,
     documentContent: string,
@@ -67,7 +78,7 @@ export const useAnnotationStore = defineStore("annotation", () => {
       );
 
       if (mappedAnnotations) {
-        let annotations = mappedAnnotations.map(
+        const annotations = mappedAnnotations.map(
           (annotation) => new NestedSetNode(annotation),
         );
 
@@ -79,13 +90,7 @@ export const useAnnotationStore = defineStore("annotation", () => {
           new Date(),
         );
         annotationHistory.reset();
-
-        annotations = nestedSetRootNode.value.allAnnotationNodes();
-        if (annotations.length > 0) {
-          selectedAnnotation.value = annotations[0];
-        } else {
-          selectedAnnotation.value = null;
-        }
+        initSelectedAnnotation();
       } else {
         console.error("Annotations could not be loaded");
       }
