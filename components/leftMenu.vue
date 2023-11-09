@@ -8,8 +8,11 @@
           <OhVueIcon name="hi-home" class="menu-icon" />
         </NuxtLink>
       </li>
-      <li>
-        <NuxtLink :to="'/'" class="mt-2">
+      <li v-if="route.params.corpusId">
+        <NuxtLink
+          :to="`/corpora/${route.params.corpusId}/documents`"
+          class="mt-2"
+        >
           <OhVueIcon name="hi-database" class="menu-icon" />
         </NuxtLink>
       </li>
@@ -28,4 +31,6 @@ import {
 } from "oh-vue-icons/icons";
 
 addIcons(HiUser, HiDatabase, HiTag, LaRocketSolid, HiHome);
+
+const route = useRoute();
 </script>
