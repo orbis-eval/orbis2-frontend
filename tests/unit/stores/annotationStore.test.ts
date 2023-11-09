@@ -51,10 +51,14 @@ const createNestedSetNode = function (
   );
 };
 
+const firstAnnotation = createMockedAnnotations(1, 0, 5);
+const secondAnnotation = createMockedAnnotations(2, 5, 7);
+const thirdAnnotation = createMockedAnnotations(3, 8, 10);
+
 const annotations: Annotation[] = Array.from([
-  createMockedAnnotations(1, 0, 5),
-  createMockedAnnotations(2, 5, 7),
-  createMockedAnnotations(3, 8, 10),
+  firstAnnotation,
+  secondAnnotation,
+  thirdAnnotation,
 ]);
 
 vi.mock("~/lib/orbisApi/orbisApiService", () => {
@@ -105,6 +109,9 @@ describe("AnnotationStore.loadAnnotations()", () => {
 
     // check that the parent was set correctly
     expect(annotationStore.nestedSetRootNode).not.toBeNull();
+
+    expect(annotationStore.selectedAnnotation?.startIndices[0]).equals(0);
+    expect(annotationStore.selectedAnnotation?.endIndices[0]).equals(5);
 
     // check if child of root-node is correct, only child should be the line-node
     const lineNode = annotationStore?.nestedSetRootNode?.children[0];
@@ -232,5 +239,87 @@ describe("Test undo and redo", () => {
     expect(commandHistoryRedoSpy).toHaveBeenCalled();
     expect(annotationStore.isUndoDisabled).toBeFalsy();
     expect(annotationStore.isRedoDisabled).toBeTruthy();
+  });
+});
+
+describe("Navigate selected annotation", () => {
+  it("Get next selected annotation", async () => {
+    const annotationStore = useAnnotationStore();
+    const documentId = 1;
+    const runId = 1;
+    const documentContent = "test und noch ein test und noch ein test";
+    await annotationStore.loadAnnotations(
+      documentId,
+      documentContent,
+      runId,
+      annotationTypes,
+      mockedOrbisApiService,
+    );
+
+    annotationStore.nextSelectedAnnotation();
+
+    expect(annotationStore.selectedAnnotation?.key).equals("my-key2");
+  });
+
+  it("Get next selected annotation does not change if it is allready last element", async () => {
+    const annotationStore = useAnnotationStore();
+    const documentId = 1;
+    const runId = 1;
+    const documentContent = "test und noch ein test und noch ein test";
+    await annotationStore.loadAnnotations(
+      documentId,
+      documentContent,
+      runId,
+      annotationTypes,
+      mockedOrbisApiService,
+    );
+    const annotations = annotationStore.nestedSetRootNode?.allAnnotationNodes();
+    if (annotations) {
+      annotationStore.setSelectedAnnotation(annotations[2]);
+    }
+
+    annotationStore.nextSelectedAnnotation();
+
+    expect(annotationStore.selectedAnnotation?.key).equals("my-key3");
+  });
+
+  it("Get previous selected annotation", async () => {
+    const annotationStore = useAnnotationStore();
+    const documentId = 1;
+    const runId = 1;
+    const documentContent = "test und noch ein test und noch ein test";
+    await annotationStore.loadAnnotations(
+      documentId,
+      documentContent,
+      runId,
+      annotationTypes,
+      mockedOrbisApiService,
+    );
+    const annotations = annotationStore.nestedSetRootNode?.allAnnotationNodes();
+    if (annotations) {
+      annotationStore.setSelectedAnnotation(annotations[2]);
+    }
+
+    annotationStore.prevSelectedAnnotation();
+
+    expect(annotationStore.selectedAnnotation?.key).equals("my-key2");
+  });
+
+  it("Get previous selected annotation does not change if it is the first annotation", async () => {
+    const annotationStore = useAnnotationStore();
+    const documentId = 1;
+    const runId = 1;
+    const documentContent = "test und noch ein test und noch ein test";
+    await annotationStore.loadAnnotations(
+      documentId,
+      documentContent,
+      runId,
+      annotationTypes,
+      mockedOrbisApiService,
+    );
+
+    annotationStore.prevSelectedAnnotation();
+
+    expect(annotationStore.selectedAnnotation?.key).equals("my-key1");
   });
 });
