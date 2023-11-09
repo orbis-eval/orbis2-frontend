@@ -83,7 +83,7 @@ onMounted(async () => {
     } else {
       console.log("Id of selected run was not set.");
     }
-  } catch (Error) {
+  } catch (error) {
     // Todo: Error Message for user
   } finally {
     loading.value = false;

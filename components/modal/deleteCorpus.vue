@@ -30,9 +30,9 @@ const props = defineProps<{
 const deletionConfirmed = async () => {
   try {
     await corpusStore.deleteCorpus(props.propsObject, $orbisApiService);
-  } catch (Error) {
+  } catch (error) {
     // Todo: Add Error Message
-    console.error(Error);
+    console.error(error);
   } finally {
     closeModal();
   }

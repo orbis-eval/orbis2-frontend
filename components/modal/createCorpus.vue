@@ -65,9 +65,9 @@ const createCorpus = async (values: any) => {
       chosenFiles.value,
       $orbisApiService,
     );
-  } catch (Error) {
+  } catch (error) {
     // Todo: Add Error Message
-    console.error(Error);
+    console.error(error);
   } finally {
     closeModal();
   }
