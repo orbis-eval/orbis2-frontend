@@ -51,7 +51,6 @@ export class NestedSet {
     rootNode?: NestedSetNode,
     generateLineAnnotations = true,
   ): NestedSetNode {
-    // console.log(`in toTree method annotations param: ${JSON.stringify(annotations)}`)
     if (!rootNode) {
       rootNode = this.generateRootNode(
         documentString,
