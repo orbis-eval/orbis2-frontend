@@ -15,6 +15,7 @@ module.exports = {
     "no-use-before-define": "off",
     "@typescript-eslint/no-use-before-define": "error",
     "no-unused-vars": "off",
+    "vue/multi-word-component-names": "off",
     "@typescript-eslint/no-unused-vars": "error",
     "prettier/prettier": "error",
     "@typescript-eslint/naming-convention": [
