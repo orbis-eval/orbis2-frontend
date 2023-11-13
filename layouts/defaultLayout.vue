@@ -14,6 +14,16 @@
         <div class="ml-4 text-lg">
           <NuxtLink :to="homeLink">{{ title }}</NuxtLink>
         </div>
+        <div class="flex-grow"></div>
+        <div>
+          <select
+            v-model="$i18n.locale"
+            class="select select-ghost w-full max-w-xs"
+          >
+            <option value="en">English</option>
+            <option value="de">Deutsch</option>
+          </select>
+        </div>
       </div>
     </header>
     <div class="flex h-full min-h-0 flex-1">
