@@ -8,7 +8,7 @@
   "corpus": {
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
-    "error":{
+    "error": {
       "corpusNameRequired": "Korpus Name wird benötigt",
       "corpusExists": "Korpus mit diesem Namen existiert bereits"
     },
@@ -36,7 +36,7 @@
     "runs": "Runs",
     "createRun": "Erstelle Run",
     "compareRuns": "Vergleiche Runs",
-    "error":{
+    "error": {
       "runNameRequired": "Run Name wird benötigt",
       "runDescriptionRequired": "Run Beschreibung wird benötigt",
       "runExists": "Run mit diesem Namen existiert bereits"
