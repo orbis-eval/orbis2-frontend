@@ -108,22 +108,6 @@ onMounted(async () => {
   }
 });
 
-onMounted(async () => {
-  loading.value = true;
-  try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
-    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
-    await countDocuments();
-    await loadDocuments();
-    // @Todo: Error message for user
-  } finally {
-    loading.value = false;
-  }
-});
-
 async function runChanged() {
   await pageChanged(currentPage.value);
 }
