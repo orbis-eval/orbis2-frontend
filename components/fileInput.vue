@@ -1,7 +1,9 @@
 <template>
   <div class="flex flex-col justify-between">
     <div class="mb-6 flex items-center justify-between">
-      <label class="text-white" for="file-input"> Import Data: </label>
+      <label class="text-white" for="file-input">
+        {{ $t("fileInput.importData") }}:
+      </label>
       <div>
         <input
           id="file-input"
@@ -12,7 +14,9 @@
           type="file"
           @change="inputChanged"
         />
-        <OrbisButton :on-click="openFileInput">Choose File</OrbisButton>
+        <OrbisButton :on-click="openFileInput">{{
+          $t("button.chooseFiles")
+        }}</OrbisButton>
       </div>
     </div>
     <div
@@ -22,7 +26,7 @@
     >
       <div class="text-gray-600">
         <div v-if="!selectedFiles.length" class="flex h-full items-center p-4">
-          <p class="w-full text-center">Or drop files here</p>
+          <p class="w-full text-center">{{ $t("fileInput.dropFiles") }}</p>
         </div>
         <div v-else class="p-1">
           <div

@@ -1,0 +1,47 @@
+{
+  "documents": "Dokumente",
+  "numberAbbreviation": "Nr",
+  "id": "ID",
+  "content": "Inhalt",
+  "name": "Name",
+  "description": "Beschreibung",
+  "corpus": {
+    "corpora": "Korpora",
+    "create": "Erstelle Korpus",
+    "delete": {
+      "warningTitle": "Korpus löschen?",
+      "warning": "Das Löschen des Korpus {name} wird alle Dokumente und Runs dieses Korpus entfernen! Möchten Sie fortfahren?"
+    }
+  },
+  "fileInput": {
+    "importData": "Dateien Importieren",
+    "dropFiles": "Dateien hier hinziehen"
+  },
+  "document": {
+    "sidebar": {
+      "selectionInfo": {
+        "selectionInfoTitle": "Informationen zur Auswahl",
+        "fieldKey": "Schlüssel",
+        "textSection": "Text Position",
+        "noSelectionInfo": "Keine Annotation wurde ausgewählt"
+      },
+      "annotationsTitle": "Annotations"
+    }
+  },
+  "run": {
+    "runs": "Runs",
+    "createRun": "Erstelle Run",
+    "compareRuns": "Vergleiche Runs",
+    "delete": {
+      "warningTitle": "Run löschen?",
+      "warning": "Durch das Löschen des Run {name} wird der Run aus diesem Korpus entfernt! Möchten Sie fortfahren?"
+    }
+  },
+  "button": {
+    "ok": "Ok",
+    "close": "Schliessen",
+    "cancel": "Abbrechen",
+    "create": "Erstellen",
+    "chooseFiles": "Dateien auswählen"
+  }
+}

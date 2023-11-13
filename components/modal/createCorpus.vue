@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h2 class="mb-5 text-3xl font-bold">Create Corpus</h2>
+    <h2 class="mb-5 text-3xl font-bold">{{ $t("corpus.create") }}</h2>
     <Form
       v-slot="{ errors }"
       :validation-schema="validationSchema"
       @submit="createCorpus"
     >
       <div class="mb-4">
-        <label class="mb-1 block text-white">Name of Corpus:</label>
+        <label class="mb-1 block text-white">{{ $t("name") }}:</label>
         <Field
           :class="errors.corpusName ? 'input-bordered input-error' : ''"
           class="input mb-2 w-full bg-white text-black"
@@ -18,8 +18,10 @@
       </div>
       <FileInput accepted-file-types=".json" @fileChange="fileChanged" />
       <div class="mt-5 flex gap-4">
-        <OrbisButton :is-form-button="true">Create</OrbisButton>
-        <OrbisButton :on-click="cancel">cancel</OrbisButton>
+        <OrbisButton :is-form-button="true"
+          >{{ $t("button.create") }}
+        </OrbisButton>
+        <OrbisButton :on-click="cancel">{{ $t("button.cancel") }}</OrbisButton>
       </div>
     </Form>
   </div>

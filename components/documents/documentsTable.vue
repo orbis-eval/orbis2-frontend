@@ -2,13 +2,13 @@
   <div
     class="mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
   >
-    <h1 class="mb-5 text-3xl text-white">Documents</h1>
+    <h1 class="mb-5 text-3xl text-white">{{ $t("documents") }}</h1>
     <table aria-label="List of documents in corpus" class="table text-white">
       <thead class="text-left">
         <tr class="text-lg text-white">
-          <th>Nr</th>
-          <th>ID</th>
-          <th>Content</th>
+          <th>{{ $t("numberAbbreviation") }}</th>
+          <th>{{ $t("id") }}</th>
+          <th>{{ $t("content") }}</th>
         </tr>
       </thead>
 

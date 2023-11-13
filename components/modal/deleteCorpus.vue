@@ -1,9 +1,9 @@
 <template>
   <OrbisWarning
-    :message="`Deleting corpus with '${propsObject.name}' will remove all documents and runs of this corpus! Do you want to continue?`"
-    confirm-text="ok"
-    decline-text="cancel"
-    title="Delete corpus?"
+    :confirm-text="$t('button.ok')"
+    :decline-text="$t('button.cancel')"
+    :message="$t('corpus.delete.warning', { name: propsObject.name })"
+    :title="$t('corpus.delete.warningTitle')"
     :on-confirm="deletionConfirmed"
     :on-decline="closeModal"
   />
