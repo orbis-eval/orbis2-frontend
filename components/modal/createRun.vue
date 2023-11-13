@@ -27,12 +27,12 @@
         <ErrorMessage class="text-red-400" name="runDesc" />
       </div>
       <div class="mt-10 grid grid-cols-3 gap-4">
-        <OrbisButton :is-form-button="true">{{
-          $t("button.create")
-        }}</OrbisButton>
-        <OrbisButton :on-click="() => closeModal()">{{
-          $t("button.cancel")
-        }}</OrbisButton>
+        <OrbisButton :is-form-button="true"
+          >{{ $t("button.create") }}
+        </OrbisButton>
+        <OrbisButton :on-click="() => closeModal()"
+          >{{ $t("button.cancel") }}
+        </OrbisButton>
       </div>
     </Form>
   </div>
@@ -43,6 +43,7 @@ import { Form, Field, ErrorMessage } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { storeToRefs } from "pinia";
+import { useI18n } from "vue-i18n";
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
@@ -51,6 +52,7 @@ import { useCorpusStore } from "~/stores/corpusStore";
 const { $orbisApiService } = useNuxtApp() as {
   $orbisApiService: OrbisApiService;
 };
+const { t } = useI18n();
 const { closeModal } = useModal();
 const runStore = useRunStore();
 const corpusStore = useCorpusStore();
@@ -65,10 +67,12 @@ const validationSchema = toTypedSchema(
   zod.object({
     runName: zod
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      .string({ required_error: "Run Name is required" })
-      .refine(runNotExists, { message: "Run with this name already exists" }),
-    // eslint-disable-next-line @typescript-eslint/naming-convention
-    runDesc: zod.string({ required_error: "Run Description is required" }),
+      .string({ required_error: t("run.error.runNameRequired") })
+      .refine(runNotExists, { message: t("run.error.runExists") }),
+    runDesc: zod.string({
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      required_error: t("run.error.runDescriptionRequired"),
+    }),
   }),
 );
 
