@@ -14,9 +14,9 @@
           type="file"
           @change="inputChanged"
         />
-        <OrbisButton :on-click="openFileInput">{{
-          $t("button.chooseFiles")
-        }}</OrbisButton>
+        <OrbisButton :on-click="openFileInput"
+          >{{ $t("button.chooseFiles") }}
+        </OrbisButton>
       </div>
     </div>
     <div
