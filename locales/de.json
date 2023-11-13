@@ -8,6 +8,10 @@
   "corpus": {
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
+    "error":{
+      "corpusNameRequired": "Korpus Name wird benötigt",
+      "corpusExists": "Korpus mit diesem Namen existiert bereits"
+    },
     "delete": {
       "warningTitle": "Korpus löschen?",
       "warning": "Das Löschen des Korpus {name} wird alle Dokumente und Runs dieses Korpus entfernen! Möchten Sie fortfahren?"
@@ -32,6 +36,11 @@
     "runs": "Runs",
     "createRun": "Erstelle Run",
     "compareRuns": "Vergleiche Runs",
+    "error":{
+      "runNameRequired": "Run Name wird benötigt",
+      "runDescriptionRequired": "Run Beschreibung wird benötigt",
+      "runExists": "Run mit diesem Namen existiert bereits"
+    },
     "delete": {
       "warningTitle": "Run löschen?",
       "warning": "Durch das Löschen des Run {name} wird der Run aus diesem Korpus entfernt! Möchten Sie fortfahren?"

@@ -8,6 +8,10 @@
   "corpus": {
     "corpora": "Corpora",
     "create": "Create Corpus",
+    "error":{
+      "corpusNameRequired": "Corpus name is required",
+      "corpusExists": "Corpus with this name already exists"
+    },
     "delete": {
       "warningTitle": "Delete corpus?",
       "warning": "Deleting corpus with {name} will remove all documents and runs of this corpus! Do you want to continue?"
@@ -32,6 +36,11 @@
     "runs": "Runs",
     "createRun": "Create Run",
     "compareRuns": "Compare Runs",
+    "error":{
+      "runNameRequired": "Run name is required",
+      "runDescriptionRequired": "Run description is required",
+      "runExists": "Run with this name already exists"
+    },
     "delete": {
       "warningTitle": "Delete run?",
       "warning": "Deleting run with {name} will remove the run from this corpus! Do you want to continue?"

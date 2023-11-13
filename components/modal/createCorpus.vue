@@ -31,8 +31,10 @@
 import { ErrorMessage, Field, Form } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+import { useI18n } from "vue-i18n";
 import { useCorpusStore } from "~/stores/corpusStore";
 
+const { t } = useI18n();
 const { $orbisApiService } = useNuxtApp();
 const { closeModal } = useModal();
 const corpusStore = useCorpusStore();
@@ -49,9 +51,9 @@ const validationSchema = toTypedSchema(
   zod.object({
     corpusName: zod
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      .string({ required_error: "Corpus Name is required" })
+      .string({ required_error: t("corpus.error.corpusNameRequired") })
       .refine(corpusNotExists, {
-        message: "Corpus with this name already exists",
+        message: t("corpus.error.corpusExists"),
       }),
   }),
 );
