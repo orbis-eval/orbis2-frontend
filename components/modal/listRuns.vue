@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mb-5 text-3xl font-bold">Runs</h2>
+    <h2 class="mb-5 text-3xl font-bold">{{ $t("run.runs") }}</h2>
     <template v-for="run in runs" :key="run.id">
       <div class="flex items-center py-2">
         <div
@@ -34,10 +34,14 @@
 
     <div class="mt-10 grid grid-cols-3 gap-4">
       <OrbisButton :on-click="() => openModal(ModalCreateRun)"
-        >Create Run</OrbisButton
-      >
-      <OrbisButton :on-click="() => {}">Compare Runs</OrbisButton>
-      <OrbisButton :on-click="() => closeModal()">Close</OrbisButton>
+        >{{ $t("run.createRun") }}
+      </OrbisButton>
+      <OrbisButton :on-click="() => {}">{{
+        $t("run.compareRuns")
+      }}</OrbisButton>
+      <OrbisButton :on-click="() => closeModal()">{{
+        $t("button.close")
+      }}</OrbisButton>
     </div>
   </div>
 </template>

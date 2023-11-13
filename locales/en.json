@@ -1,0 +1,47 @@
+{
+  "documents": "Documents",
+  "numberAbbreviation": "Nr",
+  "id": "ID",
+  "content": "Content",
+  "name": "Name",
+  "description": "Description",
+  "corpus": {
+    "corpora": "Corpora",
+    "create": "Create Corpus",
+    "delete": {
+      "warningTitle": "Delete corpus?",
+      "warning": "Deleting corpus with {name} will remove all documents and runs of this corpus! Do you want to continue?"
+    }
+  },
+  "fileInput": {
+    "importData": "Import Data",
+    "dropFiles": "Drop Files here"
+  },
+  "document": {
+    "sidebar": {
+      "selectionInfo": {
+        "selectionInfoTitle": "Selection Info",
+        "fieldKey": "Key",
+        "textSection": "Text section",
+        "noSelectionInfo": "No Annotation is selected"
+      },
+      "annotationsTitle": "Annotations"
+    }
+  },
+  "run": {
+    "runs": "Runs",
+    "createRun": "Create Run",
+    "compareRuns": "Compare Runs",
+    "delete": {
+      "warningTitle": "Delete run?",
+      "warning": "Deleting run with {name} will remove the run from this corpus! Do you want to continue?"
+    }
+  },
+  "button": {
+    "ok": "Ok",
+    "close": "Close",
+    "cancel": "Cancel",
+    "create": "Create",
+    "chooseFile": "Choose File"
+  }
+}

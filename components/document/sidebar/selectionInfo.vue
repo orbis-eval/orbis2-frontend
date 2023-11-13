@@ -1,6 +1,8 @@
 <template>
   <div class="p-4">
-    <div class="text-lg font-bold">Selection Info</div>
+    <div class="text-lg font-bold">
+      {{ $t("document.sidebar.selectionInfo.selectionInfoTitle") }}
+    </div>
     <div class="mt-2 rounded bg-gray-700 p-2">
       <div v-if="selectedAnnotation">
         <div class="flex items-center justify-between">
@@ -21,13 +23,19 @@
         </div>
         <div class="mt-3 flex flex-col">
           <span class="mb-1 text-sm"
-            >Text section: {{ selectedAnnotation.startIndices[0] }} -
+            >{{ $t("document.sidebar.selectionInfo.textSection") }}:
+            {{ selectedAnnotation.startIndices[0] }} -
             {{ selectedAnnotation.endIndices[0] }}</span
           >
-          <span class="mb-1 text-sm">Key: {{ selectedAnnotation.key }}</span>
+          <span class="mb-1 text-sm"
+            >{{ $t("document.sidebar.selectionInfo.fieldKey") }}:
+            {{ selectedAnnotation.key }}</span
+          >
         </div>
       </div>
-      <div v-else>No Annotation is selected</div>
+      <div v-else>
+        {{ $t("document.sidebar.selectionInfo.noSelectionInfo") }}
+      </div>
     </div>
   </div>
 </template>

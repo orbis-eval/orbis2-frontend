@@ -1,13 +1,13 @@
 <template>
   <div>
-    <h2 class="mb-5 text-3xl font-bold">Create run</h2>
+    <h2 class="mb-5 text-3xl font-bold">{{ $t("run.createRun") }}</h2>
     <Form
       v-slot="{ errors }"
       :validation-schema="validationSchema"
       @submit="createRun"
     >
       <div class="mb-4">
-        <label class="mb-1 block text-white">Name:</label>
+        <label class="mb-1 block text-white">{{ $t("name") }}:</label>
         <Field
           :class="errors.runName ? 'input-bordered input-error' : ''"
           class="input mb-2 w-full bg-white text-black"
@@ -17,7 +17,7 @@
         <ErrorMessage class="text-red-400" name="runName" />
       </div>
       <div class="mb-4">
-        <label class="mb-1 block text-white">Description:</label>
+        <label class="mb-1 block text-white">{{ $t("description") }}:</label>
         <Field
           :class="errors.runDesc ? 'input-bordered input-error' : ''"
           class="input mb-2 w-full bg-white text-black"
@@ -27,8 +27,12 @@
         <ErrorMessage class="text-red-400" name="runDesc" />
       </div>
       <div class="mt-10 grid grid-cols-3 gap-4">
-        <OrbisButton :is-form-button="true">Create</OrbisButton>
-        <OrbisButton :on-click="() => closeModal()">Cancel</OrbisButton>
+        <OrbisButton :is-form-button="true">{{
+          $t("button.create")
+        }}</OrbisButton>
+        <OrbisButton :on-click="() => closeModal()">{{
+          $t("button.cancel")
+        }}</OrbisButton>
       </div>
     </Form>
   </div>
