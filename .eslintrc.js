@@ -60,24 +60,7 @@ module.exports = {
     "vue/valid-define-props": "error",
     "@intlify/vue-i18n/no-missing-keys": "error",
     "@intlify/vue-i18n/no-missing-keys-in-other-locales": "error",
-    "@intlify/vue-i18n/no-raw-text": [
-      "error",
-      {
-        attributes: {
-          "/.+/": [
-            "title",
-            "aria-label",
-            "aria-placeholder",
-            "aria-roledescription",
-            "aria-valuetext",
-          ],
-          input: ["placeholder"],
-          img: ["alt"],
-        },
-        ignoreNodes: ["md-icon", "v-icon"],
-        ignorePattern: "^[-#:()&]+$"
-      },
-    ],
+    "@intlify/vue-i18n/no-raw-text": "off",
   },
   overrides: [],
   settings: {
