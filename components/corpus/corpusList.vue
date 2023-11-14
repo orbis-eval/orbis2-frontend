@@ -20,7 +20,7 @@
             class="flex py-2"
           >
             <NuxtLink
-              :to="`/corpora/${corpus.identifier}/documents`"
+              :to="`/corpora/${corpus.id}/runs`"
               class="hover:text-purple-400"
             >
               {{ corpus.name }}

@@ -5,7 +5,87 @@
     </template>
     <LoadingSpinner v-if="loading" class="mt-20" />
     <div v-else class="ml-10 mr-10 flex h-full flex-col">
-      <p>Grüezi</p>
+      <div
+        class="mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
+      >
+        <div class="mb-5 flex items-center gap-5">
+          <h1 class="text-3xl text-white">Overview Runs</h1>
+          <OrbisButton>Import Run</OrbisButton>
+        </div>
+        <div class="mb-5 flex items-center gap-5">
+          <h2>Table Actions</h2>
+          <OrbisButton size="sm">Sort</OrbisButton>
+          <OrbisButton
+            size="sm"
+            :on-click="() => (isExtraMetricsVisible = !isExtraMetricsVisible)"
+            >Toggle Extra Metrics</OrbisButton
+          >
+          <OrbisButton
+            v-if="isNormalRunSelected && onlyOneRunSelected"
+            size="sm"
+            :on-click="() => setGoldRun(normalRunSelected)"
+            >Set Gold Run</OrbisButton
+          >
+          <OrbisButton
+            v-if="isGoldRunSelected && onlyOneRunSelected"
+            size="sm"
+            :on-click="() => unsetGoldRun(goldRunSelected)"
+            >Unset Gold Run</OrbisButton
+          >
+          <OrbisButton v-if="areTwoRunsSelected" size="sm">Compare</OrbisButton>
+        </div>
+        <table aria-label="List of runs in corpus" class="table text-white">
+          <thead class="text-left">
+            <tr class="text-lg text-white">
+              <th>#</th>
+              <th>Name</th>
+              <td>Date</td>
+              <td>F1</td>
+              <td>Precision</td>
+              <td>Recall</td>
+              <td>Accuracy</td>
+              <td v-if="isExtraMetricsVisible">TP</td>
+              <td v-if="isExtraMetricsVisible">TN</td>
+              <td v-if="isExtraMetricsVisible">FP</td>
+              <td v-if="isExtraMetricsVisible">FN</td>
+              <td v-if="isExtraMetricsVisible">Kappa Micro</td>
+              <td v-if="isExtraMetricsVisible">Kappa Macro</td>
+              <td v-if="isExtraMetricsVisible">Avg Macro F1</td>
+              <td v-if="isExtraMetricsVisible">Avg Micro F1</td>
+            </tr>
+          </thead>
+
+          <tbody v-for="(run, index) in mappedRuns" :key="run.id">
+            <tr :class="run.isGoldRun ? 'bg-orange-300 text-black' : ''">
+              <th>
+                <input
+                  v-model="run.selected"
+                  type="checkbox"
+                  class="checkbox checkbox-sm"
+                />
+              </th>
+              <th :class="run.experiment ? 'pl-10' : ''">
+                <NuxtLink :to="`/corpora/${corpus.id}/documents/`">
+                  {{ run.name }}
+                </NuxtLink>
+              </th>
+              <td>{{ run.timestamp }}</td>
+              <td>0.8</td>
+              <td>0.7</td>
+              <td>0.6</td>
+              <td>0.5</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+              <td v-if="isExtraMetricsVisible">0.2</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </NuxtLayout>
 </template>
@@ -17,7 +97,6 @@ import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
-import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
@@ -28,58 +107,60 @@ const { $orbisApiService } = useNuxtApp() as {
 };
 
 const corpusStore = useCorpusStore();
-const documentStore = useDocumentStore();
-
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
+const { runs } = storeToRefs(runStore);
 
-const { selectedRun } = storeToRefs(runStore);
-
-const pageSize = ref(10);
-const loading = ref(true);
-
-const { currentPage } = storeToRefs(documentStore);
-const { totalPages } = storeToRefs(documentStore);
 const { setTitle } = useTitle();
 
-// called when another page is selected
-async function pageChanged(nextPage: number) {
-  if (selectedRun.value.id) {
-    loading.value = true;
-    documentStore.currentPage = nextPage;
-    const startIndex = (currentPage.value - 1) * pageSize.value;
-    try {
-      await documentStore.loadDocuments(
-        selectedRun.value.id,
-        $orbisApiService,
-        pageSize.value,
-        startIndex,
-      );
-    } catch (error) {
-      console.error(error);
-    } finally {
-      loading.value = false;
-    }
-  } else {
-    console.warn("Id of selected run was not set in pageChanged.");
-  }
-}
+const loading = ref(true);
 
-async function countDocuments() {
-  if (selectedRun.value.id) {
-    await documentStore.countDocuments(selectedRun.value.id, $orbisApiService);
-    documentStore.totalPages = Math.ceil(
-      documentStore.nrOfDocuments / pageSize.value,
-    );
-  } else {
-    console.warn("Id of selected run was not set in countDocuments.");
-  }
-}
+const MAPPING_EXPERIMENTS = {
+  R1: "G1",
+  R2: "G1",
+  R3: "G2",
+  R4: "G2",
+};
 
-async function loadDocuments() {
-  await pageChanged(currentPage.value);
-}
+const mappedRuns = ref([]);
+
+const normalRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => !run.isGoldRun && run.selected)[0] ?? null,
+);
+
+const goldRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => run.isGoldRun && run.selected)[0] ?? null,
+);
+
+const isNormalRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => !run.isGoldRun && run.selected).length ===
+    1,
+);
+const isGoldRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => run.isGoldRun && run.selected).length ===
+    1,
+);
+const onlyOneRunSelected = computed(
+  () => mappedRuns.value.filter((run) => run.selected).length === 1,
+);
+const areTwoRunsSelected = computed(
+  () => mappedRuns.value.filter((run) => run.selected).length === 2,
+);
+
+const setGoldRun = (run) => {
+  run.isGoldRun = true;
+};
+
+const unsetGoldRun = (run) => {
+  run.isGoldRun = false;
+};
+
+const isExtraMetricsVisible = ref(false);
 
 onMounted(async () => {
   loading.value = true;
@@ -90,31 +171,18 @@ onMounted(async () => {
     );
     setTitle(corpus.value.name);
     await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
-    await countDocuments();
-    await loadDocuments();
+
+    mappedRuns.value = runs.value.map((run) => ({
+      ...run,
+      // isGoldrun, check if first letter of run.name is "G"
+      isGoldRun: run.name[0] === "G",
+      experiment: run.name[0] === "R" ? MAPPING_EXPERIMENTS[run.name] : null,
+      selected: false,
+    }));
+
     // @Todo: Error message for user
   } finally {
     loading.value = false;
   }
 });
-
-onMounted(async () => {
-  loading.value = true;
-  try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
-    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
-    await countDocuments();
-    await loadDocuments();
-    // @Todo: Error message for user
-  } finally {
-    loading.value = false;
-  }
-});
-
-async function runChanged() {
-  await pageChanged(currentPage.value);
-}
 </script>
