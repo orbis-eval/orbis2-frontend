@@ -9,7 +9,11 @@ module.exports = {
     ecmaVersion: "latest",
     parser: "@typescript-eslint/parser",
   },
-  extends: ["@nuxtjs/eslint-config-typescript", "plugin:prettier/recommended"],
+  extends: [
+    "@nuxtjs/eslint-config-typescript",
+    "plugin:prettier/recommended",
+    "plugin:@intlify/vue-i18n/recommended",
+  ],
   plugins: ["simple-import-sort"],
   rules: {
     "no-use-before-define": "off",
@@ -54,6 +58,31 @@ module.exports = {
       },
     ],
     "vue/valid-define-props": "error",
+    "@intlify/vue-i18n/no-missing-keys": "error",
+    "@intlify/vue-i18n/no-missing-keys-in-other-locales": "error",
+    "@intlify/vue-i18n/no-raw-text": [
+      "error",
+      {
+        attributes: {
+          "/.+/": [
+            "title",
+            "aria-label",
+            "aria-placeholder",
+            "aria-roledescription",
+            "aria-valuetext",
+          ],
+          input: ["placeholder"],
+          img: ["alt"],
+        },
+        ignoreNodes: ["md-icon", "v-icon"],
+        ignorePattern: "^[-#:()&]+$"
+      },
+    ],
   },
   overrides: [],
+  settings: {
+    "vue-i18n": {
+      localeDir: "./locales/*.{json, yaml, yml}",
+    },
+  },
 };
