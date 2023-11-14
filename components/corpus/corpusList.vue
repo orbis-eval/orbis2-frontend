@@ -3,7 +3,7 @@
     <div class="content-card border-2 border-gray-600">
       <div class="card-body">
         <div class="card-title flex">
-          <div>Corpora</div>
+          <div>{{ $t("corpus.corpora") }}</div>
           <div class="flex-grow"></div>
           <OrbisButton
             :on-click="() => openModal(modalCreateCorpus)"
@@ -44,6 +44,7 @@ import modalCreateCorpus from "~/components/modal/createCorpus.vue";
 import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
 import { Corpus } from "~/lib/model/corpus";
+
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
 
