@@ -59,13 +59,24 @@ module.exports = {
     ],
     "vue/valid-define-props": "error",
     "@intlify/vue-i18n/no-missing-keys": "error",
-    "@intlify/vue-i18n/no-missing-keys-in-other-locales": "error",
     "@intlify/vue-i18n/no-raw-text": "off",
+    "@intlify/vue-i18n/no-missing-keys-in-other-locales": "error",
+    "@intlify/vue-i18n/no-duplicate-keys-in-locale": "error",
   },
-  overrides: [],
+  overrides: [
+    {
+      files: ["locales/*.json"],
+      rules: {
+        "no-unused-expressions": "off",
+        "@intlify/vue-i18n/no-missing-keys-in-other-locales": "error",
+        "@intlify/vue-i18n/no-duplicate-keys-in-locale": "error",
+      },
+    },
+  ],
   settings: {
     "vue-i18n": {
       localeDir: "./locales/*.{json, yaml, yml}",
+      messageSyntaxVersion: '^9.0.0',
     },
   },
 };
