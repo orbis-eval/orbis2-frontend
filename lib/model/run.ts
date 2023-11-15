@@ -10,7 +10,8 @@ export class Run implements IRun {
   corpus: Corpus;
   timestamp?: string;
   documentAnnotations?: Map<Document, Annotation[]>;
-  id?: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _id?: number;
 
   constructor(run: IRun) {
     this.name = run.name;
@@ -18,14 +19,14 @@ export class Run implements IRun {
     this.corpus = new Corpus(run.corpus);
     this.timestamp = this.getFormattedUpdatedAt();
     this.documentAnnotations = run.documentAnnotations;
-    this.id = run.id;
+    this._id = run._id;
   }
 
   // toJson method returns an object that contains all of the class's properties except for _id.
   // TODO: exclude timestamp for now
   toJSON() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...json } = this;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/naming-convention
+    const { _id, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 

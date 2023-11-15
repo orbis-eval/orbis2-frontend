@@ -37,7 +37,7 @@ export class NestedSetNodeDeleter {
     idAnnotationToDelete: NestedSetNode,
   ) {
     annotations.filter((annotation, index, annotations) => {
-      if (annotation.id === idAnnotationToDelete.id) {
+      if (annotation._id === idAnnotationToDelete._id) {
         // Deletes the value from the original array
         annotations.splice(index, 1);
         return true;

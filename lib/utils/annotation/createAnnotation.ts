@@ -48,7 +48,7 @@ export function createNestedSetNode(
         documentId,
         metadata: [],
         timestamp: new Date(),
-        id,
+        _id: id,
       }),
     ),
   );

@@ -49,21 +49,21 @@ describe("NestedSet.toTree(...)", () => {
       expect(lineAnnotationNode.children[3].endIndices[0]).toEqual(10);
 
       // check the node "AABB"
-      expect(lineAnnotationNode.children[0].id).toEqual(
-        mockAnnotationNodes[0].id,
+      expect(lineAnnotationNode.children[0]._id).toEqual(
+        mockAnnotationNodes[0]._id,
       );
       // check the childs of "AABB"
-      expect(lineAnnotationNode.children[0].children[0].id).toEqual(
-        mockAnnotationNodes[1].id,
+      expect(lineAnnotationNode.children[0].children[0]._id).toEqual(
+        mockAnnotationNodes[1]._id,
       );
       expect(
         lineAnnotationNode.children[0].children[1].annotationType.name,
       ).toEqual(NestedSet.GAP_ANNOTATION_TYPE_NAME);
 
       // check the childs of "AA"
-      expect(lineAnnotationNode.children[0].children[0].children[0].id).toEqual(
-        mockAnnotationNodes[2].id,
-      );
+      expect(
+        lineAnnotationNode.children[0].children[0].children[0]._id,
+      ).toEqual(mockAnnotationNodes[2]._id);
       expect(
         lineAnnotationNode.children[0].children[0].children[0].children.length,
       ).toEqual(0);
@@ -76,8 +76,8 @@ describe("NestedSet.toTree(...)", () => {
       ).toEqual(2);
 
       // check annotation "DD"
-      expect(lineAnnotationNode.children[2].id).toEqual(
-        mockAnnotationNodes[3].id,
+      expect(lineAnnotationNode.children[2]._id).toEqual(
+        mockAnnotationNodes[3]._id,
       );
       expect(lineAnnotationNode.children[2].children.length).toEqual(0);
     }
@@ -115,8 +115,8 @@ describe("NestedSet.toTree(...)", () => {
       expect(lineAnnotationNode.children[2].children[0].endIndices[0]).toEqual(
         9,
       );
-      expect(lineAnnotationNode.children[2].children[1].id).toEqual(
-        mockAnnotations[2].id,
+      expect(lineAnnotationNode.children[2].children[1]._id).toEqual(
+        mockAnnotations[2]._id,
       );
       expect(
         lineAnnotationNode.children[2].children[2].surfaceForms[0],
@@ -244,16 +244,16 @@ describe("test json serialization", () => {
       annotationType,
       annotator,
     );
-    expect("id" in annotationNode).toBeTruthy();
-    expect("id" in annotationNode.annotationType).toBeTruthy();
-    expect("id" in annotationNode.annotator).toBeTruthy();
+    expect("_id" in annotationNode).toBeTruthy();
+    expect("_id" in annotationNode.annotationType).toBeTruthy();
+    expect("_id" in annotationNode.annotator).toBeTruthy();
     // serialize to json
     const annotationJsonString = JSON.stringify(annotationNode);
     // parse back to object
     const parsedAnnotation = JSON.parse(annotationJsonString);
     // the id's should NOT be contained anymore in the objects
-    expect(!("id" in parsedAnnotation)).toBeTruthy();
-    expect(!("id" in parsedAnnotation.annotation_type)).toBeTruthy();
-    expect(!("id" in parsedAnnotation.annotator)).toBeTruthy();
+    expect(!("_id" in parsedAnnotation)).toBeTruthy();
+    expect(!("_id" in parsedAnnotation.annotationType)).toBeTruthy();
+    expect(!("_id" in parsedAnnotation.annotator)).toBeTruthy();
   });
 });

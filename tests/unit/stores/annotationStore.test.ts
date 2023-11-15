@@ -12,13 +12,13 @@ const annotationTypes = [
   new AnnotationType({
     colorId: 1,
     name: "type1",
-    id: 1,
+    _id: 1,
   }),
 ];
 const annotator = new Annotator({
   name: "name",
   roles: [],
-  id: 2,
+  _id: 2,
 });
 
 const createMockedAnnotations = function (
@@ -37,7 +37,7 @@ const createMockedAnnotations = function (
     documentId: 1,
     metadata: [],
     timestamp: new Date(),
-    id: annotationId,
+    _id: annotationId,
   });
 };
 

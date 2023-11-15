@@ -4,5 +4,5 @@ export interface IAnnotator {
   name: string;
   roles: Role[];
   password?: string;
-  id?: number;
+  _id?: number;
 }

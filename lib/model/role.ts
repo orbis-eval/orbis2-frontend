@@ -3,16 +3,16 @@ import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Role implements IRole {
   name: string;
-  id?: number;
+  _id?: number;
 
   constructor(role: IRole) {
     this.name = role.name;
-    this.id = role.id;
+    this._id = role._id;
   }
 
   toJSON() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...json } = this;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/naming-convention
+    const { _id, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

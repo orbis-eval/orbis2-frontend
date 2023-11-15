@@ -35,7 +35,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     try {
       await orbisApiService.deleteCorpus(corpusToDelete);
       corpora.value = corpora.value.filter(
-        (corpus) => corpus.id !== corpusToDelete.id,
+        (corpus) => corpus._id !== corpusToDelete._id,
       );
     } catch (error) {
       throw new Error("An error occurred while deleting a corpus", {

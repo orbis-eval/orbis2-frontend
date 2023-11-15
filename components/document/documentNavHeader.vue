@@ -13,7 +13,7 @@
       <OhVueIcon name="md-navigatebefore-twotone" scale="2.5" />
     </OrbisButton>
     <div class="grow text-center">
-      <span class="font-bold">{{ $t("id") }}:</span> {{ currentDocument.id }}
+      <span class="font-bold">{{ $t("id") }}:</span> {{ currentDocument._id }}
     </div>
     <OrbisButton
       :disabled="nrOfDocuments <= 1"
@@ -51,13 +51,13 @@ const { selectedRun } = storeToRefs(runStore);
 
 async function nextDocument() {
   emit("loadingStarted");
-  if (selectedRun.value.id) {
-    await documentStore.nextDocument(selectedRun.value.id, $orbisApiService);
+  if (selectedRun.value._id) {
+    await documentStore.nextDocument(selectedRun.value._id, $orbisApiService);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/documents/" +
-        currentDocument.value.id,
+        currentDocument.value._id,
     );
   } else {
     console.warn("Id of selected run was not set in nextDocument.");
@@ -67,16 +67,16 @@ async function nextDocument() {
 
 async function previousDocument() {
   emit("loadingStarted");
-  if (selectedRun.value.id) {
+  if (selectedRun.value._id) {
     await documentStore.previousDocument(
-      selectedRun.value.id,
+      selectedRun.value._id,
       $orbisApiService,
     );
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/documents/" +
-        currentDocument.value.id,
+        currentDocument.value._id,
     );
   } else {
     console.warn("Id of selected run was not set in previousDocument.");

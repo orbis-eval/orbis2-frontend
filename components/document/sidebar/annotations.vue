@@ -4,22 +4,22 @@
     <div v-if="nestedSetRootNode" class="space-y-2">
       <div
         v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
-        :key="nestedSetNode.id"
+        :key="nestedSetNode._id"
       >
         <div
           :class="
-            nestedSetNode.id === selectedAnnotation?.id
+            nestedSetNode._id === selectedAnnotation?._id
               ? 'bg-gray-500'
               : 'bg-gray-700'
           "
           class="flex cursor-pointer items-center rounded p-2 hover:bg-gray-500"
           @mouseleave="
-            emit('setHighlightNestedSetNode', [selectedAnnotation?.id])
+            emit('setHighlightNestedSetNode', [selectedAnnotation?._id])
           "
           @mouseover="
             emit('setHighlightNestedSetNode', [
-              selectedAnnotation?.id,
-              nestedSetNode.id,
+              selectedAnnotation?._id,
+              nestedSetNode._id,
             ])
           "
         >
@@ -39,7 +39,7 @@
             ></div>
             <div
               :class="{
-                'font-bold': nestedSetNode.id === selectedAnnotation?.id,
+                'font-bold': nestedSetNode._id === selectedAnnotation?._id,
               }"
               class="text-sm"
             >

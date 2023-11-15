@@ -4,17 +4,18 @@ import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 export class Metadata implements IMetadata {
   key: string;
   value: string;
-  id?: number;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _id?: number;
 
   constructor(metadata: IMetadata) {
     this.key = metadata.key;
     this.value = metadata.value;
-    this.id = metadata.id;
+    this._id = metadata._id;
   }
 
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...json } = this;
+    const { _id, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

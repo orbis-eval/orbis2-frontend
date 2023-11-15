@@ -6,13 +6,15 @@ import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 export const annotationType: AnnotationType = new AnnotationType({
   name: "A Type",
   colorId: 1,
-  id: 1,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _id: 1,
 });
 
 export const annotator: Annotator = new Annotator({
   name: "test annotator",
   roles: [],
-  id: 1,
+  // eslint-disable-next-line @typescript-eslint/naming-convention
+  _id: 1,
 });
 
 export function mockAnnotationNode(
@@ -35,7 +37,8 @@ export function mockAnnotationNode(
       documentId: 1,
       metadata: [],
       timestamp: new Date(),
-      id,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      _id: id,
     }),
   );
 }

@@ -13,7 +13,7 @@
     </span>
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode.children"
-      :key="nestedSetChildNode.id"
+      :key="nestedSetChildNode._id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -40,7 +40,7 @@
         ),
     }"
     :class="[
-      highlightedNestedSetNodeId.includes(Number(nestedSetNode.id))
+      highlightedNestedSetNodeId.includes(Number(nestedSetNode._id))
         ? 'rounded-t bg-neutral-400 text-white'
         : '',
       'border-b-4',
@@ -48,7 +48,7 @@
       'pt-1',
       'text-lg',
       'tracking-wider',
-      nestedSetNode.id ? 'annotation' : '',
+      nestedSetNode._id ? 'annotation' : '',
     ]"
   >
     <span v-if="nestedSetNode.children.length === 0" @mouseup="onMouseUp">
@@ -56,7 +56,7 @@
     </span>
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode.children"
-      :key="nestedSetChildNode.id"
+      :key="nestedSetChildNode._id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -67,7 +67,7 @@
   <span v-else class="p-1">
     <AnnotationNode
       v-for="nestedSetChildNode in nestedSetNode?.children"
-      :key="nestedSetChildNode.id"
+      :key="nestedSetChildNode._id"
       :nested-set-node="nestedSetChildNode"
       :color-palette="colorPalette"
       :highlighted-nested-set-node-id="highlightedNestedSetNodeId"

@@ -55,7 +55,7 @@ export class NestedSetNode extends Annotation {
       documentId: this.documentId,
       metadata: this.metadata,
       timestamp: this.timestamp,
-      id: this.id,
+      _id: this._id,
     });
   }
 }

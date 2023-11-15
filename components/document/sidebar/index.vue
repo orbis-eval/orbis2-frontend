@@ -29,7 +29,7 @@ const { selectedAnnotation } = storeToRefs(annotationStore);
 
 watch(selectedAnnotation, (newSelectedAnnotation) => {
   if (newSelectedAnnotation) {
-    emit("setHighlightNestedSetNode", [newSelectedAnnotation.id]);
+    emit("setHighlightNestedSetNode", [newSelectedAnnotation._id]);
   }
 });
 </script>
