@@ -28,7 +28,8 @@
         "fieldKey": "Schlüssel",
         "textSection": "Text Position",
         "noSelectionInfo": "Keine Annotation wurde ausgewählt"
-      }
+      },
+      "annotationsTitle": "Annotations"
     }
   },
   "run": {
