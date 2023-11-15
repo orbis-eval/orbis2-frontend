@@ -76,7 +76,7 @@ module.exports = {
   settings: {
     "vue-i18n": {
       localeDir: "./locales/*.{json, yaml, yml}",
-      messageSyntaxVersion: '^9.0.0',
+      messageSyntaxVersion: "^9.0.0",
     },
   },
 };
