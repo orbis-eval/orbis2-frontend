@@ -1,8 +1,13 @@
-export default defineI18nConfig(async () => ({
-  legacy: false,
-  locale: "en",
-  messages: {
-    en: await import("~/locales/en.json"),
-    de: await import("~/locales/de.json"),
-  },
-}));
+import en from "./locales/en.json";
+import de from "./locales/de.json";
+
+export default defineI18nConfig(() => {
+  return {
+    legacy: false,
+    locale: "en",
+    messages: {
+      en,
+      de,
+    },
+  };
+});
