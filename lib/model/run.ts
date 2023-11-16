@@ -21,11 +21,9 @@ export class Run implements IRun {
     this.identifier = run.identifier;
   }
 
-  // toJson method returns an object that contains all of the class's properties except for _id.
-  // TODO: exclude timestamp for now
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { identifier, ...json } = this;
+    const { identifier, timestamp, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 
