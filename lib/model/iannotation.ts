@@ -13,5 +13,6 @@ export interface IAnnotation {
   documentId: number;
   metadata: Metadata[];
   timestamp: Date;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   _id?: number;
 }

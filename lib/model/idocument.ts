@@ -6,5 +6,6 @@ export interface IDocument {
   runId: number;
   metadata: Metadata[];
   done: boolean;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   _id?: number;
 }

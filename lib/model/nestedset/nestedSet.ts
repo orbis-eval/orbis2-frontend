@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { NestedSetParseError } from "~/lib/model/nestedset/nestedSetParseError";
 
+// eslint-disable @typescript-eslint/naming-convention
 export class NestedSet {
   public static readonly GAP_ANNOTATION_KEY = "GAP_ANNOTATION_KEY";
   public static readonly LINE_ANNOTATION_KEY = "LINE_ANNOTATION_KEY";

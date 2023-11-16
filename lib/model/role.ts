@@ -3,6 +3,7 @@ import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Role implements IRole {
   name: string;
+  // eslint-disable-next-line @typescript-eslint/naming-convention
   _id?: number;
 
   constructor(role: IRole) {

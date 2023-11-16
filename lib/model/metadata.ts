@@ -14,7 +14,7 @@ export class Metadata implements IMetadata {
   }
 
   toJSON() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/naming-convention
     const { _id, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
