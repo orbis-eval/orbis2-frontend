@@ -1,5 +1,4 @@
 import { TypedInternalResponse } from "nitropack";
-import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Parser {
   /**
