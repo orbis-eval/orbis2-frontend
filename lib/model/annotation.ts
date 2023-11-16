@@ -16,7 +16,7 @@ export class Annotation implements IAnnotation {
   metadata: Metadata[];
   timestamp: Date;
   // eslint-disable-next-line @typescript-eslint/naming-convention
-  _id?: number;
+  identifier?: number;
 
   constructor(annotation: IAnnotation) {
     this.key = annotation.key;
@@ -31,12 +31,12 @@ export class Annotation implements IAnnotation {
       (metadata) => new Metadata(metadata),
     );
     this.timestamp = annotation.timestamp;
-    this._id = annotation._id;
+    this.identifier = annotation.identifier;
   }
 
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/naming-convention
-    const { _id, timestamp, ...json } = this;
+    const { identifier, timestamp, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

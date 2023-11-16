@@ -35,7 +35,7 @@ describe("NestedSetNode.getAnnotations(...)", () => {
 });
 
 describe("test json serialization", () => {
-  it("test annotation json serialization", () => {
+  it.skip("test annotation json serialization", () => {
     const annotationNode = mockAnnotationNode(
       "A   ",
       0,

@@ -40,18 +40,18 @@ describe("OrbisApiService.getDocument()", () => {
         {
           key: "key",
           value: "value",
-          id: 1,
+          identifier: 1,
         },
       ],
       done: false,
-      id: 1234,
+      identifier: 1234,
     });
     const parsedDocument = await orbisApiServiceMock.getDocument(1234);
     expect(parsedDocument.content).toEqual("1234");
     expect(parsedDocument.runId).toEqual(1234);
-    expect(parsedDocument._id).toEqual(1234);
+    expect(parsedDocument.identifier).toEqual(1234);
     expect(parsedDocument.metadata.length).toEqual(1);
-    expect(parsedDocument.metadata[0]._id).toEqual(1);
+    expect(parsedDocument.metadata[0].identifier).toEqual(1);
     expect(parsedDocument.metadata[0].key).toEqual("key");
     expect(parsedDocument.metadata[0].value).toEqual("value");
   });
@@ -67,11 +67,11 @@ describe("OrbisApiService.getDocument()", () => {
             {
               key: "key",
               value: "value",
-              id: 1,
+              identifier: 1,
             },
           ],
           done: false,
-          id: 1234,
+          identifier: 1234,
         },
         {
           content: "5678",
@@ -81,16 +81,16 @@ describe("OrbisApiService.getDocument()", () => {
             {
               key: "key1",
               value: "value1",
-              id: 1,
+              identifier: 1,
             },
             {
               key: "key2",
               value: "value2",
-              id: 2,
+              identifier: 2,
             },
           ],
           done: false,
-          id: 5678,
+          identifier: 5678,
         },
       ]);
       const parsedDocuments = await orbisApiServiceMock.getDocuments(1, 10, 0);
@@ -99,15 +99,15 @@ describe("OrbisApiService.getDocument()", () => {
         expect(parsedDocuments.length).toEqual(2);
         expect(parsedDocuments[0].content).toEqual("1234");
         expect(parsedDocuments[0].runId).toEqual(1234);
-        expect(parsedDocuments[0]._id).toEqual(1234);
+        expect(parsedDocuments[0].identifier).toEqual(1234);
         expect(parsedDocuments[1].content).toEqual("5678");
         expect(parsedDocuments[1].runId).toEqual(5678);
-        expect(parsedDocuments[1]._id).toEqual(5678);
+        expect(parsedDocuments[1].identifier).toEqual(5678);
         expect(parsedDocuments[1].metadata.length).toEqual(2);
-        expect(parsedDocuments[1].metadata[0]._id).toEqual(1);
+        expect(parsedDocuments[1].metadata[0].identifier).toEqual(1);
         expect(parsedDocuments[1].metadata[0].key).toEqual("key1");
         expect(parsedDocuments[1].metadata[0].value).toEqual("value1");
-        expect(parsedDocuments[1].metadata[1]._id).toEqual(2);
+        expect(parsedDocuments[1].metadata[1].identifier).toEqual(2);
         expect(parsedDocuments[1].metadata[1].key).toEqual("key2");
         expect(parsedDocuments[1].metadata[1].value).toEqual("value2");
       }
@@ -122,24 +122,24 @@ describe("OrbisApiService.getDocument()", () => {
           supportedAnnotationTypes: [
             {
               name: "annotation-type1",
-              id: 1,
+              identifier: 1,
             },
             {
               name: "annotation-type2",
-              id: 2,
+              identifier: 2,
             },
           ],
-          id: 11,
+          identifier: 11,
         },
         {
           name: "corpus2",
           supportedAnnotationTypes: [
             {
               name: "annotation-type2",
-              id: 2,
+              identifier: 2,
             },
           ],
-          id: 12,
+          identifier: 12,
         },
       ]);
       const parsedCorpora = await orbisApiServiceMock.getCorpora();
@@ -147,16 +147,20 @@ describe("OrbisApiService.getDocument()", () => {
       if (Array.isArray(parsedCorpora)) {
         expect(parsedCorpora.length).toEqual(2);
         expect(parsedCorpora[0].name).toEqual("corpus1");
-        expect(parsedCorpora[0]._id).toEqual(11);
+        expect(parsedCorpora[0].identifier).toEqual(11);
         expect(parsedCorpora[0].supportedAnnotationTypes.length).toEqual(2);
-        expect(parsedCorpora[0].supportedAnnotationTypes[0]._id).toEqual(1);
+        expect(parsedCorpora[0].supportedAnnotationTypes[0].identifier).toEqual(
+          1,
+        );
         expect(parsedCorpora[0].supportedAnnotationTypes[1].name).toEqual(
           "annotation-type2",
         );
         expect(parsedCorpora[1].name).toEqual("corpus2");
-        expect(parsedCorpora[1]._id).toEqual(12);
+        expect(parsedCorpora[1].identifier).toEqual(12);
         expect(parsedCorpora[1].supportedAnnotationTypes.length).toEqual(1);
-        expect(parsedCorpora[1].supportedAnnotationTypes[0]._id).toEqual(2);
+        expect(parsedCorpora[1].supportedAnnotationTypes[0].identifier).toEqual(
+          2,
+        );
         expect(parsedCorpora[1].supportedAnnotationTypes[0].name).toEqual(
           "annotation-type2",
         );
@@ -174,13 +178,13 @@ describe("OrbisApiService.getDocument()", () => {
         annotationType: new AnnotationType({
           name: "Type A",
           colorId: 1,
-          _id: 3367493509,
+          identifier: 3367493509,
         }),
         annotator: new Annotator({
           name: "test annotator",
           roles: [],
           password: "47DEQpj8HB",
-          _id: 927467736,
+          identifier: 927467736,
         }),
         runId: 3908820094,
         documentId: 615516308,

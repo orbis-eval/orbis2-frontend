@@ -29,7 +29,7 @@ export class JSONTransformer {
       if (Object.hasOwn(obj, key)) {
         const value = obj[key];
 
-        if (key === "_id") {
+        if (key === "identifier") {
           continue;
         }
 

@@ -7,8 +7,7 @@ export class Annotator implements IAnnotator {
   name: string;
   roles: Role[];
   password?: string;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _id?: number;
+  identifier?: number;
 
   constructor(annotator: IAnnotator) {
     this.name = annotator.name;
@@ -17,12 +16,12 @@ export class Annotator implements IAnnotator {
       annotator.password = hash("");
     }
     this.password = annotator.password;
-    this._id = annotator._id;
+    this.identifier = annotator.identifier;
   }
 
   toJSON() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/naming-convention
-    const { _id, ...json } = this;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { identifier, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

@@ -4,18 +4,17 @@ import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 export class AnnotationType implements IAnnotationType {
   name: string;
   colorId: number;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _id?: number;
+  identifier?: number;
 
   constructor(annotationType: IAnnotationType) {
     this.name = annotationType.name;
-    this._id = annotationType._id;
+    this.identifier = annotationType.identifier;
     this.colorId = annotationType.colorId;
   }
 
   toJSON() {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars,@typescript-eslint/naming-convention
-    const { _id, ...json } = this;
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { identifier, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

@@ -14,9 +14,13 @@
           </OrbisButton>
         </div>
         <ul class="mt-5">
-          <li v-for="corpus in corpora" :key="corpus._id" class="flex py-2">
+          <li
+            v-for="corpus in corpora"
+            :key="corpus.identifier"
+            class="flex py-2"
+          >
             <NuxtLink
-              :to="`/corpora/${corpus._id}/documents`"
+              :to="`/corpora/${corpus.identifier}/documents`"
               class="hover:text-purple-400"
             >
               {{ corpus.name }}

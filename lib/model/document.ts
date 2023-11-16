@@ -7,8 +7,7 @@ export class Document implements IDocument {
   runId: number;
   metadata: Metadata[];
   done: boolean;
-  // eslint-disable-next-line @typescript-eslint/naming-convention
-  _id?: number;
+  identifier?: number;
 
   constructor(document: IDocument) {
     this.content = document.content;
@@ -16,6 +15,6 @@ export class Document implements IDocument {
     this.runId = document.runId;
     this.metadata = document.metadata;
     this.done = document.done;
-    this._id = document._id;
+    this.identifier = document.identifier;
   }
 }

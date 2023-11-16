@@ -40,7 +40,7 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
         documentId: 1,
         metadata: [],
         timestamp: new Date(),
-        _id: -1,
+        identifier: -1,
       }),
     );
 
@@ -114,7 +114,7 @@ describe("NestedSetNodeInserter.insertAnnotationNode(...)", () => {
         documentId: 1,
         metadata: [],
         timestamp: new Date(),
-        _id: -1,
+        identifier: -1,
       }),
     );
 

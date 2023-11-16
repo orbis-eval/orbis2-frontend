@@ -17,31 +17,31 @@ export class NestedSet {
   public static GAP_ANNOTATION_TYPE = new AnnotationType({
     name: this.GAP_ANNOTATION_TYPE_NAME,
     colorId: 1,
-    _id: 1000,
+    identifier: 1000,
   });
 
   public static LINE_ANNOTATION_TYPE = new AnnotationType({
     name: this.LINE_ANNOTATION_TYPE_NAME,
     colorId: 1,
-    _id: 1001,
+    identifier: 1001,
   });
 
   public static NESTED_SET_ANNOTATOR = new Annotator({
     name: this.NESTEDSET_ANNOTATOR_NAME,
     roles: [],
-    _id: 1001,
+    identifier: 1001,
   });
 
   public static ROOT_ANNOTATION_TYPE = new AnnotationType({
     name: "ROOT_NODE_ANNOTATION",
     colorId: 1,
-    _id: 4000,
+    identifier: 4000,
   });
 
   public static ROOT_ANNOTATOR = new Annotator({
     name: this.NESTEDSET_ANNOTATOR_NAME,
     roles: [],
-    _id: 1001,
+    identifier: 1001,
   });
 
   static toTree(
@@ -188,7 +188,7 @@ export class NestedSet {
             documentId,
             metadata: [],
             timestamp: timeStamp,
-            _id: offset,
+            identifier: offset,
           }),
         ),
       );
@@ -236,7 +236,7 @@ export class NestedSet {
         documentId,
         metadata: [],
         timestamp,
-        _id: -1,
+        identifier: -1,
       }),
     );
   }
@@ -265,7 +265,7 @@ export class NestedSet {
       documentId: childNode.documentId,
       metadata: [],
       timestamp: childNode.timestamp,
-      _id: 2000,
+      identifier: 2000,
     });
   }
 }

@@ -17,7 +17,7 @@ const createCorpus = (
     (annotationType) => new AnnotationType(annotationType),
   );
   return new Corpus({
-    _id: id,
+    identifier: id,
     name,
     supportedAnnotationTypes,
   });

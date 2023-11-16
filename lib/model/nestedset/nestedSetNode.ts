@@ -56,7 +56,7 @@ export class NestedSetNode extends Annotation {
       metadata: this.metadata,
       timestamp: this.timestamp,
       // eslint-disable-next-line @typescript-eslint/naming-convention
-      _id: this._id,
+      identifier: this.identifier,
     });
   }
 }

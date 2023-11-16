@@ -19,7 +19,7 @@
       >
         <li
           v-for="annotationType in filteredAnnotationTypes"
-          :key="annotationType._id"
+          :key="annotationType.identifier"
           @click="annotationClicked(annotationType)"
         >
           <a href="#" class="block px-4 py-2">{{ annotationType.name }}</a>

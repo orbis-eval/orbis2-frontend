@@ -23,15 +23,15 @@ describe("JSONTransformer", () => {
         {
           name: "annotation-type1",
           colorId: 1,
-          _id: 123,
+          identifier: 123,
         },
         {
           name: "annotation-type2",
           colorId: 2,
-          _id: 123,
+          identifier: 123,
         },
       ],
-      _id: 123,
+      identifier: 123,
     };
 
     const expectedOutput = {

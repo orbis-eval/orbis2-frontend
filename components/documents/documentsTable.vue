@@ -12,18 +12,20 @@
         </tr>
       </thead>
 
-      <tbody v-for="(document, index) in documents" :key="document._id">
+      <tbody v-for="(document, index) in documents" :key="document.identifier">
         <tr
           class="hover cursor-pointer"
           @click="
-            router.push(`/corpora/${corpus._id}/documents/${document._id}`)
+            router.push(
+              `/corpora/${corpus.identifier}/documents/${document.identifier}`,
+            )
           "
         >
           <td class="py-1 pr-5">
             {{ pageSize * (currentPage - 1) + index + 1 }}
           </td>
           <td class="py-1 pr-5">
-            {{ document._id }}
+            {{ document.identifier }}
           </td>
           <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
         </tr>

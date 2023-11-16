@@ -1,7 +1,7 @@
 <template>
   <div>
     <h2 class="mb-5 text-3xl font-bold">{{ $t("run.runs") }}</h2>
-    <template v-for="run in runs" :key="run._id">
+    <template v-for="run in runs" :key="run.identifier">
       <div class="flex items-center py-2">
         <div
           :class="['flex-1', 'w-4/6', selectedRun == run ? 'text-primary' : '']"

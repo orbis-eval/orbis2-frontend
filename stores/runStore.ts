@@ -42,7 +42,7 @@ export const useRunStore = defineStore("run", () => {
       if (loadedRuns.length > 0) {
         runs.value = loadedRuns;
         const isSelectedRunInLoadedRuns = loadedRuns.some(
-          (run) => run._id === selectedRun.value._id,
+          (run) => run.identifier === selectedRun.value.identifier,
         );
         if (!isSelectedRunInLoadedRuns || corpusId.value !== id) {
           selectedRun.value = loadedRuns[0];
@@ -57,7 +57,7 @@ export const useRunStore = defineStore("run", () => {
   }
 
   function changeToFirstRunIfSelectedRunIsDeleted(run: Run) {
-    if (selectedRun.value._id === run._id) {
+    if (selectedRun.value.identifier === run.identifier) {
       changeSelectedRun(runs.value[0]);
     }
   }
@@ -66,7 +66,7 @@ export const useRunStore = defineStore("run", () => {
     try {
       if (runs.value.length > 1) {
         await orbisApiService.deleteRun(run);
-        runs.value = runs.value.filter((r) => r._id !== run._id);
+        runs.value = runs.value.filter((r) => r.identifier !== run.identifier);
         changeToFirstRunIfSelectedRunIsDeleted(run);
       } else {
         console.error("Cannot delete the last run");
