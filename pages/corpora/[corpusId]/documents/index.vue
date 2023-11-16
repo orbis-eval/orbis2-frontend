@@ -55,13 +55,13 @@ const { setTitle } = useTitle();
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
-  if (selectedRun.value.id) {
+  if (selectedRun.value.identifier) {
     loading.value = true;
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
       await documentStore.loadDocuments(
-        selectedRun.value.id,
+        selectedRun.value.identifier,
         $orbisApiService,
         pageSize.value,
         startIndex,
@@ -77,8 +77,11 @@ async function pageChanged(nextPage: number) {
 }
 
 async function countDocuments() {
-  if (selectedRun.value.id) {
-    await documentStore.countDocuments(selectedRun.value.id, $orbisApiService);
+  if (selectedRun.value.identifier) {
+    await documentStore.countDocuments(
+      selectedRun.value.identifier,
+      $orbisApiService,
+    );
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );

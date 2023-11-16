@@ -17,7 +17,7 @@
       <ul
         class="menu dropdown-content z-[1] w-full rounded-md bg-gray-100 text-black shadow"
       >
-        <li v-for="run in runs" :key="run.id">
+        <li v-for="run in runs" :key="run.identifier">
           <NuxtLink
             class="link hover:bg-gray-200 hover:text-black"
             @click="selectedRunChanged(run)"
@@ -50,7 +50,7 @@ const { selectedRun } = storeToRefs(runStore);
 const { runs } = storeToRefs(runStore);
 
 function selectedRunChanged(run: Run) {
-  if (run.id) {
+  if (run.identifier) {
     runStore.changeSelectedRun(run);
     emit("runChanged");
     // close dropdown once clicked

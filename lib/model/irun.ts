@@ -8,5 +8,5 @@ export interface IRun {
   corpus: Corpus;
   timestamp?: string;
   documentAnnotations?: Map<Document, Annotation[]>;
-  id?: number;
+  identifier?: number;
 }

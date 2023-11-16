@@ -5,19 +5,19 @@ import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 export class Corpus implements ICorpus {
   name: string;
   supportedAnnotationTypes: AnnotationType[];
-  id?: number;
+  identifier?: number;
 
   constructor(corpus: ICorpus) {
     this.name = corpus.name;
     this.supportedAnnotationTypes = corpus.supportedAnnotationTypes.map(
       (supportedAnnotationType) => new AnnotationType(supportedAnnotationType),
     );
-    this.id = corpus.id;
+    this.identifier = corpus.identifier;
   }
 
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...json } = this;
+    const { identifier, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

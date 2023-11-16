@@ -55,7 +55,8 @@ export class NestedSetNode extends Annotation {
       documentId: this.documentId,
       metadata: this.metadata,
       timestamp: this.timestamp,
-      id: this.id,
+      // eslint-disable-next-line @typescript-eslint/naming-convention
+      identifier: this.identifier,
     });
   }
 }

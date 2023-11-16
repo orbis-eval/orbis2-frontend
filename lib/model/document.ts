@@ -7,7 +7,7 @@ export class Document implements IDocument {
   runId: number;
   metadata: Metadata[];
   done: boolean;
-  id?: number;
+  identifier?: number;
 
   constructor(document: IDocument) {
     this.content = document.content;
@@ -15,6 +15,6 @@ export class Document implements IDocument {
     this.runId = document.runId;
     this.metadata = document.metadata;
     this.done = document.done;
-    this.id = document.id;
+    this.identifier = document.identifier;
   }
 }

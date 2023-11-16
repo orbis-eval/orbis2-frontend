@@ -7,7 +7,7 @@ export class Annotator implements IAnnotator {
   name: string;
   roles: Role[];
   password?: string;
-  id?: number;
+  identifier?: number;
 
   constructor(annotator: IAnnotator) {
     this.name = annotator.name;
@@ -16,12 +16,12 @@ export class Annotator implements IAnnotator {
       annotator.password = hash("");
     }
     this.password = annotator.password;
-    this.id = annotator.id;
+    this.identifier = annotator.identifier;
   }
 
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { id, ...json } = this;
+    const { identifier, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

@@ -27,7 +27,7 @@
       <h2 class="text-4xl">Tree could not be rendered</h2>
       Annotations that possibly are overlapping:
       <ul>
-        <li v-for="node in errorNodes" :key="node.id">
+        <li v-for="node in errorNodes" :key="node.identifier">
           {{ node.surfaceForms[0] }}:({{ node.startIndices[0] }}/{{
             node.endIndices[0]
           }})
@@ -163,7 +163,7 @@ function updateAnnotations(currentSelection: any) {
 // called when creating a new annotation
 async function createAnnotation(annotationType: AnnotationType) {
   try {
-    if (selectedRun.value.id) {
+    if (selectedRun.value.identifier) {
       const textSpan = new TextSpan(
         selection.value.word,
         selection.value.start,
@@ -173,7 +173,7 @@ async function createAnnotation(annotationType: AnnotationType) {
         textSpan,
         annotationType,
         annotator,
-        selectedRun.value.id,
+        selectedRun.value.identifier,
         Number(route.params.id),
         $orbisApiService,
       );

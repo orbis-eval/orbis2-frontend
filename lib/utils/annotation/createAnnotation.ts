@@ -48,7 +48,8 @@ export function createNestedSetNode(
         documentId,
         metadata: [],
         timestamp: new Date(),
-        id,
+        // eslint-disable-next-line @typescript-eslint/naming-convention
+        identifier: id,
       }),
     ),
   );

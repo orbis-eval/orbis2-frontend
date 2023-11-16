@@ -3,16 +3,17 @@ import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 
+/* eslint-disable @typescript-eslint/naming-convention */
 export const annotationType: AnnotationType = new AnnotationType({
   name: "A Type",
   colorId: 1,
-  id: 1,
+  identifier: 1,
 });
 
 export const annotator: Annotator = new Annotator({
   name: "test annotator",
   roles: [],
-  id: 1,
+  identifier: 1,
 });
 
 export function mockAnnotationNode(
@@ -35,7 +36,7 @@ export function mockAnnotationNode(
       documentId: 1,
       metadata: [],
       timestamp: new Date(),
-      id,
+      identifier: id,
     }),
   );
 }

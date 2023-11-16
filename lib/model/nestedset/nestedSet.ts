@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/naming-convention */
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { NestedSetParseError } from "~/lib/model/nestedset/nestedSetParseError";
 
+// eslint-disable @typescript-eslint/naming-convention
 export class NestedSet {
   public static readonly GAP_ANNOTATION_KEY = "GAP_ANNOTATION_KEY";
   public static readonly LINE_ANNOTATION_KEY = "LINE_ANNOTATION_KEY";
@@ -15,31 +17,31 @@ export class NestedSet {
   public static GAP_ANNOTATION_TYPE = new AnnotationType({
     name: this.GAP_ANNOTATION_TYPE_NAME,
     colorId: 1,
-    id: 1000,
+    identifier: 1000,
   });
 
   public static LINE_ANNOTATION_TYPE = new AnnotationType({
     name: this.LINE_ANNOTATION_TYPE_NAME,
     colorId: 1,
-    id: 1001,
+    identifier: 1001,
   });
 
   public static NESTED_SET_ANNOTATOR = new Annotator({
     name: this.NESTEDSET_ANNOTATOR_NAME,
     roles: [],
-    id: 1001,
+    identifier: 1001,
   });
 
   public static ROOT_ANNOTATION_TYPE = new AnnotationType({
     name: "ROOT_NODE_ANNOTATION",
     colorId: 1,
-    id: 4000,
+    identifier: 4000,
   });
 
   public static ROOT_ANNOTATOR = new Annotator({
     name: this.NESTEDSET_ANNOTATOR_NAME,
     roles: [],
-    id: 1001,
+    identifier: 1001,
   });
 
   static toTree(
@@ -186,7 +188,7 @@ export class NestedSet {
             documentId,
             metadata: [],
             timestamp: timeStamp,
-            id: offset,
+            identifier: offset,
           }),
         ),
       );
@@ -234,7 +236,7 @@ export class NestedSet {
         documentId,
         metadata: [],
         timestamp,
-        id: -1,
+        identifier: -1,
       }),
     );
   }
@@ -263,7 +265,7 @@ export class NestedSet {
       documentId: childNode.documentId,
       metadata: [],
       timestamp: childNode.timestamp,
-      id: 2000,
+      identifier: 2000,
     });
   }
 }
