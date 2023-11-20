@@ -33,9 +33,6 @@ import { useRunStore } from "~/stores/runStore";
 addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
-const { $orbisApiService } = useNuxtApp() as {
-  $orbisApiService: OrbisApiService;
-};
 
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
@@ -62,7 +59,6 @@ async function pageChanged(nextPage: number) {
     try {
       await documentStore.loadDocuments(
         selectedRun.value.identifier,
-        $orbisApiService,
         pageSize.value,
         startIndex,
       );
@@ -78,10 +74,7 @@ async function pageChanged(nextPage: number) {
 
 async function countDocuments() {
   if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(
-      selectedRun.value.identifier,
-      $orbisApiService,
-    );
+    await documentStore.countDocuments(selectedRun.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -97,10 +90,7 @@ async function loadDocuments() {
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
+    await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
     await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
     await countDocuments();
