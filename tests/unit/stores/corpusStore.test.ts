@@ -57,6 +57,15 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
   };
 });
 
+// Mock useRuntimeConfig
+vi.mock("@nuxt/composition-api", () => ({
+  useRuntimeConfig: vi.fn(() => ({
+    public: {
+      orbisApiBase: "http://localhost:63012/",
+    },
+  })),
+}));
+
 describe("Corpus Store", () => {
   const mockedOrbisApiService = new OrbisApiService("");
 
@@ -82,7 +91,7 @@ describe("Corpus Store", () => {
     const corpusStore = useCorpusStore();
     const corpusId = 1;
 
-    await corpusStore.loadCorpus(corpusId, mockedOrbisApiService);
+    await corpusStore.loadCorpus(corpusId);
 
     expect(corpusStore.corpus).toEqual(corpus);
   });
@@ -90,7 +99,7 @@ describe("Corpus Store", () => {
   it("loadCorpora should fetch and update a corpus", async () => {
     const corpusStore = useCorpusStore();
 
-    await corpusStore.loadCorpora(mockedOrbisApiService);
+    await corpusStore.loadCorpora();
 
     expect(corpusStore.corpora).toEqual(corpora);
   });
