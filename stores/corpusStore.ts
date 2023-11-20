@@ -5,6 +5,8 @@ import { Corpus } from "~/lib/model/corpus";
 import { Document } from "~/lib/model/document";
 import { DocumentFileReader } from "~/lib/utils/documentFileReader";
 
+const $orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
+
 export const useCorpusStore = defineStore("corpus", () => {
   const corpora = ref([] as Corpus[]);
   const corpus = ref({} as Corpus);
@@ -14,9 +16,9 @@ export const useCorpusStore = defineStore("corpus", () => {
     corpus.value = {} as Corpus;
   }
 
-  async function loadCorpora(orbisApiService: OrbisApiService) {
+  async function loadCorpora() {
     try {
-      const response = await orbisApiService.getCorpora();
+      const response = await $orbisApiService.getCorpora();
 
       if (Array.isArray(response) && response.length > 0) {
         corpora.value = response;
@@ -28,12 +30,9 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
-  async function deleteCorpus(
-    corpusToDelete: Corpus,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function deleteCorpus(corpusToDelete: Corpus) {
     try {
-      await orbisApiService.deleteCorpus(corpusToDelete);
+      await $orbisApiService.deleteCorpus(corpusToDelete);
       corpora.value = corpora.value.filter(
         (corpus) => corpus.identifier !== corpusToDelete.identifier,
       );
@@ -44,22 +43,15 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
-  async function loadCorpus(
-    corpusId: number,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function loadCorpus(corpusId: number) {
     try {
-      corpus.value = await orbisApiService.getCorpus(corpusId);
+      corpus.value = await $orbisApiService.getCorpus(corpusId);
     } catch (error) {
       throw new Error("An error occurred while fetching a corpus.");
     }
   }
 
-  async function createCorpus(
-    corpusName: string,
-    chosenFiles: File[],
-    orbisApiService: OrbisApiService,
-  ) {
+  async function createCorpus(corpusName: string, chosenFiles: File[]) {
     try {
       let newCorpus: Corpus = new Corpus({
         name: corpusName,
@@ -69,7 +61,7 @@ export const useCorpusStore = defineStore("corpus", () => {
       if (chosenFiles.length > 0) {
         docs = await DocumentFileReader.readFiles(chosenFiles);
       }
-      newCorpus = await orbisApiService.createCorpus(newCorpus, docs);
+      newCorpus = await $orbisApiService.createCorpus(newCorpus, docs);
       corpora.value.push(newCorpus);
     } catch (error) {
       throw new Error("An error occurred while adding a new corpus", {
