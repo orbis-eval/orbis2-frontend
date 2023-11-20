@@ -50,7 +50,7 @@ describe("Modal", () => {
     modal.getComponent().props = {};
     modal.setPropsObject({ var1: "value1" });
 
-    expect(modal.validatePropsObject()).toBe(true);
+    expect(modal.validatePropsObject()).toBe(false);
   });
 
   it("should validate props correctly, if propsObject is null and props are not set", () => {
