@@ -34,7 +34,6 @@ import { useDocumentStore } from "~/stores/documentStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 import { useTitle } from "~/composables/title";
 
-const { $orbisApiService } = useNuxtApp();
 const route = useRoute();
 
 const loading = ref(true);
@@ -53,10 +52,7 @@ const { corpus } = storeToRefs(corpusStore);
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
+    await corpusStore.loadCorpus(Number(route.params.corpusId));
     await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
     await documentStore.loadDocument(Number(route.params.id), $orbisApiService);
 
