@@ -5,7 +5,6 @@ import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { TextSpan } from "~/lib/model/textSpan";
 
 const annotationTypes = [
@@ -85,8 +84,6 @@ vi.mock("~/lib/utils/annotation/annotationCommandHistory", () => {
   };
 });
 
-const mockedOrbisApiService = new OrbisApiService("");
-
 beforeEach(() => {
   // necessary, otherwise the global store is not available
   setActivePinia(createPinia());
@@ -104,7 +101,6 @@ describe("AnnotationStore.loadAnnotations()", () => {
       documentContent,
       runId,
       annotationTypes,
-      mockedOrbisApiService,
     );
 
     // check that the parent was set correctly
@@ -139,7 +135,6 @@ describe("Add annotations", () => {
         annotator,
         runId,
         documentId,
-        mockedOrbisApiService,
       ),
     ).rejects.toThrowError();
 
@@ -160,7 +155,6 @@ describe("Add annotations", () => {
       documentContent,
       runId,
       annotationTypes,
-      mockedOrbisApiService,
     );
     await annotationStore.createAnnotation(
       textSpan,
@@ -168,7 +162,6 @@ describe("Add annotations", () => {
       annotator,
       runId,
       documentId,
-      mockedOrbisApiService,
     );
 
     expect(commandHistoryExecuteSpy).toHaveBeenCalled();
@@ -187,7 +180,7 @@ describe("Delete annotations", () => {
     const annotation = createNestedSetNode(100, 1, 5);
 
     await expect(
-      annotationStore.deleteAnnotation(annotation, mockedOrbisApiService),
+      annotationStore.deleteAnnotation(annotation),
     ).rejects.toThrowError();
 
     expect(commandHistoryExecuteSpy).not.toHaveBeenCalled();
@@ -207,9 +200,8 @@ describe("Delete annotations", () => {
       documentContent,
       runId,
       annotationTypes,
-      mockedOrbisApiService,
     );
-    await annotationStore.deleteAnnotation(annotation, mockedOrbisApiService);
+    await annotationStore.deleteAnnotation(annotation);
 
     expect(commandHistoryExecuteSpy).toHaveBeenCalled();
     expect(annotationStore.isUndoDisabled).toBeFalsy();
@@ -253,7 +245,6 @@ describe("Navigate selected annotation", () => {
       documentContent,
       runId,
       annotationTypes,
-      mockedOrbisApiService,
     );
 
     annotationStore.nextSelectedAnnotation();
@@ -271,7 +262,6 @@ describe("Navigate selected annotation", () => {
       documentContent,
       runId,
       annotationTypes,
-      mockedOrbisApiService,
     );
     const annotations = annotationStore.nestedSetRootNode?.allAnnotationNodes();
     if (annotations) {
@@ -293,7 +283,6 @@ describe("Navigate selected annotation", () => {
       documentContent,
       runId,
       annotationTypes,
-      mockedOrbisApiService,
     );
     const annotations = annotationStore.nestedSetRootNode?.allAnnotationNodes();
     if (annotations) {
@@ -315,7 +304,6 @@ describe("Navigate selected annotation", () => {
       documentContent,
       runId,
       annotationTypes,
-      mockedOrbisApiService,
     );
 
     annotationStore.prevSelectedAnnotation();

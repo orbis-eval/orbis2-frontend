@@ -69,8 +69,6 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
 });
 
 describe("Document Store", () => {
-  const mockedOrbisApiService = new OrbisApiService("");
-
   beforeEach(() => {
     setActivePinia(createPinia());
   });
@@ -99,12 +97,7 @@ describe("Document Store", () => {
     const pageSize = 10;
     const skip = 0;
 
-    await documentStore.loadDocuments(
-      runId,
-      mockedOrbisApiService,
-      pageSize,
-      skip,
-    );
+    await documentStore.loadDocuments(runId, pageSize, skip);
 
     expect(documentStore.documents).toEqual(documents);
   });
@@ -114,7 +107,7 @@ describe("Document Store", () => {
     const runId = 1;
     const mockedNumberOfDocuments = documents.length;
 
-    await documentStore.countDocuments(runId, mockedOrbisApiService);
+    await documentStore.countDocuments(runId);
 
     expect(documentStore.nrOfDocuments).toEqual(mockedNumberOfDocuments);
   });
@@ -124,7 +117,7 @@ describe("Document Store", () => {
     documentStore.currentDocument = documents[0];
     const runId = 1;
 
-    await documentStore.nextDocument(runId, mockedOrbisApiService);
+    await documentStore.nextDocument(runId);
 
     expect(documentStore.currentDocument).toEqual(documents[1]);
   });
@@ -134,7 +127,7 @@ describe("Document Store", () => {
     documentStore.currentDocument = documents[2];
     const runId = 1;
 
-    await documentStore.previousDocument(runId, mockedOrbisApiService);
+    await documentStore.previousDocument(runId);
 
     expect(documentStore.currentDocument).toEqual(documents[1]);
   });
