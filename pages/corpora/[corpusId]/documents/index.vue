@@ -26,9 +26,7 @@ import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { useDocumentStore } from "~/stores/documentStore";
-import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
 
@@ -92,7 +90,7 @@ onMounted(async () => {
   try {
     await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
-    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
+    await runStore.loadRuns(Number(route.params.corpusId));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
