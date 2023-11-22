@@ -62,10 +62,7 @@ export const useDocumentStore = defineStore("document", () => {
     );
   }
 
-  async function previousDocument(
-    runId: number,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function previousDocument(runId: number) {
     if (!currentDocument.value.identifier) {
       throw new Error("No valid id for current Document");
     }
@@ -75,10 +72,7 @@ export const useDocumentStore = defineStore("document", () => {
     );
   }
 
-  async function countDocuments(
-    runId: number,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function countDocuments(runId: number) {
     try {
       const response = await orbisApiService.countDocuments(runId);
       nrOfDocuments.value = Number(response);
