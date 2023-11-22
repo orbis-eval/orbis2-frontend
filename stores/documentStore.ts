@@ -4,9 +4,8 @@ import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Document } from "~/lib/model/document";
 import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
-const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
-
 export const useDocumentStore = defineStore("document", () => {
+  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
   const documents = ref([] as Document[]);
   const currentDocument = ref({} as Document);
   const nrOfDocuments = ref(1);

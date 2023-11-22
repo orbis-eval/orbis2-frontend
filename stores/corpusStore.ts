@@ -6,9 +6,8 @@ import { Document } from "~/lib/model/document";
 import { DocumentFileReader } from "~/lib/utils/documentFileReader";
 import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
-const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
-
 export const useCorpusStore = defineStore("corpus", () => {
+  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
   const corpora = ref([] as Corpus[]);
   const corpus = ref({} as Corpus);
 

@@ -12,9 +12,8 @@ import { Annotation } from "~/lib/model/annotation";
 import { TextSpan } from "~/lib/model/textSpan";
 import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
-const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
-
 export const useAnnotationStore = defineStore("annotation", () => {
+  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
   const nestedSetRootNode = ref({} as NestedSetNode | null);
   const selectedAnnotation = ref({} as NestedSetNode | null);
   const annotationHistory = new AnnotationCommandHistory();

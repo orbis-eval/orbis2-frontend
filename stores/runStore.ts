@@ -3,10 +3,10 @@ import { ref } from "vue";
 import { Run } from "~/lib/model/run";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
-
-// const {$orbisApiService} = useNuxtApp() as { $orbisApiService: OrbisApiService };
+import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
 export const useRunStore = defineStore("run", () => {
+  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
   const corpusId = ref(-1);
   const runs = ref([] as Run[]);
   const selectedRun = ref({} as Run);
@@ -21,11 +21,7 @@ export const useRunStore = defineStore("run", () => {
     selectedRun.value = run;
   }
 
-  async function createRun(
-    newRun: Run,
-    corpus: Corpus,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function createRun(newRun: Run, corpus: Corpus) {
     try {
       const run = await orbisApiService.createRun(newRun, corpus);
       runs.value.push(run);
@@ -36,7 +32,7 @@ export const useRunStore = defineStore("run", () => {
     }
   }
 
-  async function loadRuns(id: number, orbisApiService: OrbisApiService) {
+  async function loadRuns(id: number) {
     try {
       const loadedRuns = await orbisApiService.getRuns(id);
       if (loadedRuns.length > 0) {
@@ -62,7 +58,7 @@ export const useRunStore = defineStore("run", () => {
     }
   }
 
-  async function deleteRun(run: Run, orbisApiService: OrbisApiService) {
+  async function deleteRun(run: Run) {
     try {
       if (runs.value.length > 1) {
         await orbisApiService.deleteRun(run);
