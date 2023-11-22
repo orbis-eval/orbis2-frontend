@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Document } from "~/lib/model/document";
+import { ORBIS_BASE_URL } from "~/constants/orbisApi";
+
+const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
 
 export const useDocumentStore = defineStore("document", () => {
   const documents = ref([] as Document[]);
@@ -20,7 +23,6 @@ export const useDocumentStore = defineStore("document", () => {
 
   async function loadDocuments(
     runId: number,
-    orbisApiService: OrbisApiService,
     pageSize: number,
     skip: number = 0,
   ) {
@@ -37,10 +39,7 @@ export const useDocumentStore = defineStore("document", () => {
     }
   }
 
-  async function loadDocument(
-    documentId: number,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function loadDocument(documentId: number) {
     try {
       currentDocument.value = await orbisApiService.getDocument(documentId);
     } catch (error) {
@@ -53,7 +52,7 @@ export const useDocumentStore = defineStore("document", () => {
     }
   }
 
-  async function nextDocument(runId: number, orbisApiService: OrbisApiService) {
+  async function nextDocument(runId: number) {
     if (!currentDocument.value.identifier) {
       throw new Error("No valid id for current Document");
     }
