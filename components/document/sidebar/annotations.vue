@@ -73,14 +73,12 @@ addIcons(MdDeleteforeverOutlined);
 
 const emit = defineEmits(["setHighlightNestedSetNode"]);
 
-const { $orbisApiService } = useNuxtApp();
-
 const annotationStore = useAnnotationStore();
 const { nestedSetRootNode, selectedAnnotation } = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
 const { currentColorPalette } = storeToRefs(colorPalettesStore);
 
 async function deleteAnnotation(nestedSetNode: NestedSetNode) {
-  await annotationStore.deleteAnnotation(nestedSetNode, $orbisApiService);
+  await annotationStore.deleteAnnotation(nestedSetNode);
 }
 </script>

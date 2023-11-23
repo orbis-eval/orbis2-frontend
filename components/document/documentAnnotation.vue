@@ -64,7 +64,6 @@ defineProps<{
   highlightedNestedSetNodeId: number[];
 }>();
 
-const { $orbisApiService } = useNuxtApp();
 const route = useRoute();
 
 const selection = ref(null as any);
@@ -135,7 +134,7 @@ const annotator: Annotator = new Annotator({
 });
 
 async function deleteAnnotation(nestedSetNode: NestedSetNode) {
-  await annotationStore.deleteAnnotation(nestedSetNode, $orbisApiService);
+  await annotationStore.deleteAnnotation(nestedSetNode);
 }
 
 function hideAnnotationModal() {
@@ -175,7 +174,6 @@ async function createAnnotation(annotationType: AnnotationType) {
         annotator,
         selectedRun.value.identifier,
         Number(route.params.id),
-        $orbisApiService,
       );
     } else {
       console.error("no run id defined in createAnnotation");

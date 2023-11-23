@@ -14,10 +14,6 @@ import ModalListRuns from "~/components/modal/listRuns.vue";
 
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
-const { $orbisApiService } = useNuxtApp() as {
-  $orbisApiService: OrbisApiService;
-};
 
 const { openModal, closeModal } = useModal();
 const runStore = useRunStore();
@@ -36,7 +32,7 @@ const onDecline = () => {
 
 const deletionConfirmed = async () => {
   try {
-    await runStore.deleteRun(props.propsObject, $orbisApiService);
+    await runStore.deleteRun(props.propsObject);
   } catch (error) {
     // @Todo: Show error message to user
     console.error(error);

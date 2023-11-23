@@ -27,6 +27,7 @@ import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
+import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
 

@@ -39,19 +39,15 @@
 </template>
 
 <script lang="ts" setup>
-import { Form, Field, ErrorMessage } from "vee-validate";
+import { ErrorMessage, Field, Form } from "vee-validate";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { useCorpusStore } from "~/stores/corpusStore";
 
-const { $orbisApiService } = useNuxtApp() as {
-  $orbisApiService: OrbisApiService;
-};
 const { t } = useI18n();
 const { closeModal } = useModal();
 const runStore = useRunStore();
@@ -83,7 +79,7 @@ const createRun = async (values: any) => {
       description: values.runDesc,
       corpus: corpus.value,
     });
-    await runStore.createRun(newRun, corpus.value, $orbisApiService);
+    await runStore.createRun(newRun, corpus.value);
   } catch (error) {
     // Todo: Show error to user
     console.error(error);
