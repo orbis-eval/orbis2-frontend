@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
 import { Document } from "~/lib/model/document";
 import { DocumentFileReader } from "~/lib/utils/documentFileReader";
+import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
 export const useCorpusStore = defineStore("corpus", () => {
+  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
   const corpora = ref([] as Corpus[]);
   const corpus = ref({} as Corpus);
 
@@ -14,7 +16,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     corpus.value = {} as Corpus;
   }
 
-  async function loadCorpora(orbisApiService: OrbisApiService) {
+  async function loadCorpora() {
     try {
       const response = await orbisApiService.getCorpora();
 
@@ -28,10 +30,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
-  async function deleteCorpus(
-    corpusToDelete: Corpus,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function deleteCorpus(corpusToDelete: Corpus) {
     try {
       await orbisApiService.deleteCorpus(corpusToDelete);
       corpora.value = corpora.value.filter(
@@ -44,10 +43,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
-  async function loadCorpus(
-    corpusId: number,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function loadCorpus(corpusId: number) {
     try {
       corpus.value = await orbisApiService.getCorpus(corpusId);
     } catch (error) {
@@ -55,11 +51,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
-  async function createCorpus(
-    corpusName: string,
-    chosenFiles: File[],
-    orbisApiService: OrbisApiService,
-  ) {
+  async function createCorpus(corpusName: string, chosenFiles: File[]) {
     try {
       let newCorpus: Corpus = new Corpus({
         name: corpusName,

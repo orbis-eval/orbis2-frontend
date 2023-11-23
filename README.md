@@ -18,6 +18,12 @@ The section below describes how you can use Orbis2 for creating and correcting a
 
 The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/container/package/orbis2-frontend) bundles all software necessary to run Orbis Annotator.
 
+### Inject `.env` file
+
+Copy the `.env.example` to `.env` and adjust the `orbisApiBaseURL` value.
+
+`cp .env.example .env`
+
 ### Start the container
 
 Start and run the container with the following command.

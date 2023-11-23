@@ -12,11 +12,7 @@
 <script lang="ts" setup>
 import { Corpus } from "~/lib/model/corpus";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 
-const { $orbisApiService } = useNuxtApp() as {
-  $orbisApiService: OrbisApiService;
-};
 const corpusStore = useCorpusStore();
 const { closeModal } = useModal();
 
@@ -29,7 +25,7 @@ const props = defineProps<{
 
 const deletionConfirmed = async () => {
   try {
-    await corpusStore.deleteCorpus(props.propsObject, $orbisApiService);
+    await corpusStore.deleteCorpus(props.propsObject);
   } catch (error) {
     // Todo: Add Error Message
     console.error(error);

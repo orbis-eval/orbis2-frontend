@@ -34,7 +34,6 @@ import { useDocumentStore } from "~/stores/documentStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 import { useTitle } from "~/composables/title";
 
-const { $orbisApiService } = useNuxtApp();
 const route = useRoute();
 
 const loading = ref(true);
@@ -53,21 +52,15 @@ const { corpus } = storeToRefs(corpusStore);
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
-    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
-    await documentStore.loadDocument(Number(route.params.id), $orbisApiService);
+    await corpusStore.loadCorpus(Number(route.params.corpusId));
+    await runStore.loadRuns(Number(route.params.corpusId));
+    await documentStore.loadDocument(Number(route.params.id));
 
     setTitle(corpus.value.name);
 
     if (selectedRun.value.identifier) {
-      await documentStore.countDocuments(
-        selectedRun.value.identifier,
-        $orbisApiService,
-      );
-      await colorPalettesStore.loadColorPalettes($orbisApiService);
+      await documentStore.countDocuments(selectedRun.value.identifier);
+      await colorPalettesStore.loadColorPalettes();
 
       if (documentStore.currentDocument.identifier) {
         await annotationStore.loadAnnotations(
@@ -75,7 +68,6 @@ onMounted(async () => {
           documentStore.currentDocument.content,
           selectedRun.value.identifier,
           selectedRun.value.corpus.supportedAnnotationTypes,
-          $orbisApiService,
         );
       } else {
         console.log("Id of current document was not set.");

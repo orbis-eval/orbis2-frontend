@@ -35,7 +35,6 @@ import { useI18n } from "vue-i18n";
 import { useCorpusStore } from "~/stores/corpusStore";
 
 const { t } = useI18n();
-const { $orbisApiService } = useNuxtApp();
 const { closeModal } = useModal();
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
@@ -64,11 +63,7 @@ function fileChanged(newChosenFiles: File[]) {
 
 const createCorpus = async (values: any) => {
   try {
-    await corpusStore.createCorpus(
-      values.corpusName,
-      chosenFiles.value,
-      $orbisApiService,
-    );
+    await corpusStore.createCorpus(values.corpusName, chosenFiles.value);
   } catch (error) {
     // Todo: Add Error Message
     console.error(error);

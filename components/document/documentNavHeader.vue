@@ -42,7 +42,6 @@ const route = useRoute();
 
 const emit = defineEmits(["loadingStarted", "loadingFinished"]);
 
-const { $orbisApiService } = useNuxtApp();
 addIcons(MdNavigatenextTwotone, MdNavigatebeforeTwotone);
 
 const documentStore = useDocumentStore();
@@ -53,10 +52,7 @@ const { selectedRun } = storeToRefs(runStore);
 async function nextDocument() {
   emit("loadingStarted");
   if (selectedRun.value.identifier) {
-    await documentStore.nextDocument(
-      selectedRun.value.identifier,
-      $orbisApiService,
-    );
+    await documentStore.nextDocument(selectedRun.value.identifier);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
@@ -72,10 +68,7 @@ async function nextDocument() {
 async function previousDocument() {
   emit("loadingStarted");
   if (selectedRun.value.identifier) {
-    await documentStore.previousDocument(
-      selectedRun.value.identifier,
-      $orbisApiService,
-    );
+    await documentStore.previousDocument(selectedRun.value.identifier);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +

@@ -122,32 +122,6 @@ export class OrbisApiService {
     );
   }
 
-  async apiGet(query: string): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}${query}`, {
-      method: "GET",
-    });
-  }
-
-  async apiPost(
-    query: string,
-    body: any,
-  ): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}${query}`, {
-      method: "POST",
-      body: JSON.stringify(body),
-    });
-  }
-
-  async apiDelete(
-    query: string,
-    body: any,
-  ): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}${query}`, {
-      method: "DELETE",
-      body: JSON.stringify(body),
-    });
-  }
-
   async nextDocument(runId: number, documentId: number): Promise<Document> {
     return await Parser.parse(
       Document,
@@ -163,11 +137,37 @@ export class OrbisApiService {
   }
 
   async countDocuments(runId: number): Promise<Number> {
-    // @ts-ignore
+    /* @ts-ignore */
     return await this.apiGet(`countDocuments?run_id=${runId}`);
   }
 
   async colorPalettes(): Promise<ColorPalette[]> {
     return await Parser.parseList(ColorPalette, this.apiGet(`colorPalettes`));
+  }
+
+  async apiGet(query: string): Promise<TypedInternalResponse<string>> {
+    return await $fetch(`${this.orbisApiBase}/${query}`, {
+      method: "GET",
+    });
+  }
+
+  async apiPost(
+    query: string,
+    body: any,
+  ): Promise<TypedInternalResponse<string>> {
+    return await $fetch(`${this.orbisApiBase}/${query}`, {
+      method: "POST",
+      body: JSON.stringify(body),
+    });
+  }
+
+  async apiDelete(
+    query: string,
+    body: any,
+  ): Promise<TypedInternalResponse<string>> {
+    return await $fetch(`${this.orbisApiBase}/${query}`, {
+      method: "DELETE",
+      body: JSON.stringify(body),
+    });
   }
 }

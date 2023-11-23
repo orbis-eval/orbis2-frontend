@@ -10,8 +10,10 @@ import { AnnotationCommandHistory } from "~/lib/utils/annotation/annotationComma
 import { DeleteAnnotationCommand } from "~/lib/utils/annotation/deleteAnnotationCommand";
 import { Annotation } from "~/lib/model/annotation";
 import { TextSpan } from "~/lib/model/textSpan";
+import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
 export const useAnnotationStore = defineStore("annotation", () => {
+  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
   const nestedSetRootNode = ref({} as NestedSetNode | null);
   const selectedAnnotation = ref({} as NestedSetNode | null);
   const annotationHistory = new AnnotationCommandHistory();
@@ -93,7 +95,6 @@ export const useAnnotationStore = defineStore("annotation", () => {
     documentContent: string,
     runId: number,
     annotationTypes: AnnotationType[],
-    orbisApiService: OrbisApiService,
   ) {
     try {
       const annotationsFromDb = await orbisApiService.getAnnotations(
@@ -135,7 +136,6 @@ export const useAnnotationStore = defineStore("annotation", () => {
     annotator: Annotator,
     runId: number,
     documentId: number,
-    orbisApiService: OrbisApiService,
   ) {
     if (nestedSetRootNode.value instanceof NestedSetNode) {
       const addCommand = new CreateAnnotationCommand(
@@ -157,10 +157,7 @@ export const useAnnotationStore = defineStore("annotation", () => {
     }
   }
 
-  async function deleteAnnotation(
-    annotation: NestedSetNode,
-    orbisApiService: OrbisApiService,
-  ) {
+  async function deleteAnnotation(annotation: NestedSetNode) {
     if (nestedSetRootNode.value instanceof NestedSetNode) {
       const deleteCommand = new DeleteAnnotationCommand(
         annotation,

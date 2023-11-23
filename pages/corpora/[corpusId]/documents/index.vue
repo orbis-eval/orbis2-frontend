@@ -26,16 +26,12 @@ import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
-const { $orbisApiService } = useNuxtApp() as {
-  $orbisApiService: OrbisApiService;
-};
 
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
@@ -62,7 +58,6 @@ async function pageChanged(nextPage: number) {
     try {
       await documentStore.loadDocuments(
         selectedRun.value.identifier,
-        $orbisApiService,
         pageSize.value,
         startIndex,
       );
@@ -78,10 +73,7 @@ async function pageChanged(nextPage: number) {
 
 async function countDocuments() {
   if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(
-      selectedRun.value.identifier,
-      $orbisApiService,
-    );
+    await documentStore.countDocuments(selectedRun.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -97,12 +89,9 @@ async function loadDocuments() {
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(
-      Number(route.params.corpusId),
-      $orbisApiService,
-    );
+    await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
-    await runStore.loadRuns(Number(route.params.corpusId), $orbisApiService);
+    await runStore.loadRuns(Number(route.params.corpusId));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user

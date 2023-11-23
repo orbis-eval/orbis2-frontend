@@ -5,7 +5,23 @@ import { Run } from "~/lib/model/run";
 import { Corpus } from "~/lib/model/corpus";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Parser } from "~/lib/parser";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+
+const mockedOrbisApiServiceDeleteRun = vi.fn().mockResolvedValue(true);
+
+// Create a mock class for OrbisApiService with all required methods for this test suite
+vi.mock("~/lib/orbisApi/orbisApiService", () => {
+  return {
+    OrbisApiService: vi.fn().mockImplementation(() => ({
+      getRuns: async (): Promise<Run[] | Error> => {
+        return await Parser.parseList(Run, Promise.resolve(runs));
+      },
+      createRun: async (newRun: Run): Promise<Run | Error> => {
+        return await Parser.parse(Run, Promise.resolve(newRun));
+      },
+      deleteRun: mockedOrbisApiServiceDeleteRun,
+    })),
+  };
+});
 
 const createRun = (id: number, name: string, description: string): Run => {
   return new Run({
@@ -28,26 +44,7 @@ const runs: Run[] = Array.from([
   createRun(3, "Run 3", "some desc"),
 ]);
 
-const mockedOrbisApiServiceDeleteRun = vi.fn().mockResolvedValue(true);
-
-// Create a mock class for OrbisApiService with all required methods for this test suite
-vi.mock("~/lib/orbisApi/orbisApiService", () => {
-  return {
-    OrbisApiService: vi.fn().mockImplementation(() => ({
-      getRuns: async (): Promise<Run[] | Error> => {
-        return await Parser.parseList(Run, Promise.resolve(runs));
-      },
-      createRun: async (newRun: Run): Promise<Run | Error> => {
-        return await Parser.parse(Run, Promise.resolve(newRun));
-      },
-      deleteRun: mockedOrbisApiServiceDeleteRun,
-    })),
-  };
-});
-
 describe("Run Store", () => {
-  const mockedOrbisApiService = new OrbisApiService("");
-
   beforeEach(() => {
     mockedOrbisApiServiceDeleteRun.mockClear();
     setActivePinia(createPinia());
@@ -80,7 +77,7 @@ describe("Run Store", () => {
     const runStore = useRunStore();
     const corpusId = 1;
 
-    await runStore.loadRuns(corpusId, mockedOrbisApiService);
+    await runStore.loadRuns(corpusId);
 
     expect(runStore.corpusId).toBe(corpusId);
     expect(runStore.runs.length).toEqual(3);
@@ -94,7 +91,7 @@ describe("Run Store", () => {
     runStore.selectedRun = run3;
     runStore.corpusId = corpusId;
 
-    await runStore.loadRuns(corpusId, mockedOrbisApiService);
+    await runStore.loadRuns(corpusId);
 
     expect(runStore.corpusId).toBe(corpusId);
     expect(runStore.runs.length).toEqual(3);
@@ -108,7 +105,7 @@ describe("Run Store", () => {
     runStore.selectedRun = run3;
     runStore.corpusId = 1;
 
-    await runStore.loadRuns(newCorpusId, mockedOrbisApiService);
+    await runStore.loadRuns(newCorpusId);
 
     expect(runStore.corpusId).toBe(newCorpusId);
     expect(runStore.runs.length).toEqual(3);
@@ -120,7 +117,7 @@ describe("Run Store", () => {
     const newRun = createRun(1, "Run 1", "some desc");
     const corpus = newRun.corpus;
 
-    await runStore.createRun(newRun, corpus, mockedOrbisApiService);
+    await runStore.createRun(newRun, corpus);
 
     expect(runStore.runs.length).equals(1);
     expect(runStore.runs).toContainEqual(newRun);
@@ -133,7 +130,7 @@ describe("Run Store", () => {
     runStore.runs = [run1, run2];
     runStore.selectedRun = run1;
 
-    await runStore.deleteRun(run2, mockedOrbisApiService);
+    await runStore.deleteRun(run2);
 
     expect(runStore.runs.length).equals(1);
     expect(runStore.runs).toContainEqual(run1);
@@ -147,7 +144,7 @@ describe("Run Store", () => {
     runStore.runs = [run1, run2];
     runStore.selectedRun = run1;
 
-    await runStore.deleteRun(run1, mockedOrbisApiService);
+    await runStore.deleteRun(run1);
 
     expect(runStore.runs.length).equals(1);
     expect(runStore.runs).toContainEqual(run2);
@@ -160,7 +157,7 @@ describe("Run Store", () => {
     runStore.runs = [run1];
     runStore.selectedRun = run1;
 
-    await runStore.deleteRun(run1, mockedOrbisApiService);
+    await runStore.deleteRun(run1);
 
     expect(mockedOrbisApiServiceDeleteRun).not.toHaveBeenCalled();
     expect(runStore.runs.length).equals(1);
