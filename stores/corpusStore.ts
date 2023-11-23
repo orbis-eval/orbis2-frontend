@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
 import { Document } from "~/lib/model/document";
 import { DocumentFileReader } from "~/lib/utils/documentFileReader";
+import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
 export const useCorpusStore = defineStore("corpus", () => {
