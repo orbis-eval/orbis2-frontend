@@ -56,15 +56,6 @@ vi.mock("~/lib/orbisApi/orbisApiService", () => {
   };
 });
 
-// Mock useRuntimeConfig
-vi.mock("@nuxt/composition-api", () => ({
-  useRuntimeConfig: vi.fn(() => ({
-    public: {
-      orbisApiBase: "http://localhost:63012/",
-    },
-  })),
-}));
-
 describe("Corpus Store", () => {
   beforeEach(() => {
     setActivePinia(createPinia());
