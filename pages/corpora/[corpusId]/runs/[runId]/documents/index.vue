@@ -53,10 +53,12 @@
         />
       </div>
     </div>
+    <MessageToast v-if="showToast" :toastSettings="toastSettings" />
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
@@ -65,11 +67,17 @@ import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 
+import {
+  MessageToastSettings,
+  MessageToastType,
+} from "~/lib/types/MessageToastSettings";
 addIcons(MdKeyboardarrowdown);
 
 const router = useRouter();
 
 const { $progress } = useNuxtApp();
+
+const { t } = useI18n();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
@@ -82,6 +90,14 @@ const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 
 const pageSize = ref(10);
 
+const toastSettings = ref({
+  message: t("document.error.documentNotLoading"),
+  type: MessageToastType.ERROR,
+} as MessageToastSettings);
+const showToast = ref(false);
+
+const { currentPage } = storeToRefs(documentStore);
+const { totalPages } = storeToRefs(documentStore);
 const { setTitle } = useTitle();
 
 // called when another page is selected
@@ -97,7 +113,7 @@ async function pageChanged(nextPage: number) {
         startIndex,
       );
     } catch (error) {
-      console.error(error);
+      showToast.value = true;
     } finally {
       $progress.finish();
     }
@@ -127,7 +143,8 @@ onMounted(async () => {
     setTitle(corpus.value.name);
     await countDocuments();
     await loadDocuments();
-    // @Todo: Error message for user
+  } catch (error) {
+    showToast.value = true;
   } finally {
     $progress.finish();
   }
