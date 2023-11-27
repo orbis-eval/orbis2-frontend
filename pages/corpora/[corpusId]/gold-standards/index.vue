@@ -9,12 +9,8 @@
         class="mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
       >
         <div class="mb-5 flex items-center gap-5">
-          <h1 class="text-3xl text-white">Runs</h1>
-          <OrbisButton>Import Run</OrbisButton>
-          <OrbisButton>
-            <OhVueIcon name="bi-play-fill" class="menu-icon" fill="green" />
-            Start Pre-defined Runs
-          </OrbisButton>
+          <h1 class="text-3xl text-white">Gold Standards</h1>
+          <OrbisButton>Import Gold Standard</OrbisButton>
         </div>
         <div class="divider"></div>
         <div class="mb-5 flex items-center gap-5">
@@ -26,7 +22,19 @@
             >Toggle Extra Metrics</OrbisButton
           >
           <OrbisButton
-            :disabled="!isOnlyOneRunSelected"
+            :disabled="!(isNormalRunSelected && onlyOneRunSelected)"
+            size="sm"
+            :on-click="() => setGoldRun(normalRunSelected)"
+            >Set Gold Run</OrbisButton
+          >
+          <OrbisButton
+            :disabled="!(isGoldRunSelected && onlyOneRunSelected)"
+            size="sm"
+            :on-click="() => unsetGoldRun(goldRunSelected)"
+            >Unset Gold Run</OrbisButton
+          >
+          <OrbisButton
+            :disabled="!areTwoRunsSelected"
             size="sm"
             :on-click="
               () =>
@@ -35,7 +43,7 @@
                   query: { mode: 'comparison' },
                 })
             "
-            >Compare with Gold Standard<div class="badge bg-orange-300 text-black">G1</div></OrbisButton
+            >Compare</OrbisButton
           >
         </div>
         <div class="divider"></div>
@@ -101,15 +109,15 @@
 </template>
 
 <script setup lang="ts">
-import {addIcons, OhVueIcon} from "oh-vue-icons";
-import { MdKeyboardarrowdown, BiPlayFill } from "oh-vue-icons/icons";
+import { addIcons } from "oh-vue-icons";
+import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { useRunStore } from "~/stores/runStore";
 
-addIcons(MdKeyboardarrowdown, BiPlayFill);
+addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
 const router = useRouter();
@@ -136,12 +144,40 @@ const MAPPING_EXPERIMENTS = {
 
 const mappedRuns = ref([]);
 
-const isOnlyOneRunSelected = computed(
+const normalRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => !run.isGoldRun && run.selected)[0] ?? null,
+);
+
+const goldRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => run.isGoldRun && run.selected)[0] ?? null,
+);
+
+const isNormalRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => !run.isGoldRun && run.selected).length ===
+    1,
+);
+const isGoldRunSelected = computed(
+  () =>
+    mappedRuns.value.filter((run) => run.isGoldRun && run.selected).length ===
+    1,
+);
+const onlyOneRunSelected = computed(
   () => mappedRuns.value.filter((run) => run.selected).length === 1,
 );
 const areTwoRunsSelected = computed(
   () => mappedRuns.value.filter((run) => run.selected).length === 2,
 );
+
+const setGoldRun = (run) => {
+  run.isGoldRun = true;
+};
+
+const unsetGoldRun = (run) => {
+  run.isGoldRun = false;
+};
 
 const isExtraMetricsVisible = ref(false);
 
@@ -167,7 +203,7 @@ onMounted(async () => {
       selected: false,
     }));
 
-    mappedRuns.value = mappedRuns.value.filter((run) => run.name[0] !== "G");
+    mappedRuns.value = mappedRuns.value.filter((run) => run.name[0] === "G");
 
     // @Todo: Error message for user
   } finally {

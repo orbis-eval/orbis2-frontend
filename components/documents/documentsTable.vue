@@ -19,15 +19,32 @@
       </label>
     </div>
     <div class="divider"></div>
-    <div v-if="viewMode == 'single'" class="flex items-center gap-2">
-      <span>Select Run</span>
-      <OrbisButton>Run 1</OrbisButton>
-    </div>
-    <div v-if="viewMode == 'comparison'" class="flex items-center gap-2">
-      <span>Compare Run</span>
-      <OrbisButton class="bg-orange-300 text-black">G1</OrbisButton>
-      <span>with</span>
-      <OrbisButton>R1</OrbisButton>
+    <div class="flex">
+      <div class="w-6/12">
+        <div v-if="viewMode == 'single'" class="flex items-center gap-2">
+          <span>Select Run</span>
+          <OrbisButton size="sm">Run 1</OrbisButton>
+        </div>
+        <div v-if="viewMode == 'comparison'" class="flex items-center gap-2">
+          <span>Compare Run</span>
+          <OrbisButton class="bg-orange-300 text-black" size="sm"
+            >G1</OrbisButton
+          >
+          <span>with</span>
+          <OrbisButton size="sm">R1</OrbisButton>
+        </div>
+      </div>
+      <div class="w-6/12">
+        <div class="flex items-center gap-5">
+          <h2>Table Actions</h2>
+          <OrbisButton size="sm">Sort</OrbisButton>
+          <OrbisButton
+            size="sm"
+            :on-click="() => (isExtraMetricsVisible = !isExtraMetricsVisible)"
+            >Toggle Extra Metrics</OrbisButton
+          >
+        </div>
+      </div>
     </div>
     <div class="divider"></div>
     <table aria-label="List of documents in corpus" class="table text-white">
@@ -42,11 +59,10 @@
       <tbody v-for="(document, index) in documents" :key="document.identifier">
         <tr
           class="hover cursor-pointer"
-          @click="
-            router.push(
-              `/corpora/${corpus.identifier}/documents/${document.identifier}`,
-            )
-          "
+          @click="router.push({
+              path: `/corpora/${corpus.identifier}/documents/${document.identifier}`,
+              query: { mode: viewMode }
+            })"
         >
           <td class="py-1 pr-5">
             {{ pageSize * (currentPage - 1) + index + 1 }}
@@ -70,6 +86,7 @@ import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 
+const route = useRoute();
 const router = useRouter();
 
 const corpusStore = useCorpusStore();
@@ -79,4 +96,8 @@ const { corpus } = storeToRefs(corpusStore);
 
 const pageSize = ref(10);
 const viewMode = ref("single");
+
+if (route.query.mode && route.query.mode === "comparison") {
+  viewMode.value = "comparison";
+}
 </script>

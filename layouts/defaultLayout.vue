@@ -3,16 +3,23 @@
     <header
       class="sticky top-0 z-10 col-span-full bg-base-200 px-4 py-2 text-gray-200"
     >
-      <div class="flex flex-row items-center">
-        <NuxtLink :to="homeLink">
-          <img
-            src="~/assets/img/Orbis-Logo-Transparent_2.png"
-            alt="Orbis-Eval logo"
-            class="h-12 w-12 rounded-full border border-gray-600 bg-white"
-          />
-        </NuxtLink>
-        <div class="ml-4 text-lg">
-          <NuxtLink :to="homeLink">{{ title }}</NuxtLink>
+      <div class="flex">
+        <div class="flex flex-row items-center w-3/6">
+          <NuxtLink :to="homeLink">
+            <img
+                src="~/assets/img/Orbis-Logo-Transparent_2.png"
+                alt="Orbis-Eval logo"
+                class="h-12 w-12 rounded-full border border-gray-600 bg-white"
+            />
+          </NuxtLink>
+          <div class="ml-4 text-lg">
+            <NuxtLink :to="homeLink" class="whitespace-nowrap">{{ title }}</NuxtLink>
+          </div>
+        </div>
+        <div v-if="route.params.corpusId" class="flex w-3/6 items-center">
+          <div v-if="viewMode == 'single'" class="badge badge-primary">Single Mode</div>
+          <div v-if="viewMode == 'comparison'" class="badge badge-error">Comparison Mode</div>
+          <div class="badge bg-orange-300 text-black ml-1">G1</div>
         </div>
         <div class="flex-grow"></div>
         <div>
@@ -34,6 +41,7 @@
         </slot>
       </nav>
       <main class="h-full grow overflow-y-auto p-4 pb-0">
+        Corpora > Runs > Documents > Single Mode > Nr. 123123
         <slot />
       </main>
       <aside class="h-full">
@@ -50,6 +58,8 @@ import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 
+const route = useRoute();
+
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 const { title } = useTitle("Orbis NG");
@@ -60,4 +70,9 @@ const homeLink = computed(() => {
   }
   return "/";
 });
+
+const viewMode = ref("single");
+if (route.query.mode === "comparison") {
+  viewMode.value = "comparison";
+}
 </script>

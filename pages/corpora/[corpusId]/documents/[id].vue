@@ -3,6 +3,22 @@
     <LoadingSpinner v-if="loading" class="mt-5" />
     <div v-else class="mt-5">
       <div
+        class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-5 flex"
+        v-if="isComparisonMode"
+      >
+        <div class="w-6/12">
+          <p><b>F1 Score:</b> 0.81 / 0.82</p>
+          <p><b>Precision:</b> 0.81 / 0.82</p>
+          <p><b>Recall:</b> 0.81 / 0.82</p>
+          <p><b>Accuracy:</b> 0.81 / 0.82</p>
+        </div>
+        <div class="w-6/12">
+          <p><b>True Positive:</b> 2</p>
+          <p><b>False Positive: </b> 1</p>
+          <p><b>False Negative:</b> 1</p>
+        </div>
+      </div>
+      <div
         class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral"
       >
         <DocumentNavHeader
@@ -89,4 +105,9 @@ onBeforeUnmount(() => {
 function setHighlightNestedSetNode(ids: number[]) {
   highlightedNestedSetNodeId.value = ids;
 }
+
+const isComparisonMode = computed(() => {
+  return route.query.mode === "comparison";
+});
+
 </script>

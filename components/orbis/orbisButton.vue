@@ -86,7 +86,7 @@ const classesAsString = computed(() => {
 
   if (props.disabled || isLoading.value) {
     classList.push(
-      "bg-gray-300 text-gray-600 cursor-not-allowed opacity-50 border-gray-300",
+      "cursor-not-allowed opacity-50",
     );
   }
   if (props.active) {
