@@ -20,6 +20,9 @@
           <div v-if="viewMode == 'single'" class="badge badge-primary">Single Mode</div>
           <div v-if="viewMode == 'comparison'" class="badge badge-error">Comparison Mode</div>
           <div class="badge bg-orange-300 text-black ml-1">G1</div>
+          <div v-if="selectedRun" class="badge badge-info">
+            {{ selectedRun.name }}
+          </div>
         </div>
         <div class="flex-grow"></div>
         <div>
@@ -57,11 +60,16 @@
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useRunStore } from "~/stores/runStore";
 
 const route = useRoute();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
+
+const runStore = useRunStore();
+const { selectedRun } = storeToRefs(runStore);
+
 const { title } = useTitle("Orbis NG");
 
 const homeLink = computed(() => {
