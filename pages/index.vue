@@ -42,11 +42,13 @@
         </div>
       </div>
     </div>
+    <MessageToast v-if="showToast" :toastSettings="toastSettings" />
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
 import { addIcons } from "oh-vue-icons";
+import { useI18n } from "vue-i18n";
 import { OhVueIcon } from "oh-vue-icons";
 import { HiPlus, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import { useRunStore } from "~/stores/runStore";
@@ -56,7 +58,20 @@ import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
 import { Corpus } from "~/lib/model/corpus";
 
+import {
+  MessageToastSettings,
+  MessageToastType,
+} from "~/lib/types/MessageToastSettings";
+
 addIcons(MdDeleteforeverOutlined, HiPlus);
+
+const { t } = useI18n();
+
+const toastSettings = ref({
+  message: t("corpus.error.corpusNotLoading"),
+  type: MessageToastType.ERROR,
+} as MessageToastSettings);
+const showToast = ref(false);
 
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
@@ -76,7 +91,8 @@ async function loadCorpora() {
   try {
     corpusStore.reset();
     await corpusStore.loadCorpora();
-    // TODO, 06.01.2023 anf: correct error handling
+  } catch (error) {
+    showToast.value = true;
   } finally {
     $progress.finish();
   }
