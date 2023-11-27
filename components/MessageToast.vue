@@ -2,8 +2,8 @@
   <div class="text-center">
     <div class="toast toast-start">
       <div
-        v-if="showToast === true && toastSettings"
-        :class="`alert alert-${toastSettings.type}`"
+        v-if="showToast && toastSettings"
+        :class="`alert alert-${toastSettings.type.toString()} text-black`"
       >
         <span>{{ toastSettings.message }}</span>
       </div>
@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import { MessageToastSettings } from "~/lib/types/MessageToastSettings";
 
+// :class="`alert alert-${toastSettings.type}`"
 const props = defineProps<{
   toastSettings: MessageToastSettings;
 }>();
