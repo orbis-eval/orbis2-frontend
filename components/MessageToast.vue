@@ -1,7 +1,10 @@
 <template>
   <div class="text-center">
     <div class="toast toast-start">
-      <div v-if="toastSettings" :class="`alert alert-${toastSettings.type}`">
+      <div
+        v-if="showToast === true && toastSettings"
+        :class="`alert alert-${toastSettings.type}`"
+      >
         <span>{{ toastSettings.message }}</span>
       </div>
     </div>
@@ -11,7 +14,20 @@
 <script setup lang="ts">
 import { MessageToastSettings } from "~/lib/types/MessageToastSettings";
 
-defineProps<{
+const props = defineProps<{
   toastSettings: MessageToastSettings;
 }>();
+
+const showToast = ref(false);
+const seconds = 5;
+
+// Close toast after 5 seconds
+if (props.toastSettings) {
+  showToast.value = true;
+
+  // Set a timer to hide the toast after 5 seconds
+  setTimeout(() => {
+    showToast.value = false;
+  }, seconds * 1000);
+}
 </script>
