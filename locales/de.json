@@ -14,6 +14,8 @@
     "create": "Erstelle Korpus",
     "error": {
       "corpusNameRequired": "Korpus Name wird benötigt",
+      "corpusFileWrong": "Die Datei für diesen Korpus scheint nicht korrekt zu sein",
+      "corpusNotLoading": "Es ist ein Fehler beim Laden der Korpora aufgetreten",
       "corpusExists": "Korpus mit diesem Namen existiert bereits"
     },
     "delete": {
@@ -26,7 +28,15 @@
     "dropGoldStandard": "Gold Standard hier hinziehen"
   },
   "document": {
+    "documents": "Dokumente",
     "document": "Dokument",
+    "create": "Erstelle Dokument",
+    "error": {
+      "documentNameRequired": "Dokument Name wird benötigt",
+      "documentFileWrong": "Die Datei für dieses Dokument scheint nicht korrekt zu sein",
+      "documentExists": "Dokument mit diesem Namen existiert bereits",
+      "documentNotLoading": "Es scheint einen Fehler beim Laden der Dokumente zu geben"
+    },
     "sidebar": {
       "selectionInfo": {
         "selectionInfoTitle": "Informationen zur Auswahl",

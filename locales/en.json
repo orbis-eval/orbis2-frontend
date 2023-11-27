@@ -14,6 +14,8 @@
     "create": "Create Corpus",
     "error": {
       "corpusNameRequired": "Corpus name is required",
+      "corpusFileWrong": "The file for this corpus seems wrong",
+      "corpusNotLoading": "There was a problem loading the corpora",
       "corpusExists": "Corpus with this name already exists"
     },
     "delete": {
@@ -25,7 +27,18 @@
     "dropFile": "Drop File here"
   },
   "document": {
+    "documents": "Documents",
     "document": "Document",
+    "create": "Create Document",
+    "error": {
+      "documentNameRequired": "Document name is required",
+      "documentExists": "Document with this name already exists",
+      "documentNotLoading": "There was a problem loading the documents"
+    },
+    "delete": {
+      "warningTitle": "Delete document?",
+      "warning": "Deleting document with {name} will remove all annotations of this document! Do you want to continue?"
+    },
     "sidebar": {
       "selectionInfo": {
         "selectionInfoTitle": "Selection Info",
