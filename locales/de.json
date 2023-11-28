@@ -1,5 +1,6 @@
 {
   "documents": "Dokumente",
+  "allDocuments": "Alle Dokumente",
   "numberAbbreviation": "Nr",
   "id": "ID",
   "content": "Inhalt",
@@ -33,6 +34,7 @@
     }
   },
   "run": {
+    "viewTitle": "Run {name}",
     "runs": "Runs",
     "createRun": "Erstelle Run",
     "compareRuns": "Vergleiche Runs",

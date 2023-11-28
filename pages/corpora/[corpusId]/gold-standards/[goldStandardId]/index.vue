@@ -8,13 +8,24 @@
       <div
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
       >
-        <h1 class="mb-3 text-3xl text-white">{{ $t("allDocuments") }}</h1>
+        <h1 class="mb-3 text-3xl text-white">
+          {{ $t("run.viewTitle", { name: selectedGoldStandard.name }) }}
+        </h1>
+
+        <h2 class="mb-5 text-2xl text-white">{{ $t("documents") }}</h2>
         <div class="divider"></div>
         <div class="flex">
           <div class="w-12/12">
             <div class="flex items-center gap-5">
               <h2>Table Actions</h2>
               <OrbisButton size="sm">Sort</OrbisButton>
+              <OrbisButton
+                size="sm"
+                :on-click="
+                  () => (isExtraMetricsVisible = !isExtraMetricsVisible)
+                "
+                >Toggle Extra Metrics</OrbisButton
+              >
             </div>
           </div>
         </div>
@@ -51,6 +62,10 @@
                 {{ document.identifier }}
               </td>
               <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
+              <td v-if="viewMode == 'comparison'">0.2</td>
+              <td v-if="viewMode == 'comparison'">0.2</td>
+              <td v-if="viewMode == 'comparison'">0.2</td>
+              <td v-if="viewMode == 'comparison'">0.2</td>
             </tr>
           </tbody>
         </table>
@@ -74,31 +89,37 @@ import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
+import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
+const router = useRouter();
 
 const corpusStore = useCorpusStore();
+const documentStore = useDocumentStore();
+
 const { corpus } = storeToRefs(corpusStore);
 
-const documentStore = useDocumentStore();
-const { currentPage, documents, totalPages } = storeToRefs(documentStore);
+const runStore = useRunStore();
+
+const { selectedGoldStandard, changeSelectedGoldStandard } = storeToRefs(runStore);
 
 const pageSize = ref(10);
 const loading = ref(true);
 
+const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 const { setTitle } = useTitle();
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
-  if (selectedRun.value.identifier) {
+  if (selectedGoldStandard.value.identifier) {
     loading.value = true;
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
       await documentStore.loadDocuments(
-        selectedRun.value.identifier,
+        selectedGoldStandard.value.identifier,
         pageSize.value,
         startIndex,
       );
@@ -113,8 +134,8 @@ async function pageChanged(nextPage: number) {
 }
 
 async function countDocuments() {
-  if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(selectedRun.value.identifier);
+  if (selectedGoldStandard.value.identifier) {
+    await documentStore.countDocuments(selectedGoldStandard.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -132,6 +153,8 @@ onMounted(async () => {
   try {
     await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
+    await runStore.loadRuns(Number(route.params.corpusId));
+    runStore.changeSelectedGoldStandard(runStore.getRunById(Number(route.params.goldStandardId)));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
@@ -139,8 +162,4 @@ onMounted(async () => {
     loading.value = false;
   }
 });
-
-async function runChanged() {
-  await pageChanged(currentPage.value);
-}
 </script>

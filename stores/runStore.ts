@@ -10,11 +10,13 @@ export const useRunStore = defineStore("run", () => {
   const corpusId = ref(-1);
   const runs = ref([] as Run[]);
   const selectedRun = ref({} as Run);
+  const selectedGoldStandard = ref({} as Run);
 
   function reset() {
     corpusId.value = -1;
     runs.value = [] as Run[];
     selectedRun.value = {} as Run;
+    selectedGoldStandard.value = {} as Run;
   }
 
   function changeSelectedRun(run: Run) {
@@ -37,12 +39,6 @@ export const useRunStore = defineStore("run", () => {
       const loadedRuns = await orbisApiService.getRuns(id);
       if (loadedRuns.length > 0) {
         runs.value = loadedRuns;
-        const isSelectedRunInLoadedRuns = loadedRuns.some(
-          (run) => run.identifier === selectedRun.value.identifier,
-        );
-        if (!isSelectedRunInLoadedRuns || corpusId.value !== id) {
-          selectedRun.value = loadedRuns[0];
-        }
         corpusId.value = id;
       }
     } catch (error) {
@@ -52,18 +48,11 @@ export const useRunStore = defineStore("run", () => {
     }
   }
 
-  function changeToFirstRunIfSelectedRunIsDeleted(run: Run) {
-    if (selectedRun.value.identifier === run.identifier) {
-      changeSelectedRun(runs.value[0]);
-    }
-  }
-
   async function deleteRun(run: Run) {
     try {
       if (runs.value.length > 1) {
         await orbisApiService.deleteRun(run);
         runs.value = runs.value.filter((r) => r.identifier !== run.identifier);
-        changeToFirstRunIfSelectedRunIsDeleted(run);
       } else {
         console.error("Cannot delete the last run");
       }
@@ -72,6 +61,14 @@ export const useRunStore = defineStore("run", () => {
         cause: error,
       });
     }
+  }
+
+  function changeSelectedGoldStandard(goldStandard: Run) {
+    selectedGoldStandard.value = goldStandard;
+  }
+
+  function getRunById(id: number) {
+    return runs.value.find((r) => r.identifier === id);
   }
 
   return {
@@ -83,5 +80,8 @@ export const useRunStore = defineStore("run", () => {
     loadRuns,
     createRun,
     changeSelectedRun,
+    selectedGoldStandard,
+    changeSelectedGoldStandard,
+    getRunById,
   };
 });

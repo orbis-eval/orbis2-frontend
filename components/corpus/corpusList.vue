@@ -20,7 +20,7 @@
             class="flex py-2"
           >
             <NuxtLink
-              :to="`/corpora/${corpus.id}/runs`"
+              :to="`/corpora/${corpus.identifier}/gold-standards`"
               class="hover:text-purple-400"
             >
               {{ corpus.name }}
@@ -44,6 +44,7 @@
 import { OhVueIcon } from "oh-vue-icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useRunStore } from "~/stores/runStore";
 import modalCreateCorpus from "~/components/modal/createCorpus.vue";
 import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
@@ -51,6 +52,9 @@ import { Corpus } from "~/lib/model/corpus";
 
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
+
+const runStore = useRunStore();
+runStore.reset();
 
 const { openModal } = useModal();
 const onDeleteCorpus = (corpus: Corpus) => {
