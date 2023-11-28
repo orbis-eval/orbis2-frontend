@@ -6,6 +6,7 @@
   "content": "Inhalt",
   "name": "Name",
   "description": "Beschreibung",
+  "overview": "Übersicht",
   "corpus": {
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
@@ -23,6 +24,7 @@
     "dropFiles": "Dateien hier hinziehen"
   },
   "document": {
+    "document": "Dokument",
     "sidebar": {
       "selectionInfo": {
         "selectionInfoTitle": "Informationen zur Auswahl",

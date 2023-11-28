@@ -9,7 +9,7 @@
           class="rounded-none py-3"
           active-class="bg-gray-500"
         >
-          <OhVueIcon name="hi-database" class="menu-icon" /> Corpora
+          <OhVueIcon name="hi-database" class="menu-icon" /> {{ $t("corpus.corpora") }}
         </NuxtLink>
       </li>
       <li :class="route.params.corpusId ? '' : 'disabled-link'">
@@ -41,7 +41,7 @@
                 'whitespace-nowrap',
                 route.params.corpusId ? 'text-white' : 'text-gray-600',
               ]"
-              >Overview</span
+              >{{ $t("overview") }}</span
             >
           </NuxtLink>
         </li>
@@ -57,7 +57,7 @@
                 'whitespace-nowrap',
                 route.params.corpusId ? 'text-white' : 'text-gray-600',
               ]"
-              >Documents</span
+              >{{ $t("documents") }}</span
             >
           </NuxtLink>
         </li>
@@ -73,7 +73,7 @@
                 'whitespace-nowrap',
                 route.params.corpusId ? 'text-white' : 'text-gray-600',
               ]"
-              >Document</span
+              >{{ $t("document.document") }}</span
             >
           </NuxtLink>
         </li>
