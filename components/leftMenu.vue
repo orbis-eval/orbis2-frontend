@@ -14,72 +14,6 @@
       </li>
       <li :class="route.params.corpusId ? '' : 'disabled-link'">
         <NuxtLink
-          :to="`/corpora/${route.params.corpusId}/gold-standards`"
-          active-class="bg-gray-500"
-          class="rounded-none py-3"
-        >
-          <OhVueIcon
-            name="bi-journal-bookmark-fill"
-            class="menu-icon"
-            :fill="route.params.corpusId ? 'white' : '#353535'"
-          />
-          <span :class="route.params.corpusId ? 'text-white' : 'text-gray-600'"
-            >Gold Standards</span
-          >
-        </NuxtLink>
-      </li>
-      <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
-        <li :class="route.params.corpusId ? '' : 'disabled-link'">
-          <NuxtLink
-            :to="`/corpora/${route.params.corpusId}/gold-standards`"
-            class="rounded-none py-1 pl-12"
-            active-class="bg-gray-500"
-          >
-            <span
-              :class="[
-                'text-xs',
-                'whitespace-nowrap',
-                route.params.corpusId ? 'text-white' : 'text-gray-600',
-              ]"
-              >Overview</span
-            >
-          </NuxtLink>
-        </li>
-        <li :class="selectedGoldStandard.identifier ? '' : 'disabled-link'">
-          <NuxtLink
-            :to="`/corpora/${route.params.corpusId}/gold-standards/${selectedGoldStandard.identifier}/`"
-            class="rounded-none py-1 pl-12"
-            active-class="bg-gray-500"
-          >
-            <span
-              :class="[
-                'text-xs',
-                'whitespace-nowrap',
-                route.params.corpusId ? 'text-white' : 'text-gray-600',
-              ]"
-              >Documents</span
-            >
-          </NuxtLink>
-        </li>
-        <li :class="route.params.goldStandardId && route.params.documentId ? '' : 'disabled-link'">
-          <NuxtLink
-            :to="`/corpora/${route.params.corpusId}/gold-standards/${route.params.goldStandardId}/documents/${route.params.documentId}/`"
-            class="rounded-none py-1 pl-12"
-            active-class="bg-gray-500"
-          >
-            <span
-              :class="[
-                'text-xs',
-                'whitespace-nowrap',
-                route.params.corpusId ? 'text-white' : 'text-gray-600',
-              ]"
-              >Annotations</span
-            >
-          </NuxtLink>
-        </li>
-      </ul>
-      <li :class="route.params.corpusId ? '' : 'disabled-link'">
-        <NuxtLink
           :to="`/corpora/${route.params.corpusId}/runs`"
           active-class="bg-gray-500"
           class="rounded-none py-3"
@@ -127,7 +61,7 @@
             >
           </NuxtLink>
         </li>
-        <li :class="route.params.runId && route.params.documentId ? '' : 'disabled-link'">
+        <li :class="route.params.documentId ? '' : 'disabled-link'">
           <NuxtLink
             :to="`/corpora/${route.params.corpusId}/runs/${route.params.runId}/documents/${route.params.documentId}/`"
             class="rounded-none py-1 pl-12"
@@ -139,7 +73,7 @@
                 'whitespace-nowrap',
                 route.params.corpusId ? 'text-white' : 'text-gray-600',
               ]"
-              >Annotations</span
+              >Document</span
             >
           </NuxtLink>
         </li>

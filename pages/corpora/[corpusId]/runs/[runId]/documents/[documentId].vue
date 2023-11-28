@@ -70,7 +70,7 @@ onMounted(async () => {
   try {
     await corpusStore.loadCorpus(Number(route.params.corpusId));
     await runStore.loadRuns(Number(route.params.corpusId));
-    await documentStore.loadDocument(Number(route.params.id));
+    await documentStore.loadDocument(Number(route.params.documentId));
 
     setTitle(corpus.value.name);
 

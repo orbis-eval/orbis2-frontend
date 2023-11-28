@@ -173,7 +173,7 @@ async function createAnnotation(annotationType: AnnotationType) {
         annotationType,
         annotator,
         selectedRun.value.identifier,
-        Number(route.params.id),
+        Number(route.params.documentId),
       );
     } else {
       console.error("no run id defined in createAnnotation");

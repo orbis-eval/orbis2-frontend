@@ -56,6 +56,8 @@ async function nextDocument() {
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
+        "/runs/" +
+        selectedRun.value.identifier +
         "/documents/" +
         currentDocument.value.identifier,
     );
@@ -72,6 +74,8 @@ async function previousDocument() {
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
+        "/runs/" +
+        selectedRun.value.identifier +
         "/documents/" +
         currentDocument.value.identifier,
     );

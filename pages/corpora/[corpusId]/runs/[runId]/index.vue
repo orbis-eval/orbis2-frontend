@@ -47,7 +47,7 @@
               class="hover cursor-pointer"
               @click="
                 router.push(
-                  `/corpora/${corpus.identifier}/documents/${document.identifier}`,
+                  `/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/documents/${document.identifier}`,
                 )
               "
             >

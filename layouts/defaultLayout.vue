@@ -40,16 +40,25 @@
             >
               {{ run.name }}
             </option>
-            <option>Import new version</option>
+            <option value="import-new-version">-- Import new version --</option>
           </select>
           <div class="mx-2 flex items-center">
-            <label :class="!(selectedGoldStandard.identifier && selectedRun.identifier) ? 'text-gray-400' : ''">Compare with</label>
+            <label
+              :class="
+                !(selectedGoldStandard.identifier && selectedRun.identifier)
+                  ? 'text-gray-400'
+                  : ''
+              "
+              >Compare with</label
+            >
             <input
               type="checkbox"
               class="toggle toggle-warning ml-2"
               @change="runStore.toggleComparisonMode"
               :checked="comparisonMode"
-              :disabled="!(selectedGoldStandard.identifier && selectedRun.identifier)"
+              :disabled="
+                !(selectedGoldStandard.identifier && selectedRun.identifier)
+              "
             />
           </div>
           <select
@@ -109,6 +118,8 @@ import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
+import ModalImportGoldStandard from "~/components/modal/importGoldStandard.vue";
+import { Corpus } from "~/lib/model/corpus";
 
 const route = useRoute();
 
@@ -140,8 +151,17 @@ const isDocumentSelectDisabled = computed(() => {
   return true;
 });
 
+const { openModal } = useModal();
+const onImportNewVersion = (event: Event) => {
+  openModal(ModalImportGoldStandard);
+};
+
 const changeGoldStandard = (event: Event) => {
   const target = event.target as HTMLSelectElement;
+  if (target.value === "import-new-version") {
+    onImportNewVersion(event);
+    return;
+  }
   runStore.changeSelectedGoldStandard(
     runs.value.find((run) => run.identifier === Number(target.value)),
   );
@@ -153,5 +173,4 @@ const changeRun = (event: Event) => {
     runs.value.find((run) => run.identifier === Number(target.value)),
   );
 };
-
 </script>
