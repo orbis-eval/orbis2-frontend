@@ -4,7 +4,7 @@
     <div v-else class="mt-5">
       <div
         class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-5 flex"
-        v-if="isComparisonMode"
+        v-if="comparisonMode"
       >
         <div class="w-6/12">
           <p><b>F1 Score:</b> 0.81 / 0.82</p>
@@ -56,7 +56,7 @@ const loading = ref(true);
 const documentStore = useDocumentStore();
 const corpusStore = useCorpusStore();
 const runStore = useRunStore();
-const { selectedRun } = storeToRefs(runStore);
+const { selectedRun, comparisonMode } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
 const colorPalettesStore = useColorPalettesStore();
 
@@ -105,9 +105,5 @@ onBeforeUnmount(() => {
 function setHighlightNestedSetNode(ids: number[]) {
   highlightedNestedSetNodeId.value = ids;
 }
-
-const isComparisonMode = computed(() => {
-  return route.query.mode === "comparison";
-});
 
 </script>

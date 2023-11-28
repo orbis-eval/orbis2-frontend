@@ -40,10 +40,17 @@
             >
               {{ run.name }}
             </option>
+            <option>Import new version</option>
           </select>
           <div class="mx-2 flex items-center">
-            Compare with
-            <input type="checkbox" class="toggle toggle-warning ml-2" checked />
+            <label :class="!(selectedGoldStandard.identifier && selectedRun.identifier) ? 'text-gray-400' : ''">Compare with</label>
+            <input
+              type="checkbox"
+              class="toggle toggle-warning ml-2"
+              @change="runStore.toggleComparisonMode"
+              :checked="comparisonMode"
+              :disabled="!(selectedGoldStandard.identifier && selectedRun.identifier)"
+            />
           </div>
           <select
             @change="changeRun"
@@ -109,7 +116,8 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { selectedGoldStandard, selectedRun, runs } = storeToRefs(runStore);
+const { selectedGoldStandard, selectedRun, runs, comparisonMode } =
+  storeToRefs(runStore);
 
 const { title } = useTitle("Orbis NG");
 
@@ -146,8 +154,4 @@ const changeRun = (event: Event) => {
   );
 };
 
-const viewMode = ref("single");
-if (route.query.mode === "comparison") {
-  viewMode.value = "comparison";
-}
 </script>

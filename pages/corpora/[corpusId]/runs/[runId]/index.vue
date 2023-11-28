@@ -19,13 +19,6 @@
             <div class="flex items-center gap-5">
               <h2>Table Actions</h2>
               <OrbisButton size="sm">Sort</OrbisButton>
-              <OrbisButton
-                size="sm"
-                :on-click="
-                  () => (isExtraMetricsVisible = !isExtraMetricsVisible)
-                "
-                >Toggle Extra Metrics</OrbisButton
-              >
             </div>
           </div>
         </div>
@@ -39,6 +32,10 @@
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>
+              <th v-if="comparisonMode">Kappa W</th>
+              <th v-if="comparisonMode">Kappa X</th>
+              <th v-if="comparisonMode">Kappa Y</th>
+              <th v-if="comparisonMode">Kappa Z</th>
             </tr>
           </thead>
 
@@ -49,10 +46,9 @@
             <tr
               class="hover cursor-pointer"
               @click="
-                router.push({
-                  path: `/corpora/${corpus.identifier}/documents/${document.identifier}`,
-                  query: { mode: viewMode },
-                })
+                router.push(
+                  `/corpora/${corpus.identifier}/documents/${document.identifier}`,
+                )
               "
             >
               <td class="py-1 pr-5">
@@ -62,10 +58,10 @@
                 {{ document.identifier }}
               </td>
               <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
             </tr>
           </tbody>
         </table>
@@ -103,7 +99,7 @@ const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 
-const { selectedRun, changeSelectedRun } = storeToRefs(runStore);
+const { selectedRun, comparisonMode } = storeToRefs(runStore);
 
 const pageSize = ref(10);
 const loading = ref(true);
@@ -162,5 +158,4 @@ onMounted(async () => {
     loading.value = false;
   }
 });
-
 </script>

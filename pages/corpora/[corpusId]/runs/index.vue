@@ -20,55 +20,23 @@
         <div class="mb-5 flex items-center gap-5">
           <h2>Table Actions</h2>
           <OrbisButton size="sm">Sort</OrbisButton>
-          <OrbisButton
-            size="sm"
-            :on-click="() => (isExtraMetricsVisible = !isExtraMetricsVisible)"
-            >Toggle Extra Metrics</OrbisButton
-          >
-          <OrbisButton
-            :disabled="!isRunSelected"
-            size="sm"
-            :on-click="
-              () =>
-                router.push({
-                  path: `/corpora/${corpus.identifier}/documents/`,
-                  query: { mode: 'comparison' },
-                })
-            "
-            >Compare with Gold Standard<div class="badge bg-orange-300 text-black">G1</div></OrbisButton
-          >
         </div>
         <div class="divider"></div>
         <table aria-label="List of runs in corpus" class="table text-white">
           <thead class="text-left">
             <tr class="text-lg text-white">
-              <th>#</th>
               <th>Name</th>
-              <td>Date</td>
-              <td>F1</td>
-              <td>Precision</td>
-              <td>Recall</td>
-              <td>Accuracy</td>
-              <td v-if="isExtraMetricsVisible">TP</td>
-              <td v-if="isExtraMetricsVisible">TN</td>
-              <td v-if="isExtraMetricsVisible">FP</td>
-              <td v-if="isExtraMetricsVisible">FN</td>
-              <td v-if="isExtraMetricsVisible">Kappa Micro</td>
-              <td v-if="isExtraMetricsVisible">Kappa Macro</td>
-              <td v-if="isExtraMetricsVisible">Avg Macro F1</td>
-              <td v-if="isExtraMetricsVisible">Avg Micro F1</td>
+              <th>Date</th>
+              <th>Corpus Version</th>
+              <th v-if="comparisonMode">F1</th>
+              <th v-if="comparisonMode">Precision</th>
+              <th v-if="comparisonMode">Recall</th>
+              <th v-if="comparisonMode">Accuracy</th>
             </tr>
           </thead>
 
           <tbody v-for="(run, index) in runs" :key="run.identifier">
-            <tr :class="run.isGoldRun ? 'bg-orange-300 text-black' : ''">
-              <th>
-                <input
-                  v-model="run.selected"
-                  type="checkbox"
-                  class="checkbox checkbox-sm"
-                />
-              </th>
+            <tr>
               <th>
                 <NuxtLink
                   :to="`/corpora/${corpus.identifier}/runs/${run.identifier}`"
@@ -77,18 +45,11 @@
                 </NuxtLink>
               </th>
               <td>{{ run.timestamp }}</td>
-              <td>0.8</td>
-              <td>0.8</td>
-              <td>0.8</td>
-              <td>0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
-              <td v-if="isExtraMetricsVisible">0.8</td>
+              <td>V1</td>
+              <td v-if="comparisonMode">0.8</td>
+              <td v-if="comparisonMode">0.8</td>
+              <td v-if="comparisonMode">0.8</td>
+              <td v-if="comparisonMode">0.8</td>
             </tr>
           </tbody>
         </table>
@@ -114,17 +75,11 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { runs } = storeToRefs(runStore);
+const { runs, comparisonMode } = storeToRefs(runStore);
 
 const { setTitle } = useTitle();
 
 const loading = ref(true);
-
-const isRunSelected = computed(
-  () => runs.value.filter((run) => run.selected).length === 1,
-);
-
-const isExtraMetricsVisible = ref(false);
 
 onMounted(async () => {
   loading.value = true;

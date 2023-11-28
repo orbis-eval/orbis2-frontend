@@ -19,13 +19,6 @@
             <div class="flex items-center gap-5">
               <h2>Table Actions</h2>
               <OrbisButton size="sm">Sort</OrbisButton>
-              <OrbisButton
-                size="sm"
-                :on-click="
-                  () => (isExtraMetricsVisible = !isExtraMetricsVisible)
-                "
-                >Toggle Extra Metrics</OrbisButton
-              >
             </div>
           </div>
         </div>
@@ -48,12 +41,7 @@
           >
             <tr
               class="hover cursor-pointer"
-              @click="
-                router.push({
-                  path: `/corpora/${corpus.identifier}/documents/${document.identifier}`,
-                  query: { mode: viewMode },
-                })
-              "
+              @click="router.push(`/corpora/${corpus.identifier}/documents/${document.identifier}`)"
             >
               <td class="py-1 pr-5">
                 {{ pageSize * (currentPage - 1) + index + 1 }}
@@ -62,10 +50,10 @@
                 {{ document.identifier }}
               </td>
               <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
-              <td v-if="viewMode == 'comparison'">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
+              <td v-if="comparisonMode">0.2</td>
             </tr>
           </tbody>
         </table>
@@ -103,7 +91,7 @@ const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 
-const { selectedGoldStandard, changeSelectedGoldStandard } = storeToRefs(runStore);
+const { selectedGoldStandard, comparisonMode } = storeToRefs(runStore);
 
 const pageSize = ref(10);
 const loading = ref(true);

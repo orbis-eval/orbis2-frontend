@@ -16,28 +16,18 @@
         <div class="mb-5 flex items-center gap-5">
           <h2>Table Actions</h2>
           <OrbisButton size="sm">Sort</OrbisButton>
-          <OrbisButton size="sm" :disabled="!goldStandardIsChecked">Select to compare</OrbisButton>
         </div>
         <div class="divider"></div>
         <table aria-label="List of runs in corpus" class="table text-white">
           <thead class="text-left">
             <tr class="text-lg text-white">
-              <th>#</th>
-              <th>Name</th>
+              <th>Version</th>
               <td>Date</td>
-              <td>Corpus Version</td>
             </tr>
           </thead>
 
           <tbody v-for="(run, index) in runs" :key="run.identifier">
             <tr>
-              <th>
-                <input
-                  v-model="run.selected"
-                  type="checkbox"
-                  class="checkbox checkbox-sm"
-                />
-              </th>
               <th>
                 <NuxtLink
                   :to="`/corpora/${corpus.identifier}/gold-standards/${run.identifier}`"
@@ -77,10 +67,6 @@ const { runs } = storeToRefs(runStore);
 const { setTitle } = useTitle();
 
 const loading = ref(true);
-
-const goldStandardIsChecked = computed(() => {
-  return runs.value.some((run) => run.selected);
-});
 
 onMounted(async () => {
   loading.value = true;

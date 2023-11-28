@@ -37,12 +37,7 @@
           >
             <tr
               class="hover cursor-pointer"
-              @click="
-                router.push({
-                  path: `/corpora/${corpus.identifier}/documents/${document.identifier}`,
-                  query: { mode: viewMode },
-                })
-              "
+              @click="router.push(`/corpora/${corpus.identifier}/documents/${document.identifier}`)"
             >
               <td class="py-1 pr-5">
                 {{ pageSize * (currentPage - 1) + index + 1 }}
