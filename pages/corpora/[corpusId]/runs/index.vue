@@ -15,6 +15,10 @@
             <OhVueIcon name="bi-play-fill" class="menu-icon" fill="green" />
             Start Pre-defined Runs
           </OrbisButton>
+          <OrbisButton>
+            <OhVueIcon name="co-cog" class="menu-icon" />
+            Configure Pre-defined Runs
+          </OrbisButton>
         </div>
         <div class="divider"></div>
         <div class="mb-5 flex items-center gap-5">
@@ -60,13 +64,13 @@
 
 <script setup lang="ts">
 import {addIcons, OhVueIcon} from "oh-vue-icons";
-import { MdKeyboardarrowdown, BiPlayFill } from "oh-vue-icons/icons";
+import { MdKeyboardarrowdown, BiPlayFill, CoCog } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 
-addIcons(MdKeyboardarrowdown, BiPlayFill);
+addIcons(MdKeyboardarrowdown, BiPlayFill, CoCog);
 
 const route = useRoute();
 const router = useRouter();
