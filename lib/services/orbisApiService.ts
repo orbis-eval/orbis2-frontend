@@ -211,7 +211,7 @@ export class OrbisApiService {
     query: string,
     body: any,
   ): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}/${query}`, {
+    return await fetch(`${this.orbisApiBase}/${query}`, {
       method: "POST",
       body: JSON.stringify(body),
     });
