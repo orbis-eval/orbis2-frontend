@@ -2,7 +2,7 @@ import { IAnnotationCommand } from "~/lib/utils/annotation/iAnnotationCommand";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import {
   createAnnotation,
   createNestedSetNode,

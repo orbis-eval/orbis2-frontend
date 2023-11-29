@@ -1,6 +1,6 @@
 import { IAnnotationCommand } from "~/lib/utils/annotation/iAnnotationCommand";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { createAnnotation } from "~/lib/utils/annotation/createAnnotation";
 import { deleteAnnotation } from "~/lib/utils/annotation/deleteAnnotation";
 

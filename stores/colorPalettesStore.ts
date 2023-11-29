@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { ColorPalette } from "~/lib/model/colorpalette";
 
 export const useColorPalettesStore = defineStore("colorPalletes", () => {

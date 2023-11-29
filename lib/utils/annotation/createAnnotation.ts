@@ -3,7 +3,7 @@ import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { NestedSet } from "~/lib/model/nestedset/nestedSet";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { NestedSetNodeInserter } from "~/lib/model/nestedset/nestedSetNodeInserter";
 import { TextSpan } from "~/lib/model/textSpan";
 
