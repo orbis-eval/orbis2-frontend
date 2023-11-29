@@ -18,15 +18,15 @@ export default class ErrorService {
           message: "Network error occured",
           type: MessageToastType.ERROR,
         };
-      } else if (response.status >= 500) {
-        console.error(error);
+      } else if (response.status === 422) {
+        // unprocessable entity
         return {
           // TODO: use correct translation text
           message: "Network error occured",
           type: MessageToastType.ERROR,
         };
-      } else if (response.status === 422) {
-        // unprocessable entity
+      } else if (response.status >= 500) {
+        console.error(error);
         return {
           // TODO: use correct translation text
           message: "Network error occured",
