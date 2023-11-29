@@ -50,6 +50,8 @@
           </div>
         </div>
       </div>
+      <FileInput accepted-file-types=".json" @fileChange="fileChanged" />
+      <p ref="corpusFile" class="text-red-400">{{ corpusFileError }}</p>
       <div class="mt-5 flex gap-4">
         <OrbisButton :is-form-button="true"
           >{{ $t("button.create") }}
@@ -58,26 +60,44 @@
       </div>
     </Form>
   </div>
+  <!-- TODO: when in modal and somethings wrongs with backend, show message toast left bottom corner message toast -->
+  <div>
+    <MessageToast
+      :toastSettings="toastSettings"
+      class="fixed bottom-4 left-4 z-50"
+    />
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ErrorMessage, Field, Form } from "vee-validate";
+import { useI18n } from "vue-i18n";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { useI18n } from "vue-i18n";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { MessageToastSettings } from "~/lib/types/MessageToastSettings";
+import ErrorService from "~/lib/services/errorService";
 
 const { t } = useI18n();
+
 const { closeModal } = useModal();
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
 const cancel = () => closeModal();
 
 const chosenFiles = ref([] as File[]);
+const corpusFileError = ref("");
+
+const showToast = ref(false);
+const toastSettings = ref({} as MessageToastSettings);
 const fileFormat = ref("label-studio");
 
 const corpusNotExists = (runName: string) => {
   return !corpora.value.some((corpus) => corpus.name === runName);
+};
+
+const setCorpusFileError = (error: any) => {
+  corpusFileError.value = error;
 };
 
 const validationSchema = toTypedSchema(
@@ -110,6 +130,18 @@ const createCorpus = async (values: any) => {
     console.error(error);
   } finally {
     closeModal();
+  } catch (error: any) {
+    if (!error.response) {
+      // TODO: use correct translation text
+      setCorpusFileError("There was an error creating this corpus");
+    } else if (error.response.status === 422) {
+      setCorpusFileError("There was a problem with the file structure");
+    }
+    // return this.displayErrorMessage("Network error occured");
+    // TODO: differentiate between ErrorMessage and MessageToast
+    // toastSettings.value = ErrorService.onError(error);
+
+    // showToast.value = true;
   }
 };
 </script>
