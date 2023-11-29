@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { TypedInternalResponse } from "nitropack";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";

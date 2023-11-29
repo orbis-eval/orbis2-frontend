@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { Run } from "~/lib/model/run";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
 
 export const useRunStore = defineStore("run", () => {

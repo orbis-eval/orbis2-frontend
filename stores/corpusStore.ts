@@ -51,7 +51,11 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
-  async function createCorpus(corpusName: string, chosenFiles: File[], fileFormat: string) {
+  async function createCorpus(
+    corpusName: string,
+    chosenFiles: File[],
+    fileFormat: string,
+  ) {
     try {
       let newCorpus: Corpus = new Corpus({
         name: corpusName,

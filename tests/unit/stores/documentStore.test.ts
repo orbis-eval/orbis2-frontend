@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, vi, it } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Document } from "~/lib/model/document";
 import { useDocumentStore } from "~/stores/documentStore";
 import { Parser } from "~/lib/parser";

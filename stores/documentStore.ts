@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Document } from "~/lib/model/document";
 
 export const useDocumentStore = defineStore("document", () => {
