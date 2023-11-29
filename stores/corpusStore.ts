@@ -63,10 +63,6 @@ export const useCorpusStore = defineStore("corpus", () => {
       });
       newCorpus = await orbisApiService.createCorpus(newCorpus, chosenFiles, fileFormat);
       corpora.value.push(newCorpus);
-    } catch (error) {
-      throw new Error("An error occurred while adding a new corpus", {
-        cause: error,
-      });
     }
   }
 
