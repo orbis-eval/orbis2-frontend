@@ -21,11 +21,6 @@
           </OrbisButton>
         </div>
         <div class="divider"></div>
-        <div class="mb-5 flex items-center gap-5">
-          <h2>Table Actions</h2>
-          <OrbisButton size="sm">Sort</OrbisButton>
-        </div>
-        <div class="divider"></div>
         <table aria-label="List of runs in corpus" class="table text-white">
           <thead class="text-left">
             <tr class="text-lg text-white">

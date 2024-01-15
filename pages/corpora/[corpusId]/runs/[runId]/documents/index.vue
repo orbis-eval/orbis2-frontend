@@ -10,15 +10,6 @@
       >
         <h1 class="mb-3 text-3xl text-white">{{ $t("allDocuments") }}</h1>
         <div class="divider"></div>
-        <div class="flex">
-          <div class="w-12/12">
-            <div class="flex items-center gap-5">
-              <h2>Table Actions</h2>
-              <OrbisButton size="sm">Sort</OrbisButton>
-            </div>
-          </div>
-        </div>
-        <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
           class="table text-white"
