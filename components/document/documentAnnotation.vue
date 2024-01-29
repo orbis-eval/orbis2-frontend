@@ -5,7 +5,7 @@
         <!-- context modal gui for selecting the type -->
         <AnnotationModal
           ref="annotationTypeModal"
-          :annotation-types="selectedRun.corpus.supportedAnnotationTypes"
+          :annotation-types="props.run.corpus.supportedAnnotationTypes"
           :is-visible="showAnnotationModal"
           :left-position="mousePosX"
           :selection-surface-form="selectionSurfaceForm"
@@ -59,9 +59,11 @@ import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 import { Annotation } from "~/lib/model/annotation";
 import AnnotationModal from "~/components/annotation/annotationModal.vue";
 import { TextSpan } from "~/lib/model/textSpan";
+import { Run } from "~/lib/model/run";
 
-defineProps<{
+const props = defineProps<{
   highlightedNestedSetNodeId: number[];
+  run: InstanceType<typeof Run>;
 }>();
 
 const route = useRoute();
@@ -74,7 +76,6 @@ const mousePosY = ref(0);
 const showAnnotationModal = ref(false);
 const errorNodes = ref([] as Annotation[]);
 const runStore = useRunStore();
-const { selectedRun } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
 const { nestedSetRootNode } = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
@@ -142,7 +143,7 @@ function hideAnnotationModal() {
 }
 
 function updateAnnotations(currentSelection: any) {
-  if (selectedRun.value.name.includes("default")) {
+  if (props.run.value.name.includes("default")) {
     console.log("default run selected for annotation");
     wrongRunSelectedEnabled.value = true;
   } else if (currentSelection) {
@@ -162,7 +163,7 @@ function updateAnnotations(currentSelection: any) {
 // called when creating a new annotation
 async function createAnnotation(annotationType: AnnotationType) {
   try {
-    if (selectedRun.value.identifier) {
+    if (props.run.value.identifier) {
       const textSpan = new TextSpan(
         selection.value.word,
         selection.value.start,
@@ -172,7 +173,7 @@ async function createAnnotation(annotationType: AnnotationType) {
         textSpan,
         annotationType,
         annotator,
-        selectedRun.value.identifier,
+        props.run.value.identifier,
         Number(route.params.documentId),
       );
     } else {

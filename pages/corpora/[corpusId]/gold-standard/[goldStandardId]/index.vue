@@ -9,7 +9,7 @@
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
       >
         <h1 class="mb-3 text-3xl text-white">
-          {{ $t("run.viewTitle", { name: selectedRun.name }) }}
+          {{ $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name }) }}
         </h1>
 
         <h2 class="mb-5 text-2xl text-white">{{ $t("documents") }}</h2>
@@ -23,10 +23,6 @@
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>
-              <th>Kappa W</th>
-              <th>Kappa X</th>
-              <th>Kappa Y</th>
-              <th>Kappa Z</th>
             </tr>
           </thead>
 
@@ -38,7 +34,7 @@
               class="hover cursor-pointer"
               @click="
                 router.push(
-                  `/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/documents/${document.identifier}`,
+                  `/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/documents/${document.identifier}`,
                 )
               "
             >
@@ -49,10 +45,6 @@
                 {{ document.identifier }}
               </td>
               <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
-              <td>0.2</td>
-              <td>0.2</td>
-              <td>0.2</td>
-              <td>0.2</td>
             </tr>
           </tbody>
         </table>
@@ -90,7 +82,7 @@ const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 
-const { selectedRun } = storeToRefs(runStore);
+const { selectedGoldStandard } = storeToRefs(runStore);
 
 const pageSize = ref(10);
 const loading = ref(true);
@@ -100,13 +92,13 @@ const { setTitle } = useTitle();
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
-  if (selectedRun.value.identifier) {
+  if (selectedGoldStandard.value.identifier) {
     loading.value = true;
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
       await documentStore.loadDocuments(
-        selectedRun.value.identifier,
+        selectedGoldStandard.value.identifier,
         pageSize.value,
         startIndex,
       );
@@ -121,8 +113,8 @@ async function pageChanged(nextPage: number) {
 }
 
 async function countDocuments() {
-  if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(selectedRun.value.identifier);
+  if (selectedGoldStandard.value.identifier) {
+    await documentStore.countDocuments(selectedGoldStandard.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -141,7 +133,6 @@ onMounted(async () => {
     await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
     await runStore.loadRuns(Number(route.params.corpusId));
-    runStore.changeSelectedRun(runStore.getRunById(Number(route.params.runId)));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user

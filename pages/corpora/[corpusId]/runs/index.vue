@@ -10,14 +10,10 @@
       >
         <div class="mb-5 flex items-center gap-5">
           <h1 class="text-3xl text-white">Runs</h1>
-          <OrbisButton>Import Run</OrbisButton>
+          <OrbisButton :on-click="() => openModal(ModalCreateRun)">Import Run</OrbisButton>
           <OrbisButton>
-            <OhVueIcon name="bi-play-fill" class="menu-icon" fill="green" />
-            Start Pre-defined Runs
-          </OrbisButton>
-          <OrbisButton>
-            <OhVueIcon name="co-cog" class="menu-icon" />
-            Configure Pre-defined Runs
+            <OhVueIcon name="hi-clipboard-list" class="menu-icon" fill="yellow" />
+            Evaluate new runs
           </OrbisButton>
         </div>
         <div class="divider"></div>
@@ -26,11 +22,10 @@
             <tr class="text-lg text-white">
               <th>Name</th>
               <th>Date</th>
-              <th>Corpus Version</th>
-              <th v-if="comparisonMode">F1</th>
-              <th v-if="comparisonMode">Precision</th>
-              <th v-if="comparisonMode">Recall</th>
-              <th v-if="comparisonMode">Accuracy</th>
+              <th>F1</th>
+              <th>Precision</th>
+              <th>Recall</th>
+              <th>Accuracy</th>
             </tr>
           </thead>
 
@@ -44,11 +39,10 @@
                 </NuxtLink>
               </th>
               <td>{{ run.timestamp }}</td>
-              <td>V1</td>
-              <td v-if="comparisonMode">0.8</td>
-              <td v-if="comparisonMode">0.8</td>
-              <td v-if="comparisonMode">0.8</td>
-              <td v-if="comparisonMode">0.8</td>
+              <td>0.8</td>
+              <td>0.8</td>
+              <td>0.8</td>
+              <td>0.8</td>
             </tr>
           </tbody>
         </table>
@@ -59,22 +53,25 @@
 
 <script setup lang="ts">
 import {addIcons, OhVueIcon} from "oh-vue-icons";
-import { MdKeyboardarrowdown, BiPlayFill, CoCog } from "oh-vue-icons/icons";
+import { MdKeyboardarrowdown, BiPlayFill, HiClipboardList } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 
-addIcons(MdKeyboardarrowdown, BiPlayFill, CoCog);
+import ModalCreateRun from "~/components/modal/createRun.vue";
+
+addIcons(MdKeyboardarrowdown, BiPlayFill, HiClipboardList);
 
 const route = useRoute();
 const router = useRouter();
+const { openModal, closeModal } = useModal();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { runs, comparisonMode } = storeToRefs(runStore);
+const { runs } = storeToRefs(runStore);
 
 const { setTitle } = useTitle();
 

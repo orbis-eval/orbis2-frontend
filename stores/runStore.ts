@@ -11,20 +11,17 @@ export const useRunStore = defineStore("run", () => {
   const runs = ref([] as Run[]);
   const selectedRun = ref({} as Run);
   const selectedGoldStandard = ref({} as Run);
-  const comparisonMode = ref(false);
 
   function reset() {
     corpusId.value = -1;
     runs.value = [] as Run[];
     selectedRun.value = {} as Run;
     selectedGoldStandard.value = {} as Run;
-    comparisonMode.value = false;
   }
 
   function changeSelectedRun(run: Run) {
     if (!run.identifier) {
       selectedRun.value = {} as Run;
-      comparisonMode.value = false;
     } else {
       selectedRun.value = run;
     }
@@ -73,7 +70,6 @@ export const useRunStore = defineStore("run", () => {
   function changeSelectedGoldStandard(goldStandard: Run) {
     if (!goldStandard.identifier) {
       selectedGoldStandard.value = {} as Run;
-      comparisonMode.value = false;
     } else {
       selectedGoldStandard.value = goldStandard;
     }
@@ -81,14 +77,6 @@ export const useRunStore = defineStore("run", () => {
 
   function getRunById(id: number) {
     return runs.value.find((r) => r.identifier === id);
-  }
-
-  function toggleComparisonMode() {
-    comparisonMode.value = !comparisonMode.value;
-  }
-
-  function setComparisonMode(value: boolean) {
-    comparisonMode.value = value;
   }
 
   return {
@@ -102,9 +90,6 @@ export const useRunStore = defineStore("run", () => {
     changeSelectedRun,
     selectedGoldStandard,
     changeSelectedGoldStandard,
-    getRunById,
-    comparisonMode,
-    toggleComparisonMode,
-    setComparisonMode,
+    getRunById
   };
 });

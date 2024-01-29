@@ -1,4 +1,5 @@
 import { Document } from "~/lib/model/document";
+import { AnnotationType } from "~/lib/model/annotationType";
 
 export class DocumentFileReader {
   static async readFiles(documentFilesToRead: File[]): Promise<Document[]> {
@@ -9,14 +10,22 @@ export class DocumentFileReader {
         reader.onload = (event: ProgressEvent<FileReader>) => {
           try {
             if (event.target) {
-              const content = event.target.result;
-              if (typeof content === "string" && content !== "") {
-                const doc = new Document(JSON.parse(content));
-                doc.done = false;
-                doc.metadata = [];
-                doc.runId = 0;
-                docs.push(doc);
+              const jsonFile = JSON.parse(event.target.result as string);
+              for (let i = 0; i < jsonFile.length; i++) {
+                const content = jsonFile[i].data.text;
+                if (typeof content === "string" && content !== "") {
+                  const doc = new Document({
+                    key: jsonFile[i].key,
+                    content,
+                    done: false,
+                    metadata: [],
+                    runId: 0,
+                  });
+                  docs.push(doc);
+                }
               }
+              // TODO: add annotation types to corpus
+              // TODO: add annotations to documents
             }
             resolve();
           } catch (error) {

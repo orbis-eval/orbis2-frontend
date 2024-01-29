@@ -6,7 +6,7 @@
   "content": "Inhalt",
   "name": "Name",
   "description": "Beschreibung",
-  "overview": "Übersicht",
+  "list_of_runs": "Liste der Runs",
   "corpus": {
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
@@ -20,8 +20,8 @@
     }
   },
   "fileInput": {
-    "importData": "Dateien Importieren",
-    "dropFiles": "Dateien hier hinziehen"
+    "importGoldStandard": "Gold Standard Importieren",
+    "dropGoldStandard": "Gold Standard hier hinziehen"
   },
   "document": {
     "document": "Dokument",
@@ -36,6 +36,7 @@
     }
   },
   "run": {
+    "viewGoldStandardTitle": "Gold Standard {name}",
     "viewTitle": "Run {name}",
     "runs": "Runs",
     "createRun": "Erstelle Run",
@@ -55,6 +56,8 @@
     "close": "Schliessen",
     "cancel": "Abbrechen",
     "create": "Erstellen",
-    "chooseFiles": "Dateien auswählen"
-  }
+    "chooseFiles": "Dateien auswählen",
+    "chooseFile": "Datei auswählen"
+  },
+  "select_gold_standard": "Gold Standard auswählen"
 }

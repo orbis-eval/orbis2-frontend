@@ -8,11 +8,7 @@
       <div
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
       >
-        <h1 class="mb-3 text-3xl text-white">
-          {{ $t("run.viewTitle", { name: selectedRun.name }) }}
-        </h1>
-
-        <h2 class="mb-5 text-2xl text-white">{{ $t("documents") }}</h2>
+        <h1 class="mb-3 text-3xl text-white">{{ $t("allDocuments") }}</h1>
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
@@ -23,10 +19,6 @@
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>
-              <th>Kappa W</th>
-              <th>Kappa X</th>
-              <th>Kappa Y</th>
-              <th>Kappa Z</th>
             </tr>
           </thead>
 
@@ -36,11 +28,7 @@
           >
             <tr
               class="hover cursor-pointer"
-              @click="
-                router.push(
-                  `/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/documents/${document.identifier}`,
-                )
-              "
+              @click="router.push(`/corpora/${corpus.identifier}/documents/${document.identifier}`)"
             >
               <td class="py-1 pr-5">
                 {{ pageSize * (currentPage - 1) + index + 1 }}
@@ -49,10 +37,6 @@
                 {{ document.identifier }}
               </td>
               <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
-              <td>0.2</td>
-              <td>0.2</td>
-              <td>0.2</td>
-              <td>0.2</td>
             </tr>
           </tbody>
         </table>
@@ -76,26 +60,20 @@ import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
-import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
 
 const route = useRoute();
-const router = useRouter();
 
 const corpusStore = useCorpusStore();
-const documentStore = useDocumentStore();
-
 const { corpus } = storeToRefs(corpusStore);
 
-const runStore = useRunStore();
-
-const { selectedRun } = storeToRefs(runStore);
+const documentStore = useDocumentStore();
+const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 
 const pageSize = ref(10);
 const loading = ref(true);
 
-const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 const { setTitle } = useTitle();
 
 // called when another page is selected
@@ -140,8 +118,6 @@ onMounted(async () => {
   try {
     await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
-    await runStore.loadRuns(Number(route.params.corpusId));
-    runStore.changeSelectedRun(runStore.getRunById(Number(route.params.runId)));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
@@ -149,4 +125,8 @@ onMounted(async () => {
     loading.value = false;
   }
 });
+
+async function runChanged() {
+  await pageChanged(currentPage.value);
+}
 </script>

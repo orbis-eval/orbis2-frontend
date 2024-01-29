@@ -21,7 +21,7 @@
         <div class="flex w-6/12 justify-center">
           <select
             @change="changeGoldStandard"
-            class="select select-warning mr-1 max-w-xs"
+            class="select select-warning max-w-xs"
             :disabled="isGoldStandardSelectDisabled"
           >
             <option
@@ -29,9 +29,7 @@
               :selected="
                 !selectedGoldStandard || !selectedGoldStandard.identifier
               "
-            >
-              Select Gold Standard
-            </option>
+            >{{ $t("select_gold_standard") }}</option>
             <option
               v-for="run in runs"
               :key="run.identifier"
@@ -40,9 +38,8 @@
             >
               {{ run.name }}
             </option>
-            <option value="import-new-version">-- Import new version --</option>
           </select>
-          <div class="mx-2 flex items-center">
+          <div class="mx-2 flex items-center" v-if="(route.name as string).includes('corpora-corpusId-runs-runId')">
             <label
               :class="
                 !(selectedGoldStandard.identifier && selectedRun.identifier)
@@ -51,20 +48,12 @@
               "
               >Compare with</label
             >
-            <input
-              type="checkbox"
-              class="toggle toggle-warning ml-2"
-              @change="runStore.toggleComparisonMode"
-              :checked="comparisonMode"
-              :disabled="
-                !(selectedGoldStandard.identifier && selectedRun.identifier)
-              "
-            />
           </div>
           <select
             @change="changeRun"
             class="select select-info mr-1 max-w-xs"
             :disabled="isRunSelectDisabled"
+            v-if="(route.name as string).includes('corpora-corpusId-runs-runId')"
           >
             <option
               disabled
@@ -127,7 +116,7 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { selectedGoldStandard, selectedRun, runs, comparisonMode } =
+const { selectedGoldStandard, selectedRun, runs } =
   storeToRefs(runStore);
 
 const { title } = useTitle("Orbis NG");
@@ -173,4 +162,5 @@ const changeRun = (event: Event) => {
     runs.value.find((run) => run.identifier === Number(target.value)),
   );
 };
+
 </script>
