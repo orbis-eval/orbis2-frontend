@@ -10,6 +10,7 @@
       >
         <h1 class="mb-3 text-3xl text-white">
           {{ $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name }) }}
+          <OrbisButton :on-click="() => {}">Import Gold Standard</OrbisButton>
         </h1>
 
         <h2 class="mb-5 text-2xl text-white">{{ $t("documents") }}</h2>
@@ -69,6 +70,7 @@ import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
+import ModalCreateRun from "~/components/modal/createRun.vue";
 
 addIcons(MdKeyboardarrowdown);
 
