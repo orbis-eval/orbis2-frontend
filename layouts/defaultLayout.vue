@@ -31,12 +31,12 @@
               "
             >{{ $t("select_gold_standard") }}</option>
             <option
-              v-for="run in runs"
-              :key="run.identifier"
-              :value="run.identifier"
-              :selected="run.identifier === selectedGoldStandard.identifier"
+              v-for="goldStandard in goldStandards"
+              :key="goldStandard.identifier"
+              :value="goldStandard.identifier"
+              :selected="goldStandard.identifier === selectedGoldStandard.identifier"
             >
-              {{ run.name }}
+              {{ goldStandard.name }}
             </option>
           </select>
           <div class="mx-2 flex items-center" v-if="(route.name as string).includes('corpora-corpusId-runs-runId')">
@@ -116,8 +116,7 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { selectedGoldStandard, selectedRun, runs } =
-  storeToRefs(runStore);
+const { selectedGoldStandard, selectedRun, runs, goldStandards } = storeToRefs(runStore);
 
 const { title } = useTitle("Orbis NG");
 

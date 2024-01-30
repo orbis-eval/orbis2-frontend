@@ -9,12 +9,14 @@ export const useRunStore = defineStore("run", () => {
   const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
   const corpusId = ref(-1);
   const runs = ref([] as Run[]);
+  const goldStandards = ref([] as Run[]);
   const selectedRun = ref({} as Run);
   const selectedGoldStandard = ref({} as Run);
 
   function reset() {
     corpusId.value = -1;
     runs.value = [] as Run[];
+    goldStandards.value = [] as Run[];
     selectedRun.value = {} as Run;
     selectedGoldStandard.value = {} as Run;
   }
@@ -52,6 +54,20 @@ export const useRunStore = defineStore("run", () => {
     }
   }
 
+  async function loadGoldStandards(id: number) {
+    try {
+      const loadedGoldStandards = await orbisApiService.getGoldStandards(id);
+      if (loadedGoldStandards.length > 0) {
+        goldStandards.value = loadedGoldStandards;
+        corpusId.value = id;
+      }
+    } catch (error) {
+      throw new Error("An error occurred while fetching gold standards.", {
+        cause: error,
+      });
+    }
+  }
+
   async function deleteRun(run: Run) {
     try {
       if (runs.value.length > 1) {
@@ -82,14 +98,16 @@ export const useRunStore = defineStore("run", () => {
   return {
     corpusId,
     runs,
+    goldStandards,
     selectedRun,
     reset,
     deleteRun,
     loadRuns,
+    loadGoldStandards,
     createRun,
     changeSelectedRun,
     selectedGoldStandard,
     changeSelectedGoldStandard,
-    getRunById
+    getRunById,
   };
 });

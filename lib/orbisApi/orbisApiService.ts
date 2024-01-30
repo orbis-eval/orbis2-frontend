@@ -68,6 +68,13 @@ export class OrbisApiService {
     );
   }
 
+  async getGoldStandards(corpusId: number): Promise<Run[]> {
+    return await Parser.parseList(
+      Run,
+      this.apiGet(`getGoldStandards?corpus_id=${corpusId}`),
+    );
+  }
+
   async getAnnotations(
     runId?: number,
     documentId?: number,

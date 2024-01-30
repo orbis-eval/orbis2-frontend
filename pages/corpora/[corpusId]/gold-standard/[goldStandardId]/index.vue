@@ -132,7 +132,7 @@ onMounted(async () => {
   try {
     await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
-    await runStore.loadRuns(Number(route.params.corpusId));
+    await runStore.loadGoldStandards(Number(route.params.corpusId));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
