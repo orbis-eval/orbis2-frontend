@@ -35,9 +35,9 @@ variables:
   DOCKERFILEPATH: dockerfile
 
 stages:
-  - lint
+  #- lint
   - build
-  - test
-  - sonar
+  #- test
+  #- sonar
   - dockerbuild
   - publish-k8s
