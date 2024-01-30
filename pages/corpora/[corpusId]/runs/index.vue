@@ -30,14 +30,15 @@
           </thead>
 
           <tbody v-for="(run, index) in runs" :key="run.identifier">
-            <tr>
-              <th>
-                <NuxtLink
-                  :to="`/corpora/${corpus.identifier}/runs/${run.identifier}`"
-                >
-                  {{ run.name }}
-                </NuxtLink>
-              </th>
+            <tr
+              class="hover cursor-pointer"
+              @click="
+                router.push(
+                  `/corpora/${corpus.identifier}/runs/${run.identifier}`,
+                )
+              "
+            >
+              <th>{{ run.name }}</th>
               <td>{{ run.timestamp }}</td>
               <td>0.8</td>
               <td>0.8</td>
