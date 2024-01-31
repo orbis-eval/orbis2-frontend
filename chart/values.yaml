@@ -28,7 +28,7 @@ env:
   # port under which the application is started
   PORT: 63013
   NUXT_PUBLIC_ORBIS_API_BASE: /api/
-  orbisBaseUrl: https://orbis2-ng.prod.semanticlab.net:63012
+  NUXT_PUBLIC_ORBIS_BASE_URL: https://orbis2-ng.prod.semanticlab.net:63012
 
 ingress:
   main:
