@@ -85,9 +85,7 @@ const classesAsString = computed(() => {
   classList.push(sizeMapping[props.size]);
 
   if (props.disabled || isLoading.value) {
-    classList.push(
-      "cursor-not-allowed opacity-50",
-    );
+    classList.push("cursor-not-allowed opacity-50");
   }
   if (props.active) {
     classList.push("btn-active");

@@ -28,7 +28,11 @@
           >
             <tr
               class="hover cursor-pointer"
-              @click="router.push(`/corpora/${corpus.identifier}/documents/${document.identifier}`)"
+              @click="
+                router.push(
+                  `/corpora/${corpus.identifier}/documents/${document.identifier}`,
+                )
+              "
             >
               <td class="py-1 pr-5">
                 {{ pageSize * (currentPage - 1) + index + 1 }}
@@ -59,14 +63,18 @@ import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 
 addIcons(MdKeyboardarrowdown);
 
-const route = useRoute();
+const router = useRouter();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
+
+const runStore = useRunStore();
+const { selectedRun } = storeToRefs(runStore);
 
 const documentStore = useDocumentStore();
 const { currentPage, documents, totalPages } = storeToRefs(documentStore);
@@ -116,7 +124,6 @@ async function loadDocuments() {
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
     await countDocuments();
     await loadDocuments();

@@ -3,7 +3,7 @@
     <LoadingSpinner v-if="loading" class="mt-5" />
     <div v-else class="mt-5">
       <div
-        class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-5 flex"
+        class="mx-10 mb-10 flex flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-5"
       >
         <div class="w-6/12">
           <p><b>F1 Score:</b> 0.81 / 0.82</p>
@@ -68,26 +68,11 @@ const { corpus } = storeToRefs(corpusStore);
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(Number(route.params.corpusId));
-    await runStore.loadRuns(Number(route.params.corpusId));
-    await documentStore.loadDocument(Number(route.params.documentId));
-
     setTitle(corpus.value.name);
 
     if (selectedRun.value.identifier) {
-      await documentStore.countDocuments(selectedRun.value.identifier);
+      // @todo remove color Palettes from backend, not needed
       await colorPalettesStore.loadColorPalettes();
-
-      if (documentStore.currentDocument.identifier) {
-        await annotationStore.loadAnnotations(
-          documentStore.currentDocument.identifier,
-          documentStore.currentDocument.content,
-          selectedRun.value.identifier,
-          selectedRun.value.corpus.supportedAnnotationTypes,
-        );
-      } else {
-        console.log("Id of current document was not set.");
-      }
     } else {
       console.log("Id of selected run was not set.");
     }
@@ -105,5 +90,4 @@ onBeforeUnmount(() => {
 function setHighlightNestedSetNode(ids: number[]) {
   highlightedNestedSetNodeId.value = ids;
 }
-
 </script>

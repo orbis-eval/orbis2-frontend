@@ -1,6 +1,6 @@
 <template>
   <div
-    v-if="selectedRun && currentDocument"
+    v-if="currentDocument"
     class="flex items-center px-4 pb-4 pt-5 text-lg"
   >
     <OrbisButton
@@ -47,17 +47,27 @@ addIcons(MdNavigatenextTwotone, MdNavigatebeforeTwotone);
 const documentStore = useDocumentStore();
 const { currentDocument, nrOfDocuments } = storeToRefs(documentStore);
 const runStore = useRunStore();
-const { selectedRun } = storeToRefs(runStore);
+const { selectedRun, selectedGoldStandard } = storeToRefs(runStore);
 
 async function nextDocument() {
   emit("loadingStarted");
-  if (selectedRun.value.identifier) {
+  if ("runId" in route.params) {
     await documentStore.nextDocument(selectedRun.value.identifier);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/runs/" +
         selectedRun.value.identifier +
+        "/documents/" +
+        currentDocument.value.identifier,
+    );
+  } else if ("goldStandardId" in route.params) {
+    await documentStore.nextDocument(selectedGoldStandard.value.identifier);
+    await navigateTo(
+      "/corpora/" +
+        route.params.corpusId +
+        "/gold-standard/" +
+        selectedGoldStandard.value.identifier +
         "/documents/" +
         currentDocument.value.identifier,
     );
@@ -69,13 +79,23 @@ async function nextDocument() {
 
 async function previousDocument() {
   emit("loadingStarted");
-  if (selectedRun.value.identifier) {
+  if ("runId" in route.params) {
     await documentStore.previousDocument(selectedRun.value.identifier);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/runs/" +
         selectedRun.value.identifier +
+        "/documents/" +
+        currentDocument.value.identifier,
+    );
+  } else if ("goldStandardId" in route.params) {
+    await documentStore.previousDocument(selectedGoldStandard.value.identifier);
+    await navigateTo(
+      "/corpora/" +
+        route.params.corpusId +
+        "/gold-standard/" +
+        selectedGoldStandard.value.identifier +
         "/documents/" +
         currentDocument.value.identifier,
     );

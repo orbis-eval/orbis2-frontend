@@ -9,7 +9,9 @@
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
       >
         <h1 class="mb-3 text-3xl text-white">
-          {{ $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name }) }}
+          {{
+            $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name })
+          }}
           <OrbisButton :on-click="() => {}">Import Gold Standard</OrbisButton>
         </h1>
 
@@ -132,9 +134,7 @@ async function loadDocuments() {
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
-    await runStore.loadGoldStandards(Number(route.params.corpusId));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user

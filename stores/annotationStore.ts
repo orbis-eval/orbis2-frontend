@@ -186,6 +186,7 @@ export const useAnnotationStore = defineStore("annotation", () => {
   }
 
   return {
+    reset,
     nestedSetRootNode,
     isUndoDisabled,
     isRedoDisabled,

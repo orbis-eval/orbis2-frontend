@@ -53,26 +53,10 @@ const { corpus } = storeToRefs(corpusStore);
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(Number(route.params.corpusId));
-    await runStore.loadRuns(Number(route.params.corpusId));
-    await documentStore.loadDocument(Number(route.params.documentId));
-
     setTitle(corpus.value.name);
 
     if (selectedGoldStandard.value.identifier) {
-      await documentStore.countDocuments(selectedGoldStandard.value.identifier);
       await colorPalettesStore.loadColorPalettes();
-
-      if (documentStore.currentDocument.identifier) {
-        await annotationStore.loadAnnotations(
-          documentStore.currentDocument.identifier,
-          documentStore.currentDocument.content,
-          selectedGoldStandard.value.identifier,
-          selectedGoldStandard.value.corpus.supportedAnnotationTypes,
-        );
-      } else {
-        console.log("Id of current document was not set.");
-      }
     } else {
       console.log("Id of selected run was not set.");
     }
@@ -90,5 +74,4 @@ onBeforeUnmount(() => {
 function setHighlightNestedSetNode(ids: number[]) {
   highlightedNestedSetNodeId.value = ids;
 }
-
 </script>

@@ -29,17 +29,26 @@
               :selected="
                 !selectedGoldStandard || !selectedGoldStandard.identifier
               "
-            >{{ $t("select_gold_standard") }}</option>
+            >
+              {{ $t("select_gold_standard") }}
+            </option>
             <option
               v-for="goldStandard in goldStandards"
               :key="goldStandard.identifier"
               :value="goldStandard.identifier"
-              :selected="goldStandard.identifier === selectedGoldStandard.identifier"
+              :selected="
+                goldStandard.identifier === selectedGoldStandard.identifier
+              "
             >
               {{ goldStandard.name }}
             </option>
           </select>
-          <div class="mx-2 flex items-center" v-if="(route.name as string).includes('corpora-corpusId-runs-runId')">
+          <div
+            class="mx-2 flex items-center"
+            v-if="
+              (route.name as string).includes('corpora-corpusId-runs-runId')
+            "
+          >
             <label
               :class="
                 !(selectedGoldStandard.identifier && selectedRun.identifier)
@@ -53,7 +62,9 @@
             @change="changeRun"
             class="select select-info mr-1 max-w-xs"
             :disabled="isRunSelectDisabled"
-            v-if="(route.name as string).includes('corpora-corpusId-runs-runId')"
+            v-if="
+              (route.name as string).includes('corpora-corpusId-runs-runId')
+            "
           >
             <option
               disabled
@@ -111,18 +122,20 @@ import ModalImportGoldStandard from "~/components/modal/importGoldStandard.vue";
 import { Corpus } from "~/lib/model/corpus";
 
 const route = useRoute();
+const router = useRouter();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { selectedGoldStandard, selectedRun, runs, goldStandards } = storeToRefs(runStore);
+const { selectedGoldStandard, selectedRun, runs, goldStandards } =
+  storeToRefs(runStore);
 
 const { title } = useTitle("Orbis NG");
 
 const homeLink = computed(() => {
   if (corpus.value.identifier) {
-    return `/corpora/${corpus.value.identifier}/documents`;
+    return `/corpora/${corpus.value.identifier}/runs`;
   }
   return "/";
 });
@@ -135,31 +148,31 @@ const isRunSelectDisabled = computed(() => {
   return !corpus.value.identifier;
 });
 
-const isDocumentSelectDisabled = computed(() => {
-  return true;
-});
-
 const { openModal } = useModal();
-const onImportNewVersion = (event: Event) => {
-  openModal(ModalImportGoldStandard);
-};
 
 const changeGoldStandard = (event: Event) => {
   const target = event.target as HTMLSelectElement;
-  if (target.value === "import-new-version") {
-    onImportNewVersion(event);
-    return;
+  const goldStandard = runStore.getGoldStandardById(Number(target.value));
+  if (goldStandard) {
+    runStore.changeSelectedGoldStandard(goldStandard);
+  } else {
+    // error
+    Error("No gold standard selected");
   }
-  runStore.changeSelectedGoldStandard(
-    runs.value.find((run) => run.identifier === Number(target.value)),
-  );
 };
 
 const changeRun = (event: Event) => {
   const target = event.target as HTMLSelectElement;
-  runStore.changeSelectedRun(
-    runs.value.find((run) => run.identifier === Number(target.value)),
-  );
+  const runId = Number(target.value);
+  let link = [
+    "/corpora",
+    corpus.value.identifier,
+    "runs",
+    runId,
+  ];
+  if ('documentId' in route.params) {
+    link.push('documents', route.params.documentId);
+  }
+  router.push(link.join('/'));
 };
-
 </script>

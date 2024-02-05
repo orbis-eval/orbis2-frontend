@@ -28,7 +28,11 @@
           >
             <tr
               class="hover cursor-pointer"
-              @click="router.push(`/corpora/${corpus.identifier}/documents/${document.identifier}`)"
+              @click="
+                router.push(
+                  `/corpora/${corpus.identifier}/documents/${document.identifier}`,
+                )
+              "
             >
               <td class="py-1 pr-5">
                 {{ pageSize * (currentPage - 1) + index + 1 }}
@@ -59,14 +63,18 @@ import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 
 addIcons(MdKeyboardarrowdown);
 
-const route = useRoute();
+const router = useRouter();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
+
+const runStore = useRunStore();
+const { selectedGoldStandard } = storeToRefs(runStore);
 
 const documentStore = useDocumentStore();
 const { currentPage, documents, totalPages } = storeToRefs(documentStore);
@@ -78,13 +86,13 @@ const { setTitle } = useTitle();
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
-  if (selectedRun.value.identifier) {
+  if (selectedGoldStandard.value.identifier) {
     loading.value = true;
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
       await documentStore.loadDocuments(
-        selectedRun.value.identifier,
+        selectedGoldStandard.value.identifier,
         pageSize.value,
         startIndex,
       );
@@ -99,8 +107,8 @@ async function pageChanged(nextPage: number) {
 }
 
 async function countDocuments() {
-  if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(selectedRun.value.identifier);
+  if (selectedGoldStandard.value.identifier) {
+    await documentStore.countDocuments(selectedGoldStandard.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -116,7 +124,6 @@ async function loadDocuments() {
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
     await countDocuments();
     await loadDocuments();

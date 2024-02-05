@@ -138,10 +138,7 @@ async function loadDocuments() {
 onMounted(async () => {
   loading.value = true;
   try {
-    await corpusStore.loadCorpus(Number(route.params.corpusId));
     setTitle(corpus.value.name);
-    await runStore.loadRuns(Number(route.params.corpusId));
-    runStore.changeSelectedRun(runStore.getRunById(Number(route.params.runId)));
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user

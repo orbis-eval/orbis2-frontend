@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col justify-between">
-    <div class="flex flex-row mb-6 gap-4">
+    <div class="mb-6 flex flex-row gap-4">
       <div class="basis-4/5">
         <div
           class="flex h-full max-h-96 flex-col justify-between overflow-auto border border-dashed border-gray-400"
@@ -8,8 +8,13 @@
           @dragover.prevent="dragOverHandler"
         >
           <div class="text-gray-600">
-            <div v-if="!selectedFiles.length" class="flex h-full items-center p-4">
-              <p class="w-full text-center">{{ $t("fileInput.dropGoldStandard") }}</p>
+            <div
+              v-if="!selectedFiles.length"
+              class="flex h-full items-center p-4"
+            >
+              <p class="w-full text-center">
+                {{ $t("fileInput.dropGoldStandard") }}
+              </p>
             </div>
             <div v-else class="p-1">
               <div
@@ -48,7 +53,12 @@
       <div class="basis-1/2">
         <div class="form-control">
           <label class="label cursor-pointer justify-normal">
-            <input type="radio" name="radio-10" class="radio checked:bg-red-500" checked />
+            <input
+              type="radio"
+              name="radio-10"
+              class="radio checked:bg-red-500"
+              checked
+            />
             <span class="label-text ml-2">Label Studio (JSON)</span>
           </label>
         </div>
@@ -56,7 +66,11 @@
       <div class="basis-1/2">
         <div class="form-control">
           <label class="label cursor-pointer justify-normal">
-            <input type="radio" name="radio-10" class="radio checked:bg-blue-500" />
+            <input
+              type="radio"
+              name="radio-10"
+              class="radio checked:bg-blue-500"
+            />
             <span class="label-text ml-2">Doccano (JSONL)</span>
           </label>
         </div>

@@ -3,7 +3,7 @@
     <h2 class="mb-5 text-3xl font-bold">Import new version</h2>
     <p>Lorem Ipsum</p>
     <input type="file" class="input" />
-    <br>
+    <br />
     <OrbisButton :on-click="cancel">Cancel</OrbisButton>
   </div>
 </template>

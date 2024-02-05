@@ -95,6 +95,10 @@ export const useRunStore = defineStore("run", () => {
     return runs.value.find((r) => r.identifier === id);
   }
 
+  function getGoldStandardById(id: number) {
+    return goldStandards.value.find((r) => r.identifier === id);
+  }
+
   return {
     corpusId,
     runs,
@@ -109,5 +113,6 @@ export const useRunStore = defineStore("run", () => {
     selectedGoldStandard,
     changeSelectedGoldStandard,
     getRunById,
+    getGoldStandardById,
   };
 });

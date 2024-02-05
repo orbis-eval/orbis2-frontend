@@ -143,7 +143,7 @@ function hideAnnotationModal() {
 }
 
 function updateAnnotations(currentSelection: any) {
-  if (props.run.value.name.includes("default")) {
+  if (props.run.name.includes("default")) {
     console.log("default run selected for annotation");
     wrongRunSelectedEnabled.value = true;
   } else if (currentSelection) {
