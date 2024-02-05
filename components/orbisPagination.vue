@@ -11,7 +11,6 @@
       :key="pageNumber"
       :on-click="() => changePage(pageNumber)"
       :active="currentPage === pageNumber"
-      :disabled="isFirstPage"
     >
       {{ pageNumber }}
     </OrbisButton>

@@ -1,6 +1,7 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxtjs/i18n"],
+  plugins: ["~/plugins/vue.progress.bar.js"],
   build: {
     transpile: ["oh-vue-icons"],
   },

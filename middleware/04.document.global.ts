@@ -6,6 +6,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const corpusStore = useCorpusStore();
   const documentStore = useDocumentStore();
   const annotationStore = useAnnotationStore();
+  const { $progress } = useNuxtApp();
 
   const runId = Number.parseInt(to.params.runId?.toString());
   const goldStandardId = Number.parseInt(to.params.goldStandardId?.toString());
@@ -23,7 +24,11 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     } else {
       throw new Error("No valid run or gold standard id");
     }
+    // @ts-ignore
+    $progress.increase(10);
     await documentStore.loadDocument(documentId).then(async () => {
+      // @ts-ignore
+      $progress.increase(10);
       if (documentStore.currentDocument.identifier && idOfRun) {
         // load annotations
         await annotationStore.loadAnnotations(
@@ -32,6 +37,8 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
           idOfRun,
           corpusStore.corpus.supportedAnnotationTypes,
         );
+        // @ts-ignore
+        $progress.increase(10);
       }
     });
   }
