@@ -52,7 +52,7 @@ const { selectedRun, selectedGoldStandard } = storeToRefs(runStore);
 async function nextDocument() {
   emit("loadingStarted");
   if ("runId" in route.params) {
-    await documentStore.nextDocument(selectedRun.value.identifier);
+    await documentStore.nextDocument(selectedRun.value.identifier || -1);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
@@ -62,7 +62,7 @@ async function nextDocument() {
         currentDocument.value.identifier,
     );
   } else if ("goldStandardId" in route.params) {
-    await documentStore.nextDocument(selectedGoldStandard.value.identifier);
+    await documentStore.nextDocument(selectedGoldStandard.value.identifier || -1);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
@@ -80,7 +80,7 @@ async function nextDocument() {
 async function previousDocument() {
   emit("loadingStarted");
   if ("runId" in route.params) {
-    await documentStore.previousDocument(selectedRun.value.identifier);
+    await documentStore.previousDocument(selectedRun.value.identifier || -1);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
@@ -90,7 +90,9 @@ async function previousDocument() {
         currentDocument.value.identifier,
     );
   } else if ("goldStandardId" in route.params) {
-    await documentStore.previousDocument(selectedGoldStandard.value.identifier);
+    await documentStore.previousDocument(
+      selectedGoldStandard.value.identifier || -1,
+    );
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +

@@ -163,7 +163,7 @@ function updateAnnotations(currentSelection: any) {
 // called when creating a new annotation
 async function createAnnotation(annotationType: AnnotationType) {
   try {
-    if (props.run.value.identifier) {
+    if (props.run.identifier) {
       const textSpan = new TextSpan(
         selection.value.word,
         selection.value.start,
@@ -173,7 +173,7 @@ async function createAnnotation(annotationType: AnnotationType) {
         textSpan,
         annotationType,
         annotator,
-        props.run.value.identifier,
+        props.run.identifier,
         Number(route.params.documentId),
       );
     } else {

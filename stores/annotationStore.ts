@@ -10,10 +10,10 @@ import { AnnotationCommandHistory } from "~/lib/utils/annotation/annotationComma
 import { DeleteAnnotationCommand } from "~/lib/utils/annotation/deleteAnnotationCommand";
 import { Annotation } from "~/lib/model/annotation";
 import { TextSpan } from "~/lib/model/textSpan";
-import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
 export const useAnnotationStore = defineStore("annotation", () => {
-  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
+  const rc = useRuntimeConfig();
+  const orbisApiService = new OrbisApiService(rc.public.orbisBaseUrl);
   const nestedSetRootNode = ref({} as NestedSetNode | null);
   const selectedAnnotation = ref({} as NestedSetNode | null);
   const annotationHistory = new AnnotationCommandHistory();

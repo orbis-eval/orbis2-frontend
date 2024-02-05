@@ -171,7 +171,7 @@ const changeRun = (event: Event) => {
     runId,
   ];
   if ('documentId' in route.params) {
-    link.push('documents', route.params.documentId);
+    link.push('documents', route.params.documentId.toString());
   }
   router.push(link.join('/'));
 };

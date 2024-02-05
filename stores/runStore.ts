@@ -3,10 +3,10 @@ import { ref } from "vue";
 import { Run } from "~/lib/model/run";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
-import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
 export const useRunStore = defineStore("run", () => {
-  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
+  const rc = useRuntimeConfig();
+  const orbisApiService = new OrbisApiService(rc.public.orbisBaseUrl);
   const corpusId = ref(-1);
   const runs = ref([] as Run[]);
   const goldStandards = ref([] as Run[]);

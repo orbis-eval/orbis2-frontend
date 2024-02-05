@@ -2,10 +2,10 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
 import { Document } from "~/lib/model/document";
-import { ORBIS_BASE_URL } from "~/constants/orbisApi";
 
 export const useDocumentStore = defineStore("document", () => {
-  const orbisApiService = new OrbisApiService(ORBIS_BASE_URL);
+  const rc = useRuntimeConfig();
+  const orbisApiService = new OrbisApiService(rc.public.orbisBaseUrl);
   const documents = ref([] as Document[]);
   const currentDocument = ref({} as Document);
   const nrOfDocuments = ref(1);
