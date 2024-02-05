@@ -32,7 +32,7 @@
                 background:
                   '#' +
                   currentColorPalette.getHexadecimalColorValue(
-                    nestedSetNode.annotationType.identifier,
+                    nestedSetNode.annotationType.identifier || 1,
                   ),
               }"
               class="mr-2 h-4 w-4 shrink-0"
