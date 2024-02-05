@@ -1,3 +1,6 @@
+VERSION_FILE := version.txt
+CURRENT_VERSION := $(shell cat $(VERSION_FILE))
+
 release_major_version:
 	$(eval MAJOR_VERSION := $(word 1, $(subst ., ,$(CURRENT_VERSION))))
 	$(eval NEW_MAJOR_VERSION := $(shell echo $$(($(MAJOR_VERSION)+1))))

@@ -1,16 +1,22 @@
 include:
-  - project: "nlp/team/ci-templates"
-    file: "node-js/.lint.yaml"
+  #- project: "nlp/team/ci-templates"
+  #  file: "node-js/.lint.yaml"
+  #  ref: "main"
   - project: "nlp/team/ci-templates"
     file: "node-js/.build.yaml"
-  - project: "nlp/team/ci-templates"
-    file: "node-js/.test.yaml"
-  - project: "nlp/team/ci-templates"
-    file: "node-js/.sonar.yaml"
+    ref: "main"
+  #- project: "nlp/team/ci-templates"
+  #  file: "node-js/.test.yaml"
+  #  ref: "main"
+  #- project: "nlp/team/ci-templates"
+  #file: "node-js/.sonar.yaml"
+  #ref: "main"
   - project: "nlp/team/ci-templates"
     file: "node-js/.docker-build.yaml"
+    ref: "main"
   - project: "nlp/team/ci-templates"
     file: "node-js/.publish-k8s.yaml"
+    ref: "main"
 
 default:
   interruptible: true
