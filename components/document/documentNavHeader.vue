@@ -52,24 +52,24 @@ const { selectedRun, selectedGoldStandard } = storeToRefs(runStore);
 async function nextDocument() {
   emit("loadingStarted");
   if ("runId" in route.params) {
-    await documentStore.nextDocument(selectedRun.value.identifier || -1);
+    const newDocument = await documentStore.nextDocument(selectedRun.value.identifier || -1);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/runs/" +
         selectedRun.value.identifier +
         "/documents/" +
-        currentDocument.value.identifier,
+        newDocument.identifier,
     );
   } else if ("goldStandardId" in route.params) {
-    await documentStore.nextDocument(selectedGoldStandard.value.identifier || -1);
+    const newDocument = await documentStore.nextDocument(selectedGoldStandard.value.identifier || -1);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/gold-standard/" +
         selectedGoldStandard.value.identifier +
         "/documents/" +
-        currentDocument.value.identifier,
+        newDocument.identifier,
     );
   } else {
     console.warn("Id of selected run was not set in nextDocument.");
@@ -80,17 +80,17 @@ async function nextDocument() {
 async function previousDocument() {
   emit("loadingStarted");
   if ("runId" in route.params) {
-    await documentStore.previousDocument(selectedRun.value.identifier || -1);
+    const newDocument = await documentStore.previousDocument(selectedRun.value.identifier || -1);
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
         "/runs/" +
         selectedRun.value.identifier +
         "/documents/" +
-        currentDocument.value.identifier,
+        newDocument.identifier,
     );
   } else if ("goldStandardId" in route.params) {
-    await documentStore.previousDocument(
+    const newDocument = await documentStore.previousDocument(
       selectedGoldStandard.value.identifier || -1,
     );
     await navigateTo(
@@ -99,7 +99,7 @@ async function previousDocument() {
         "/gold-standard/" +
         selectedGoldStandard.value.identifier +
         "/documents/" +
-        currentDocument.value.identifier,
+        newDocument.identifier,
     );
   } else {
     console.warn("Id of selected run was not set in previousDocument.");

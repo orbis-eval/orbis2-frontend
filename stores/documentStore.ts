@@ -55,7 +55,7 @@ export const useDocumentStore = defineStore("document", () => {
     if (!currentDocument.value.identifier) {
       throw new Error("No valid id for current Document");
     }
-    currentDocument.value = await orbisApiService.nextDocument(
+    return await orbisApiService.nextDocument(
       runId,
       currentDocument.value.identifier,
     );
@@ -65,7 +65,7 @@ export const useDocumentStore = defineStore("document", () => {
     if (!currentDocument.value.identifier) {
       throw new Error("No valid id for current Document");
     }
-    currentDocument.value = await orbisApiService.previousDocument(
+    return await orbisApiService.previousDocument(
       runId,
       currentDocument.value.identifier,
     );

@@ -12,6 +12,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   const goldStandardId = Number.parseInt(to.params.goldStandardId?.toString());
   const documentId = Number.parseInt(to.params.documentId?.toString());
 
+  console.log(documentId, documentStore.currentDocument.identifier);
   // fetch the document if it's not already loaded
   if (documentId && documentId !== documentStore.currentDocument.identifier) {
     let idOfRun: number;
@@ -29,6 +30,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
     await documentStore.loadDocument(documentId).then(async () => {
       // @ts-ignore
       $progress.increase(10);
+      console.log(documentStore.currentDocument.content);
       if (documentStore.currentDocument.identifier && idOfRun) {
         // load annotations
         await annotationStore.loadAnnotations(
