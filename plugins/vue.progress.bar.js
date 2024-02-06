@@ -1,9 +1,9 @@
 import VueProgressBar from "@aacassandra/vue3-progressbar";
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(VueProgressBar, {
-    color: "rgb(107, 114, 128)",
+    color: "rgb(173,216,230)",
     failedColor: "red",
-    thickness: "5px",
+    thickness: "7px",
     position: "relative",
   });
   return {
