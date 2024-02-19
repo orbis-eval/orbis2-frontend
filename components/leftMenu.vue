@@ -6,6 +6,12 @@
       <MenuItem :url="`/`" :text="$t('corpus.corpora')" :validator="true">
         <OhVueIcon name="hi-database" class="menu-icon" />
       </MenuItem>
+      <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
+        <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/`"
+            :text="$t('allAnnotations')"
+        />
+      </ul>
       <MenuItem
         :url="`/corpora/${route.params.corpusId}/gold-standard/${selectedGoldStandard.identifier}/`"
         text="Gold Standard"

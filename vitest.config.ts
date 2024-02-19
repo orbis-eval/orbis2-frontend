@@ -7,7 +7,9 @@ export default {
   plugins: [
     vue(),
     AutoImport({
-      imports: ["vue"],
+      imports: [
+          "vue",
+      ],
     }),
     Components({ dirs: ["./components"] }),
   ],
@@ -18,6 +20,7 @@ export default {
       provider: "v8",
       reporter: ["text", "lcov"],
     },
+    setupFiles: ["./tests/setup.ts"],
   },
   resolve: {
     alias: {

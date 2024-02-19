@@ -5,6 +5,7 @@
       <div
         v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
         :key="nestedSetNode.identifier"
+        @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
       >
         <div
           :class="
@@ -25,7 +26,6 @@
         >
           <div
             class="flex flex-grow"
-            @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
           >
             <div
               :style="{

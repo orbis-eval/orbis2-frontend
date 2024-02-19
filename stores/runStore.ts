@@ -73,6 +73,7 @@ export const useRunStore = defineStore("run", () => {
       if (runs.value.length > 1) {
         await orbisApiService.deleteRun(run);
         runs.value = runs.value.filter((r) => r.identifier !== run.identifier);
+        selectedRun.value = runs.value[0];
       } else {
         console.error("Cannot delete the last run");
       }

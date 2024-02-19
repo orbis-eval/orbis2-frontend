@@ -1,6 +1,8 @@
 {
   "documents": "Documents",
   "allDocuments": "All Documents",
+  "annotations": "Annotations",
+  "allAnnotations": "All Annotations",
   "numberAbbreviation": "Nr",
   "id": "ID",
   "content": "Content",

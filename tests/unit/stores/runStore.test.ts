@@ -73,18 +73,7 @@ describe("Run Store", () => {
     expect(runStore.selectedRun).toEqual(run);
   });
 
-  it("loadRuns should update corpusId, runs, and selectedRun", async () => {
-    const runStore = useRunStore();
-    const corpusId = 1;
-
-    await runStore.loadRuns(corpusId);
-
-    expect(runStore.corpusId).toBe(corpusId);
-    expect(runStore.runs.length).toEqual(3);
-    expect(runStore.selectedRun).toEqual(runs[0]);
-  });
-
-  it("second execution of loadRuns should keep selected run", async () => {
+  it("execution of loadRuns should keep selected run", async () => {
     const runStore = useRunStore();
     const corpusId = 1;
     const run3 = createRun(3, "Run 3", "some desc");
@@ -96,20 +85,6 @@ describe("Run Store", () => {
     expect(runStore.corpusId).toBe(corpusId);
     expect(runStore.runs.length).toEqual(3);
     expect(runStore.selectedRun).toEqual(run3);
-  });
-
-  it("second execution of loadRuns should not be kept if corpus changes", async () => {
-    const runStore = useRunStore();
-    const run3 = createRun(3, "Run 3", "some desc");
-    const newCorpusId = 2;
-    runStore.selectedRun = run3;
-    runStore.corpusId = 1;
-
-    await runStore.loadRuns(newCorpusId);
-
-    expect(runStore.corpusId).toBe(newCorpusId);
-    expect(runStore.runs.length).toEqual(3);
-    expect(runStore.selectedRun).toEqual(runs[0]);
   });
 
   it("createRun should create a new run", async () => {

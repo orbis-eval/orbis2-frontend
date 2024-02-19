@@ -34,6 +34,7 @@ import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 import { useTitle } from "~/composables/title";
+import {onMounted} from "#imports";
 
 const route = useRoute();
 
@@ -43,27 +44,16 @@ const corpusStore = useCorpusStore();
 const runStore = useRunStore();
 const { selectedGoldStandard } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
-const colorPalettesStore = useColorPalettesStore();
 
 const highlightedNestedSetNodeId = ref([] as number[]);
 
-const { setTitle } = useTitle();
-const { corpus } = storeToRefs(corpusStore);
-
-onMounted(async () => {
-  loading.value = true;
-  try {
-    setTitle(corpus.value.name);
-
-    if (selectedGoldStandard.value.identifier) {
-      await colorPalettesStore.loadColorPalettes();
-    } else {
-      console.log("Id of selected run was not set.");
+onMounted(() => {
+  if (annotationStore.selectedAnnotation) {
+    let ids : number[] = [];
+    if (annotationStore.selectedAnnotation.identifier) {
+      ids.push(annotationStore.selectedAnnotation.identifier);
     }
-  } catch (error) {
-    // Todo: Error Message for user
-  } finally {
-    loading.value = false;
+    setHighlightNestedSetNode(ids);
   }
 });
 

@@ -1,6 +1,24 @@
 VERSION_FILE := version.txt
 CURRENT_VERSION := $(shell cat $(VERSION_FILE))
 
+start:
+	docker compose up -d
+
+stop:
+	docker compose stop
+
+build:
+	docker compose build
+
+down:
+	docker compose down -v
+
+logs:
+	docker compose logs -f
+
+test:
+	docker compose exec frontend yarn test
+
 release_major_version:
 	$(eval MAJOR_VERSION := $(word 1, $(subst ., ,$(CURRENT_VERSION))))
 	$(eval NEW_MAJOR_VERSION := $(shell echo $$(($(MAJOR_VERSION)+1))))

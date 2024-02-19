@@ -3,8 +3,7 @@
     <template #leftMenu>
       <LeftMenu />
     </template>
-    <LoadingSpinner v-if="loading" class="mt-20" />
-    <div v-else class="flex h-full flex-col">
+    <div class="flex h-full flex-col">
       <div
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
       >
@@ -79,6 +78,8 @@ addIcons(MdKeyboardarrowdown);
 const route = useRoute();
 const router = useRouter();
 
+const { $progress } = useNuxtApp();
+
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 
@@ -89,7 +90,6 @@ const runStore = useRunStore();
 const { selectedGoldStandard } = storeToRefs(runStore);
 
 const pageSize = ref(10);
-const loading = ref(true);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 const { setTitle } = useTitle();
@@ -97,7 +97,7 @@ const { setTitle } = useTitle();
 // called when another page is selected
 async function pageChanged(nextPage: number) {
   if (selectedGoldStandard.value.identifier) {
-    loading.value = true;
+    $progress.start();
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
@@ -109,7 +109,7 @@ async function pageChanged(nextPage: number) {
     } catch (error) {
       console.error(error);
     } finally {
-      loading.value = false;
+      $progress.finish()
     }
   } else {
     console.warn("Id of selected run was not set in pageChanged.");
@@ -132,14 +132,14 @@ async function loadDocuments() {
 }
 
 onMounted(async () => {
-  loading.value = true;
+  $progress.start();
   try {
     setTitle(corpus.value.name);
     await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
   } finally {
-    loading.value = false;
+    $progress.finish();
   }
 });
 </script>

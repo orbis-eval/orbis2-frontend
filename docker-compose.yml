@@ -1,0 +1,15 @@
+version: "3"
+
+volumes:
+  node_modules:
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: dockerfile.dev
+    ports:
+      - "3000:3000"
+      - "24678:24678"
+    volumes:
+      - .:/nuxt-app
+      - node_modules:/nuxt-app/node_modules

@@ -1,7 +1,6 @@
 <template>
   <NuxtLayout name="default-layout">
-    <LoadingSpinner v-if="loading" class="mt-5" />
-    <div v-else class="mt-5">
+    <div class="mt-5">
       <div
         class="mx-10 mb-10 flex flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-5"
       >
@@ -20,11 +19,7 @@
       <div
         class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral"
       >
-        <DocumentNavHeader
-          @loadingFinished="loading = false"
-          @loadingStarted="loading = true"
-        >
-        </DocumentNavHeader>
+        <DocumentNavHeader />
         <DocumentAnnotation
           :run="selectedRun"
           :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -34,7 +29,6 @@
     </div>
     <template #sidebar>
       <DocumentSidebar
-        :loading="loading"
         @setHighlightNestedSetNode="setHighlightNestedSetNode"
       ></DocumentSidebar>
     </template>
@@ -49,37 +43,24 @@ import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 import { useTitle } from "~/composables/title";
+import {onMounted} from "#imports";
 
 const route = useRoute();
-
-const loading = ref(true);
+const { $progress } = useNuxtApp();
 const documentStore = useDocumentStore();
-const corpusStore = useCorpusStore();
 const runStore = useRunStore();
 const { selectedRun } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
-const colorPalettesStore = useColorPalettesStore();
 
 const highlightedNestedSetNodeId = ref([] as number[]);
 
-const { setTitle } = useTitle();
-const { corpus } = storeToRefs(corpusStore);
-
-onMounted(async () => {
-  loading.value = true;
-  try {
-    setTitle(corpus.value.name);
-
-    if (selectedRun.value.identifier) {
-      // @todo remove color Palettes from backend, not needed
-      await colorPalettesStore.loadColorPalettes();
-    } else {
-      console.log("Id of selected run was not set.");
+onMounted(() => {
+  if (annotationStore.selectedAnnotation) {
+    let ids : number[] = [];
+    if (annotationStore.selectedAnnotation.identifier) {
+      ids.push(annotationStore.selectedAnnotation.identifier);
     }
-  } catch (error) {
-    // Todo: Error Message for user
-  } finally {
-    loading.value = false;
+    setHighlightNestedSetNode(ids);
   }
 });
 

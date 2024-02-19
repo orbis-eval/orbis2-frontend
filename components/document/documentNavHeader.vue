@@ -1,30 +1,34 @@
 <template>
   <div
     v-if="currentDocument"
-    class="flex items-center px-4 pb-4 pt-5 text-lg"
+    class="flex items-center px-4 pb-4 pt-5 text-lg w-100"
   >
-    <OrbisButton
-      :disabled="nrOfDocuments <= 1"
-      :on-click="previousDocument"
-      class="p-0"
-      size="md"
-      transparent
-    >
-      <OhVueIcon name="md-navigatebefore-twotone" scale="2.5" />
-    </OrbisButton>
+    <div class="flex w-1/4 justify-start">
+      <OrbisButton
+          :disabled="nrOfDocuments <= 1"
+          :on-click="previousDocument"
+          class="p-0"
+          size="md"
+          transparent
+      >
+        <OhVueIcon name="md-navigatebefore-twotone" scale="2.5" />
+      </OrbisButton>
+    </div>
     <div class="grow text-center">
       <span class="font-bold">{{ $t("id") }}:</span>
       {{ currentDocument.identifier }}
     </div>
-    <OrbisButton
-      :disabled="nrOfDocuments <= 1"
-      :on-click="nextDocument"
-      class="p-0"
-      size="md"
-      transparent
-    >
-      <OhVueIcon name="md-navigatenext-twotone" scale="2.5" />
-    </OrbisButton>
+    <div class="flex w-1/4 justify-end">
+      <OrbisButton
+        :disabled="nrOfDocuments <= 1"
+        :on-click="nextDocument"
+        class="p-0"
+        size="md"
+        transparent
+      >
+        <OhVueIcon name="md-navigatenext-twotone" scale="2.5" />
+      </OrbisButton>
+    </div>
   </div>
 </template>
 

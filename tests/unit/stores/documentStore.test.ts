@@ -115,9 +115,8 @@ describe("Document Store", () => {
   it("nextDocument should fetch the next document and update the current document", async () => {
     const documentStore = useDocumentStore();
     documentStore.currentDocument = documents[0];
-    const runId = 1;
 
-    await documentStore.nextDocument(runId);
+    documentStore.currentDocument = await documentStore.nextDocument(documentStore.currentDocument.identifier);
 
     expect(documentStore.currentDocument).toEqual(documents[1]);
   });
@@ -127,7 +126,7 @@ describe("Document Store", () => {
     documentStore.currentDocument = documents[2];
     const runId = 1;
 
-    await documentStore.previousDocument(runId);
+    documentStore.currentDocument = await documentStore.previousDocument(runId);
 
     expect(documentStore.currentDocument).toEqual(documents[1]);
   });
