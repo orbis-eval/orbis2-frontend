@@ -21,7 +21,8 @@
 defineProps<{
   url: string;
   text: string;
-  validator: Boolean;
+  // Optional validator
+  validator?: Boolean;
 }>();
 </script>
 

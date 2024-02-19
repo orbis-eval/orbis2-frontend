@@ -116,7 +116,9 @@ describe("Document Store", () => {
     const documentStore = useDocumentStore();
     documentStore.currentDocument = documents[0];
 
-    documentStore.currentDocument = await documentStore.nextDocument(documentStore.currentDocument.identifier);
+    let documentId: number = documentStore.currentDocument.identifier || 0;
+
+    documentStore.currentDocument = await documentStore.nextDocument(documentId);
 
     expect(documentStore.currentDocument).toEqual(documents[1]);
   });

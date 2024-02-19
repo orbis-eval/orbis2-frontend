@@ -19,6 +19,9 @@ logs:
 test:
 	docker compose exec frontend yarn test
 
+yarn-build:
+	docker compose exec frontend yarn build
+
 release_major_version:
 	$(eval MAJOR_VERSION := $(word 1, $(subst ., ,$(CURRENT_VERSION))))
 	$(eval NEW_MAJOR_VERSION := $(shell echo $$(($(MAJOR_VERSION)+1))))
