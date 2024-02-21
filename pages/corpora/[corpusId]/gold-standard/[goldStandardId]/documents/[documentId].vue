@@ -1,15 +1,10 @@
 <template>
   <NuxtLayout name="default-layout">
-    <LoadingSpinner v-if="loading" class="mt-5" />
-    <div v-else class="mt-5">
+    <div class="mt-5">
       <div
         class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral"
       >
-        <DocumentNavHeader
-          @loadingFinished="loading = false"
-          @loadingStarted="loading = true"
-        >
-        </DocumentNavHeader>
+        <DocumentNavHeader />
         <DocumentAnnotation
           :run="selectedGoldStandard"
           :highlighted-nested-set-node-id="highlightedNestedSetNodeId"
@@ -19,7 +14,6 @@
     </div>
     <template #sidebar>
       <DocumentSidebar
-        :loading="loading"
         @setHighlightNestedSetNode="setHighlightNestedSetNode"
       ></DocumentSidebar>
     </template>
@@ -38,7 +32,6 @@ import {onMounted} from "#imports";
 
 const route = useRoute();
 
-const loading = ref(true);
 const documentStore = useDocumentStore();
 const corpusStore = useCorpusStore();
 const runStore = useRunStore();

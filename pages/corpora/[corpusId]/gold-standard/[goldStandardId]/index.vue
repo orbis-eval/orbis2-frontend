@@ -55,7 +55,7 @@
           v-if="totalPages"
           :current-page="currentPage"
           :total-pages="totalPages"
-          class="text-center"
+          class="text-center my-3"
           @pageChanged="pageChanged"
         />
       </div>

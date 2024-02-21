@@ -94,11 +94,34 @@ export class OrbisApiService {
 
   async createCorpus(
     corpus: Corpus,
-    documents: Document[] = [],
+    chosenFiles: File[] = [],
+    fileFormat: string,
   ): Promise<Corpus> {
     const body = { corpus } as any;
-    if (documents.length > 0) {
-      body.documents = documents;
+    if (chosenFiles.length > 0) {
+      body.files= [];
+
+      // Iterate through each chosen file
+      for (const file of chosenFiles) {
+        const fileReader = new FileReader();
+
+        // Read the file content asynchronously
+        const fileContent = await new Promise<string>((resolve) => {
+          fileReader.onload = (event) => {
+            resolve(event.target?.result as string);
+          };
+          fileReader.readAsText(file);
+        });
+
+        // Add file details to the array
+        body.files.push({
+          filename: file.name,
+          filesize: file.size,
+          content: fileContent,
+          file_format: fileFormat,
+          // Add other file details as needed
+        });
+      }
     }
     return await Parser.parse(Corpus, this.apiPost("createCorpus", body));
   }

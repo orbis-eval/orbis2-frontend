@@ -16,7 +16,40 @@
         />
         <ErrorMessage class="text-red-400" name="corpusName" />
       </div>
-      <FileInput accepted-file-types=".json" @fileChange="fileChanged" />
+      <FileInput :accepted-file-types="acceptedFileTypes" @fileChange="fileChanged" />
+      <div>
+        <p>Data from:</p>
+      </div>
+      <div class="flex">
+        <div class="basis-1/2">
+          <div class="form-control">
+            <label class="label cursor-pointer justify-normal">
+              <input
+                  type="radio"
+                  name="radio-10"
+                  class="radio checked:bg-red-500"
+                  value="label-studio"
+                  v-model="fileFormat"
+              />
+              <span class="label-text ml-2">Label Studio (JSON)</span>
+            </label>
+          </div>
+        </div>
+        <div class="basis-1/2">
+          <div class="form-control">
+            <label class="label cursor-pointer justify-normal">
+              <input
+                  type="radio"
+                  name="radio-10"
+                  class="radio checked:bg-blue-500"
+                  value="doccano"
+                  v-model="fileFormat"
+              />
+              <span class="label-text ml-2">Doccano (JSONL)</span>
+            </label>
+          </div>
+        </div>
+      </div>
       <div class="mt-5 flex gap-4">
         <OrbisButton :is-form-button="true"
           >{{ $t("button.create") }}
@@ -42,6 +75,8 @@ const cancel = () => closeModal();
 
 const chosenFiles = ref([] as File[]);
 
+const fileFormat = ref("label-studio");
+
 const corpusNotExists = (runName: string) => {
   return !corpora.value.some((corpus) => corpus.name === runName);
 };
@@ -61,9 +96,16 @@ function fileChanged(newChosenFiles: File[]) {
   chosenFiles.value = newChosenFiles;
 }
 
+const acceptedFileTypes = computed(() => {
+  if (fileFormat.value === "label-studio") {
+    return ".json";
+  }
+  return ".jsonl";
+});
+
 const createCorpus = async (values: any) => {
   try {
-    await corpusStore.createCorpus(values.corpusName, chosenFiles.value);
+    await corpusStore.createCorpus(values.corpusName, chosenFiles.value, fileFormat.value);
   } catch (error) {
     // Todo: Add Error Message
     console.error(error);

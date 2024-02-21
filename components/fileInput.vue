@@ -46,36 +46,6 @@
         </OrbisButton>
       </div>
     </div>
-    <div>
-      <p>Data from:</p>
-    </div>
-    <div class="flex">
-      <div class="basis-1/2">
-        <div class="form-control">
-          <label class="label cursor-pointer justify-normal">
-            <input
-              type="radio"
-              name="radio-10"
-              class="radio checked:bg-red-500"
-              checked
-            />
-            <span class="label-text ml-2">Label Studio (JSON)</span>
-          </label>
-        </div>
-      </div>
-      <div class="basis-1/2">
-        <div class="form-control">
-          <label class="label cursor-pointer justify-normal">
-            <input
-              type="radio"
-              name="radio-10"
-              class="radio checked:bg-blue-500"
-            />
-            <span class="label-text ml-2">Doccano (JSONL)</span>
-          </label>
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
