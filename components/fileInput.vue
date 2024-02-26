@@ -13,7 +13,7 @@
               class="flex h-full items-center p-4"
             >
               <p class="w-full text-center">
-                {{ $t("fileInput.dropGoldStandard") }}
+                {{ $t("fileInput.dropFile") }}
               </p>
             </div>
             <div v-else class="p-1">

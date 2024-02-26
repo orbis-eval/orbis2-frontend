@@ -27,10 +27,10 @@
             <tr class="text-lg text-white">
               <th>Name</th>
               <th>Date</th>
-              <th>F1</th>
-              <th>Precision</th>
-              <th>Recall</th>
-              <th>Accuracy</th>
+              <th>Kappa Macro</th>
+              <th>Kappa Micro</th>
+              <th>Average Macro F1</th>
+              <th>Average Micro F1</th>
             </tr>
           </thead>
 
@@ -45,10 +45,10 @@
             >
               <th>{{ run.name }}</th>
               <td>{{ run.timestamp }}</td>
-              <td>0.8</td>
-              <td>0.8</td>
-              <td>0.8</td>
-              <td>0.8</td>
+              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[0].toFixed(2) }}</td><td v-else>-</td>
+              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[1].toFixed(2) }}</td><td v-else>-</td>
+              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[2].toFixed(2) }}</td><td v-else>-</td>
+              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[3].toFixed(2) }}</td><td v-else>-</td>
             </tr>
           </tbody>
         </table>

@@ -42,6 +42,7 @@
     "viewTitle": "Run {name}",
     "runs": "Runs",
     "createRun": "Erstelle Run",
+    "importRun": "Run Importieren",
     "compareRuns": "Vergleiche Runs",
     "error": {
       "runNameRequired": "Run Name wird benötigt",
@@ -58,6 +59,7 @@
     "close": "Schliessen",
     "cancel": "Abbrechen",
     "create": "Erstellen",
+    "import": "Importieren",
     "chooseFiles": "Dateien auswählen",
     "chooseFile": "Datei auswählen"
   },

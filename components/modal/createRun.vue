@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mb-5 text-3xl font-bold">{{ $t("run.createRun") }}</h2>
+    <h2 class="mb-5 text-3xl font-bold">{{ $t("run.importRun") }}</h2>
     <Form
       v-slot="{ errors }"
       :validation-schema="validationSchema"
@@ -26,9 +26,43 @@
         />
         <ErrorMessage class="text-red-400" name="runDesc" />
       </div>
+      <FileInput :accepted-file-types="acceptedFileTypes" @fileChange="fileChanged" />
+      <div>
+        <p>File format:</p>
+      </div>
+      <div class="flex">
+        <div class="basis-1/2">
+          <div class="form-control">
+            <label class="label cursor-pointer justify-normal">
+              <input
+                  type="radio"
+                  name="radio-10"
+                  class="radio checked:bg-red-500"
+                  value="label-studio"
+                  v-model="fileFormat"
+              />
+              <span class="label-text ml-2">Label Studio (JSON)</span>
+            </label>
+          </div>
+        </div>
+        <div class="basis-1/2">
+          <div class="form-control">
+            <label class="label cursor-pointer justify-normal">
+              <input
+                  type="radio"
+                  name="radio-10"
+                  class="radio checked:bg-blue-500"
+                  value="doccano"
+                  v-model="fileFormat"
+              />
+              <span class="label-text ml-2">Doccano (JSONL)</span>
+            </label>
+          </div>
+        </div>
+      </div>
       <div class="mt-10 grid grid-cols-3 gap-4">
         <OrbisButton :is-form-button="true"
-          >{{ $t("button.create") }}
+          >{{ $t("button.import") }}
         </OrbisButton>
         <OrbisButton :on-click="() => closeModal()"
           >{{ $t("button.cancel") }}
@@ -55,6 +89,20 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 const { runs } = storeToRefs(runStore);
 
+const chosenFiles = ref([] as File[]);
+const fileFormat = ref("label-studio");
+
+function fileChanged(newChosenFiles: File[]) {
+  chosenFiles.value = newChosenFiles;
+}
+
+const acceptedFileTypes = computed(() => {
+  if (fileFormat.value === "label-studio") {
+    return ".json";
+  }
+  return ".jsonl";
+});
+
 const runNotExists = (runName: string) => {
   return !runs.value.some((run) => run.name === runName);
 };
@@ -79,7 +127,7 @@ const createRun = async (values: any) => {
       description: values.runDesc,
       corpus: corpus.value,
     });
-    await runStore.createRun(newRun, corpus.value);
+    await runStore.createRun(newRun, corpus.value, chosenFiles.value, fileFormat.value);
   } catch (error) {
     // Todo: Show error to user
     console.error(error);

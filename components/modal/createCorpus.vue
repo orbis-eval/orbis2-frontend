@@ -18,7 +18,7 @@
       </div>
       <FileInput :accepted-file-types="acceptedFileTypes" @fileChange="fileChanged" />
       <div>
-        <p>Data from:</p>
+        <p>File format:</p>
       </div>
       <div class="flex">
         <div class="basis-1/2">
@@ -74,7 +74,6 @@ const { corpora } = storeToRefs(corpusStore);
 const cancel = () => closeModal();
 
 const chosenFiles = ref([] as File[]);
-
 const fileFormat = ref("label-studio");
 
 const corpusNotExists = (runName: string) => {

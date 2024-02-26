@@ -11,6 +11,7 @@ export class Run implements IRun {
   timestamp?: string;
   documentAnnotations?: Map<Document, Annotation[]>;
   identifier?: number;
+  interRaterAgreement?: number[];
 
   constructor(run: IRun) {
     this.name = run.name;
@@ -19,6 +20,7 @@ export class Run implements IRun {
     this.timestamp = this.getFormattedUpdatedAt();
     this.documentAnnotations = run.documentAnnotations;
     this.identifier = run.identifier;
+    this.interRaterAgreement = run.interRaterAgreement;
   }
 
   toJSON() {

@@ -9,4 +9,5 @@ export interface IRun {
   timestamp?: string;
   documentAnnotations?: Map<Document, Annotation[]>;
   identifier?: number;
+  interRaterAgreement?: float[];
 }

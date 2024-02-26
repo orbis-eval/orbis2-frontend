@@ -22,8 +22,7 @@
     }
   },
   "fileInput": {
-    "importGoldStandard": "Import Gold Standard",
-    "dropGoldStandard": "Drop Gold Standard here"
+    "dropFile": "Drop File here"
   },
   "document": {
     "document": "Document",
@@ -42,6 +41,7 @@
     "viewTitle": "Run {name}",
     "runs": "Runs",
     "createRun": "Create Run",
+    "importRun": "Import Run",
     "compareRuns": "Compare Runs",
     "error": {
       "runNameRequired": "Run name is required",
@@ -58,6 +58,7 @@
     "close": "Close",
     "cancel": "Cancel",
     "create": "Create",
+    "import": "Import",
     "chooseFiles": "Choose Files",
     "chooseFile": "Choose File"
   },
