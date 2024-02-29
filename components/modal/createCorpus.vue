@@ -88,23 +88,19 @@ const acceptedFileTypes = ".json, .jsonl";
 const createCorpus = async (values: any) => {
   try {
     await corpusStore.createCorpus(values.corpusName, chosenFiles.value);
-  } catch (error) {
-    // Todo: Add Error Message
-    console.error(error);
-  } finally {
-    closeModal();
   } catch (error: any) {
+    // return this.displayErrorMessage("Network error occured");
+    // TODO: differentiate between ErrorMessage and MessageToast
+    // toastSettings.value = ErrorService.onError(error);
+    // showToast.value = true;
     if (!error.response) {
       // TODO: use correct translation text
       setCorpusFileError("There was an error creating this corpus");
     } else if (error.response.status === 422) {
       setCorpusFileError("There was a problem with the file structure");
     }
-    // return this.displayErrorMessage("Network error occured");
-    // TODO: differentiate between ErrorMessage and MessageToast
-    // toastSettings.value = ErrorService.onError(error);
-
-    // showToast.value = true;
+  } finally {
+    closeModal();
   }
 };
 </script>
