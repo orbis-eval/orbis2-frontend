@@ -16,7 +16,10 @@
         />
         <ErrorMessage class="text-red-400" name="corpusName" />
       </div>
-      <FileInput :accepted-file-types="acceptedFileTypes" @fileChange="fileChanged" />
+      <FileInput
+        :accepted-file-types="acceptedFileTypes"
+        @fileChange="fileChanged"
+      />
       <div>
         <p>File format:</p>
       </div>
@@ -25,11 +28,11 @@
           <div class="form-control">
             <label class="label cursor-pointer justify-normal">
               <input
-                  type="radio"
-                  name="radio-10"
-                  class="radio checked:bg-red-500"
-                  value="label-studio"
-                  v-model="fileFormat"
+                type="radio"
+                name="radio-10"
+                class="radio checked:bg-red-500"
+                value="label-studio"
+                v-model="fileFormat"
               />
               <span class="label-text ml-2">Label Studio (JSON)</span>
             </label>
@@ -39,11 +42,11 @@
           <div class="form-control">
             <label class="label cursor-pointer justify-normal">
               <input
-                  type="radio"
-                  name="radio-10"
-                  class="radio checked:bg-blue-500"
-                  value="doccano"
-                  v-model="fileFormat"
+                type="radio"
+                name="radio-10"
+                class="radio checked:bg-blue-500"
+                value="doccano"
+                v-model="fileFormat"
               />
               <span class="label-text ml-2">Doccano (JSONL)</span>
             </label>
@@ -124,24 +127,24 @@ const acceptedFileTypes = computed(() => {
 
 const createCorpus = async (values: any) => {
   try {
-    await corpusStore.createCorpus(values.corpusName, chosenFiles.value, fileFormat.value);
-  } catch (error) {
-    // Todo: Add Error Message
-    console.error(error);
-  } finally {
-    closeModal();
+    await corpusStore.createCorpus(
+      values.corpusName,
+      chosenFiles.value,
+      fileFormat.value,
+    );
   } catch (error: any) {
+    // return this.displayErrorMessage("Network error occured");
+    // TODO: differentiate between ErrorMessage and MessageToast
+    // toastSettings.value = ErrorService.onError(error);
+    // showToast.value = true;
     if (!error.response) {
       // TODO: use correct translation text
       setCorpusFileError("There was an error creating this corpus");
     } else if (error.response.status === 422) {
       setCorpusFileError("There was a problem with the file structure");
     }
-    // return this.displayErrorMessage("Network error occured");
-    // TODO: differentiate between ErrorMessage and MessageToast
-    // toastSettings.value = ErrorService.onError(error);
-
-    // showToast.value = true;
+  } finally {
+    closeModal();
   }
 };
 </script>

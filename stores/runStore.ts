@@ -29,9 +29,19 @@ export const useRunStore = defineStore("run", () => {
     }
   }
 
-  async function createRun(newRun: Run, corpus: Corpus, chosenFiles: File[], fileFormat: string) {
+  async function createRun(
+    newRun: Run,
+    corpus: Corpus,
+    chosenFiles: File[],
+    fileFormat: string,
+  ) {
     try {
-      const run = await orbisApiService.createRun(newRun, corpus, chosenFiles, fileFormat);
+      const run = await orbisApiService.createRun(
+        newRun,
+        corpus,
+        chosenFiles,
+        fileFormat,
+      );
       runs.value.push(run);
     } catch (error) {
       throw new Error("An error occurred while creating a run.", {
