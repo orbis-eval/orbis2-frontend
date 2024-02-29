@@ -8,8 +8,8 @@
       </MenuItem>
       <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
         <MenuSubItem
-            :url="`/corpora/${corpus.identifier}/gold-stajndard/${selectedGoldStandard.identifier}/`"
-            :text="$t('allAnnotations')"
+          :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/`"
+          :text="$t('allAnnotations')"
         />
       </ul>
       <MenuItem
@@ -28,7 +28,9 @@
         <MenuSubItem
           :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/documents/${route.params.documentId}/`"
           :text="$t('document.document')"
-          :validator="'goldStandardId' in route.params && 'documentId' in route.params"
+          :validator="
+            'goldStandardId' in route.params && 'documentId' in route.params
+          "
         />
       </ul>
       <MenuItem
@@ -60,17 +62,17 @@
 </template>
 
 <script setup lang="ts">
-import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
-  HiUser,
-  HiDatabase,
-  HiTag,
-  LaRocketSolid,
-  LaRunningSolid,
-  IoDocuments,
   BiJournalBookmarkFill,
   BiJournalText,
+  HiDatabase,
   HiHome,
+  HiTag,
+  HiUser,
+  IoDocuments,
+  LaRocketSolid,
+  LaRunningSolid,
 } from "oh-vue-icons/icons";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
@@ -99,4 +101,3 @@ const { selectedGoldStandard, selectedRun } = storeToRefs(runStore);
 const documentStore = useDocumentStore();
 const { documents, currentDocument } = storeToRefs(documentStore);
 </script>
-
