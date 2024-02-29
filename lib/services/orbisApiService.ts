@@ -99,7 +99,7 @@ export class OrbisApiService {
   ): Promise<Corpus> {
     const body = { corpus } as any;
     if (chosenFiles.length > 0) {
-      body.files= [];
+      body.files = [];
 
       // Iterate through each chosen file
       for (const file of chosenFiles) {
@@ -126,10 +126,15 @@ export class OrbisApiService {
     return await Parser.parse(Corpus, this.apiPost("createCorpus", body));
   }
 
-  async createRun(newRun: Run, corpus: Corpus, chosenFiles: File[] = [], fileFormat: string,): Promise<Run> {
+  async createRun(
+    newRun: Run,
+    corpus: Corpus,
+    chosenFiles: File[] = [],
+    fileFormat: string,
+  ): Promise<Run> {
     const body = { corpus } as any;
     if (chosenFiles.length > 0) {
-      body.files= [];
+      body.files = [];
 
       // Iterate through each chosen file
       for (const file of chosenFiles) {
@@ -211,7 +216,7 @@ export class OrbisApiService {
     query: string,
     body: any,
   ): Promise<TypedInternalResponse<string>> {
-    return await fetch(`${this.orbisApiBase}/${query}`, {
+    return await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "POST",
       body: JSON.stringify(body),
     });
