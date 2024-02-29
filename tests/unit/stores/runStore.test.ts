@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, vi, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
@@ -92,7 +92,7 @@ describe("Run Store", () => {
     const newRun = createRun(1, "Run 1", "some desc");
     const corpus = newRun.corpus;
 
-    await runStore.createRun(newRun, corpus);
+    await runStore.createRun(newRun, corpus, [], "");
 
     expect(runStore.runs.length).equals(1);
     expect(runStore.runs).toContainEqual(newRun);
