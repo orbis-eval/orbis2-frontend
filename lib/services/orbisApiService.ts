@@ -118,7 +118,7 @@ export class OrbisApiService {
           filename: file.name,
           filesize: file.size,
           content: fileContent,
-          file_format: fileFormat,
+          fileFormat,
           // Add other file details as needed
         });
       }
@@ -153,7 +153,7 @@ export class OrbisApiService {
           filename: file.name,
           filesize: file.size,
           content: fileContent,
-          file_format: fileFormat,
+          fileFormat,
           // Add other file details as needed
         });
       }
