@@ -1,11 +1,13 @@
 import { defineStore } from "pinia";
 import { ref } from "vue";
 import { Corpus } from "~/lib/model/corpus";
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 
 export const useCorpusStore = defineStore("corpus", () => {
-  const rc = useRuntimeConfig();
-  const orbisApiService = new OrbisApiService(rc.public.orbisBaseUrl);
+  const runtimeConfig = useRuntimeConfig();
+  const orbisApiService = new OrbisApiService(
+    runtimeConfig.public.orbisBaseUrl,
+  );
   const corpora = ref([] as Corpus[]);
   const corpus = ref({} as Corpus);
 
@@ -57,6 +59,8 @@ export const useCorpusStore = defineStore("corpus", () => {
       });
       newCorpus = await orbisApiService.createCorpus(newCorpus, chosenFiles);
       corpora.value.push(newCorpus);
+    } catch (error) {
+      console.error(error);
     }
   }
 
