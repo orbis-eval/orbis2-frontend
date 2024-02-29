@@ -96,8 +96,6 @@ const toastSettings = ref({
 } as MessageToastSettings);
 const showToast = ref(false);
 
-const { currentPage } = storeToRefs(documentStore);
-const { totalPages } = storeToRefs(documentStore);
 const { setTitle } = useTitle();
 
 // called when another page is selected
