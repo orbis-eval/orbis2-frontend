@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, vi, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
