@@ -133,8 +133,9 @@ const createCorpus = async (values: any) => {
       fileFormat.value,
     );
   } catch (error: any) {
-    // return this.displayErrorMessage("Network error occured");
+    console.log(error);
     // TODO: differentiate between ErrorMessage and MessageToast
+    ErrorService.displayErrorMessage("Network error occured");
     // toastSettings.value = ErrorService.onError(error);
     // showToast.value = true;
     if (!error.response) {
