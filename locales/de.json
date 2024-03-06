@@ -1,4 +1,7 @@
 {
+  "error": {
+    "networkError": "Netzwerk-Fehler"
+  },
   "documents": "Dokumente",
   "allDocuments": "Alle Dokumente",
   "annotations": "Annotationen",
@@ -16,7 +19,8 @@
       "corpusNameRequired": "Korpus Name wird benötigt",
       "corpusFileWrong": "Die Datei für diesen Korpus scheint nicht korrekt zu sein",
       "corpusNotLoading": "Es ist ein Fehler beim Laden der Korpora aufgetreten",
-      "corpusExists": "Korpus mit diesem Namen existiert bereits"
+      "corpusExists": "Korpus mit diesem Namen existiert bereits",
+      "corpusError": "Fehler beim Erstellen des Korpus"
     },
     "delete": {
       "warningTitle": "Korpus löschen?",

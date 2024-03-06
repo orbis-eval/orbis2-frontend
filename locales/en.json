@@ -1,4 +1,7 @@
 {
+  "error": {
+    "networkError": "Network error occurred"
+  },
   "documents": "Documents",
   "allDocuments": "All Documents",
   "annotations": "Annotations",
@@ -16,7 +19,8 @@
       "corpusNameRequired": "Corpus name is required",
       "corpusFileWrong": "The file for this corpus seems wrong",
       "corpusNotLoading": "There was a problem loading the corpora",
-      "corpusExists": "Corpus with this name already exists"
+      "corpusExists": "Corpus with this name already exists",
+      "corpusError": "There was an error creating this corpus"
     },
     "delete": {
       "warningTitle": "Delete corpus?",
