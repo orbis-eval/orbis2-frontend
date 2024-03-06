@@ -47,8 +47,8 @@ export class Parser {
   static async parseList<T, U extends T>(
     constructor: new (data: T) => U,
     promise: Promise<TypedInternalResponse<string>>,
-  ): Promise<U[]> {
-    const response: any = await promise;
+  ) {
+    const response = await promise;
 
     if (Array.isArray(response)) {
       const result: U[] = [];
@@ -57,7 +57,5 @@ export class Parser {
       }
       return result;
     }
-
-    throw new Error("Response in Promise is expected to be a list.");
   }
 }

@@ -36,7 +36,7 @@ export default class ErrorService {
     }
   }
 
-  private static displayErrorMessage(message: string, type?: MessageToastType) {
+  public static displayErrorMessage(message: string, type?: MessageToastType) {
     return {
       message,
       type,

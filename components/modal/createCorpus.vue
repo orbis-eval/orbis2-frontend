@@ -148,4 +148,25 @@ const createCorpus = async (values: any) => {
     closeModal();
   }
 };
+
+/*const createCorpus = async (values: any) => {
+  await corpusStore
+    .createCorpus(values.corpusName, chosenFiles.value, fileFormat.value)
+    .catch((err) => console.error(err));*/
+/*  } catch (error: any) {
+    console.log(error);
+    // TODO: differentiate between ErrorMessage and MessageToast
+    ErrorService.displayErrorMessage("Network error occured");
+    // toastSettings.value = ErrorService.onError(error);
+    // showToast.value = true;
+    if (!error.response) {
+      // TODO: use correct translation text
+      setCorpusFileError("There was an error creating this corpus");
+    } else if (error.response.status === 422) {
+      setCorpusFileError("There was a problem with the file structure");
+    }
+  } finally {
+    closeModal();
+  }*/
+// };
 </script>

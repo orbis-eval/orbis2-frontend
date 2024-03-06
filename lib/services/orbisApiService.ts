@@ -13,7 +13,8 @@ export class OrbisApiService {
     this.orbisApiBase = orbisApiBase;
   }
 
-  async getCorpora(): Promise<Corpus[]> {
+  // TODO: change return type
+  async getCorpora(): Promise<Corpus[] | undefined> {
     return await Parser.parseList(Corpus, this.apiGet(`getCorpora`));
   }
 
@@ -207,19 +208,33 @@ export class OrbisApiService {
   }
 
   async apiGet(query: string): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}/${query}`, {
+    // return await $fetch(`${this.orbisApiBase}/${query}`, {
+    const { data, error } = await useFetch(`${this.orbisApiBase}/whut`, {
       method: "GET",
     });
+
+    if (error) {
+      throw new Error("An error occured", {
+        cause: error,
+      });
+    }
+    return data.value;
   }
 
   async apiPost(
     query: string,
     body: any,
   ): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}/${query}`, {
+    let errorResponse;
+    const { data } = await useFetch(`${this.orbisApiBase}/${query}`, {
       method: "POST",
       body,
+      onResponseError({ response }) {
+        errorResponse = response;
+      },
     });
+
+    return { data: data.value, errorResponse };
   }
 
   async apiDelete(

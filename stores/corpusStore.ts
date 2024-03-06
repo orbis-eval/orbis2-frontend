@@ -17,16 +17,16 @@ export const useCorpusStore = defineStore("corpus", () => {
   }
 
   async function loadCorpora() {
-    try {
-      const response = await orbisApiService.getCorpora();
+    const response = await orbisApiService.getCorpora();
 
-      if (Array.isArray(response) && response.length > 0) {
-        corpora.value = response;
-      }
-    } catch (error) {
+    if (response) {
       throw new Error("An error occurred while fetching corpora.", {
-        cause: error,
+        cause: response.error,
       });
+    }
+
+    if (Array.isArray(response) && response.length > 0) {
+      corpora.value = response;
     }
   }
 
@@ -56,20 +56,16 @@ export const useCorpusStore = defineStore("corpus", () => {
     chosenFiles: File[],
     fileFormat: string,
   ) {
-    try {
-      let newCorpus: Corpus = new Corpus({
-        name: corpusName,
-        supportedAnnotationTypes: [],
-      });
-      newCorpus = await orbisApiService.createCorpus(
-        newCorpus,
-        chosenFiles,
-        fileFormat,
-      );
-      corpora.value.push(newCorpus);
-    } catch (error) {
-      console.error(error);
-    }
+    let newCorpus: Corpus = new Corpus({
+      name: corpusName,
+      supportedAnnotationTypes: [],
+    });
+    newCorpus = await orbisApiService.createCorpus(
+      newCorpus,
+      chosenFiles,
+      fileFormat,
+    );
+    corpora.value.push(newCorpus);
   }
 
   return {
