@@ -59,8 +59,8 @@ export const useCorpusStore = defineStore("corpus", () => {
       });
       newCorpus = await orbisApiService.createCorpus(newCorpus, chosenFiles);
       corpora.value.push(newCorpus);
-    } catch (error) {
-      console.error(error);
+    } catch (error: any) {
+      throw new Error(error.message);
     }
   }
 
