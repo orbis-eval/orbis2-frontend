@@ -28,13 +28,6 @@
       </div>
     </Form>
   </div>
-  <!-- TODO: when in modal and somethings wrongs with backend, show message toast left bottom corner message toast -->
-  <div>
-    <MessageToast
-      :toastSettings="toastSettings"
-      class="fixed bottom-4 left-4 z-50"
-    />
-  </div>
 </template>
 
 <script lang="ts" setup>
@@ -43,8 +36,6 @@ import { useI18n } from "vue-i18n";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { MessageToastSettings } from "~/lib/types/MessageToastSettings";
-import ErrorService from "~/lib/services/errorService";
 
 const { t } = useI18n();
 
@@ -56,8 +47,6 @@ const cancel = () => closeModal();
 const chosenFiles = ref([] as File[]);
 const corpusFileError = ref("");
 
-const showToast = ref(false);
-const toastSettings = ref({} as MessageToastSettings);
 const fileFormat = ref("label-studio");
 
 const corpusNotExists = (runName: string) => {
@@ -88,19 +77,10 @@ const acceptedFileTypes = ".json, .jsonl";
 const createCorpus = async (values: any) => {
   try {
     await corpusStore.createCorpus(values.corpusName, chosenFiles.value);
-  } catch (error: any) {
-    // return this.displayErrorMessage("Network error occured");
-    // TODO: differentiate between ErrorMessage and MessageToast
-    // toastSettings.value = ErrorService.onError(error);
-    // showToast.value = true;
-    if (!error.response) {
-      // TODO: use correct translation text
-      setCorpusFileError("There was an error creating this corpus");
-    } else if (error.response.status === 422) {
-      setCorpusFileError("There was a problem with the file structure");
-    }
-  } finally {
+
     closeModal();
+  } catch (error: any) {
+    setCorpusFileError(t("corpus.error.corpusError"));
   }
 };
 </script>
