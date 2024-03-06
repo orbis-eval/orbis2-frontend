@@ -47,9 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { addIcons } from "oh-vue-icons";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { useI18n } from "vue-i18n";
-import { OhVueIcon } from "oh-vue-icons";
 import { HiPlus, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import { useRunStore } from "~/stores/runStore";
 import { useCorpusStore } from "~/stores/corpusStore";
