@@ -66,7 +66,7 @@ addIcons(MdDeleteforeverOutlined, HiPlus);
 
 const { t } = useI18n();
 
-const toastSettings = ref<MessageToastSettings>();
+const toastSettings = ref({} as MessageToastSettings);
 
 const showToast = ref(false);
 
@@ -90,8 +90,8 @@ async function loadCorpora() {
     await corpusStore.loadCorpora();
   } catch (error) {
     toastSettings.value = {
-      type: MessageToastType.ERROR,
       message: t("error.networkError"),
+      type: MessageToastType.ERROR,
     };
     showToast.value = true;
   } finally {
