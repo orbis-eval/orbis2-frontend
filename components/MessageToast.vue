@@ -18,18 +18,20 @@ import { MessageToastSettings } from "~/lib/types/MessageToastSettings";
 
 const props = defineProps<{
   toastSettings: MessageToastSettings;
+  showToast: boolean;
 }>();
 
-const showToast = ref(false);
 const seconds = 5;
 
-// Close toast after 5 seconds
-if (props.toastSettings) {
-  showToast.value = true;
+const emit = defineEmits(["closeToast"]);
 
-  // Set a timer to hide the toast after 5 seconds
-  setTimeout(() => {
-    showToast.value = false;
-  }, seconds * 1000);
-}
+// Close toast after 5 seconds
+watchEffect(() => {
+  if (props.toastSettings && props.toastSettings.type) {
+    // Set a timer to hide the toast after x seconds
+    setTimeout(() => {
+      emit("closeToast");
+    }, seconds * 1000);
+  }
+});
 </script>
