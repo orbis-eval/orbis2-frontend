@@ -42,7 +42,12 @@
         </div>
       </div>
     </div>
-    <MessageToast v-if="showToast" :toastSettings="toastSettings" />
+    <MessageToast
+      v-if="showToast"
+      :showToast="showToast"
+      :toastSettings="toastSettings"
+      @closeToast="closeToast"
+    />
   </NuxtLayout>
 </template>
 
@@ -98,6 +103,10 @@ async function loadCorpora() {
     $progress.finish();
   }
 }
+
+const closeToast = () => {
+  showToast.value = false;
+};
 
 onMounted(async () => {
   await loadCorpora();
