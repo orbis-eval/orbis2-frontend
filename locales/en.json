@@ -20,7 +20,8 @@
       "corpusFileWrong": "The file for this corpus seems wrong",
       "corpusNotLoading": "There was a problem loading the corpora",
       "corpusExists": "Corpus with this name already exists",
-      "corpusError": "There was an error creating this corpus"
+      "corpusError": "There was an error creating this corpus",
+      "corpusDeleteError": "There was an error deleting this corpus"
     },
     "delete": {
       "warningTitle": "Delete corpus?",

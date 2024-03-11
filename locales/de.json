@@ -20,7 +20,8 @@
       "corpusFileWrong": "Die Datei für diesen Korpus scheint nicht korrekt zu sein",
       "corpusNotLoading": "Es ist ein Fehler beim Laden der Korpora aufgetreten",
       "corpusExists": "Korpus mit diesem Namen existiert bereits",
-      "corpusError": "Fehler beim Erstellen des Korpus"
+      "corpusError": "Fehler beim Erstellen des Korpus",
+      "corpusDeleteError": "Fehler beim Löschen des Korpus"
     },
     "delete": {
       "warningTitle": "Korpus löschen?",
