@@ -41,13 +41,8 @@
           </div>
         </div>
       </div>
+      <OrbisMessageToast />
     </div>
-    <MessageToast
-      v-if="showToast"
-      :showToast="showToast"
-      :toastSettings="toastSettings"
-      @closeToast="closeToast"
-    />
   </NuxtLayout>
 </template>
 
@@ -61,19 +56,14 @@ import modalCreateCorpus from "~/components/modal/createCorpus.vue";
 import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
 import { Corpus } from "~/lib/model/corpus";
-
-import {
-  MessageToastSettings,
-  MessageToastType,
-} from "~/lib/types/MessageToastSettings";
+import { MessageToastType } from "~/lib/types/MessageToastSettings";
+import { useMessageToast } from "~/composables/messageToast";
 
 addIcons(MdDeleteforeverOutlined, HiPlus);
 
 const { t } = useI18n();
 
-const toastSettings = ref({} as MessageToastSettings);
-
-const showToast = ref(false);
+const { showToast } = useMessageToast();
 
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
@@ -94,19 +84,14 @@ async function loadCorpora() {
     corpusStore.reset();
     await corpusStore.loadCorpora();
   } catch (error) {
-    toastSettings.value = {
-      message: t("error.networkError"),
+    showToast({
+      message: t("corpus.error.corpusNotLoading"),
       type: MessageToastType.ERROR,
-    };
-    showToast.value = true;
+    });
   } finally {
     $progress.finish();
   }
 }
-
-const closeToast = () => {
-  showToast.value = false;
-};
 
 onMounted(async () => {
   await loadCorpora();
