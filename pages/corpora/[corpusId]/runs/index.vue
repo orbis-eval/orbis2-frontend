@@ -91,6 +91,10 @@ const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 const { runs } = storeToRefs(runStore);
+
+runs.value.forEach((run) => {
+  run.justCreated = false;
+});
 </script>
 
 <style scoped>
