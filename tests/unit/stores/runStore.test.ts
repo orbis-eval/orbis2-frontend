@@ -91,8 +91,9 @@ describe("Run Store", () => {
     const runStore = useRunStore();
     const newRun = createRun(1, "Run 1", "some desc");
     const corpus = newRun.corpus;
+    const files = [new File([""], "file1.txt")];
 
-    await runStore.createRun(newRun, corpus);
+    await runStore.createRun(newRun, corpus, files);
 
     expect(runStore.runs.length).equals(1);
     expect(runStore.runs).toContainEqual(newRun);
