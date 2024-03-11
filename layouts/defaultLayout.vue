@@ -172,6 +172,6 @@ const changeRun = (event: Event) => {
   if ("documentId" in route.params) {
     link.push("documents", route.params.documentId.toString());
   }
-  router.push(link.join('/'));
+  router.push(link.join("/"));
 };
 </script>
