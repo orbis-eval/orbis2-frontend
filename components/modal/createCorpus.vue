@@ -47,8 +47,6 @@ const cancel = () => closeModal();
 const chosenFiles = ref([] as File[]);
 const corpusFileError = ref("");
 
-const fileFormat = ref("label-studio");
-
 const corpusNotExists = (runName: string) => {
   return !corpora.value.some((corpus) => corpus.name === runName);
 };
