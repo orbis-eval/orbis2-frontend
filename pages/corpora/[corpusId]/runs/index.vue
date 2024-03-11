@@ -26,7 +26,6 @@
           <thead class="text-left">
             <tr class="text-lg text-white">
               <th>Name</th>
-              <th>Date</th>
               <th>Kappa Macro</th>
               <th>Kappa Micro</th>
               <th>Average Macro F1</th>
@@ -37,6 +36,7 @@
           <tbody v-for="(run, index) in runs" :key="run.identifier">
             <tr
               class="hover cursor-pointer"
+              :class="run.justCreated ? 'just-created' : ''"
               @click="
                 router.push(
                   `/corpora/${corpus.identifier}/runs/${run.identifier}`,
@@ -44,7 +44,6 @@
               "
             >
               <th>{{ run.name }}</th>
-              <td>{{ run.timestamp }}</td>
               <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[0].toFixed(2) }}</td><td v-else>-</td>
               <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[1].toFixed(2) }}</td><td v-else>-</td>
               <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[2].toFixed(2) }}</td><td v-else>-</td>
@@ -81,3 +80,21 @@ const { corpus } = storeToRefs(corpusStore);
 const runStore = useRunStore();
 const { runs } = storeToRefs(runStore);
 </script>
+
+<style scoped>
+.just-created {
+  background-color: #4a5568;
+  animation: fadeToTransparent 3s forwards;
+  animation-delay: 0.2s;
+}
+
+@keyframes fadeToTransparent {
+  from {
+    background-color: gold; /* Start with gold */
+  }
+  to {
+    background-color: transparent; /* Fade to transparent */
+  }
+}
+</style>
+

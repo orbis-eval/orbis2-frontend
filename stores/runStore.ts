@@ -32,7 +32,9 @@ export const useRunStore = defineStore("run", () => {
   async function createRun(newRun: Run, corpus: Corpus, chosenFiles: File[]) {
     try {
       const run = await orbisApiService.createRun(newRun, corpus, chosenFiles);
-      runs.value.push(run);
+      run.justCreated = true;
+      // add new run at the beginning of the list
+      runs.value = [run, ...runs.value];
     } catch (error) {
       throw new Error("An error occurred while creating a run.", {
         cause: error,

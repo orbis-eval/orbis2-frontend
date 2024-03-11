@@ -10,7 +10,7 @@
         </div>
 
         <div :class="['w-2/6', selectedRun == run ? 'text-primary' : '']">
-          <span>{{ run.timestamp }}</span>
+          <span>{{ run.created_at }}</span>
         </div>
 
         <OrbisButton
