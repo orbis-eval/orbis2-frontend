@@ -23,7 +23,8 @@
   },
   "fileInput": {
     "importGoldStandard": "Gold Standard Importieren",
-    "dropGoldStandard": "Gold Standard hier hinziehen"
+    "dropGoldStandard": "Gold Standard hier hinziehen",
+    "dropFile": "Datei hier hinziehen"
   },
   "document": {
     "document": "Dokument",
