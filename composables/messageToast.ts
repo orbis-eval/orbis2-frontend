@@ -1,29 +1,26 @@
-import { Ref } from "vue";
 import { MessageToastSettings } from "~/lib/types/MessageToastSettings";
 
-export interface ToastState {
-  toastSettings: Ref<MessageToastSettings>;
-  showToast: Ref<boolean>;
-}
+const isVisible = ref(false);
+const toastSettings = ref({} as MessageToastSettings);
 
-export function useMessageToast(): ToastState {
-  const toastSettings = ref({} as MessageToastSettings);
-  const showToast = ref(false);
+export function useMessageToast() {
   const seconds = 5;
 
-  // Close toast after 5 seconds
-  watchEffect(() => {
+  const showToast = (newToastSettings: MessageToastSettings) => {
     if (toastSettings.value) {
-      showToast.value = true;
+      toastSettings.value = newToastSettings;
+      isVisible.value = true;
+
       // Set a timer to hide the toast after x seconds
       setTimeout(() => {
-        showToast.value = false;
+        isVisible.value = false;
       }, seconds * 1000);
     }
-  });
+  };
 
   return {
-    toastSettings,
     showToast,
+    isVisible,
+    toastSettings,
   };
 }
