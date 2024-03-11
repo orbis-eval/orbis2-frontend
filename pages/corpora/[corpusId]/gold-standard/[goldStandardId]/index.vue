@@ -55,7 +55,7 @@
           v-if="totalPages"
           :current-page="currentPage"
           :total-pages="totalPages"
-          class="text-center my-3"
+          class="my-3 text-center"
           @pageChanged="pageChanged"
         />
       </div>
@@ -71,11 +71,9 @@ import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
-import ModalCreateRun from "~/components/modal/createRun.vue";
 
 addIcons(MdKeyboardarrowdown);
 
-const route = useRoute();
 const router = useRouter();
 
 const { $progress } = useNuxtApp();
@@ -109,7 +107,7 @@ async function pageChanged(nextPage: number) {
     } catch (error) {
       console.error(error);
     } finally {
-      $progress.finish()
+      $progress.finish();
     }
   } else {
     console.warn("Id of selected run was not set in pageChanged.");

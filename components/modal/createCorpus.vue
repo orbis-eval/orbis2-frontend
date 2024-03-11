@@ -16,7 +16,10 @@
         />
         <ErrorMessage class="text-red-400" name="corpusName" />
       </div>
-      <FileInput :accepted-file-types="acceptedFileTypes" @fileChange="fileChanged" />
+      <FileInput
+        :accepted-file-types="acceptedFileTypes"
+        @fileChange="fileChanged"
+      />
       <div class="mt-5 flex gap-4">
         <OrbisButton :is-form-button="true"
           >{{ $t("button.create") }}

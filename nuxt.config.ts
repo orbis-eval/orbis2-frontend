@@ -36,7 +36,7 @@ export default defineNuxtConfig({
   runtimeConfig: {
     public: {
       orbisApiBase: "http://localhost:63012/",
-      orbisBaseUrl: "http://localhost:63012"
+      orbisBaseUrl: "http://localhost:63012",
     },
   },
   pinia: {
@@ -48,6 +48,6 @@ export default defineNuxtConfig({
   },
   ssr: false,
   devServer: {
-    host: '0.0.0.0'
-  }
+    host: "0.0.0.0",
+  },
 });

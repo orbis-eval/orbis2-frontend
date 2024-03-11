@@ -1,7 +1,7 @@
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const corpusStore = useCorpusStore();
   const runStore = useRunStore();
   const { $progress } = useNuxtApp();

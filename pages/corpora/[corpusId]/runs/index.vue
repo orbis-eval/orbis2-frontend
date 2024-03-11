@@ -33,7 +33,7 @@
             </tr>
           </thead>
 
-          <tbody v-for="(run, index) in runs" :key="run.identifier">
+          <tbody v-for="run in runs" :key="run.identifier">
             <tr
               class="hover cursor-pointer"
               :class="run.justCreated ? 'just-created' : ''"
@@ -44,10 +44,22 @@
               "
             >
               <th>{{ run.name }}</th>
-              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[0].toFixed(2) }}</td><td v-else>-</td>
-              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[1].toFixed(2) }}</td><td v-else>-</td>
-              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[2].toFixed(2) }}</td><td v-else>-</td>
-              <td v-if="run.interRaterAgreement">{{ run.interRaterAgreement[3].toFixed(2) }}</td><td v-else>-</td>
+              <td v-if="run.interRaterAgreement">
+                {{ run.interRaterAgreement[0].toFixed(2) }}
+              </td>
+              <td v-else>-</td>
+              <td v-if="run.interRaterAgreement">
+                {{ run.interRaterAgreement[1].toFixed(2) }}
+              </td>
+              <td v-else>-</td>
+              <td v-if="run.interRaterAgreement">
+                {{ run.interRaterAgreement[2].toFixed(2) }}
+              </td>
+              <td v-else>-</td>
+              <td v-if="run.interRaterAgreement">
+                {{ run.interRaterAgreement[3].toFixed(2) }}
+              </td>
+              <td v-else>-</td>
             </tr>
           </tbody>
         </table>
@@ -97,4 +109,3 @@ const { runs } = storeToRefs(runStore);
   }
 }
 </style>
-

@@ -1,5 +1,5 @@
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async () => {
   const { $progress } = useNuxtApp();
   // @ts-ignore
-  $progress.start();
+  await $progress.start();
 });

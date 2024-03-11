@@ -1,8 +1,8 @@
-//@ts-ignore
+// @ts-ignore
 import VueProgressBar from "@aacassandra/vue3-progressbar";
 import { Progress } from "~/lib/utils/progress";
 
-//@ts-ignore
+// @ts-ignore
 export default defineNuxtPlugin((nuxtApp) => {
   nuxtApp.vueApp.use(VueProgressBar, {
     color: "rgb(173,216,230)",
@@ -12,7 +12,7 @@ export default defineNuxtPlugin((nuxtApp) => {
   });
   return {
     provide: {
-      progress: new Progress(nuxtApp.vueApp.config.globalProperties.$Progress)
+      progress: new Progress(nuxtApp.vueApp.config.globalProperties.$Progress),
     },
   };
 });

@@ -38,25 +38,22 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useAnnotationStore } from "~/stores/annotationStore";
-import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
-import { useDocumentStore } from "~/stores/documentStore";
-import { useColorPalettesStore } from "~/stores/colorPalettesStore";
-import { useTitle } from "~/composables/title";
-import {onMounted} from "#imports";
+import { onMounted } from "#imports";
 
-const route = useRoute();
-const { $progress } = useNuxtApp();
-const documentStore = useDocumentStore();
 const runStore = useRunStore();
 const { selectedRun } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
 
 const highlightedNestedSetNodeId = ref([] as number[]);
 
+function setHighlightNestedSetNode(ids: number[]) {
+  highlightedNestedSetNodeId.value = ids;
+}
+
 onMounted(() => {
   if (annotationStore.selectedAnnotation) {
-    let ids : number[] = [];
+    const ids: number[] = [];
     if (annotationStore.selectedAnnotation.identifier) {
       ids.push(annotationStore.selectedAnnotation.identifier);
     }
@@ -67,8 +64,4 @@ onMounted(() => {
 onBeforeUnmount(() => {
   annotationStore.resetAnnotationStack();
 });
-
-function setHighlightNestedSetNode(ids: number[]) {
-  highlightedNestedSetNodeId.value = ids;
-}
 </script>

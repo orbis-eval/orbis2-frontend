@@ -26,7 +26,10 @@
         />
         <ErrorMessage class="text-red-400" name="runDesc" />
       </div>
-      <FileInput :accepted-file-types="acceptedFileTypes" @fileChange="fileChanged" />
+      <FileInput
+        :accepted-file-types="acceptedFileTypes"
+        @fileChange="fileChanged"
+      />
       <div class="mt-10 grid grid-cols-3 gap-4">
         <OrbisButton :is-form-button="true"
           >{{ $t("button.import") }}
@@ -57,7 +60,6 @@ const { corpus } = storeToRefs(corpusStore);
 const { runs } = storeToRefs(runStore);
 
 const chosenFiles = ref([] as File[]);
-const fileFormat = ref("label-studio");
 
 function fileChanged(newChosenFiles: File[]) {
   chosenFiles.value = newChosenFiles;

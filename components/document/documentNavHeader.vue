@@ -1,15 +1,15 @@
 <template>
   <div
     v-if="currentDocument"
-    class="flex items-center px-4 pb-4 pt-5 text-lg w-100"
+    class="w-100 flex items-center px-4 pb-4 pt-5 text-lg"
   >
     <div class="flex w-1/4 justify-start">
       <OrbisButton
-          :disabled="nrOfDocuments <= 1"
-          :on-click="previousDocument"
-          class="p-0"
-          size="md"
-          transparent
+        :disabled="nrOfDocuments <= 1"
+        :on-click="previousDocument"
+        class="p-0"
+        size="md"
+        transparent
       >
         <OhVueIcon name="md-navigatebefore-twotone" scale="2.5" />
       </OrbisButton>
@@ -56,7 +56,9 @@ const { selectedRun, selectedGoldStandard } = storeToRefs(runStore);
 async function nextDocument() {
   emit("loadingStarted");
   if ("runId" in route.params) {
-    const newDocument = await documentStore.nextDocument(selectedRun.value.identifier || -1);
+    const newDocument = await documentStore.nextDocument(
+      selectedRun.value.identifier || -1,
+    );
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
@@ -66,7 +68,9 @@ async function nextDocument() {
         newDocument.identifier,
     );
   } else if ("goldStandardId" in route.params) {
-    const newDocument = await documentStore.nextDocument(selectedGoldStandard.value.identifier || -1);
+    const newDocument = await documentStore.nextDocument(
+      selectedGoldStandard.value.identifier || -1,
+    );
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +
@@ -84,7 +88,9 @@ async function nextDocument() {
 async function previousDocument() {
   emit("loadingStarted");
   if ("runId" in route.params) {
-    const newDocument = await documentStore.previousDocument(selectedRun.value.identifier || -1);
+    const newDocument = await documentStore.previousDocument(
+      selectedRun.value.identifier || -1,
+    );
     await navigateTo(
       "/corpora/" +
         route.params.corpusId +

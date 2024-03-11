@@ -7,9 +7,7 @@ export default {
   plugins: [
     vue(),
     AutoImport({
-      imports: [
-          "vue",
-      ],
+      imports: ["vue"],
     }),
     Components({ dirs: ["./components"] }),
   ],

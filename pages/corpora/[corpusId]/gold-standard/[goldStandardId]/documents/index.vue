@@ -132,8 +132,4 @@ onMounted(async () => {
     loading.value = false;
   }
 });
-
-async function runChanged() {
-  await pageChanged(currentPage.value);
-}
 </script>

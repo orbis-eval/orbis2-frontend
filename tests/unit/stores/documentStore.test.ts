@@ -118,7 +118,8 @@ describe("Document Store", () => {
 
     let documentId: number = documentStore.currentDocument.identifier || 0;
 
-    documentStore.currentDocument = await documentStore.nextDocument(documentId);
+    documentStore.currentDocument =
+      await documentStore.nextDocument(documentId);
 
     expect(documentStore.currentDocument).toEqual(documents[1]);
   });

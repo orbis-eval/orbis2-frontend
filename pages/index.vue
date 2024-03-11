@@ -9,30 +9,30 @@
               <div>{{ $t("corpus.corpora") }}</div>
               <div class="flex-grow"></div>
               <OrbisButton
-                  :on-click="() => openModal(modalCreateCorpus)"
-                  size="sm"
-                  transparent
+                :on-click="() => openModal(modalCreateCorpus)"
+                size="sm"
+                transparent
               >
                 <OhVueIcon name="hi-plus" />
               </OrbisButton>
             </div>
             <ul class="mt-5">
               <li
-                  v-for="corpus in corpora"
-                  :key="corpus.identifier"
-                  class="flex py-2"
+                v-for="corpus in corpora"
+                :key="corpus.identifier"
+                class="flex py-2"
               >
                 <NuxtLink
-                    :to="`/corpora/${corpus.identifier}/runs`"
-                    class="hover:text-purple-400"
+                  :to="`/corpora/${corpus.identifier}/runs`"
+                  class="hover:text-purple-400"
                 >
                   {{ corpus.name }}
                 </NuxtLink>
                 <div class="flex-grow"></div>
                 <OrbisButton
-                    :on-click="() => onDeleteCorpus(corpus)"
-                    size="sm"
-                    transparent
+                  :on-click="() => onDeleteCorpus(corpus)"
+                  size="sm"
+                  transparent
                 >
                   <OhVueIcon name="md-deleteforever-outlined" />
                 </OrbisButton>

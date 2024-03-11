@@ -5,14 +5,9 @@
       class="rounded-none py-1 pl-12"
       active-class="bg-gray-500"
     >
-      <span
-        :class="[
-          'text-xs',
-          'whitespace-nowrap',
-          'text-white',
-        ]"
-        >{{ text }}</span
-      >
+      <span :class="['text-xs', 'whitespace-nowrap', 'text-white']">{{
+        text
+      }}</span>
     </NuxtLink>
   </li>
 </template>

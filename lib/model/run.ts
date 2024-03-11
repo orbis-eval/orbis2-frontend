@@ -8,7 +8,7 @@ export class Run implements IRun {
   name: string;
   description: string;
   corpus: Corpus;
-  created_at?: string;
+  createdAt?: string;
   documentAnnotations?: Map<Document, Annotation[]>;
   identifier?: number;
   interRaterAgreement?: number[];
@@ -18,16 +18,16 @@ export class Run implements IRun {
     this.name = run.name;
     this.description = run.description;
     this.corpus = new Corpus(run.corpus);
-    this.created_at = run.created_at;
+    this.createdAt = run.createdAt;
     this.documentAnnotations = run.documentAnnotations;
     this.identifier = run.identifier;
     this.interRaterAgreement = run.interRaterAgreement;
-    this.justCreated = false;
+    this.justCreated = run.justCreated || false;
   }
 
   toJSON() {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const { identifier, created_at, ...json } = this;
+    const { identifier, createdAt, ...json } = this;
     return JSONTransformer.transformFromCamelCase(json);
   }
 }

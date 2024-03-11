@@ -19,6 +19,12 @@ logs:
 test:
 	docker compose exec frontend yarn test
 
+lint:
+	docker compose exec frontend yarn lint
+
+lintfix:
+	docker compose exec frontend yarn lintfix
+
 yarn-build:
 	docker compose exec frontend yarn build
 

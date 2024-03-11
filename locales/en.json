@@ -8,7 +8,7 @@
   "content": "Content",
   "name": "Name",
   "description": "Description",
-  "list_of_runs": "List of runs",
+  "listOfRuns": "List of runs",
   "corpus": {
     "corpora": "Corpora",
     "create": "Create Corpus",
@@ -62,5 +62,5 @@
     "chooseFiles": "Choose Files",
     "chooseFile": "Choose File"
   },
-  "select_gold_standard": "Select Gold Standard"
+  "selectGoldStandard": "Select Gold Standard"
 }

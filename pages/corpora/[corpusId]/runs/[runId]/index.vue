@@ -60,7 +60,7 @@
           v-if="totalPages"
           :current-page="currentPage"
           :total-pages="totalPages"
-          class="text-center my-3"
+          class="my-3 text-center"
           @pageChanged="pageChanged"
         />
       </div>
@@ -79,7 +79,6 @@ import { useRunStore } from "~/stores/runStore";
 
 addIcons(MdKeyboardarrowdown);
 
-const route = useRoute();
 const router = useRouter();
 
 const { $progress } = useNuxtApp();

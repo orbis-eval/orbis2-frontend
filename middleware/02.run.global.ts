@@ -2,7 +2,7 @@ import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useAnnotationStore } from "~/stores/annotationStore";
 
-export default defineNuxtRouteMiddleware(async (to, from) => {
+export default defineNuxtRouteMiddleware(async (to) => {
   const runStore = useRunStore();
   const documentStore = useDocumentStore();
   const annotationStore = useAnnotationStore();
@@ -12,7 +12,7 @@ export default defineNuxtRouteMiddleware(async (to, from) => {
   if (runId && runId !== runStore.selectedRun.identifier) {
     documentStore.reset();
     annotationStore.reset();
-    const run = runStore.getRunById(runId);
+    const run = await runStore.getRunById(runId);
     if (!run) {
       throw new Error("Run not found");
     }

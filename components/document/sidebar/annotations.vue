@@ -24,9 +24,7 @@
             ])
           "
         >
-          <div
-            class="flex flex-grow"
-          >
+          <div class="flex flex-grow">
             <div
               :style="{
                 background:

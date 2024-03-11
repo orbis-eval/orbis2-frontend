@@ -132,8 +132,4 @@ onMounted(async () => {
     $progress.finish();
   }
 });
-
-async function runChanged() {
-  await pageChanged(currentPage.value);
-}
 </script>

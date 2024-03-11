@@ -35,6 +35,7 @@ const createRun = (id: number, name: string, description: string): Run => {
         new AnnotationType({ name: "annotation-type-1", colorId: 1 }),
       ],
     }),
+    justCreated: true
   });
 };
 

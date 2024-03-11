@@ -94,11 +94,11 @@ export class OrbisApiService {
 
   async createCorpus(
     corpus: Corpus,
-    chosenFiles: File[] = []
+    chosenFiles: File[] = [],
   ): Promise<Corpus> {
     const body = { corpus } as any;
     if (chosenFiles.length > 0) {
-      body.files= [];
+      body.files = [];
 
       // Iterate through each chosen file
       for (const file of chosenFiles) {
@@ -124,10 +124,14 @@ export class OrbisApiService {
     return await Parser.parse(Corpus, this.apiPost("createCorpus", body));
   }
 
-  async createRun(newRun: Run, corpus: Corpus, chosenFiles: File[] = []): Promise<Run> {
+  async createRun(
+    newRun: Run,
+    corpus: Corpus,
+    chosenFiles: File[] = [],
+  ): Promise<Run> {
     const body = { corpus } as any;
     if (chosenFiles.length > 0) {
-      body.files= [];
+      body.files = [];
 
       // Iterate through each chosen file
       for (const file of chosenFiles) {
@@ -145,7 +149,7 @@ export class OrbisApiService {
         body.files.push({
           filename: file.name,
           filesize: file.size,
-          content: fileContent
+          content: fileContent,
           // Add other file details as needed
         });
       }

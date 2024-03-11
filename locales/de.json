@@ -8,7 +8,7 @@
   "content": "Inhalt",
   "name": "Name",
   "description": "Beschreibung",
-  "list_of_runs": "Liste der Runs",
+  "listOfRuns": "Liste der Runs",
   "corpus": {
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
@@ -63,5 +63,5 @@
     "chooseFiles": "Dateien auswählen",
     "chooseFile": "Datei auswählen"
   },
-  "select_gold_standard": "Gold Standard auswählen"
+  "selectGoldStandard": "Gold Standard auswählen"
 }
