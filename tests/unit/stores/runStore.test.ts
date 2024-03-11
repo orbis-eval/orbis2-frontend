@@ -9,7 +9,7 @@ import { Parser } from "~/lib/parser";
 const mockedOrbisApiServiceDeleteRun = vi.fn().mockResolvedValue(true);
 
 // Create a mock class for OrbisApiService with all required methods for this test suite
-vi.mock("~/lib/orbisApi/orbisApiService", () => {
+vi.mock("~/lib/services/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
       getRuns: async (): Promise<Run[] | Error> => {

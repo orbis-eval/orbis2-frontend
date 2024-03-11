@@ -7,6 +7,16 @@ import { Annotator } from "~/lib/model/annotator";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { TextSpan } from "~/lib/model/textSpan";
 
+vi.mock("~/lib/services/orbisApiService", () => {
+  return {
+    OrbisApiService: vi.fn().mockImplementation(() => ({
+      getAnnotations: (): Annotation[] => {
+        return annotations;
+      },
+    })),
+  };
+});
+
 const annotationTypes = [
   new AnnotationType({
     colorId: 1,
@@ -59,16 +69,6 @@ const annotations: Annotation[] = Array.from([
   secondAnnotation,
   thirdAnnotation,
 ]);
-
-vi.mock("~/lib/orbisApi/orbisApiService", () => {
-  return {
-    OrbisApiService: vi.fn().mockImplementation(() => ({
-      getAnnotations: (): Annotation[] => {
-        return annotations;
-      },
-    })),
-  };
-});
 
 const commandHistoryExecuteSpy = vi.fn().mockResolvedValue(null);
 const commandHistoryUndoSpy = vi.fn().mockResolvedValue(true);

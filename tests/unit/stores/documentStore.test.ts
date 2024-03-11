@@ -1,6 +1,5 @@
-import { beforeEach, describe, expect, vi, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
-import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Document } from "~/lib/model/document";
 import { useDocumentStore } from "~/stores/documentStore";
 import { Parser } from "~/lib/parser";
@@ -44,7 +43,7 @@ function findDocumentById(
 }
 
 // Create a mock class for OrbisApiService with all required methods for this test suite
-vi.mock("~/lib/orbisApi/orbisApiService", () => {
+vi.mock("~/lib/services/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
       getDocuments: (): Promise<Document[] | Error> => {
