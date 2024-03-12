@@ -92,7 +92,15 @@
               </option>
             </select>
           </div>
-          <div class="flex w-2/12"></div>
+          <div class="flex w-2/12">
+            <button
+              data-toggle-theme="dark,light"
+              data-act-class="ACTIVECLASS"
+              class="btn btn-square btn-ghost"
+            >
+              <OhVueIcon name="bi-moon-fill" />
+            </button>
+          </div>
           <div class="flex w-1/12">
             <select
               v-model="$i18n.locale"
@@ -134,6 +142,8 @@ import { themeChange } from "theme-change";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
+
+addIcons(BiMoonFill);
 
 const route = useRoute();
 
