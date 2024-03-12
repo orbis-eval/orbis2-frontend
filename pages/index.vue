@@ -62,8 +62,7 @@ addIcons(MdDeleteforeverOutlined, HiPlus);
 
 const { t } = useI18n();
 
-const { onSuccess, onError } = useMessageToastService();
-
+const { onError } = useMessageToastService();
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
 
