@@ -15,6 +15,9 @@
   "corpus": {
     "corpora": "Corpora",
     "create": "Create Corpus",
+    "success": {
+      "corpusCreated": "Corpus created successfully"
+    },
     "error": {
       "corpusNameRequired": "Corpus name is required",
       "corpusFileWrong": "The file for this corpus seems wrong",

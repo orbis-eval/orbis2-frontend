@@ -15,6 +15,9 @@
   "corpus": {
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
+    "success": {
+      "corpusCreated": "Korpus erfolgreich erstellt"
+    },
     "error": {
       "corpusNameRequired": "Korpus Name wird benötigt",
       "corpusFileWrong": "Die Datei für diesen Korpus scheint nicht korrekt zu sein",

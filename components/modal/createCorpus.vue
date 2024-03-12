@@ -36,10 +36,12 @@ import { useI18n } from "vue-i18n";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useMessageToastService } from "~/lib/services/messageToastService";
 
 const { t } = useI18n();
 
 const { closeModal } = useModal();
+const { onSuccess } = useMessageToastService();
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
 const cancel = () => closeModal();
@@ -75,8 +77,8 @@ const acceptedFileTypes = ".json, .jsonl";
 const createCorpus = async (values: any) => {
   try {
     await corpusStore.createCorpus(values.corpusName, chosenFiles.value);
-
     closeModal();
+    onSuccess(t("corpus.success.corpusCreated"));
   } catch (error: any) {
     setCorpusFileError(t("corpus.error.corpusError"));
   }
