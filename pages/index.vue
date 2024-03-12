@@ -56,14 +56,13 @@ import modalCreateCorpus from "~/components/modal/createCorpus.vue";
 import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
 import { Corpus } from "~/lib/model/corpus";
-import { MessageToastType } from "~/lib/types/MessageToastSettings";
-import { useMessageToast } from "~/composables/messageToast";
+import { useMessageToastService } from "~/lib/services/messageToastService";
 
 addIcons(MdDeleteforeverOutlined, HiPlus);
 
 const { t } = useI18n();
 
-const { showToast } = useMessageToast();
+const { onSuccess, onError } = useMessageToastService();
 
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
@@ -84,10 +83,7 @@ async function loadCorpora() {
     corpusStore.reset();
     await corpusStore.loadCorpora();
   } catch (error) {
-    showToast({
-      message: t("corpus.error.corpusNotLoading"),
-      type: MessageToastType.ERROR,
-    });
+    onError(t("corpus.error.corpusNotLoading"));
   } finally {
     $progress.finish();
   }
