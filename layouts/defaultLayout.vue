@@ -115,7 +115,10 @@
 </template>
 
 <script setup lang="ts">
+import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { storeToRefs } from "pinia";
+import { BiMoonFill } from "oh-vue-icons/icons";
+import { themeChange } from "theme-change";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
@@ -164,6 +167,10 @@ const changeGoldStandard = (event: Event) => {
     Error("No gold standard selected");
   }
 };
+
+onMounted(() => {
+  themeChange(false);
+});
 
 const changeRun = (event: Event) => {
   const target = event.target as HTMLSelectElement;
