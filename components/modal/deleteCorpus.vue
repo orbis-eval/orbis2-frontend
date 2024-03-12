@@ -12,11 +12,11 @@
 <script lang="ts" setup>
 import { Corpus } from "~/lib/model/corpus";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { MessageToastType } from "~/lib/types/MessageToastSettings";
+import { useMessageToastService } from "~/lib/services/messageToastService";
 
 const corpusStore = useCorpusStore();
 const { closeModal } = useModal();
-const { showToast } = useMessageToast();
+const { onSuccess, onError } = useMessageToastService();
 const { t } = useI18n();
 
 const props = defineProps<{
@@ -29,11 +29,9 @@ const props = defineProps<{
 const deletionConfirmed = async () => {
   try {
     await corpusStore.deleteCorpus(props.propsObject);
+    onSuccess(t("corpus.success.corpusDeleted"));
   } catch (error) {
-    showToast({
-      message: t("corpus.error.corpusDeleteError"),
-      type: MessageToastType.ERROR,
-    });
+    onError(t("corpus.error.corpusDeleteError"));
   } finally {
     closeModal();
   }

@@ -16,6 +16,7 @@
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
     "success": {
+      "corpusDeleted": "Korpus erfolgreich gelöscht",
       "corpusCreated": "Korpus erfolgreich erstellt"
     },
     "error": {
