@@ -16,7 +16,7 @@
 import { useMessageToast } from "~/composables/messageToast";
 import { MessageToastType } from "~/lib/types/MessageToastSettings";
 
-const { isVisible, toastSettings } = toRefs(useMessageToast());
+const { isVisible, toastSettings } = useMessageToast();
 
 const getAlertClass = (type: MessageToastType) => {
   switch (type) {
