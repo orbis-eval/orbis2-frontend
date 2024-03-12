@@ -20,6 +20,9 @@
         :accepted-file-types="acceptedFileTypes"
         @fileChange="fileChanged"
       />
+      <p class="text-red-400" v-if="corpusFileError">
+        {{ corpusFileError }}
+      </p>
       <div class="mt-5 flex gap-4">
         <OrbisButton :is-form-button="true"
           >{{ $t("button.create") }}
