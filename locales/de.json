@@ -63,6 +63,9 @@
     "createRun": "Erstelle Run",
     "importRun": "Run Importieren",
     "compareRuns": "Vergleiche Runs",
+    "success": {
+      "runDeleted": "Run erfolgreich gelöscht"
+    },
     "error": {
       "runNameRequired": "Run Name wird benötigt",
       "runDescriptionRequired": "Run Beschreibung wird benötigt",

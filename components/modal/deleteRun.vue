@@ -37,6 +37,8 @@ const onDecline = () => {
 const deletionConfirmed = async () => {
   try {
     await runStore.deleteRun(props.propsObject);
+    onSuccess(t("run.success.runDeleted"));
+    closeModal();
   } catch (error) {
     onError(t("run.error.runDeleteError"));
   } finally {
