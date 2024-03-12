@@ -214,7 +214,7 @@ export class OrbisApiService {
   ): Promise<TypedInternalResponse<string>> {
     return await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "POST",
-      body: JSON.stringify(body),
+      body,
     });
   }
 
@@ -224,7 +224,7 @@ export class OrbisApiService {
   ): Promise<TypedInternalResponse<string>> {
     return await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "DELETE",
-      body: JSON.stringify(body),
+      body,
     });
   }
 }

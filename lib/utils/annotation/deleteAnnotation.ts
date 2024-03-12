@@ -1,4 +1,4 @@
-import { OrbisApiService } from "~/lib/orbisApi/orbisApiService";
+import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { NestedSetNodeDeleter } from "~/lib/model/nestedset/nestedSetNodeDeleter";
 

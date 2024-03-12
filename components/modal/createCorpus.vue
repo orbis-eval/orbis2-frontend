@@ -20,6 +20,9 @@
         :accepted-file-types="acceptedFileTypes"
         @fileChange="fileChanged"
       />
+      <p class="text-red-400" v-if="corpusFileError">
+        {{ corpusFileError }}
+      </p>
       <div class="mt-5 flex gap-4">
         <OrbisButton :is-form-button="true"
           >{{ $t("button.create") }}
@@ -32,21 +35,29 @@
 
 <script lang="ts" setup>
 import { ErrorMessage, Field, Form } from "vee-validate";
+import { useI18n } from "vue-i18n";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
-import { useI18n } from "vue-i18n";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useMessageToastService } from "~/lib/services/messageToastService";
 
 const { t } = useI18n();
+
 const { closeModal } = useModal();
+const { onSuccess } = useMessageToastService();
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
 const cancel = () => closeModal();
 
 const chosenFiles = ref([] as File[]);
+const corpusFileError = ref("");
 
 const corpusNotExists = (runName: string) => {
   return !corpora.value.some((corpus) => corpus.name === runName);
+};
+
+const setCorpusFileError = (error: any) => {
+  corpusFileError.value = error;
 };
 
 const validationSchema = toTypedSchema(
@@ -69,11 +80,10 @@ const acceptedFileTypes = ".json, .jsonl";
 const createCorpus = async (values: any) => {
   try {
     await corpusStore.createCorpus(values.corpusName, chosenFiles.value);
-  } catch (error) {
-    // Todo: Add Error Message
-    console.error(error);
-  } finally {
     closeModal();
+    onSuccess(t("corpus.success.corpusCreated"));
+  } catch (error: any) {
+    setCorpusFileError(t("corpus.error.corpusError"));
   }
 };
 </script>

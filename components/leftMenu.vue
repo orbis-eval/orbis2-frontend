@@ -62,17 +62,17 @@
 </template>
 
 <script setup lang="ts">
-import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
-  HiUser,
-  HiDatabase,
-  HiTag,
-  LaRocketSolid,
-  LaRunningSolid,
-  IoDocuments,
   BiJournalBookmarkFill,
   BiJournalText,
+  HiDatabase,
   HiHome,
+  HiTag,
+  HiUser,
+  IoDocuments,
+  LaRocketSolid,
+  LaRunningSolid,
 } from "oh-vue-icons/icons";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";

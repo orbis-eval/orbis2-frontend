@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, vi, it } from "vitest";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
@@ -9,7 +9,7 @@ import { Parser } from "~/lib/parser";
 const mockedOrbisApiServiceDeleteRun = vi.fn().mockResolvedValue(true);
 
 // Create a mock class for OrbisApiService with all required methods for this test suite
-vi.mock("~/lib/orbisApi/orbisApiService", () => {
+vi.mock("~/lib/services/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
       getRuns: async (): Promise<Run[] | Error> => {

@@ -1,4 +1,7 @@
 {
+  "error": {
+    "networkError": "Netzwerk-Fehler"
+  },
   "documents": "Dokumente",
   "allDocuments": "Alle Dokumente",
   "annotations": "Annotationen",
@@ -12,9 +15,17 @@
   "corpus": {
     "corpora": "Korpora",
     "create": "Erstelle Korpus",
+    "success": {
+      "corpusDeleted": "Korpus erfolgreich gelöscht",
+      "corpusCreated": "Korpus erfolgreich erstellt"
+    },
     "error": {
       "corpusNameRequired": "Korpus Name wird benötigt",
-      "corpusExists": "Korpus mit diesem Namen existiert bereits"
+      "corpusFileWrong": "Die Datei für diesen Korpus scheint nicht korrekt zu sein",
+      "corpusNotLoading": "Es ist ein Fehler beim Laden der Korpora aufgetreten",
+      "corpusExists": "Korpus mit diesem Namen existiert bereits",
+      "corpusError": "Fehler beim Erstellen des Korpus",
+      "corpusDeleteError": "Fehler beim Löschen des Korpus"
     },
     "delete": {
       "warningTitle": "Korpus löschen?",
@@ -27,7 +38,15 @@
     "dropFile": "Datei hier hinziehen"
   },
   "document": {
+    "documents": "Dokumente",
     "document": "Dokument",
+    "create": "Erstelle Dokument",
+    "error": {
+      "documentNameRequired": "Dokument Name wird benötigt",
+      "documentFileWrong": "Die Datei für dieses Dokument scheint nicht korrekt zu sein",
+      "documentExists": "Dokument mit diesem Namen existiert bereits",
+      "documentNotLoading": "Es scheint einen Fehler beim Laden der Dokumente zu geben"
+    },
     "sidebar": {
       "selectionInfo": {
         "selectionInfoTitle": "Informationen zur Auswahl",
@@ -45,10 +64,15 @@
     "createRun": "Erstelle Run",
     "importRun": "Run Importieren",
     "compareRuns": "Vergleiche Runs",
+    "success": {
+      "runDeleted": "Run erfolgreich gelöscht"
+    },
     "error": {
       "runNameRequired": "Run Name wird benötigt",
       "runDescriptionRequired": "Run Beschreibung wird benötigt",
-      "runExists": "Run mit diesem Namen existiert bereits"
+      "runExists": "Run mit diesem Namen existiert bereits",
+      "runError": "Es ist ein Problem beim Erstellen des Runs aufgetreten",
+      "runDeleteError": "Fehler beim Löschen des Runs"
     },
     "delete": {
       "warningTitle": "Run löschen?",

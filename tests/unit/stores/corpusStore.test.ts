@@ -6,6 +6,20 @@ import { AnnotationType } from "~/lib/model/annotationType";
 import { IAnnotationType } from "~/lib/model/iannotationType";
 import { useCorpusStore } from "~/stores/corpusStore";
 
+// Create a mock class for OrbisApiService with all required methods for this test suite
+vi.mock("~/lib/services/orbisApiService", () => {
+  return {
+    OrbisApiService: vi.fn().mockImplementation(() => ({
+      getCorpus: (): Promise<Corpus | Error> => {
+        return Parser.parse(Corpus, Promise.resolve(corpus));
+      },
+      getCorpora: (): Promise<Corpus[] | Error> => {
+        return Parser.parseList(Corpus, Promise.resolve(corpora));
+      },
+    })),
+  };
+});
+
 // Helper function to create a Corpus object
 const createCorpus = (
   id: number,
@@ -41,20 +55,6 @@ const corpora = Array.from([
     { name: "annotation-type-2", colorId: 2 },
   ]),
 ]);
-
-// Create a mock class for OrbisApiService with all required methods for this test suite
-vi.mock("~/lib/orbisApi/orbisApiService", () => {
-  return {
-    OrbisApiService: vi.fn().mockImplementation(() => ({
-      getCorpus: (): Promise<Corpus | Error> => {
-        return Parser.parse(Corpus, Promise.resolve(corpus));
-      },
-      getCorpora: (): Promise<Corpus[] | Error> => {
-        return Parser.parseList(Corpus, Promise.resolve(corpora));
-      },
-    })),
-  };
-});
 
 describe("Corpus Store", () => {
   beforeEach(() => {

@@ -1,4 +1,7 @@
 {
+  "error": {
+    "networkError": "Network error occurred"
+  },
   "documents": "Documents",
   "allDocuments": "All Documents",
   "annotations": "Annotations",
@@ -12,9 +15,17 @@
   "corpus": {
     "corpora": "Corpora",
     "create": "Create Corpus",
+    "success": {
+      "corpusDeleted": "Corpus deleted successfully",
+      "corpusCreated": "Corpus created successfully"
+    },
     "error": {
       "corpusNameRequired": "Corpus name is required",
-      "corpusExists": "Corpus with this name already exists"
+      "corpusFileWrong": "The file for this corpus seems wrong",
+      "corpusNotLoading": "There was a problem loading the corpora",
+      "corpusExists": "Corpus with this name already exists",
+      "corpusError": "There was an error creating this corpus",
+      "corpusDeleteError": "There was an error deleting this corpus"
     },
     "delete": {
       "warningTitle": "Delete corpus?",
@@ -25,7 +36,18 @@
     "dropFile": "Drop File here"
   },
   "document": {
+    "documents": "Documents",
     "document": "Document",
+    "create": "Create Document",
+    "error": {
+      "documentNameRequired": "Document name is required",
+      "documentExists": "Document with this name already exists",
+      "documentNotLoading": "There was a problem loading the documents"
+    },
+    "delete": {
+      "warningTitle": "Delete document?",
+      "warning": "Deleting document with {name} will remove all annotations of this document! Do you want to continue?"
+    },
     "sidebar": {
       "selectionInfo": {
         "selectionInfoTitle": "Selection Info",
@@ -43,10 +65,15 @@
     "createRun": "Create Run",
     "importRun": "Import Run",
     "compareRuns": "Compare Runs",
+    "success": {
+      "runDeleted": "Run deleted successfully"
+    },
     "error": {
       "runNameRequired": "Run name is required",
       "runDescriptionRequired": "Run description is required",
-      "runExists": "Run with this name already exists"
+      "runExists": "Run with this name already exists",
+      "runError": "There was an error creating this run",
+      "runDeleteError": "There was an error deleting this run"
     },
     "delete": {
       "warningTitle": "Delete run?",

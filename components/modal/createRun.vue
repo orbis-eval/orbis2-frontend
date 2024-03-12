@@ -61,6 +61,8 @@ const { runs } = storeToRefs(runStore);
 
 const chosenFiles = ref([] as File[]);
 
+const runFileError = ref("");
+
 function fileChanged(newChosenFiles: File[]) {
   chosenFiles.value = newChosenFiles;
 }
@@ -69,6 +71,10 @@ const acceptedFileTypes = ".json, .jsonl";
 
 const runNotExists = (runName: string) => {
   return !runs.value.some((run) => run.name === runName);
+};
+
+const setRunFileError = (error: any) => {
+  runFileError.value = error;
 };
 
 const validationSchema = toTypedSchema(
@@ -92,11 +98,10 @@ const createRun = async (values: any) => {
       corpus: corpus.value,
     });
     await runStore.createRun(newRun, corpus.value, chosenFiles.value);
-  } catch (error) {
-    // Todo: Show error to user
-    console.error(error);
-  } finally {
+
     closeModal();
+  } catch (error) {
+    setRunFileError(t("run.error.runError"));
   }
 };
 </script>

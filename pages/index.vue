@@ -41,13 +41,14 @@
           </div>
         </div>
       </div>
+      <OrbisMessageToast />
     </div>
   </NuxtLayout>
 </template>
 
 <script setup lang="ts">
-import { addIcons } from "oh-vue-icons";
-import { OhVueIcon } from "oh-vue-icons";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
+import { useI18n } from "vue-i18n";
 import { HiPlus, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import { useRunStore } from "~/stores/runStore";
 import { useCorpusStore } from "~/stores/corpusStore";
@@ -55,9 +56,13 @@ import modalCreateCorpus from "~/components/modal/createCorpus.vue";
 import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 
 import { Corpus } from "~/lib/model/corpus";
+import { useMessageToastService } from "~/lib/services/messageToastService";
 
 addIcons(MdDeleteforeverOutlined, HiPlus);
 
+const { t } = useI18n();
+
+const { onError } = useMessageToastService();
 const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
 
@@ -76,7 +81,8 @@ async function loadCorpora() {
   try {
     corpusStore.reset();
     await corpusStore.loadCorpora();
-    // TODO, 06.01.2023 anf: correct error handling
+  } catch (error) {
+    onError(t("corpus.error.corpusNotLoading"));
   } finally {
     $progress.finish();
   }
