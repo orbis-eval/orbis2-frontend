@@ -64,7 +64,8 @@
       "runNameRequired": "Run Name wird benötigt",
       "runDescriptionRequired": "Run Beschreibung wird benötigt",
       "runExists": "Run mit diesem Namen existiert bereits",
-      "runError": "Es ist ein Problem beim Erstellen des Runs aufgetreten"
+      "runError": "Es ist ein Problem beim Erstellen des Runs aufgetreten",
+      "runDeleteError": "Fehler beim Löschen des Runs"
     },
     "delete": {
       "warningTitle": "Run löschen?",

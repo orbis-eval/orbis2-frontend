@@ -14,8 +14,12 @@ import ModalListRuns from "~/components/modal/listRuns.vue";
 
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
+import { MessageToastType } from "~/lib/types/MessageToastSettings";
 
+const { t } = useI18n();
 const { openModal, closeModal } = useModal();
+const { showToast } = useMessageToast();
+
 const runStore = useRunStore();
 
 const props = defineProps<{
@@ -34,8 +38,10 @@ const deletionConfirmed = async () => {
   try {
     await runStore.deleteRun(props.propsObject);
   } catch (error) {
-    // @Todo: Show error message to user
-    console.error(error);
+    showToast({
+      message: t("run.error.runDeleteError"),
+      type: MessageToastType.ERROR,
+    });
   } finally {
     onDecline();
   }

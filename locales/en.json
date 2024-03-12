@@ -65,7 +65,8 @@
       "runNameRequired": "Run name is required",
       "runDescriptionRequired": "Run description is required",
       "runExists": "Run with this name already exists",
-      "runError": "There was an error creating this run"
+      "runError": "There was an error creating this run",
+      "runDeleteError": "There was an error deleting this run"
     },
     "delete": {
       "warningTitle": "Delete run?",
