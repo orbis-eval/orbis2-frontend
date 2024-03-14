@@ -45,19 +45,19 @@
             >
               <th>{{ run.name }}</th>
               <td v-if="run.interRaterAgreement">
-                {{ parseFloat(run.interRaterAgreement[0]).toFixed(2) }}
+                {{ run.interRaterAgreement[0].toFixed(2) }}
               </td>
               <td v-else>-</td>
               <td v-if="run.interRaterAgreement">
-                {{ parseFloat(run.interRaterAgreement[1]).toFixed(2) }}
+                {{ run.interRaterAgreement[1].toFixed(2) }}
               </td>
               <td v-else>-</td>
               <td v-if="run.interRaterAgreement">
-                {{ parseFloat(run.interRaterAgreement[2]).toFixed(2) }}
+                {{ run.interRaterAgreement[2].toFixed(2) }}
               </td>
               <td v-else>-</td>
               <td v-if="run.interRaterAgreement">
-                {{ parseFloat(run.interRaterAgreement[3]).toFixed(2) }}
+                {{ run.interRaterAgreement[3].toFixed(2) }}
               </td>
               <td v-else>-</td>
             </tr>
@@ -71,9 +71,9 @@
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
-  MdKeyboardarrowdown,
   BiPlayFill,
   HiClipboardList,
+  MdKeyboardarrowdown,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
