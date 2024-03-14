@@ -10,7 +10,6 @@
 </template>
 
 <script lang="ts" setup>
-import ModalListRuns from "~/components/modal/listRuns.vue";
 
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
@@ -31,7 +30,6 @@ const props = defineProps<{
 
 const onDecline = () => {
   closeModal();
-  openModal(ModalListRuns);
 };
 
 const deletionConfirmed = async () => {

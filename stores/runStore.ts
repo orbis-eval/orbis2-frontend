@@ -5,6 +5,7 @@ import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
 import { useRouteHandler } from "~/composables/routeHandler";
 
+
 export const useRunStore = defineStore("run", () => {
   const rc = useRuntimeConfig();
   const orbisApiService = new OrbisApiService(rc.public.orbisBaseUrl);
@@ -100,7 +101,7 @@ export const useRunStore = defineStore("run", () => {
         runs.value = runs.value.filter((r) => r.identifier !== run.identifier);
         selectedRun.value = runs.value[0];
       } else {
-        console.error("Cannot delete the last run");
+        throw new Error("Cannot delete the last run");
       }
     } catch (error) {
       throw new Error("An error occurred while fetching runs.", {
