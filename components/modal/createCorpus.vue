@@ -49,7 +49,7 @@ const corpusStore = useCorpusStore();
 const { corpora } = storeToRefs(corpusStore);
 const cancel = () => closeModal();
 
-const chosenFiles = ref([] as File[]);
+const chosenFile = ref({} as File);
 const corpusFileError = ref("");
 
 const corpusNotExists = (runName: string) => {
@@ -71,15 +71,15 @@ const validationSchema = toTypedSchema(
   }),
 );
 
-function fileChanged(newChosenFiles: File[]) {
-  chosenFiles.value = newChosenFiles;
+function fileChanged(newChosenFile: File) {
+  chosenFile.value = newChosenFile;
 }
 
 const acceptedFileTypes = ".json, .jsonl";
 
 const createCorpus = async (values: any) => {
   try {
-    await corpusStore.createCorpus(values.corpusName, chosenFiles.value);
+    await corpusStore.createCorpus(values.corpusName, chosenFile.value);
     closeModal();
     onSuccess(t("corpus.success.corpusCreated"));
   } catch (error: any) {
