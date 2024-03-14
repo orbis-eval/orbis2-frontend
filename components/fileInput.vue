@@ -79,7 +79,8 @@ function dragOverHandler(event: Event) {
 }
 
 function dropHandler(event: DragEvent) {
-  if (event.dataTransfer && selectedFile.value.name) {
+  if (event.dataTransfer) {
+    selectedFile.value = event.dataTransfer.files[0];
     emit("fileChange", selectedFile.value);
   }
 }
