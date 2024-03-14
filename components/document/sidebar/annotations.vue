@@ -33,11 +33,6 @@
         @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
       >
         <div
-          :class="
-            nestedSetNode.identifier === selectedAnnotation?.identifier
-              ? 'bg-gray-500'
-              : 'bg-gray-700'
-          "
           class="flex cursor-pointer items-center rounded p-2 hover:bg-gray-500"
           @mouseleave="
             emit('setHighlightNestedSetNode', [selectedAnnotation?.identifier])
@@ -143,4 +138,11 @@ const getNodes = (nodes: NestedSetNode[]) => {
   }
   return nodes;
 };
+
+/*:class="
+nestedSetNode.identifier === selectedAnnotation?.identifier
+    ? 'bg-gray-500'
+    : 'bg-gray-700'
+"*/
+
 </script>

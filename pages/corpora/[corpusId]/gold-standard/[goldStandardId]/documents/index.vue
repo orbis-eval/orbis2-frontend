@@ -3,24 +3,20 @@
     <template #leftMenu>
       <LeftMenu />
     </template>
-    <div class="flex h-full flex-col">
+    <LoadingSpinner v-if="loading" class="mt-20" />
+    <div v-else class="flex h-full flex-col">
       <div class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 p-6">
-        <h1 class="mb-3 text-3xl">
-          {{ $t("run.viewTitle", { name: selectedRun.name }) }}
-        </h1>
-
-        <h2 class="mb-5 text-2xl">{{ $t("documents") }}</h2>
+        <h1 class="mb-3 text-3xl text-white">{{ $t("allDocuments") }}</h1>
         <div class="divider"></div>
-        <table aria-label="List of documents in corpus" class="table table-sm">
+        <table
+          aria-label="List of documents in corpus"
+          class="table text-white"
+        >
           <thead class="text-left">
-            <tr class="text-lg">
+            <tr class="text-lg text-white">
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>
-              <th>Kappa Macro</th>
-              <th>Kappa Micro</th>
-              <th>Average Macro F1</th>
-              <th>Average Micro F1</th>
             </tr>
           </thead>
 
@@ -32,7 +28,7 @@
               class="hover cursor-pointer"
               @click="
                 router.push(
-                  `/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/documents/${document.identifier}`,
+                  `/corpora/${corpus.identifier}/documents/${document.identifier}`,
                 )
               "
             >
@@ -42,28 +38,18 @@
               <td class="py-1 pr-5">
                 {{ document.identifier }}
               </td>
-              <td class="pr-5">{{ document.content.substring(0, 50) }}...</td>
-              <td
-                v-for="(value, index) in getInterRaterAgreement(
-                  document.interRaterAgreement,
-                )"
-                :key="index"
-              >
-                {{ value !== null ? value.toFixed(2) : "-" }}
-              </td>
+              <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
             </tr>
           </tbody>
         </table>
 
-        <div class="flex justify-center">
-          <OrbisPagination
-            v-if="totalPages"
-            :current-page="currentPage"
-            :total-pages="totalPages"
-            class="my-3 text-center"
-            @pageChanged="pageChanged"
-          />
-        </div>
+        <OrbisPagination
+          v-if="totalPages"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          class="text-center"
+          @pageChanged="pageChanged"
+        />
       </div>
     </div>
   </NuxtLayout>
@@ -73,44 +59,45 @@
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
+import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
-import { useMessageToastService } from "~/lib/services/messageToastService";
+import { useDocumentStore } from "~/stores/documentStore";
 
 addIcons(MdKeyboardarrowdown);
-
-const { t } = useI18n();
 
 const router = useRouter();
 
 const corpusStore = useCorpusStore();
-const documentStore = useDocumentStore();
-
 const { corpus } = storeToRefs(corpusStore);
-const { onError } = useMessageToastService();
 
 const runStore = useRunStore();
+const { selectedGoldStandard } = storeToRefs(runStore);
 
-const { selectedRun } = storeToRefs(runStore);
+const documentStore = useDocumentStore();
+const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 
-const pageSize = ref(5);
+const pageSize = ref(10);
+const loading = ref(true);
 
-const { documents, currentPage, totalPages } = storeToRefs(documentStore);
+const { setTitle } = useTitle();
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
-  if (selectedRun.value.identifier) {
+  if (selectedGoldStandard.value.identifier) {
+    loading.value = true;
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
       await documentStore.loadDocuments(
-        selectedRun.value.identifier,
+        selectedGoldStandard.value.identifier,
         pageSize.value,
         startIndex,
       );
     } catch (error) {
-      onError(t("document.error.documentNotLoading"));
+      console.error(error);
+    } finally {
+      loading.value = false;
     }
   } else {
     console.warn("Id of selected run was not set in pageChanged.");
@@ -118,8 +105,8 @@ async function pageChanged(nextPage: number) {
 }
 
 async function countDocuments() {
-  if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(selectedRun.value.identifier);
+  if (selectedGoldStandard.value.identifier) {
+    await documentStore.countDocuments(selectedGoldStandard.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -133,15 +120,14 @@ async function loadDocuments() {
 }
 
 onMounted(async () => {
-  await countDocuments();
-  await loadDocuments();
-});
-
-const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
-  if (interRaterAgreement) {
-    return interRaterAgreement.slice(0, 4);
-  } else {
-    return [null, null, null, null];
+  loading.value = true;
+  try {
+    setTitle(corpus.value.name);
+    await countDocuments();
+    await loadDocuments();
+    // @Todo: Error message for user
+  } finally {
+    loading.value = false;
   }
-};
+});
 </script>

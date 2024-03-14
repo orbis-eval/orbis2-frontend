@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-screen flex-col overflow-hidden bg-base-100">
-    <header class="sticky top-0 z-10 col-span-full bg-base-200 text-gray-200">
+  <div class="flex h-screen flex-col overflow-hidden bg-base-200">
+    <header class="sticky top-0 z-10 col-span-full bg-base-300">
       <div class="px-4 py-2">
         <div class="flex">
           <div class="flex w-3/12 flex-row items-center">
@@ -93,13 +93,13 @@
             </select>
           </div>
           <div class="flex w-2/12">
-            <button
-              data-toggle-theme="dark,light"
-              data-act-class="ACTIVECLASS"
-              class="btn btn-square btn-ghost"
+            <select
+              class="select select-ghost max-w-xs"
+              v-model="$colorMode.preference"
             >
-              <OhVueIcon name="bi-moon-fill" />
-            </button>
+              <option value="dark">Dark</option>
+              <option value="light">Light</option>
+            </select>
           </div>
           <div class="flex w-1/12">
             <select
@@ -137,13 +137,12 @@
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { storeToRefs } from "pinia";
-import { BiMoonFill } from "oh-vue-icons/icons";
-import { themeChange } from "theme-change";
+import { BiMoonFill, BiSunFill } from "oh-vue-icons/icons";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 
-addIcons(BiMoonFill);
+addIcons(BiMoonFill, BiSunFill);
 
 const route = useRoute();
 
@@ -181,11 +180,8 @@ const changeGoldStandard = async (event: Event) => {
     Error("No gold standard selected");
   }
 };
-onMounted(() => {
-  themeChange(false);
-});
 
-const changeRun = async (event: Event) => {
+const changeRun = (event: Event) => {
   const target = event.target as HTMLSelectElement;
   const runId = Number(target.value);
   const link = ["/corpora", corpus.value.identifier, "runs", runId];
@@ -194,4 +190,7 @@ const changeRun = async (event: Event) => {
   }
   await navigateTo(link.join("/"));
 };
+
+const colorMode = useColorMode();
+const themes = ["dark", "light"];
 </script>

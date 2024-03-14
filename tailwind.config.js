@@ -2,7 +2,9 @@ module.exports = {
   plugins: [require("daisyui")],
   daisyui: {
     themes: [
-      {
+      "dark",
+      "light",
+      /*      {
         dark: {
           primary: "#C084FC",
           secondary: "#f6d860",
@@ -17,6 +19,8 @@ module.exports = {
           warning: "#fbbd23",
           error: "#f87272",
         },
+      },
+      {
         light: {
           primary: "#F3F4F6",
           secondary: "#E5E7EB",
@@ -31,7 +35,9 @@ module.exports = {
           warning: "#FBBF24",
           error: "#EF4444",
         },
-      },
+      },*/
     ],
   },
+  darkMode: "class",
+  classSuffix: "",
 };

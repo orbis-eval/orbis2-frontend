@@ -39,17 +39,11 @@
           nestedSetNode.annotationType.colorId,
         ),
     }"
-    :class="[
+    :class="`border-b-4 border-solid pt-1 text-lg tracking-wider ${
       highlightedNestedSetNodeId.includes(Number(nestedSetNode.identifier))
-        ? 'rounded-t bg-neutral-400 text-white'
-        : '',
-      'border-b-4',
-      'border-solid',
-      'pt-1',
-      'text-lg',
-      'tracking-wider',
-      nestedSetNode.identifier ? 'annotation' : '',
-    ]"
+        ? 'rounded-t bg-neutral-400'
+        : ''
+    } ${nestedSetNode.identifier ? 'annotation' : ''}`"
   >
     <span v-if="nestedSetNode.children.length === 0" @mouseup="onMouseUp">
       {{ nestedSetNode.surfaceForms[0] }}

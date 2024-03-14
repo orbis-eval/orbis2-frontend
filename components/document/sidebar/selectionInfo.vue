@@ -3,7 +3,7 @@
     <div class="text-lg font-bold">
       {{ $t("document.sidebar.selectionInfo.selectionInfoTitle") }}
     </div>
-    <div class="mt-2 rounded bg-gray-700 p-2">
+    <div class="mt-2 rounded p-2">
       <div v-if="selectedAnnotation">
         <div class="flex items-center justify-between">
           <span
