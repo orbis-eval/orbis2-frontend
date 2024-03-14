@@ -51,13 +51,13 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
-  async function createCorpus(corpusName: string, chosenFiles: File[]) {
+  async function createCorpus(corpusName: string, chosenFile: File) {
     try {
       let newCorpus: Corpus = new Corpus({
         name: corpusName,
         supportedAnnotationTypes: [],
       });
-      newCorpus = await orbisApiService.createCorpus(newCorpus, chosenFiles);
+      newCorpus = await orbisApiService.createCorpus(newCorpus, chosenFile);
       corpora.value.push(newCorpus);
     } catch (error: any) {
       throw new Error(error.message);

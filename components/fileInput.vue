@@ -8,22 +8,17 @@
           @dragover.prevent="dragOverHandler"
         >
           <div class="text-gray-600">
-            <div
-              v-if="!selectedFiles.length"
-              class="flex h-full items-center p-4"
-            >
+            <div v-if="!selectedFile.name" class="flex h-full items-center p-4">
               <p class="w-full text-center">
                 {{ $t("fileInput.dropFile") }}
               </p>
             </div>
             <div v-else class="p-1">
               <div
-                v-for="(file, index) in selectedFiles"
-                :key="index"
                 class="m-2 flex items-center justify-between overflow-auto px-1"
               >
-                <p id="index">{{ file.name }}</p>
-                <OrbisButton :on-click="() => deleteFile(index)">
+                <p>{{ selectedFile.name }}</p>
+                <OrbisButton :on-click="() => deleteFile()">
                   <OhVueIcon name="md-deleteforever-outlined" />
                 </OrbisButton>
               </div>
@@ -35,7 +30,6 @@
           ref="fileInput"
           :accept="acceptedFileTypes"
           class="hidden"
-          multiple
           type="file"
           @change="inputChanged"
         />
@@ -50,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 
 const emit = defineEmits(["fileChange"]);
@@ -58,7 +52,7 @@ const emit = defineEmits(["fileChange"]);
 addIcons(MdDeleteforeverOutlined);
 
 const fileInput = ref({} as HTMLInputElement);
-const selectedFiles = ref([] as File[]);
+const selectedFile = ref({} as File);
 
 defineProps<{
   acceptedFileTypes: string;
@@ -68,17 +62,15 @@ function openFileInput() {
   fileInput.value.click();
 }
 
-function deleteFile(index: number) {
-  selectedFiles.value.splice(index, 1);
-  emit("fileChange", selectedFiles.value);
+function deleteFile() {
+  selectedFile.value = {} as File;
+  emit("fileChange", selectedFile.value);
 }
 
 function inputChanged() {
   if (fileInput.value.files) {
-    for (const file of fileInput.value.files) {
-      selectedFiles.value.push(file);
-    }
-    emit("fileChange", selectedFiles.value);
+    selectedFile.value = fileInput.value.files[0];
+    emit("fileChange", selectedFile.value);
   }
 }
 
@@ -87,11 +79,8 @@ function dragOverHandler(event: Event) {
 }
 
 function dropHandler(event: DragEvent) {
-  if (event.dataTransfer) {
-    for (const file of event.dataTransfer.files) {
-      selectedFiles.value.push(file);
-    }
-    emit("fileChange", selectedFiles.value);
+  if (event.dataTransfer && selectedFile.value.name) {
+    emit("fileChange", selectedFile.value);
   }
 }
 </script>
