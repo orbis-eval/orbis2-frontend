@@ -45,19 +45,19 @@
             >
               <th>{{ run.name }}</th>
               <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[0].toFixed(2) }}
+                {{ parseFloat(run.interRaterAgreement[0]).toFixed(2) }}
               </td>
               <td v-else>-</td>
               <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[1].toFixed(2) }}
+                {{ parseFloat(run.interRaterAgreement[1]).toFixed(2) }}
               </td>
               <td v-else>-</td>
               <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[2].toFixed(2) }}
+                {{ parseFloat(run.interRaterAgreement[2]).toFixed(2) }}
               </td>
               <td v-else>-</td>
               <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[3].toFixed(2) }}
+                {{ parseFloat(run.interRaterAgreement[3]).toFixed(2) }}
               </td>
               <td v-else>-</td>
             </tr>
