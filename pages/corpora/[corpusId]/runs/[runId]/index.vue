@@ -4,21 +4,16 @@
       <LeftMenu />
     </template>
     <div class="flex h-full flex-col">
-      <div
-        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
-      >
-        <h1 class="mb-3 text-3xl text-white">
+      <div class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 p-6">
+        <h1 class="mb-3 text-3xl">
           {{ $t("run.viewTitle", { name: selectedRun.name }) }}
         </h1>
 
-        <h2 class="mb-5 text-2xl text-white">{{ $t("documents") }}</h2>
+        <h2 class="mb-5 text-2xl">{{ $t("documents") }}</h2>
         <div class="divider"></div>
-        <table
-          aria-label="List of documents in corpus"
-          class="table text-white"
-        >
+        <table aria-label="List of documents in corpus" class="table">
           <thead class="text-left">
-            <tr class="text-lg text-white">
+            <tr class="text-lg">
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>

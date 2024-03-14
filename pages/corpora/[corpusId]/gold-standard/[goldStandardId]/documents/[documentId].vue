@@ -2,7 +2,7 @@
   <NuxtLayout name="default-layout">
     <div class="mt-5">
       <div
-        class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral"
+        class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600"
       >
         <DocumentNavHeader />
         <DocumentAnnotation

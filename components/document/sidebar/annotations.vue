@@ -8,11 +8,6 @@
         @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
       >
         <div
-          :class="
-            nestedSetNode.identifier === selectedAnnotation?.identifier
-              ? 'bg-gray-500'
-              : 'bg-gray-700'
-          "
           class="flex cursor-pointer items-center rounded p-2 hover:bg-gray-500"
           @mouseleave="
             emit('setHighlightNestedSetNode', [selectedAnnotation?.identifier])
@@ -75,7 +70,11 @@ const annotationStore = useAnnotationStore();
 const { nestedSetRootNode, selectedAnnotation } = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
 const { currentColorPalette } = storeToRefs(colorPalettesStore);
-
+/*:class="
+nestedSetNode.identifier === selectedAnnotation?.identifier
+    ? 'bg-gray-500'
+    : 'bg-gray-700'
+"*/
 async function deleteAnnotation(nestedSetNode: NestedSetNode) {
   await annotationStore.deleteAnnotation(nestedSetNode);
 }
