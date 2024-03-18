@@ -21,10 +21,7 @@
             Evaluate new runs
           </OrbisButton>
           <OrbisButton :disabled="!selectedRun" @click="deleteSelectedRun">
-            <OhVueIcon
-              name="md-deleteforever"
-              class="menu-icon"
-            />
+            <OhVueIcon name="md-deleteforever" class="menu-icon" />
             Delete Run
           </OrbisButton>
         </div>
@@ -43,22 +40,20 @@
           </thead>
 
           <tbody v-for="run in runs" :key="run.identifier">
-            <tr
-              class="hover"
-              :class="run.justCreated ? 'just-created' : ''"
-            >
+            <tr class="hover" :class="run.justCreated ? 'just-created' : ''">
               <td class="px-1">
                 <input
-                    class="radio"
-                    type="radio"
-                    v-model="selectedRun"
-                    :value="run"
+                  class="radio"
+                  type="radio"
+                  v-model="selectedRun"
+                  :value="run"
                 />
               </td>
               <th>
                 <nuxt-link
                   :to="`/corpora/${corpus.identifier}/runs/${run.identifier}`"
-                  >{{ run.name }}</nuxt-link>
+                  >{{ run.name }}
+                </nuxt-link>
               </th>
               <td>
                 <div
@@ -83,10 +78,10 @@
                 <div v-if="!run.currentGoldStandard">-</div>
               </td>
               <td
-                  v-for="(value, index) in getInterRaterAgreement(
+                v-for="(value, index) in getInterRaterAgreement(
                   run.interRaterAgreement,
                 )"
-                  :key="index"
+                :key="index"
               >
                 {{ value !== null ? value.toFixed(2) : "-" }}
               </td>
@@ -113,10 +108,10 @@ import { useRunStore } from "~/stores/runStore";
 import ModalCreateRun from "~/components/modal/createRun.vue";
 import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 import OrbisButton from "~/components/orbis/orbisButton.vue";
+import { Run } from "~/lib/model/run";
 
 addIcons(MdKeyboardarrowdown, BiPlayFill, HiClipboardList, MdDeleteforever);
 
-const router = useRouter();
 const { openModal } = useModal();
 
 const corpusStore = useCorpusStore();

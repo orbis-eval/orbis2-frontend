@@ -10,13 +10,12 @@
 </template>
 
 <script lang="ts" setup>
-
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
 import { useMessageToastService } from "~/lib/services/messageToastService";
 
 const { t } = useI18n();
-const { openModal, closeModal } = useModal();
+const { closeModal } = useModal();
 const { onSuccess, onError } = useMessageToastService();
 
 const runStore = useRunStore();
