@@ -10,8 +10,8 @@
         <div class="mb-5 flex items-center gap-5">
           <h1 class="text-3xl text-white">Runs</h1>
           <OrbisButton :on-click="() => openModal(ModalCreateRun)"
-            >Import Run</OrbisButton
-          >
+            >Import Run
+          </OrbisButton>
           <OrbisButton>
             <OhVueIcon
               name="hi-clipboard-list"
@@ -44,22 +44,14 @@
               "
             >
               <th>{{ run.name }}</th>
-              <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[0].toFixed(2) }}
+              <td
+                v-for="(value, index) in getInterRaterAgreement(
+                  run.interRaterAgreement,
+                )"
+                :key="index"
+              >
+                {{ value !== null ? value.toFixed(2) : "-" }}
               </td>
-              <td v-else>-</td>
-              <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[1].toFixed(2) }}
-              </td>
-              <td v-else>-</td>
-              <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[2].toFixed(2) }}
-              </td>
-              <td v-else>-</td>
-              <td v-if="run.interRaterAgreement">
-                {{ run.interRaterAgreement[3].toFixed(2) }}
-              </td>
-              <td v-else>-</td>
             </tr>
           </tbody>
         </table>
@@ -91,6 +83,14 @@ const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 const { runs } = storeToRefs(runStore);
+
+const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
+  if (interRaterAgreement) {
+    return interRaterAgreement.slice(0, 4);
+  } else {
+    return [null, null, null, null];
+  }
+};
 
 runs.value.forEach((run) => {
   run.justCreated = false;
