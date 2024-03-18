@@ -95,7 +95,7 @@ export class OrbisApiService {
   async createCorpus(corpus: Corpus, chosenFile: File): Promise<Corpus> {
     const body = { corpus } as any;
     if (chosenFile.name) {
-      body.files = [];
+      body.file = {};
 
       // Iterate through each chosen file
       const fileReader = new FileReader();
@@ -109,45 +109,38 @@ export class OrbisApiService {
       });
 
       // Add file details to the array
-      body.files.push({
+      body.file = {
         filename: chosenFile.name,
         filesize: chosenFile.size,
         content: fileContent,
         // Add other file details as needed
-      });
+      };
     }
     return await Parser.parse(Corpus, this.apiPost("createCorpus", body));
   }
 
-  async createRun(
-    newRun: Run,
-    corpus: Corpus,
-    chosenFiles: File[] = [],
-  ): Promise<Run> {
+  async createRun(newRun: Run, corpus: Corpus, chosenFile: File): Promise<Run> {
     const body = { corpus } as any;
-    if (chosenFiles.length > 0) {
-      body.files = [];
+    if (chosenFile.name) {
+      body.file = {};
 
-      // Iterate through each chosen file
-      for (const file of chosenFiles) {
-        const fileReader = new FileReader();
+      const fileReader = new FileReader();
 
-        // Read the file content asynchronously
-        const fileContent = await new Promise<string>((resolve) => {
-          fileReader.onload = (event) => {
-            resolve(event.target?.result as string);
-          };
-          fileReader.readAsText(file);
-        });
+      // Read the file content asynchronously
+      const fileContent = await new Promise<string>((resolve) => {
+        fileReader.onload = (event) => {
+          resolve(event.target?.result as string);
+        };
+        fileReader.readAsText(chosenFile);
+      });
 
-        // Add file details to the array
-        body.files.push({
-          filename: file.name,
-          filesize: file.size,
-          content: fileContent,
-          // Add other file details as needed
-        });
-      }
+      // Add file details to the array
+      body.file = {
+        filename: chosenFile.name,
+        filesize: chosenFile.size,
+        content: fileContent,
+        // Add other file details as needed
+      };
     }
     return await Parser.parse(
       Run,

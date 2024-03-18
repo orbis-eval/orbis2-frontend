@@ -59,12 +59,11 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 const { runs } = storeToRefs(runStore);
 
-const chosenFiles = ref([] as File[]);
-
+const chosenFile = ref({} as File);
 const runFileError = ref("");
 
-function fileChanged(newChosenFiles: File[]) {
-  chosenFiles.value = newChosenFiles;
+function fileChanged(newChosenFile: File) {
+  chosenFile.value = newChosenFile;
 }
 
 const acceptedFileTypes = ".json, .jsonl";
@@ -97,7 +96,7 @@ const createRun = async (values: any) => {
       description: values.runDesc,
       corpus: corpus.value,
     });
-    await runStore.createRun(newRun, corpus.value, chosenFiles.value);
+    await runStore.createRun(newRun, corpus.value, chosenFile.value);
 
     closeModal();
   } catch (error) {

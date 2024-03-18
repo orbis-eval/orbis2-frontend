@@ -29,9 +29,9 @@ export const useRunStore = defineStore("run", () => {
     }
   }
 
-  async function createRun(newRun: Run, corpus: Corpus, chosenFiles: File[]) {
+  async function createRun(newRun: Run, corpus: Corpus, chosenFile: File) {
     try {
-      const run = await orbisApiService.createRun(newRun, corpus, chosenFiles);
+      const run = await orbisApiService.createRun(newRun, corpus, chosenFile);
       run.justCreated = true;
       // add new run at the beginning of the list
       runs.value = [run, ...runs.value];
