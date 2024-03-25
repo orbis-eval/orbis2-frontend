@@ -13,6 +13,7 @@ export class Run implements IRun {
   identifier?: number;
   interRaterAgreement?: number[];
   justCreated?: boolean;
+  currentGoldStandard?: IRun;
 
   constructor(run: IRun) {
     this.name = run.name;
@@ -23,6 +24,7 @@ export class Run implements IRun {
     this.identifier = run.identifier;
     this.interRaterAgreement = run.interRaterAgreement;
     this.justCreated = run.justCreated || false;
+    this.currentGoldStandard = run.currentGoldStandard;
   }
 
   toJSON() {

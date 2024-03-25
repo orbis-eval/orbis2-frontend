@@ -15,7 +15,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const documentId = Number.parseInt(to.params.documentId?.toString());
 
   // fetch the document if it's not already loaded
-  if (documentId && documentId !== documentStore.currentDocument.identifier) {
+  if (documentId) {
     let idOfRun: number;
     if (runId) {
       await documentStore.countDocuments(runId);

@@ -63,7 +63,7 @@
     "viewTitle": "Run {name}",
     "runs": "Runs",
     "createRun": "Create Run",
-    "importRun": "Import Run",
+    "addRun": "Add Run",
     "compareRuns": "Compare Runs",
     "success": {
       "runDeleted": "Run deleted successfully"
@@ -89,5 +89,8 @@
     "chooseFiles": "Choose Files",
     "chooseFile": "Choose File"
   },
-  "selectGoldStandard": "Select Gold Standard"
+  "selectGoldStandard": "Select Gold Standard",
+  "goldStandard": {
+    "update": "Update Gold Standard"
+  }
 }

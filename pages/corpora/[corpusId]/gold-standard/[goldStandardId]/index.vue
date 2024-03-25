@@ -11,7 +11,9 @@
           {{
             $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name })
           }}
-          <OrbisButton :on-click="() => {}">Import Gold Standard</OrbisButton>
+          <OrbisButton :on-click="() => openModal(ModalUpdateGoldStandard)"
+            >Update Gold Standard</OrbisButton
+          >
         </h1>
 
         <h2 class="mb-5 text-2xl text-white">{{ $t("documents") }}</h2>
@@ -71,10 +73,12 @@ import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
+import ModalUpdateGoldStandard from "~/components/modal/updateGoldStandard.vue";
 
 addIcons(MdKeyboardarrowdown);
 
 const router = useRouter();
+const { openModal } = useModal();
 
 const { $progress } = useNuxtApp();
 

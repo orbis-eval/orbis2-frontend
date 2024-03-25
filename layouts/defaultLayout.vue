@@ -18,7 +18,18 @@
             </div>
           </div>
           <div class="flex w-6/12 justify-center">
+            <div
+              class="flex items-center"
+              v-if="
+                (route.name as string).includes('corpora-corpusId-runs-runId')
+              "
+            >
+              <div class="badge badge-warning">
+                {{ selectedRun.currentGoldStandard?.name }}
+              </div>
+            </div>
             <select
+              v-else
               @change="changeGoldStandard"
               class="select select-warning max-w-xs"
               :disabled="isGoldStandardSelectDisabled"
@@ -154,11 +165,11 @@ hook("page:finish", () => {
   $progress.finish();
 });
 
-const changeGoldStandard = (event: Event) => {
+const changeGoldStandard = async (event: Event) => {
   const target = event.target as HTMLSelectElement;
   const goldStandard = runStore.getGoldStandardById(Number(target.value));
   if (goldStandard) {
-    runStore.changeSelectedGoldStandard(goldStandard);
+    await runStore.changeSelectedGoldStandard(goldStandard);
   } else {
     // error
     Error("No gold standard selected");

@@ -10,7 +10,7 @@
         <div class="mb-5 flex items-center gap-5">
           <h1 class="text-3xl text-white">Runs</h1>
           <OrbisButton :on-click="() => openModal(ModalCreateRun)"
-            >Import Run
+            >{{ $t("run.addRun") }}
           </OrbisButton>
           <OrbisButton>
             <OhVueIcon
@@ -26,6 +26,7 @@
           <thead class="text-left">
             <tr class="text-lg text-white">
               <th>Name</th>
+              <th>Gold Standard Version</th>
               <th>Kappa Macro</th>
               <th>Kappa Micro</th>
               <th>Average Macro F1</th>
@@ -43,7 +44,29 @@
                 )
               "
             >
-              <th>{{ run.name }}</th>
+              <td>{{ run.name }}</td>
+              <td>
+                <div
+                  v-if="
+                    run.currentGoldStandard &&
+                    run.currentGoldStandard.identifier ==
+                      selectedGoldStandard.identifier
+                  "
+                  class="badge badge-warning"
+                >
+                  {{ run.currentGoldStandard.name }}
+                </div>
+                <div
+                  v-if="
+                    run.currentGoldStandard &&
+                    run.currentGoldStandard.identifier !=
+                      selectedGoldStandard.identifier
+                  "
+                >
+                  {{ run.currentGoldStandard.name }}
+                </div>
+                <div v-if="!run.currentGoldStandard">-</div>
+              </td>
               <td
                 v-for="(value, index) in getInterRaterAgreement(
                   run.interRaterAgreement,
@@ -82,7 +105,7 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { runs } = storeToRefs(runStore);
+const { runs, selectedGoldStandard } = storeToRefs(runStore);
 
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   if (interRaterAgreement) {

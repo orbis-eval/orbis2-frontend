@@ -3,6 +3,7 @@ import { ref } from "vue";
 import { Run } from "~/lib/model/run";
 import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Corpus } from "~/lib/model/corpus";
+import { useRouteHandler } from "~/composables/routeHandler";
 
 export const useRunStore = defineStore("run", () => {
   const rc = useRuntimeConfig();
@@ -12,6 +13,7 @@ export const useRunStore = defineStore("run", () => {
   const goldStandards = ref([] as Run[]);
   const selectedRun = ref({} as Run);
   const selectedGoldStandard = ref({} as Run);
+  const routeHandler = useRouteHandler();
 
   function reset() {
     corpusId.value = -1;
@@ -37,6 +39,27 @@ export const useRunStore = defineStore("run", () => {
       runs.value = [run, ...runs.value];
     } catch (error) {
       throw new Error("An error occurred while creating a run.", {
+        cause: error,
+      });
+    }
+  }
+
+  async function updateGoldStandard(corpus: Corpus, chosenFile: File) {
+    try {
+      const goldStandard = await orbisApiService.updateGoldStandard(
+        corpus,
+        chosenFile,
+      );
+      goldStandard.justCreated = true;
+      // add new run at the beginning of the list
+      goldStandards.value = [goldStandard, ...goldStandards.value];
+      selectedGoldStandard.value = goldStandard;
+      await routeHandler.changeParam(
+        "goldStandardId",
+        goldStandard.identifier?.toString() ?? "",
+      ); // Using nullish coalescing operator
+    } catch (error) {
+      throw new Error("An error occurred while updating the gold standard.", {
         cause: error,
       });
     }
@@ -86,11 +109,17 @@ export const useRunStore = defineStore("run", () => {
     }
   }
 
-  function changeSelectedGoldStandard(goldStandard: Run) {
+  async function changeSelectedGoldStandard(goldStandard: Run) {
     if (!goldStandard.identifier) {
       selectedGoldStandard.value = {} as Run;
     } else {
       selectedGoldStandard.value = goldStandard;
+      if (selectedGoldStandard.value.identifier !== undefined) {
+        await routeHandler.changeParam(
+          "goldStandardId",
+          selectedGoldStandard.value.identifier.toString(),
+        );
+      }
     }
   }
 
@@ -117,5 +146,6 @@ export const useRunStore = defineStore("run", () => {
     changeSelectedGoldStandard,
     getRunById,
     getGoldStandardById,
+    updateGoldStandard,
   };
 });

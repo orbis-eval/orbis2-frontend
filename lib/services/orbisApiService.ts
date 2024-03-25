@@ -151,6 +151,32 @@ export class OrbisApiService {
     );
   }
 
+  async updateGoldStandard(corpus: Corpus, chosenFile: File): Promise<Run> {
+    const body = { corpus } as any;
+    if (chosenFile.name) {
+      body.file = {};
+
+      const fileReader = new FileReader();
+
+      // Read the file content asynchronously
+      const fileContent = await new Promise<string>((resolve) => {
+        fileReader.onload = (event) => {
+          resolve(event.target?.result as string);
+        };
+        fileReader.readAsText(chosenFile);
+      });
+
+      // Add file details to the array
+      body.file = {
+        filename: chosenFile.name,
+        filesize: chosenFile.size,
+        content: fileContent,
+        // Add other file details as needed
+      };
+    }
+    return await Parser.parse(Run, this.apiPost(`updateGoldStandard`, body));
+  }
+
   async deleteRun(run: Run): Promise<boolean> {
     return await Parser.parseEmptyResponse(this.apiDelete(`deleteRun`, run));
   }

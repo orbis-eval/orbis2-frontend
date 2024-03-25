@@ -62,7 +62,7 @@
     "viewTitle": "Run {name}",
     "runs": "Runs",
     "createRun": "Erstelle Run",
-    "importRun": "Run Importieren",
+    "addRun": "Run hinzufügen",
     "compareRuns": "Vergleiche Runs",
     "success": {
       "runDeleted": "Run erfolgreich gelöscht"
@@ -88,5 +88,8 @@
     "chooseFiles": "Dateien auswählen",
     "chooseFile": "Datei auswählen"
   },
-  "selectGoldStandard": "Gold Standard auswählen"
+  "selectGoldStandard": "Gold Standard auswählen",
+  "goldStandard": {
+    "update": "Gold Standard aktualisieren"
+  }
 }

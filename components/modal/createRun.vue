@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2 class="mb-5 text-3xl font-bold">{{ $t("run.importRun") }}</h2>
+    <h2 class="mb-5 text-3xl font-bold">{{ $t("run.addRun") }}</h2>
     <Form
       v-slot="{ errors }"
       :validation-schema="validationSchema"
@@ -15,16 +15,6 @@
           type="text"
         />
         <ErrorMessage class="text-red-400" name="runName" />
-      </div>
-      <div class="mb-4">
-        <label class="mb-1 block text-white">{{ $t("description") }}:</label>
-        <Field
-          :class="errors.runDesc ? 'input-bordered input-error' : ''"
-          class="input mb-2 w-full bg-white text-black"
-          name="runDesc"
-          type="text"
-        />
-        <ErrorMessage class="text-red-400" name="runDesc" />
       </div>
       <FileInput
         :accepted-file-types="acceptedFileTypes"
@@ -82,10 +72,6 @@ const validationSchema = toTypedSchema(
       // eslint-disable-next-line @typescript-eslint/naming-convention
       .string({ required_error: t("run.error.runNameRequired") })
       .refine(runNotExists, { message: t("run.error.runExists") }),
-    runDesc: zod.string({
-      // eslint-disable-next-line @typescript-eslint/naming-convention
-      required_error: t("run.error.runDescriptionRequired"),
-    }),
   }),
 );
 
@@ -93,7 +79,7 @@ const createRun = async (values: any) => {
   try {
     const newRun = new Run({
       name: values.runName,
-      description: values.runDesc,
+      description: "",
       corpus: corpus.value,
     });
     await runStore.createRun(newRun, corpus.value, chosenFile.value);

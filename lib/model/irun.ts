@@ -11,4 +11,5 @@ export interface IRun {
   identifier?: number;
   interRaterAgreement?: number[];
   justCreated?: boolean;
+  currentGoldStandard?: IRun;
 }
