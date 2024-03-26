@@ -134,8 +134,11 @@ describe("Run Store", () => {
     runStore.runs = [run1];
     runStore.selectedRun = run1;
 
-    await runStore.deleteRun(run1);
+    const deleteOperation = async () => {
+      await runStore.deleteRun(run1);
+    };
 
+    await expect(deleteOperation).rejects.toThrow();
     expect(mockedOrbisApiServiceDeleteRun).not.toHaveBeenCalled();
     expect(runStore.runs.length).equals(1);
     expect(runStore.runs).toContainEqual(run1);
