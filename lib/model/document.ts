@@ -9,6 +9,8 @@ export class Document implements IDocument {
   metadata: Metadata[];
   done: boolean;
   identifier?: number;
+  interRaterAgreement?: number[];
+  scoring?: object;
 
   constructor(document: IDocument) {
     this.content = document.content;
@@ -17,6 +19,8 @@ export class Document implements IDocument {
     this.metadata = document.metadata;
     this.done = document.done;
     this.identifier = document.identifier;
+    this.interRaterAgreement = document.interRaterAgreement;
+    this.scoring = document.scoring;
   }
 
   toJSON() {

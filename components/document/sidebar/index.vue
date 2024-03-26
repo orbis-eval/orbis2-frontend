@@ -3,7 +3,7 @@
     <div class="flex h-full w-full flex-col bg-gray-800 pt-4 text-white">
       <DocumentSidebarSelectionInfo></DocumentSidebarSelectionInfo>
 
-      <DocumentSidebarCommands></DocumentSidebarCommands>
+      <!--<DocumentSidebarCommands></DocumentSidebarCommands>-->
 
       <DocumentSidebarAnnotations
         @set-highlight-nested-set-node="
