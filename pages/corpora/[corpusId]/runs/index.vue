@@ -40,7 +40,11 @@
           </thead>
 
           <tbody v-for="run in runs" :key="run.identifier">
-            <tr class="hover" :class="run.justCreated ? 'just-created' : ''">
+            <tr
+              class="hover"
+              :class="run.justCreated ? 'just-created' : ''"
+              @click="selectedRun = run"
+            >
               <td class="px-1">
                 <input
                   class="radio"
