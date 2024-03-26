@@ -7,4 +7,6 @@ export interface IDocument {
   metadata: Metadata[];
   done: boolean;
   identifier?: number;
+  interRaterAgreement?: number[];
+  scoring?: object;
 }
