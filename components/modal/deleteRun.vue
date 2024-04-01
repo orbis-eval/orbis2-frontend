@@ -5,7 +5,7 @@
     :message="$t('run.delete.warning', { name: propsObject.name })"
     :title="$t('run.delete.warningTitle')"
     :on-confirm="deletionConfirmed"
-    :on-decline="onDecline"
+    :on-decline="closeModal"
   />
 </template>
 
@@ -27,10 +27,6 @@ const props = defineProps<{
   propsObject: Run;
 }>();
 
-const onDecline = () => {
-  closeModal();
-};
-
 const deletionConfirmed = async () => {
   try {
     await runStore.deleteRun(props.propsObject);
@@ -39,7 +35,7 @@ const deletionConfirmed = async () => {
   } catch (error) {
     onError(t("run.error.runDeleteError"));
   } finally {
-    onDecline();
+    closeModal();
   }
 };
 </script>
