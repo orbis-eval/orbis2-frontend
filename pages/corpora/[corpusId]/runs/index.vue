@@ -92,6 +92,7 @@
             </tr>
           </tbody>
         </table>
+        <OrbisMessageToast />
       </div>
     </div>
   </NuxtLayout>
@@ -100,10 +101,10 @@
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
-  MdDeleteforever,
-  MdKeyboardarrowdown,
   BiPlayFill,
   HiClipboardList,
+  MdDeleteforever,
+  MdKeyboardarrowdown,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
