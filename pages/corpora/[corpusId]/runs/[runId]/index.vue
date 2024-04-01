@@ -63,6 +63,7 @@
           class="my-3 text-center"
           @pageChanged="pageChanged"
         />
+        <OrbisMessageToast />
       </div>
     </div>
   </NuxtLayout>
@@ -76,8 +77,11 @@ import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
+import { useMessageToastService } from "~/lib/services/messageToastService";
 
 addIcons(MdKeyboardarrowdown);
+
+const { t } = useI18n();
 
 const router = useRouter();
 
@@ -87,6 +91,7 @@ const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 
 const { corpus } = storeToRefs(corpusStore);
+const { onError } = useMessageToastService();
 
 const runStore = useRunStore();
 
@@ -110,7 +115,7 @@ async function pageChanged(nextPage: number) {
         startIndex,
       );
     } catch (error) {
-      console.error(error);
+      onError(t("document.error.documentNotLoading"));
     } finally {
       $progress.finish();
     }

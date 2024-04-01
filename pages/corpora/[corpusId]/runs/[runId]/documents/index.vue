@@ -53,7 +53,7 @@
         />
       </div>
     </div>
-    <MessageToast v-if="showToast" :toastSettings="toastSettings" />
+    <OrbisMessageToast />
   </NuxtLayout>
 </template>
 
@@ -67,10 +67,8 @@ import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 
-import {
-  MessageToastSettings,
-  MessageToastType,
-} from "~/lib/types/MessageToastSettings";
+import { useMessageToastService } from "~/lib/services/messageToastService";
+
 addIcons(MdKeyboardarrowdown);
 
 const router = useRouter();
@@ -84,17 +82,12 @@ const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 const { selectedRun } = storeToRefs(runStore);
+const { onError } = useMessageToastService();
 
 const documentStore = useDocumentStore();
 const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 
 const pageSize = ref(10);
-
-const toastSettings = ref({
-  message: t("document.error.documentNotLoading"),
-  type: MessageToastType.ERROR,
-} as MessageToastSettings);
-const showToast = ref(false);
 
 const { setTitle } = useTitle();
 
@@ -111,7 +104,7 @@ async function pageChanged(nextPage: number) {
         startIndex,
       );
     } catch (error) {
-      showToast.value = true;
+      onError(t("document.error.documentNotLoading"));
     } finally {
       $progress.finish();
     }
@@ -142,7 +135,6 @@ onMounted(async () => {
     await countDocuments();
     await loadDocuments();
   } catch (error) {
-    showToast.value = true;
   } finally {
     $progress.finish();
   }
