@@ -93,13 +93,21 @@
             </select>
           </div>
           <div class="flex w-2/12">
-            <select
-              class="select select-ghost max-w-xs"
-              v-model="$colorMode.preference"
-            >
-              <option value="dark">Dark</option>
-              <option value="light">Light</option>
-            </select>
+            <label class="swap-rotate swap">
+              <input type="checkbox" />
+              <OhVueIcon
+                class="swap-off h-5 w-5 fill-current"
+                v-if="$colorMode.preference === 'light'"
+                @click="$colorMode.preference = 'dark'"
+                name="bi-moon-fill"
+              />
+              <OhVueIcon
+                class="swap-on h-5 w-5 fill-current"
+                v-else
+                @click="$colorMode.preference = 'light'"
+                name="bi-sun-fill"
+              />
+            </label>
           </div>
           <div class="flex w-1/12">
             <select
