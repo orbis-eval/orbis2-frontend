@@ -9,14 +9,16 @@
           {{
             $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name })
           }}
-          <OrbisButton :on-click="() => openModal(ModalUpdateGoldStandard)"
+          <OrbisButton
+              class="bg-gray-300 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+              :on-click="() => openModal(ModalUpdateGoldStandard)"
             >Update Gold Standard
           </OrbisButton>
         </h1>
 
-        <h2 class="mb-5 text-2xl">{{ $t("documents") }}</h2>
+        <h2 class="mb-5 text-2xl dark:text-white">{{ $t("documents") }}</h2>
         <div class="divider"></div>
-        <table aria-label="List of documents in corpus" class="table table-sm">
+        <table aria-label="List of documents in corpus" class="table table-sm text-white">
           <thead class="text-left">
             <tr class="text-lg">
               <th>{{ $t("numberAbbreviation") }}</th>
@@ -30,7 +32,7 @@
             :key="document.identifier"
           >
             <tr
-              class="hover cursor-pointer"
+              class="hover cursor-pointer text-black dark:text-white"
               @click="
                 router.push(
                   `/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/documents/${document.identifier}`,
@@ -53,7 +55,7 @@
             v-if="totalPages"
             :current-page="currentPage"
             :total-pages="totalPages"
-            class="my-3 text-center"
+            class="my-3 text-center text-black"
             @pageChanged="pageChanged"
           />
         </div>

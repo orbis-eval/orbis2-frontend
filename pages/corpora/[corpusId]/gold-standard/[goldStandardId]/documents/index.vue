@@ -12,7 +12,7 @@
           aria-label="List of documents in corpus"
           class="table text-white"
         >
-          <thead class="text-left">
+          <thead class="text-left text-black dark:text-white">
             <tr class="text-lg text-white">
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
