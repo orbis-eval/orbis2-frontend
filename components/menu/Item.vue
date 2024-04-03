@@ -3,7 +3,7 @@
     <NuxtLink
       :to="url"
       class="rounded-none"
-      active-class="bg-neutral-600 text-white"
+      active-class="bg-gray-700 text-white"
     >
       <slot></slot>
       <span class="whitespace-nowrap">{{ text }}</span>
