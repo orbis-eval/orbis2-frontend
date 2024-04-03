@@ -9,7 +9,10 @@
           <h1 class="text-3xl text-white">Runs</h1>
         </div>
         <div class="mb-5 flex items-center gap-5">
-          <OrbisButton :on-click="() => openModal(ModalCreateRun)">
+          <OrbisButton
+            class="bg-gray-300 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+            :on-click="() => openModal(ModalCreateRun)"
+          >
             {{ $t("run.addRun") }}
           </OrbisButton>
           <div class="dropdown">
@@ -50,7 +53,7 @@
         </div>
         <div class="divider"></div>
         <table aria-label="List of runs in corpus" class="table table-sm">
-          <thead class="text-left">
+          <thead class="text-left text-black">
             <tr class="text-lg">
               <th class="px-1">#</th>
               <th>Name</th>
