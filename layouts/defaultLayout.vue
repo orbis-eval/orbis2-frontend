@@ -92,31 +92,33 @@
               </option>
             </select>
           </div>
-          <div class="flex w-2/12">
-            <label class="swap-rotate swap">
-              <input type="checkbox" />
-              <OhVueIcon
-                class="swap-off h-5 w-5 fill-current"
-                v-if="$colorMode.preference === 'light'"
-                @click="$colorMode.preference = 'dark'"
-                name="bi-moon-fill"
-              />
-              <OhVueIcon
-                class="swap-on h-5 w-5 fill-current"
-                v-else
-                @click="$colorMode.preference = 'light'"
-                name="bi-sun-fill"
-              />
-            </label>
-          </div>
-          <div class="flex w-1/12">
-            <select
-              v-model="$i18n.locale"
-              class="select select-ghost w-full max-w-xs"
-            >
-              <option value="en">English</option>
-              <option value="de">Deutsch</option>
-            </select>
+          <div class="flex w-3/12">
+            <div class="flex">
+              <label class="swap-rotate swap">
+                <input type="checkbox" />
+                <OhVueIcon
+                  class="swap-off h-5 w-5 fill-current"
+                  v-if="$colorMode.preference === 'light'"
+                  @click="$colorMode.preference = 'dark'"
+                  name="bi-moon-fill"
+                />
+                <OhVueIcon
+                  class="swap-on h-5 w-5 fill-current"
+                  v-else
+                  @click="$colorMode.preference = 'light'"
+                  name="bi-sun-fill"
+                />
+              </label>
+            </div>
+            <div class="flex">
+              <select
+                v-model="$i18n.locale"
+                class="select select-ghost w-full max-w-xs"
+              >
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
