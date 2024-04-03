@@ -1,6 +1,7 @@
 <template>
   <div v-if="totalPages > 1" class="join mb-10">
     <OrbisButton
+      class="text-black dark:text-white"
       :on-click="() => changePage(1)"
       :disabled="isFirstPage"
       :join="true"
@@ -9,6 +10,7 @@
       first
     </OrbisButton>
     <OrbisButton
+      class="text-black dark:text-white"
       :on-click="() => changePage(currentPage - 1)"
       :disabled="isFirstPage"
       :join="true"
@@ -17,6 +19,7 @@
       prev
     </OrbisButton>
     <OrbisButton
+      class="text-black dark:text-white"
       v-for="pageNumber in threePages"
       :key="pageNumber"
       :on-click="() => changePage(pageNumber)"
@@ -27,6 +30,7 @@
       {{ pageNumber }}
     </OrbisButton>
     <OrbisButton
+      class="text-black dark:text-white"
       :on-click="() => changePage(currentPage + 1)"
       :disabled="isLastPage"
       :join="true"
@@ -35,6 +39,7 @@
       next
     </OrbisButton>
     <OrbisButton
+      class="text-black dark:text-white"
       :on-click="() => changePage(totalPages)"
       :disabled="isLastPage"
       :join="true"
