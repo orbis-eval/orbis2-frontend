@@ -122,6 +122,7 @@
       </aside>
     </div>
     <OrbisModalContainer />
+    <OrbisMessageToast />
   </div>
 </template>
 

@@ -41,7 +41,6 @@
           </div>
         </div>
       </div>
-      <OrbisMessageToast />
     </div>
   </NuxtLayout>
 </template>

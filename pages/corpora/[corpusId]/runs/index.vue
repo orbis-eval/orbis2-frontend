@@ -92,7 +92,6 @@
             </tr>
           </tbody>
         </table>
-        <OrbisMessageToast />
       </div>
     </div>
   </NuxtLayout>

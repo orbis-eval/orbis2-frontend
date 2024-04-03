@@ -63,7 +63,6 @@
           class="my-3 text-center"
           @pageChanged="pageChanged"
         />
-        <OrbisMessageToast />
       </div>
     </div>
   </NuxtLayout>
