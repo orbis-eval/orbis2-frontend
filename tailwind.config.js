@@ -4,5 +4,4 @@ module.exports = {
     themes: ["dark", "light"],
   },
   darkMode: "class",
-  classSuffix: "",
 };
