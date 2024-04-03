@@ -33,7 +33,7 @@
         @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
       >
         <div
-          class="flex cursor-pointer items-center rounded p-2 hover:bg-gray-500"
+          class="flex cursor-default items-center rounded p-2 hover:bg-gray-400 dark:hover:bg-gray-700"
           @mouseleave="
             emit('setHighlightNestedSetNode', [selectedAnnotation?.identifier])
           "

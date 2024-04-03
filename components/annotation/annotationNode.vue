@@ -41,7 +41,7 @@
     }"
     :class="`border-b-4 border-solid pt-1 text-lg tracking-wider ${
       highlightedNestedSetNodeId.includes(Number(nestedSetNode.identifier))
-        ? 'rounded-t bg-neutral-400'
+        ? 'rounded-t bg-gray-400 dark:bg-gray-700'
         : ''
     } ${nestedSetNode.identifier ? 'annotation' : ''}`"
   >
