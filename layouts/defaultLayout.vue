@@ -97,15 +97,15 @@
               <label class="swap-rotate swap">
                 <input type="checkbox" />
                 <OhVueIcon
-                  class="swap-off h-5 w-5 fill-current"
-                  v-if="$colorMode.preference === 'light'"
-                  @click="$colorMode.preference = 'dark'"
+                  class="h-5 w-5 fill-current"
+                  v-if="colorMode.preference === 'light'"
+                  @click="colorMode.preference = 'dark'"
                   name="bi-moon-fill"
                 />
                 <OhVueIcon
-                  class="swap-on h-5 w-5 fill-current"
+                  class="h-5 w-5 fill-current"
                   v-else
-                  @click="$colorMode.preference = 'light'"
+                  @click="colorMode.preference = 'light'"
                   name="bi-sun-fill"
                 />
               </label>
