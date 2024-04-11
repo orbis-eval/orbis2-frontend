@@ -22,10 +22,10 @@
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>
-              <th>Kappa W</th>
-              <th>Kappa X</th>
-              <th>Kappa Y</th>
-              <th>Kappa Z</th>
+              <th>Kappa Macro</th>
+              <th>Kappa Micro</th>
+              <th>Average Macro F1</th>
+              <th>Average Micro F1</th>
             </tr>
           </thead>
 
@@ -48,10 +48,14 @@
                 {{ document.identifier }}
               </td>
               <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
-              <td>0.2</td>
-              <td>0.2</td>
-              <td>0.2</td>
-              <td>0.2</td>
+              <td
+                v-for="(value, index) in getInterRaterAgreement(
+                  document.interRaterAgreement,
+                )"
+                :key="index"
+              >
+                {{ value !== null ? value.toFixed(2) : "-" }}
+              </td>
             </tr>
           </tbody>
         </table>
@@ -149,4 +153,12 @@ onMounted(async () => {
     $progress.finish();
   }
 });
+
+const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
+  if (interRaterAgreement) {
+    return interRaterAgreement.slice(0, 4);
+  } else {
+    return [null, null, null, null];
+  }
+};
 </script>

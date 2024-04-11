@@ -46,7 +46,7 @@ describe("OrbisApiService.getDocument()", () => {
       done: false,
       identifier: 1234,
     });
-    const parsedDocument = await orbisApiServiceMock.getDocument(1234);
+    const parsedDocument = await orbisApiServiceMock.getDocument(1234, 1234);
     expect(parsedDocument.content).toEqual("1234");
     expect(parsedDocument.runId).toEqual(1234);
     expect(parsedDocument.identifier).toEqual(1234);

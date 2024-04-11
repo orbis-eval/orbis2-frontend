@@ -65,7 +65,7 @@
                     ? 'text-gray-400'
                     : ''
                 "
-                >Compare with</label
+                >{{ $t("navbar.compareWith") }}</label
               >
             </div>
             <select

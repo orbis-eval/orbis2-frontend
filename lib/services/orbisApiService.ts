@@ -54,10 +54,10 @@ export class OrbisApiService {
     );
   }
 
-  async getDocument(documentId: number): Promise<Document> {
+  async getDocument(runId: number, documentId: number): Promise<Document> {
     return await Parser.parse(
       Document,
-      this.apiGet(`getDocument?document_id=${documentId}`),
+      this.apiGet(`getDocument?run_id=${runId}&document_id=${documentId}`),
     );
   }
 
