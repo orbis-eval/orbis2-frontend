@@ -21,6 +21,12 @@ const createDocument = (
     runId,
     metadata,
     done,
+    interRaterAgreement: [],
+    scoring: {
+      tp: [],
+      fp: [],
+      fn: [],
+    },
   });
 };
 

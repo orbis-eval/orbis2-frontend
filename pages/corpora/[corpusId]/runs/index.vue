@@ -18,11 +18,11 @@
               class="menu-icon"
               fill="yellow"
             />
-            Evaluate new runs
+            {{ $t("run.evaluateNewRuns") }}
           </OrbisButton>
           <OrbisButton :disabled="!selectedRun" @click="deleteSelectedRun">
             <OhVueIcon name="md-deleteforever" class="menu-icon" />
-            Delete Run
+            {{ $t("run.deleteRun") }}
           </OrbisButton>
         </div>
         <div class="divider"></div>

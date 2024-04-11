@@ -28,7 +28,7 @@ export default defineNuxtRouteMiddleware(async (to) => {
     }
     // @ts-ignore
     $progress.increase(10);
-    await documentStore.loadDocument(documentId).then(async () => {
+    await documentStore.loadDocument(idOfRun, documentId).then(async () => {
       // @ts-ignore
       $progress.increase(10);
       if (documentStore.currentDocument.identifier && idOfRun) {
