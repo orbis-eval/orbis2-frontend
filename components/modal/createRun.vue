@@ -41,9 +41,11 @@ import { useI18n } from "vue-i18n";
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useMessageToastService } from "~/lib/services/messageToastService";
 
 const { t } = useI18n();
 const { closeModal } = useModal();
+const { onSuccess, onError } = useMessageToastService();
 const runStore = useRunStore();
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
@@ -83,9 +85,10 @@ const createRun = async (values: any) => {
       corpus: corpus.value,
     });
     await runStore.createRun(newRun, corpus.value, chosenFile.value);
-
+    onSuccess(t("run.success.runCreated"));
     closeModal();
   } catch (error) {
+    onError(t("run.error.runCreateError"));
     setRunFileError(t("run.error.runError"));
   }
 };

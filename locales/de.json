@@ -65,14 +65,16 @@
     "addRun": "Run hinzufügen",
     "compareRuns": "Vergleiche Runs",
     "success": {
-      "runDeleted": "Run erfolgreich gelöscht"
+      "runDeleted": "Run erfolgreich gelöscht",
+      "runCreated": "Run erfolgreich erstellt"
     },
     "error": {
       "runNameRequired": "Run Name wird benötigt",
       "runDescriptionRequired": "Run Beschreibung wird benötigt",
       "runExists": "Run mit diesem Namen existiert bereits",
       "runError": "Es ist ein Problem beim Erstellen des Runs aufgetreten",
-      "runDeleteError": "Fehler beim Löschen des Runs"
+      "runDeleteError": "Fehler beim Löschen des Runs",
+      "runCreateError": "Fehler beim Erstellen des Runs"
     },
     "delete": {
       "warningTitle": "Run löschen?",
