@@ -12,6 +12,9 @@
   "name": "Name",
   "description": "Description",
   "listOfRuns": "List of runs",
+  "navbar": {
+    "compareWith": "Compare with"
+  },
   "corpus": {
     "corpora": "Corpora",
     "create": "Create Corpus",
@@ -55,6 +58,7 @@
         "textSection": "Text section",
         "noSelectionInfo": "No Annotation is selected"
       },
+      "openInGoldStandard": "Open Document in Gold Standard",
       "annotationsTitle": "Annotations"
     }
   },
@@ -65,6 +69,8 @@
     "createRun": "Create Run",
     "addRun": "Add Run",
     "compareRuns": "Compare Runs",
+    "evaluateNewRuns": "Evaluate New Runs",
+    "deleteRun": "Delete Run",
     "success": {
       "runDeleted": "Run deleted successfully",
       "runCreated": "Run created successfully"
