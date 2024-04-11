@@ -5,7 +5,10 @@
 
       <!--<DocumentSidebarCommands></DocumentSidebarCommands>-->
 
-      <OrbisButton v-if="isRun" class="m-2" :on-click="() => openDocumentInGoldStandard()"
+      <OrbisButton
+        v-if="isRun"
+        class="m-2"
+        :on-click="() => openDocumentInGoldStandard()"
         >{{ $t("document.sidebar.openInGoldStandard") }}
       </OrbisButton>
 
