@@ -3,25 +3,25 @@
     <div class="mb-2 text-lg font-bold">{{ $t("annotations") }}</div>
     <div v-if="isRun" role="tablist" class="tabs-boxed tabs">
       <a
-          @click="activeAnnotationTab = 'all'"
-          role="tab"
-          class="tab"
-          :class="activeAnnotationTab == 'all' ? 'tab-active' : ''"
-      >All ({{ nestedSetRootNode.allAnnotationNodes().length }})</a
+        @click="activeAnnotationTab = 'all'"
+        role="tab"
+        class="tab"
+        :class="activeAnnotationTab == 'all' ? 'tab-active' : ''"
+        >All ({{ nestedSetRootNode?.allAnnotationNodes()?.length || 0 }})</a
       >
       <a
         @click="activeAnnotationTab = 'tp'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'tp' ? 'tab-active' : ''"
-        >TP ({{ currentDocument.scoring.tp.length }})</a
+        >TP ({{ currentDocument.scoring.tp.length || 0 }})</a
       >
       <a
         @click="activeAnnotationTab = 'fp'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'fp' ? 'tab-active' : ''"
-        >FP ({{ currentDocument.scoring.fp.length }})</a
+        >FP ({{ currentDocument.scoring.fp.length || 0 }})</a
       >
     </div>
     <div v-if="nestedSetRootNode" class="space-y-2">
@@ -78,7 +78,7 @@
 </template>
 
 <script lang="ts" setup>
-import { addIcons, OhVueIcon } from "oh-vue-icons";
+import { addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useRunStore } from "~/stores/runStore";
@@ -100,10 +100,6 @@ const { nestedSetRootNode, selectedAnnotation } = storeToRefs(annotationStore);
 const colorPalettesStore = useColorPalettesStore();
 const { currentColorPalette } = storeToRefs(colorPalettesStore);
 
-async function deleteAnnotation(nestedSetNode: NestedSetNode) {
-  await annotationStore.deleteAnnotation(nestedSetNode);
-}
-
 const activeAnnotationTab = ref("all");
 
 const isRun = computed(() => {
@@ -115,25 +111,23 @@ const filterAnnotationNodes = (nodes: NestedSetNode[], metricType: string) => {
     if (metricType === "tp") {
       if (currentDocument.value.scoring.tp) {
         return currentDocument.value.scoring.tp.find(
-          (tp) => tp.identifier === node.identifier,
+          (tp: any) => tp.identifier === node.identifier,
         );
       }
-      return false;
     } else if (metricType === "fp") {
       if (currentDocument.value.scoring.fp) {
         return currentDocument.value.scoring.fp.find(
-          (fp) => fp.identifier === node.identifier,
+          (fp: any) => fp.identifier === node.identifier,
         );
       }
-      return false;
     } else if (metricType === "fn") {
       if (currentDocument.value.scoring.fn) {
         return currentDocument.value.scoring.fn.find(
-          (fn) => fn.identifier === node.identifier,
+          (fn: any) => fn.identifier === node.identifier,
         );
       }
-      return false;
     }
+    return false;
   });
 };
 

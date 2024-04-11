@@ -1,5 +1,6 @@
 import { IDocument } from "~/lib/model/idocument";
 import { Metadata } from "~/lib/model/metadata";
+import { Scoring } from "~/lib/model/scoring";
 import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 
 export class Document implements IDocument {
@@ -10,7 +11,7 @@ export class Document implements IDocument {
   done: boolean;
   identifier?: number;
   interRaterAgreement?: number[];
-  scoring?: object;
+  scoring: Scoring;
 
   constructor(document: IDocument) {
     this.content = document.content;

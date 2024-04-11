@@ -83,14 +83,16 @@ onBeforeUnmount(() => {
 const calcRecall = computed(() => {
   return (
     currentDocument.value.scoring.tp.length /
-    (currentDocument.value.scoring.tp.length + currentDocument.value.scoring.fn.length)
+    (currentDocument.value.scoring.tp.length +
+      currentDocument.value.scoring.fn.length)
   );
 });
 
 const calcPrecision = computed(() => {
   return (
     currentDocument.value.scoring.tp.length /
-    (currentDocument.value.scoring.tp.length + currentDocument.value.scoring.fp.length)
+    (currentDocument.value.scoring.tp.length +
+      currentDocument.value.scoring.fp.length)
   );
 });
 

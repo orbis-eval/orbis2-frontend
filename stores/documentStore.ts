@@ -40,7 +40,10 @@ export const useDocumentStore = defineStore("document", () => {
 
   async function loadDocument(runId: number, documentId: number) {
     try {
-      currentDocument.value = await orbisApiService.getDocument(runId, documentId);
+      currentDocument.value = await orbisApiService.getDocument(
+        runId,
+        documentId,
+      );
     } catch (error) {
       throw new Error(
         "An error occurred while fetching document " + documentId,

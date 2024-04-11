@@ -5,7 +5,7 @@
 
       <!--<DocumentSidebarCommands></DocumentSidebarCommands>-->
 
-      <OrbisButton class="m-2" :on-click="() => openDocumentInGoldStandard()"
+      <OrbisButton v-if="isRun" class="m-2" :on-click="() => openDocumentInGoldStandard()"
         >{{ $t("document.sidebar.openInGoldStandard") }}
       </OrbisButton>
 
@@ -36,6 +36,10 @@ const annotationStore = useAnnotationStore();
 const { selectedAnnotation } = storeToRefs(annotationStore);
 
 const router = useRouter();
+
+const isRun = computed(() => {
+  return currentDocument.value.runId === selectedRun.value.identifier;
+});
 
 const openDocumentInGoldStandard = () => {
   const routeData = router.resolve({
