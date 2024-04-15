@@ -11,9 +11,9 @@
             <th>False Negative</th>
           </tr>
           <tr>
-            <td class="py-0">{{ currentDocument.scoring.tp.length }}</td>
-            <td class="py-0">{{ currentDocument.scoring.fp.length }}</td>
-            <td class="py-0">{{ currentDocument.scoring.fn.length }}</td>
+            <td class="py-0">{{ currentDocument.scoring.tp.length || '0'}}</td>
+            <td class="py-0">{{ currentDocument.scoring.fp.length || '0'}}</td>
+            <td class="py-0">{{ currentDocument.scoring.fn.length || '0'}}</td>
           </tr>
           <tr>
             <th>F1 Score</th>

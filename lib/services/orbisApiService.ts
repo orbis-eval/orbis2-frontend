@@ -225,28 +225,40 @@ export class OrbisApiService {
   }
 
   async apiGet(query: string): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}/${query}`, {
+    const { $progress } = useNuxtApp();
+    $progress.start();
+    const response = await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "GET",
     });
+    $progress.finish();
+    return response;
   }
 
   async apiPost(
     query: string,
     body: any,
   ): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}/${query}`, {
+    const { $progress } = useNuxtApp();
+    $progress.start();
+    const response = await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "POST",
       body,
     });
+    $progress.finish();
+    return response;
   }
 
   async apiDelete(
     query: string,
     body: any,
   ): Promise<TypedInternalResponse<string>> {
-    return await $fetch(`${this.orbisApiBase}/${query}`, {
+    const { $progress } = useNuxtApp();
+    $progress.start();
+    const response = await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "DELETE",
       body,
     });
+    $progress.finish();
+    return response;
   }
 }

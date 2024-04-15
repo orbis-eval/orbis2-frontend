@@ -2,6 +2,9 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Document } from "~/lib/model/document";
+import { useColorPalettesStore } from "~/stores/colorPalettesStore";
+import { useAnnotationStore } from "~/stores/annotationStore";
+import { useCorpusStore } from "~/stores/corpusStore";
 
 export const useDocumentStore = defineStore("document", () => {
   const rc = useRuntimeConfig();
@@ -11,6 +14,11 @@ export const useDocumentStore = defineStore("document", () => {
   const nrOfDocuments = ref(1);
   const totalPages = ref(1);
   const currentPage = ref(1);
+
+  // Stores
+  const colorPalettesStore = useColorPalettesStore();
+  const annotationStore = useAnnotationStore();
+  const corpusStore = useCorpusStore();
 
   function reset() {
     documents.value = [] as Document[];
@@ -38,12 +46,28 @@ export const useDocumentStore = defineStore("document", () => {
     }
   }
 
+  async function mapDocumentWithAdditionalData(
+    document: Document,
+    runId: number,
+  ) {
+    currentDocument.value = document;
+    // load color palette
+    await colorPalettesStore.loadColorPalettes();
+    // load annotations
+    await annotationStore.loadAnnotations(
+      currentDocument.value.identifier,
+      currentDocument.value.content,
+      runId,
+      corpusStore.corpus.supportedAnnotationTypes,
+    );
+    return currentDocument.value;
+  }
+
   async function loadDocument(runId: number, documentId: number) {
     try {
-      currentDocument.value = await orbisApiService.getDocument(
-        runId,
-        documentId,
-      );
+      return await orbisApiService
+        .getDocument(runId, documentId)
+        .then((document) => mapDocumentWithAdditionalData(document, runId));
     } catch (error) {
       throw new Error(
         "An error occurred while fetching document " + documentId,
