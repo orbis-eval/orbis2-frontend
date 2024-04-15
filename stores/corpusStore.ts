@@ -2,6 +2,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 import { Corpus } from "~/lib/model/corpus";
 import { OrbisApiService } from "~/lib/services/orbisApiService";
+import { AnnotationType } from "~/lib/model/annotationType";
 
 export const useCorpusStore = defineStore("corpus", () => {
   const runtimeConfig = useRuntimeConfig();
@@ -10,10 +11,12 @@ export const useCorpusStore = defineStore("corpus", () => {
   );
   const corpora = ref([] as Corpus[]);
   const corpus = ref({} as Corpus);
+  const annotationTypes = ref([] as AnnotationType[]);
 
   function reset() {
     corpora.value = [] as Corpus[];
     corpus.value = {} as Corpus;
+    annotationTypes.value = [] as AnnotationType[];
   }
 
   async function loadCorpora() {
@@ -64,6 +67,20 @@ export const useCorpusStore = defineStore("corpus", () => {
     }
   }
 
+  async function loadAnnotationTypes(identifier: number | undefined) {
+    try {
+      if (!identifier) {
+        throw new Error(
+          "Corpus identifier is required to load annotation types.",
+        );
+      }
+      annotationTypes.value =
+        await orbisApiService.getAnnotationTypes(identifier);
+    } catch (error) {
+      throw new Error("An error occurred while fetching annotation types.");
+    }
+  }
+
   return {
     corpora,
     corpus,
@@ -72,5 +89,7 @@ export const useCorpusStore = defineStore("corpus", () => {
     deleteCorpus,
     loadCorpus,
     createCorpus,
+    annotationTypes,
+    loadAnnotationTypes,
   };
 });

@@ -8,8 +8,9 @@
       </MenuItem>
       <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
         <MenuSubItem
-          :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/`"
-          :text="$t('allAnnotations')"
+          :url="`/corpora/${corpus.identifier}/annotation-types/`"
+          :text="$t('allAnnotationTypes')"
+          :validator="'corpusId' in route.params"
         />
       </ul>
       <MenuItem

@@ -3,6 +3,7 @@ import { Document } from "~/lib/model/document";
 import { Parser } from "~/lib/parser";
 import { Corpus } from "~/lib/model/corpus";
 import { Annotation } from "~/lib/model/annotation";
+import { AnnotationType } from "~/lib/model/annotationType";
 import { Run } from "~/lib/model/run";
 import { ColorPalette } from "~/lib/model/colorpalette";
 
@@ -82,6 +83,13 @@ export class OrbisApiService {
     return await Parser.parseList(
       Annotation,
       this.apiGet(`getAnnotations?run_id=${runId}&document_id=${documentId}`),
+    );
+  }
+
+  async getAnnotationTypes(corpusId: number): Promise<AnnotationType[]> {
+    return await Parser.parseList(
+      AnnotationType,
+      this.apiGet(`corpusAnnotationTypes?corpus_id=${corpusId}`),
     );
   }
 
