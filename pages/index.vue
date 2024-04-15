@@ -73,17 +73,12 @@ const onDeleteCorpus = (corpus: Corpus) => {
   openModal(modalDeleteCorpus, toRaw(corpus));
 };
 
-const { $progress } = useNuxtApp();
-
 async function loadCorpora() {
-  $progress.start();
   try {
     corpusStore.reset();
     await corpusStore.loadCorpora();
   } catch (error) {
     onError(t("corpus.error.corpusNotLoading"));
-  } finally {
-    $progress.finish();
   }
 }
 

@@ -1,16 +1,29 @@
 export class Progress {
   private progress: any; // Assuming $Progress is an object with appropriate methods
+  private debounceTimer: any;
 
   constructor(progressInstance: any) {
     this.progress = progressInstance;
+    this.debounceTimer = null;
   }
 
   start() {
-    this.progress.start();
+    if (this.progressValue === 0 || this.progressValue === 100) {
+      this.progress.start();
+    } else {
+      this.progress.decrease(10);
+    }
+  }
+
+  debounceFinish() {
+    clearTimeout(this.debounceTimer);
+    this.debounceTimer = setTimeout(() => {
+      this.progress.finish();
+    }, 100);
   }
 
   finish() {
-    this.progress.finish();
+    this.debounceFinish();
   }
 
   increase(amount: number) {
@@ -21,7 +34,16 @@ export class Progress {
     this.progress.decrease(amount);
   }
 
+  set progressValue(value: number) {
+    this.progress.set(value);
+  }
+
+  get progressValue(): number {
+    return computed(() => this.progress.get()).value;
+  }
+
   get isLoading(): boolean {
-    return computed(() => this.progress.get() !== 100).value;
+    return computed(() => this.progressValue !== 100 && this.progressValue > 0)
+      .value;
   }
 }

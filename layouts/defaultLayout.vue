@@ -159,13 +159,6 @@ const isRunSelectDisabled = computed(() => {
   return !corpus.value.identifier;
 });
 
-const { hook, $progress } = useNuxtApp();
-
-hook("page:finish", () => {
-  // @ts-ignore
-  $progress.finish();
-});
-
 const changeGoldStandard = async (event: Event) => {
   const target = event.target as HTMLSelectElement;
   const goldStandard = runStore.getGoldStandardById(Number(target.value));

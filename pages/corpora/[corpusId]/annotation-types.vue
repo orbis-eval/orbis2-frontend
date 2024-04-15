@@ -37,21 +37,13 @@ const { t } = useI18n();
 
 addIcons(MdKeyboardarrowdown);
 
-const { $progress } = useNuxtApp();
-
 const corpusStore = useCorpusStore();
 
 const { corpus, annotationTypes } = storeToRefs(corpusStore);
 const { setTitle } = useTitle();
 
 onMounted(async () => {
-  $progress.start();
-  try {
-    setTitle(t("allAnnotationTypes"));
-    await corpusStore.loadAnnotationTypes(corpus.value.identifier);
-    // @Todo: Error message for user
-  } finally {
-    $progress.finish();
-  }
+  setTitle(t("allAnnotationTypes"));
+  await corpusStore.loadAnnotationTypes(corpus.value.identifier);
 });
 </script>

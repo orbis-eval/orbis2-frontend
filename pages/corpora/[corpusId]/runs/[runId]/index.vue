@@ -88,8 +88,6 @@ const { t } = useI18n();
 
 const router = useRouter();
 
-const { $progress } = useNuxtApp();
-
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 
@@ -108,7 +106,6 @@ const { setTitle } = useTitle();
 // called when another page is selected
 async function pageChanged(nextPage: number) {
   if (selectedRun.value.identifier) {
-    $progress.start();
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
@@ -119,8 +116,6 @@ async function pageChanged(nextPage: number) {
       );
     } catch (error) {
       onError(t("document.error.documentNotLoading"));
-    } finally {
-      $progress.finish();
     }
   } else {
     console.warn("Id of selected run was not set in pageChanged.");
@@ -143,15 +138,9 @@ async function loadDocuments() {
 }
 
 onMounted(async () => {
-  $progress.start();
-  try {
-    setTitle(corpus.value.name);
-    await countDocuments();
-    await loadDocuments();
-    // @Todo: Error message for user
-  } finally {
-    $progress.finish();
-  }
+  setTitle(corpus.value.name);
+  await countDocuments();
+  await loadDocuments();
 });
 
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
