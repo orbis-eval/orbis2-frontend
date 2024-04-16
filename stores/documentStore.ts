@@ -54,12 +54,14 @@ export const useDocumentStore = defineStore("document", () => {
     // load color palette
     await colorPalettesStore.loadColorPalettes();
     // load annotations
-    await annotationStore.loadAnnotations(
-      currentDocument.value.identifier,
-      currentDocument.value.content,
-      runId,
-      corpusStore.corpus.supportedAnnotationTypes,
-    );
+    if (currentDocument.value.identifier) {
+      await annotationStore.loadAnnotations(
+        currentDocument.value.identifier,
+        currentDocument.value.content,
+        runId,
+        corpusStore.corpus.supportedAnnotationTypes,
+      );
+    }
     return currentDocument.value;
   }
 

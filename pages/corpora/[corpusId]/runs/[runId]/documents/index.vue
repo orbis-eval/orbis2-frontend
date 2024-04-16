@@ -128,6 +128,7 @@ onMounted(async () => {
     await countDocuments();
     await loadDocuments();
   } catch (error) {
+    onError(t("document.error.documentNotLoading"));
   }
 });
 </script>

@@ -6,19 +6,19 @@
       >
         <table class="table">
           <tr>
-            <th>True Positive</th>
-            <th>False Positive</th>
-            <th>False Negative</th>
+            <th class="py-0">True Positive</th>
+            <th class="py-0">False Positive</th>
+            <th class="py-0">False Negative</th>
           </tr>
           <tr>
-            <td class="py-0">{{ currentDocument.scoring.tp.length || '0'}}</td>
-            <td class="py-0">{{ currentDocument.scoring.fp.length || '0'}}</td>
-            <td class="py-0">{{ currentDocument.scoring.fn.length || '0'}}</td>
+            <td class="py-0">{{ getTPCount }}</td>
+            <td class="py-0">{{ getFPCount }}</td>
+            <td class="py-0">{{ getFNCount }}</td>
           </tr>
           <tr>
-            <th>F1 Score</th>
-            <th>Precision</th>
-            <th>Recall</th>
+            <th class="py-0 pt-3">F1 Score</th>
+            <th class="py-0 pt-3">Precision</th>
+            <th class="py-0 pt-3">Recall</th>
           </tr>
           <tr>
             <td class="py-0">{{ calcF1Score.toFixed(2) }}</td>
@@ -80,26 +80,56 @@ onBeforeUnmount(() => {
   annotationStore.resetAnnotationStack();
 });
 
+const getTPCount = computed(() => {
+  if (currentDocument.value.scoring) {
+    return currentDocument.value.scoring.tp.length;
+  }
+  return 0;
+});
+
+const getFPCount = computed(() => {
+  if (currentDocument.value.scoring) {
+    return currentDocument.value.scoring.fp.length;
+  }
+  return 0;
+});
+
+const getFNCount = computed(() => {
+  if (currentDocument.value.scoring) {
+    return currentDocument.value.scoring.fn.length;
+  }
+  return 0;
+});
+
 const calcRecall = computed(() => {
-  return (
-    currentDocument.value.scoring.tp.length /
-    (currentDocument.value.scoring.tp.length +
-      currentDocument.value.scoring.fn.length)
-  );
+  if (currentDocument.value.scoring) {
+    return (
+      currentDocument.value.scoring.tp.length /
+      (currentDocument.value.scoring.tp.length +
+        currentDocument.value.scoring.fn.length)
+    );
+  }
+  return 0;
 });
 
 const calcPrecision = computed(() => {
-  return (
-    currentDocument.value.scoring.tp.length /
-    (currentDocument.value.scoring.tp.length +
-      currentDocument.value.scoring.fp.length)
-  );
+  if (currentDocument.value.scoring) {
+    return (
+      currentDocument.value.scoring.tp.length /
+      (currentDocument.value.scoring.tp.length +
+        currentDocument.value.scoring.fp.length)
+    );
+  }
+  return 0;
 });
 
 const calcF1Score = computed(() => {
+  if (calcRecall.value + calcPrecision.value === 0) {
+    return 0;
+  }
   return (
-    (2 * calcPrecision.value * calcRecall.value) /
-    (calcPrecision.value + calcRecall.value)
+    (2 * calcRecall.value * calcPrecision.value) /
+    (calcRecall.value + calcPrecision.value)
   );
 });
 </script>
