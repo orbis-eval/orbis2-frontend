@@ -141,7 +141,7 @@ const runStore = useRunStore();
 const { selectedGoldStandard, selectedRun, runs, goldStandards } =
   storeToRefs(runStore);
 
-const { title } = useTitle("Orbis NG");
+const { title } = useTitle();
 
 const homeLink = computed(() => {
   if (corpus.value.identifier) {

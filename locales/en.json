@@ -5,7 +5,7 @@
   "documents": "Documents",
   "allDocuments": "All Documents",
   "annotations": "Annotations",
-  "allAnnotationTypes": "All Annotation Types",
+  "annotationTypes": "Annotation Types",
   "numberAbbreviation": "Nr",
   "id": "ID",
   "content": "Content",
@@ -69,7 +69,6 @@
     "createRun": "Create Run",
     "addRun": "Add Run",
     "compareRuns": "Compare Runs",
-    "evaluateNewRuns": "Evaluate New Runs",
     "deleteRun": "Delete Run",
     "success": {
       "runDeleted": "Run deleted successfully",

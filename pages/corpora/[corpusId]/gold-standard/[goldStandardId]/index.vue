@@ -69,7 +69,6 @@
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
-import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
@@ -92,7 +91,6 @@ const { selectedGoldStandard } = storeToRefs(runStore);
 const pageSize = ref(10);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
-const { setTitle } = useTitle();
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
@@ -129,7 +127,6 @@ async function loadDocuments() {
 }
 
 onMounted(async () => {
-  setTitle(corpus.value.name);
   await countDocuments();
   await loadDocuments();
 });

@@ -1,12 +1,9 @@
-import { refDebounced } from "@vueuse/core";
-
-const titleIntern = ref("");
-const title = refDebounced(titleIntern, 200);
+const title = ref("Orbis NG");
 
 export const useTitle = (paramTitle?: string) => {
   const setTitle = (newTitle: string) => {
     if (newTitle.length > 0) {
-      titleIntern.value = newTitle;
+      title.value = newTitle;
       useSeoMeta({
         title: newTitle,
         ogTitle: newTitle,

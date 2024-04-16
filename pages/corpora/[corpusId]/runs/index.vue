@@ -12,14 +12,6 @@
           <OrbisButton :on-click="() => openModal(ModalCreateRun)"
             >{{ $t("run.addRun") }}
           </OrbisButton>
-          <OrbisButton>
-            <OhVueIcon
-              name="hi-clipboard-list"
-              class="menu-icon"
-              fill="yellow"
-            />
-            {{ $t("run.evaluateNewRuns") }}
-          </OrbisButton>
           <OrbisButton :disabled="!selectedRun" @click="deleteSelectedRun">
             <OhVueIcon name="md-deleteforever" class="menu-icon" />
             {{ $t("run.deleteRun") }}
