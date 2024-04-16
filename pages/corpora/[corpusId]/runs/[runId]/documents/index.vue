@@ -44,13 +44,15 @@
           </tbody>
         </table>
 
-        <OrbisPagination
-          v-if="totalPages"
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          class="text-center"
-          @pageChanged="pageChanged"
-        />
+        <div class="flex justify-center">
+          <OrbisPagination
+            v-if="totalPages"
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            class="text-center"
+            @pageChanged="pageChanged"
+          />
+        </div>
       </div>
     </div>
   </NuxtLayout>
