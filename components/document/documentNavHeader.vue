@@ -66,6 +66,7 @@ async function nextDocument() {
         selectedRun.value.identifier +
         "/documents/" +
         newDocument.identifier,
+      { replace: true },
     );
   } else if ("goldStandardId" in route.params) {
     const newDocument = await documentStore.nextDocument(
@@ -78,6 +79,7 @@ async function nextDocument() {
         selectedGoldStandard.value.identifier +
         "/documents/" +
         newDocument.identifier,
+      { replace: true },
     );
   } else {
     console.warn("Id of selected run was not set in nextDocument.");
@@ -98,6 +100,7 @@ async function previousDocument() {
         selectedRun.value.identifier +
         "/documents/" +
         newDocument.identifier,
+      { replace: true },
     );
   } else if ("goldStandardId" in route.params) {
     const newDocument = await documentStore.previousDocument(
@@ -110,6 +113,7 @@ async function previousDocument() {
         selectedGoldStandard.value.identifier +
         "/documents/" +
         newDocument.identifier,
+      { replace: true },
     );
   } else {
     console.warn("Id of selected run was not set in previousDocument.");

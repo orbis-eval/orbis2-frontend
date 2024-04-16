@@ -1,7 +1,4 @@
-import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
-import { useAnnotationStore } from "~/stores/annotationStore";
-import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const documentStore = useDocumentStore();

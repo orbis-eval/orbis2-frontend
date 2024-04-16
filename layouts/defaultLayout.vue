@@ -133,7 +133,6 @@ import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 
 const route = useRoute();
-const router = useRouter();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
@@ -170,13 +169,13 @@ const changeGoldStandard = async (event: Event) => {
   }
 };
 
-const changeRun = (event: Event) => {
+const changeRun = async (event: Event) => {
   const target = event.target as HTMLSelectElement;
   const runId = Number(target.value);
   const link = ["/corpora", corpus.value.identifier, "runs", runId];
   if ("documentId" in route.params) {
     link.push("documents", route.params.documentId.toString());
   }
-  router.push(link.join("/"));
+  await navigateTo(link.join("/"));
 };
 </script>
