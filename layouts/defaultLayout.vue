@@ -94,7 +94,8 @@
               </option>
             </select>
           </div>
-          <div class="flex w-3/12 justify-end gap-4">
+          <div class="flex w-2/12"></div>
+          <div class="flex w-1/12 justify-end gap-4">
             <div class="flex">
               <label class="swap swap-rotate">
                 <input type="checkbox" />
