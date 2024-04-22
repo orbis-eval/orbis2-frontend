@@ -15,7 +15,7 @@
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
-          class="table text-white"
+          class="table table-sm text-white"
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
@@ -47,7 +47,7 @@
               <td class="py-1 pr-5">
                 {{ document.identifier }}
               </td>
-              <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
+              <td class="pr-5">{{ document.content.substring(0, 50) }}...</td>
               <td
                 v-for="(value, index) in getInterRaterAgreement(
                   document.interRaterAgreement,
@@ -60,13 +60,15 @@
           </tbody>
         </table>
 
-        <OrbisPagination
-          v-if="totalPages"
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          class="my-3 text-center"
-          @pageChanged="pageChanged"
-        />
+        <div class="flex justify-center">
+          <OrbisPagination
+            v-if="totalPages"
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            class="my-3 text-center"
+            @pageChanged="pageChanged"
+          />
+        </div>
       </div>
     </div>
   </NuxtLayout>
@@ -97,7 +99,7 @@ const runStore = useRunStore();
 
 const { selectedRun } = storeToRefs(runStore);
 
-const pageSize = ref(10);
+const pageSize = ref(5);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 

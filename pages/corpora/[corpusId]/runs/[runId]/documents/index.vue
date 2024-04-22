@@ -11,7 +11,7 @@
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
-          class="table text-white"
+          class="table table-sm text-white"
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
@@ -44,13 +44,15 @@
           </tbody>
         </table>
 
-        <OrbisPagination
-          v-if="totalPages"
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          class="text-center"
-          @pageChanged="pageChanged"
-        />
+        <div class="flex justify-center">
+          <OrbisPagination
+            v-if="totalPages"
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            class="text-center"
+            @pageChanged="pageChanged"
+          />
+        </div>
       </div>
     </div>
   </NuxtLayout>
@@ -83,7 +85,7 @@ const { onError } = useMessageToastService();
 const documentStore = useDocumentStore();
 const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 
-const pageSize = ref(10);
+const pageSize = ref(5);
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {

@@ -12,15 +12,15 @@
             $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name })
           }}
           <OrbisButton :on-click="() => openModal(ModalUpdateGoldStandard)"
-            >Update Gold Standard</OrbisButton
-          >
+            >Update Gold Standard
+          </OrbisButton>
         </h1>
 
         <h2 class="mb-5 text-2xl text-white">{{ $t("documents") }}</h2>
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
-          class="table text-white"
+          class="table table-sm text-white"
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
@@ -53,13 +53,15 @@
           </tbody>
         </table>
 
-        <OrbisPagination
-          v-if="totalPages"
-          :current-page="currentPage"
-          :total-pages="totalPages"
-          class="my-3 text-center"
-          @pageChanged="pageChanged"
-        />
+        <div class="flex justify-center">
+          <OrbisPagination
+            v-if="totalPages"
+            :current-page="currentPage"
+            :total-pages="totalPages"
+            class="my-3 text-center"
+            @pageChanged="pageChanged"
+          />
+        </div>
       </div>
     </div>
   </NuxtLayout>
@@ -88,7 +90,7 @@ const runStore = useRunStore();
 
 const { selectedGoldStandard } = storeToRefs(runStore);
 
-const pageSize = ref(10);
+const pageSize = ref(5);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 
