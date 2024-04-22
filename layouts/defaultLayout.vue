@@ -94,7 +94,7 @@
           </div>
           <div class="flex w-3/12">
             <div class="flex">
-              <label class="swap-rotate swap">
+              <label class="swap swap-rotate">
                 <input type="checkbox" />
                 <OhVueIcon
                   class="h-5 w-5 fill-current"
@@ -146,6 +146,7 @@
 
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
+import { useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { BiMoonFill, BiSunFill } from "oh-vue-icons/icons";
 import { useTitle } from "~/composables/title";
@@ -191,7 +192,7 @@ const changeGoldStandard = async (event: Event) => {
   }
 };
 
-const changeRun = (event: Event) => {
+const changeRun = async (event: Event) => {
   const target = event.target as HTMLSelectElement;
   const runId = Number(target.value);
   const link = ["/corpora", corpus.value.identifier, "runs", runId];
@@ -202,5 +203,6 @@ const changeRun = (event: Event) => {
 };
 
 const colorMode = useColorMode();
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const themes = ["dark", "light"];
 </script>
