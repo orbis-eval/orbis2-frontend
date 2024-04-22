@@ -12,9 +12,9 @@
               />
             </NuxtLink>
             <div class="ml-4 text-lg">
-              <NuxtLink :to="homeLink" class="whitespace-nowrap">{{
-                title
-              }}</NuxtLink>
+              <NuxtLink :to="homeLink" class="whitespace-nowrap"
+                >{{ title }}
+              </NuxtLink>
             </div>
           </div>
           <div class="flex w-6/12 justify-center">
