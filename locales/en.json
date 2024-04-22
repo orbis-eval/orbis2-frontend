@@ -11,7 +11,7 @@
   "content": "Content",
   "name": "Name",
   "description": "Description",
-  "listOfRuns": "List of runs",
+  "overview": "Overview",
   "navbar": {
     "compareWith": "Compare with"
   },

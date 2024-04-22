@@ -22,6 +22,11 @@
       </MenuItem>
       <ul class="absolut menu inset-y-0 left-0 p-0">
         <MenuSubItem
+          :url="`/corpora/${corpus.identifier}/gold-standard`"
+          :text="$t('overview')"
+          :validator="'corpusId' in route.params"
+        />
+        <MenuSubItem
           :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/`"
           :text="$t('documents')"
           :validator="'goldStandardId' in route.params"
@@ -44,7 +49,7 @@
       <ul class="absolut menu inset-y-0 left-0 p-0">
         <MenuSubItem
           :url="`/corpora/${corpus.identifier}/runs`"
-          :text="$t('listOfRuns')"
+          :text="$t('overview')"
           :validator="'corpusId' in route.params"
         />
         <MenuSubItem
