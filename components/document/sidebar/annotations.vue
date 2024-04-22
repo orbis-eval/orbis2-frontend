@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 overflow-auto p-4">
     <div class="mb-2 text-lg font-bold">{{ $t("annotations") }}</div>
-    <div v-if="isRun" role="tablist" class="tabs-boxed tabs">
+    <div v-if="isRun" role="tablist" class="tabs tabs-boxed">
       <a
         @click="activeAnnotationTab = 'all'"
         role="tab"
@@ -138,11 +138,4 @@ const getNodes = (nodes: NestedSetNode[]) => {
   }
   return nodes;
 };
-
-/*:class="
-nestedSetNode.identifier === selectedAnnotation?.identifier
-    ? 'bg-gray-500'
-    : 'bg-gray-700'
-"*/
-
 </script>
