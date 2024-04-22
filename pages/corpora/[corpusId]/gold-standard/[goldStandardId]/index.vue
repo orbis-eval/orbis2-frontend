@@ -18,7 +18,9 @@
           </OrbisButton>
         </h1>
 
-        <h2 class="mb-5 text-2xl dark:text-white">{{ $t("documents") }}</h2>
+        <h2 class="mb-5 text-2xl text-black dark:text-white">
+          {{ $t("documents") }}
+        </h2>
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
