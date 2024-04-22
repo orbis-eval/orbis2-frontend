@@ -97,29 +97,30 @@
               </option>
             </select>
           </div>
-          <div class="flex w-2/12"></div>
-          <div class="flex w-1/12 justify-end gap-4">
+          <div v-else class="flex w-6/12 justify-center"></div>
+          <div class="flex w-1/12"></div>
+          <div class="flex w-2/12 justify-end gap-4">
             <div class="flex">
               <label class="swap swap-rotate">
                 <input type="checkbox" />
                 <OhVueIcon
-                  class="h-5 w-5 fill-current"
-                  v-if="$colorMode.preference === themes[1]"
-                  @click="$colorMode.preference = themes[0]"
-                  name="bi-moon-fill"
+                    class="h-5 w-5 fill-current"
+                    v-if="$colorMode.preference === themes[1]"
+                    @click="$colorMode.preference = themes[0]"
+                    name="bi-moon-fill"
                 />
                 <OhVueIcon
-                  class="h-5 w-5 fill-current"
-                  v-else
-                  @click="$colorMode.preference = themes[1]"
-                  name="bi-sun-fill"
+                    class="h-5 w-5 fill-current"
+                    v-else
+                    @click="$colorMode.preference = themes[1]"
+                    name="bi-sun-fill"
                 />
               </label>
             </div>
             <div class="flex">
               <select
-                v-model="$i18n.locale"
-                class="select select-ghost w-full max-w-xs"
+                  v-model="$i18n.locale"
+                  class="select select-ghost w-full max-w-xs"
               >
                 <option value="en">English</option>
                 <option value="de">Deutsch</option>

@@ -106,6 +106,6 @@ const runStore = useRunStore();
 const { selectedGoldStandard, selectedRun } = storeToRefs(runStore);
 
 const showMenuSubItems = computed(() => {
-  return route.params.corpusId
+  return route.params.corpusId;
 });
 </script>
