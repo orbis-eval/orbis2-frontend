@@ -19,7 +19,10 @@
               </NuxtLink>
             </div>
           </div>
-          <div class="flex w-6/12 justify-center">
+          <div
+            v-if="showComparisonComponent"
+            class="flex w-6/12 justify-center"
+          >
             <div
               class="flex items-center"
               v-if="
@@ -183,6 +186,10 @@ const isGoldStandardSelectDisabled = computed(() => {
 
 const isRunSelectDisabled = computed(() => {
   return !corpus.value.identifier;
+});
+
+const showComparisonComponent = computed(() => {
+  return (route.name as string).includes("corpora-corpusId-runs-runId");
 });
 
 const changeGoldStandard = async (event: Event) => {
