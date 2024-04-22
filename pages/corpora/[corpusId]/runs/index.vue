@@ -34,9 +34,13 @@
 
           <tbody v-for="run in runs" :key="run.identifier">
             <tr
-              class="hover"
+              class="hover cursor-pointer"
               :class="run.justCreated ? 'just-created' : ''"
-              @click="selectedRun = run"
+              @click="
+                router.push(
+                  `/corpora/${corpus.identifier}/runs/${run.identifier}`,
+                )
+              "
             >
               <th>
                 <nuxt-link
@@ -106,6 +110,7 @@ import { Run } from "~/lib/model/run";
 
 addIcons(MdKeyboardarrowdown, BiPlayFill, HiClipboardList, MdDeleteforever);
 
+const router = useRouter();
 const { openModal } = useModal();
 
 const corpusStore = useCorpusStore();
