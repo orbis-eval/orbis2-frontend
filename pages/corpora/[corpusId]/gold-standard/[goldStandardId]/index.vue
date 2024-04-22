@@ -20,7 +20,7 @@
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
-          class="table text-white"
+          class="table text-white table-sm"
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
@@ -90,7 +90,7 @@ const runStore = useRunStore();
 
 const { selectedGoldStandard } = storeToRefs(runStore);
 
-const pageSize = ref(10);
+const pageSize = ref(5);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 

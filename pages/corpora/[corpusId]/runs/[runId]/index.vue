@@ -15,7 +15,7 @@
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
-          class="table text-white"
+          class="table text-white table-sm"
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
@@ -47,7 +47,7 @@
               <td class="py-1 pr-5">
                 {{ document.identifier }}
               </td>
-              <td class="pr-5">{{ document.content.substring(0, 100) }}...</td>
+              <td class="pr-5">{{ document.content.substring(0, 50) }}...</td>
               <td
                 v-for="(value, index) in getInterRaterAgreement(
                   document.interRaterAgreement,
@@ -99,7 +99,7 @@ const runStore = useRunStore();
 
 const { selectedRun } = storeToRefs(runStore);
 
-const pageSize = ref(10);
+const pageSize = ref(5);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 

@@ -11,7 +11,7 @@
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
-          class="table text-white"
+          class="table text-white table-sm"
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
@@ -85,7 +85,7 @@ const { onError } = useMessageToastService();
 const documentStore = useDocumentStore();
 const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 
-const pageSize = ref(10);
+const pageSize = ref(5);
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
