@@ -18,7 +18,10 @@
           </OrbisButton>
         </div>
         <div class="divider"></div>
-        <table aria-label="List of runs in corpus" class="table text-white">
+        <table
+          aria-label="List of runs in corpus"
+          class="table table-sm text-white"
+        >
           <thead class="text-left">
             <tr class="text-lg text-white">
               <th class="px-1">#</th>
