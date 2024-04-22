@@ -5,7 +5,9 @@
     </template>
     <LoadingSpinner v-if="loading" class="mt-20" />
     <div v-else class="flex h-full flex-col">
-      <div class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 p-6">
+      <div
+        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 p-6"
+      >
         <h1 class="mb-3 text-3xl text-white">{{ $t("allDocuments") }}</h1>
         <div class="divider"></div>
         <table
