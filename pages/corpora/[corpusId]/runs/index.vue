@@ -53,7 +53,7 @@
         </div>
         <div class="divider"></div>
         <table aria-label="List of runs in corpus" class="table table-sm">
-          <thead class="text-left text-black">
+          <thead class="text-left text-black dark:text-white">
             <tr class="text-lg">
               <th class="px-1">#</th>
               <th>Name</th>
