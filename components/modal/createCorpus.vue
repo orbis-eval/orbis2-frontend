@@ -10,7 +10,7 @@
         <label class="mb-1 block">{{ $t("name") }}:</label>
         <Field
           :class="errors.corpusName ? 'input-bordered input-error' : ''"
-          class="input mb-2 w-full bg-white"
+          class="input mb-2 w-full bg-gray-100 dark:bg-white"
           name="corpusName"
           type="text"
         />
