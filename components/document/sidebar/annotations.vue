@@ -1,26 +1,26 @@
 <template>
   <div class="flex-1 overflow-auto p-4">
     <div class="mb-2 text-lg font-bold">{{ $t("annotations") }}</div>
-    <div v-if="isRun" role="tablist" class="tabs tabs-boxed">
+    <div v-if="isRun" role="tablist" class="-boxed-tabs tabs">
       <a
-        @click="activeAnnotationTab = 'all'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'all' ? 'tab-active' : ''"
+        @click="activeAnnotationTab = 'all'"
         >All ({{ nestedSetRootNode?.allAnnotationNodes()?.length || 0 }})</a
       >
       <a
-        @click="activeAnnotationTab = 'tp'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'tp' ? 'tab-active' : ''"
+        @click="activeAnnotationTab = 'tp'"
         >TP ({{ currentDocument.scoring.tp.length || 0 }})</a
       >
       <a
-        @click="activeAnnotationTab = 'fp'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'fp' ? 'tab-active' : ''"
+        @click="activeAnnotationTab = 'fp'"
         >FP ({{ currentDocument.scoring.fp.length || 0 }})</a
       >
     </div>
