@@ -22,13 +22,13 @@
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
-              <th class="px-1">#</th>
               <th>Name</th>
               <th>Gold Standard Version</th>
               <th>Kappa Macro</th>
               <th>Kappa Micro</th>
               <th>Average Macro F1</th>
               <th>Average Micro F1</th>
+              <th>Action</th>
             </tr>
           </thead>
 
@@ -38,14 +38,6 @@
               :class="run.justCreated ? 'just-created' : ''"
               @click="selectedRun = run"
             >
-              <td class="px-1">
-                <input
-                  class="radio"
-                  type="radio"
-                  v-model="selectedRun"
-                  :value="run"
-                />
-              </td>
               <th>
                 <nuxt-link
                   :to="`/corpora/${corpus.identifier}/runs/${run.identifier}`"
@@ -81,6 +73,11 @@
                 :key="index"
               >
                 {{ value !== null ? value.toFixed(2) : "-" }}
+              </td>
+              <td>
+                <OrbisButton @click="() => deleteRun(run)" size="sm">
+                  <OhVueIcon name="md-deleteforever" class="menu-icon" />
+                </OrbisButton>
               </td>
             </tr>
           </tbody>
@@ -125,14 +122,8 @@ const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   }
 };
 
-const selectedRun = ref<Run | null>(null);
-
-const deleteSelectedRun = () => {
-  if (selectedRun.value) {
-    const run = toRaw(selectedRun.value);
-    selectedRun.value = null;
-    openModal(ModalDeleteRun, run);
-  }
+const deleteRun = (run: Run) => {
+  openModal(ModalDeleteRun, run);
 };
 
 runs.value.forEach((run) => {
