@@ -98,14 +98,14 @@
                 <input type="checkbox" />
                 <OhVueIcon
                   class="h-5 w-5 fill-current"
-                  v-if="$colorMode.preference === 'light'"
-                  @click="$colorMode.preference = 'dark'"
+                  v-if="$colorMode.preference === themes[1]"
+                  @click="$colorMode.preference = themes[0]"
                   name="bi-moon-fill"
                 />
                 <OhVueIcon
                   class="h-5 w-5 fill-current"
                   v-else
-                  @click="$colorMode.preference = 'light'"
+                  @click="$colorMode.preference = themes[1]"
                   name="bi-sun-fill"
                 />
               </label>
@@ -146,7 +146,6 @@
 
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
-import { useColorMode } from "@vueuse/core";
 import { storeToRefs } from "pinia";
 import { BiMoonFill, BiSunFill } from "oh-vue-icons/icons";
 import { useTitle } from "~/composables/title";
@@ -154,6 +153,8 @@ import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 
 addIcons(BiMoonFill, BiSunFill);
+
+const themes = ["dark", "light"];
 
 const route = useRoute();
 
@@ -201,8 +202,4 @@ const changeRun = async (event: Event) => {
   }
   await navigateTo(link.join("/"));
 };
-
-const colorMode = useColorMode();
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const themes = ["dark", "light"];
 </script>
