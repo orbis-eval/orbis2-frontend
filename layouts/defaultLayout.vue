@@ -98,14 +98,14 @@
                 <input type="checkbox" />
                 <OhVueIcon
                   class="h-5 w-5 fill-current"
-                  v-if="colorMode.preference === 'light'"
-                  @click="colorMode.preference = 'dark'"
+                  v-if="$colorMode.preference === 'light'"
+                  @click="$colorMode.preference = 'dark'"
                   name="bi-moon-fill"
                 />
                 <OhVueIcon
                   class="h-5 w-5 fill-current"
                   v-else
-                  @click="colorMode.preference = 'light'"
+                  @click="$colorMode.preference = 'light'"
                   name="bi-sun-fill"
                 />
               </label>
