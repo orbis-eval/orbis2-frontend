@@ -9,12 +9,10 @@
       >
         <div class="mb-5 flex items-center gap-5">
           <h1 class="text-3xl text-white">Runs</h1>
-          <OrbisButton :on-click="() => openModal(ModalCreateRun)"
-            >{{ $t("run.addRun") }}
-          </OrbisButton>
-          <OrbisButton :disabled="!selectedRun" @click="deleteSelectedRun">
-            <OhVueIcon name="md-deleteforever" class="menu-icon" />
-            {{ $t("run.deleteRun") }}
+        </div>
+        <div class="mb-5 flex items-center gap-5">
+          <OrbisButton :on-click="() => openModal(ModalCreateRun)">
+            {{ $t("run.addRun") }}
           </OrbisButton>
         </div>
         <div class="divider"></div>
