@@ -1,6 +1,6 @@
 <template>
-  <div class="flex h-screen flex-col overflow-hidden bg-base-200">
-    <header class="sticky top-0 z-10 col-span-full bg-base-300">
+  <div class="flex h-screen flex-col overflow-hidden">
+    <header class="sticky top-0 z-10 col-span-full bg-base-200">
       <div class="px-4 py-2">
         <div class="flex">
           <div class="flex w-3/12 flex-row items-center">

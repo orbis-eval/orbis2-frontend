@@ -1,8 +1,8 @@
 <template>
   <div
-    class="relative flex h-full flex-col items-center justify-start border-r-2 border-gray-600"
+    class="relative flex h-full flex-col items-center justify-start border-r-2 border-gray-600 bg-gray-200 dark:bg-neutral"
   >
-    <ul class="absolut menu inset-y-0 left-0 bg-base-100 p-0 pt-5">
+    <ul class="absolut menu inset-y-0 left-0 p-0 pt-5">
       <MenuItem :url="`/`" :text="$t('corpus.corpora')" :validator="true">
         <OhVueIcon name="hi-database" class="menu-icon" />
       </MenuItem>
