@@ -1,9 +1,23 @@
 <template>
   <button
+    v-if="isFormButton"
     :disabled="disabled || isLoading || isFormLoading"
     :class="classesAsString"
-    :type="isFormButton ? 'submit' : 'button'"
+    type="submit"
     @click="clickEvent"
+  >
+    <span
+      v-if="isLoading || isFormLoading"
+      class="loading loading-spinner h-4 w-4"
+    ></span>
+    <slot></slot>
+  </button>
+  <button
+    v-else
+    :disabled="disabled || isLoading || isFormLoading"
+    :class="classesAsString"
+    type="button"
+    @click.stop.prevent="clickEvent"
   >
     <span
       v-if="isLoading || isFormLoading"

@@ -9,13 +9,46 @@
       >
         <div class="mb-5 flex items-center gap-5">
           <h1 class="text-3xl text-white">Runs</h1>
-          <OrbisButton :on-click="() => openModal(ModalCreateRun)"
-            >{{ $t("run.addRun") }}
+        </div>
+        <div class="mb-5 flex items-center gap-5">
+          <OrbisButton :on-click="() => openModal(ModalCreateRun)">
+            {{ $t("run.addRun") }}
           </OrbisButton>
-          <OrbisButton :disabled="!selectedRun" @click="deleteSelectedRun">
-            <OhVueIcon name="md-deleteforever" class="menu-icon" />
-            {{ $t("run.deleteRun") }}
-          </OrbisButton>
+          <div class="dropdown">
+            <div tabindex="0" role="button" class="btn">
+              <OhVueIcon name="fa-filter" class="menu-icon" />
+              {{ $t("filters") }}
+              <span v-if="numActiveFilters"
+                >- {{ numActiveFilters }} Active</span
+              >
+            </div>
+            <div
+              tabindex="0"
+              class="min-w-10 menu dropdown-content z-[1] mt-2 rounded-lg bg-base-100 p-2 shadow"
+            >
+              <b>Gold Standard Version</b>
+              <div class="divider my-0"></div>
+
+              <select
+                v-model="filterGoldStandard"
+                class="select select-sm max-w-xs"
+              >
+                <option :value="null">{{ $t("noFilter") }}</option>
+                <option
+                  v-for="goldStandard in goldStandards"
+                  :key="goldStandard.identifier"
+                  :value="goldStandard"
+                >
+                  {{ goldStandard.name }}
+                </option>
+              </select>
+
+              <div class="divider my-0"></div>
+              <OrbisButton :on-click="clearFilters" size="sm">
+                {{ $t("clearAllFilters") }}
+              </OrbisButton>
+            </div>
+          </div>
         </div>
         <div class="divider"></div>
         <table
@@ -24,30 +57,26 @@
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
-              <th class="px-1">#</th>
               <th>Name</th>
               <th>Gold Standard Version</th>
               <th>Kappa Macro</th>
               <th>Kappa Micro</th>
               <th>Average Macro F1</th>
               <th>Average Micro F1</th>
+              <th>{{ $t("run.action") }}</th>
             </tr>
           </thead>
 
-          <tbody v-for="run in runs" :key="run.identifier">
+          <tbody v-for="run in filteredRuns" :key="run.identifier">
             <tr
-              class="hover"
+              class="hover cursor-pointer"
               :class="run.justCreated ? 'just-created' : ''"
-              @click="selectedRun = run"
+              @click="
+                router.push(
+                  `/corpora/${corpus.identifier}/runs/${run.identifier}`,
+                )
+              "
             >
-              <td class="px-1">
-                <input
-                  class="radio"
-                  type="radio"
-                  v-model="selectedRun"
-                  :value="run"
-                />
-              </td>
               <th>
                 <nuxt-link
                   :to="`/corpora/${corpus.identifier}/runs/${run.identifier}`"
@@ -55,26 +84,7 @@
                 </nuxt-link>
               </th>
               <td>
-                <div
-                  v-if="
-                    run.currentGoldStandard &&
-                    run.currentGoldStandard.identifier ==
-                      selectedGoldStandard.identifier
-                  "
-                  class="badge badge-warning"
-                >
-                  {{ run.currentGoldStandard.name }}
-                </div>
-                <div
-                  v-if="
-                    run.currentGoldStandard &&
-                    run.currentGoldStandard.identifier !=
-                      selectedGoldStandard.identifier
-                  "
-                >
-                  {{ run.currentGoldStandard.name }}
-                </div>
-                <div v-if="!run.currentGoldStandard">-</div>
+                <div>{{ run.currentGoldStandard?.name }}</div>
               </td>
               <td
                 v-for="(value, index) in getInterRaterAgreement(
@@ -83,6 +93,14 @@
                 :key="index"
               >
                 {{ value !== null ? value.toFixed(2) : "-" }}
+              </td>
+              <td>
+                <OrbisButton :on-click="() => deleteRun(run)" size="sm">
+                  <OhVueIcon
+                    name="md-deleteforever-outlined"
+                    class="menu-icon"
+                  />
+                </OrbisButton>
               </td>
             </tr>
           </tbody>
@@ -97,8 +115,9 @@ import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
   BiPlayFill,
   HiClipboardList,
-  MdDeleteforever,
+  MdDeleteforeverOutlined,
   MdKeyboardarrowdown,
+  FaFilter,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
@@ -109,15 +128,22 @@ import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 import OrbisButton from "~/components/orbis/orbisButton.vue";
 import { Run } from "~/lib/model/run";
 
-addIcons(MdKeyboardarrowdown, BiPlayFill, HiClipboardList, MdDeleteforever);
+addIcons(
+  MdKeyboardarrowdown,
+  BiPlayFill,
+  HiClipboardList,
+  MdDeleteforeverOutlined,
+  FaFilter,
+);
 
+const router = useRouter();
 const { openModal } = useModal();
 
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { runs, selectedGoldStandard } = storeToRefs(runStore);
+const { runs, goldStandards } = storeToRefs(runStore);
 
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   if (interRaterAgreement) {
@@ -127,18 +153,38 @@ const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   }
 };
 
-const selectedRun = ref<Run | null>(null);
-
-const deleteSelectedRun = () => {
-  if (selectedRun.value) {
-    const run = toRaw(selectedRun.value);
-    selectedRun.value = null;
-    openModal(ModalDeleteRun, run);
-  }
+const deleteRun = (run: Run) => {
+  openModal(ModalDeleteRun, run);
 };
 
 runs.value.forEach((run) => {
   run.justCreated = false;
+});
+
+/*
+ * Filters
+ */
+const filterGoldStandard = ref<Run | null>(null);
+const filteredRuns = computed(() => {
+  if (filterGoldStandard.value) {
+    return runs.value.filter(
+      (run) =>
+        run.currentGoldStandard?.identifier ===
+        filterGoldStandard.value?.identifier,
+    );
+  } else {
+    return runs.value;
+  }
+});
+const clearFilters = () => {
+  filterGoldStandard.value = null;
+};
+const numActiveFilters = computed(() => {
+  let count = 0;
+  if (filterGoldStandard.value) {
+    count++;
+  }
+  return count;
 });
 </script>
 
