@@ -26,7 +26,7 @@ export default defineNuxtConfig({
         class: "h-full",
       },
       htmlAttrs: {
-        class: "h-full bg-gray-100",
+        class: "h-full",
       },
       link: [
         {
