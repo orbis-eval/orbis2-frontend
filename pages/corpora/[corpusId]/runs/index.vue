@@ -14,6 +14,41 @@
           <OrbisButton :on-click="() => openModal(ModalCreateRun)">
             {{ $t("run.addRun") }}
           </OrbisButton>
+          <div class="dropdown">
+            <div tabindex="0" role="button" class="btn">
+              <OhVueIcon name="fa-filter" class="menu-icon" />
+              {{ $t("filters") }}
+              <span v-if="numActiveFilters"
+                >- {{ numActiveFilters }} Active</span
+              >
+            </div>
+            <div
+              tabindex="0"
+              class="min-w-10 menu dropdown-content z-[1] mt-2 rounded-lg bg-base-100 p-2 shadow"
+            >
+              <b>Gold Standard Version</b>
+              <div class="divider my-0"></div>
+
+              <select
+                v-model="filterGoldStandard"
+                class="select select-sm max-w-xs"
+              >
+                <option :value="null">{{ $t("noFilter") }}</option>
+                <option
+                  v-for="goldStandard in goldStandards"
+                  :key="goldStandard.identifier"
+                  :value="goldStandard"
+                >
+                  {{ goldStandard.name }}
+                </option>
+              </select>
+
+              <div class="divider my-0"></div>
+              <OrbisButton :on-click="clearFilters" size="sm">
+                {{ $t("clearAllFilters") }}
+              </OrbisButton>
+            </div>
+          </div>
         </div>
         <div class="divider"></div>
         <table
@@ -28,11 +63,11 @@
               <th>Kappa Micro</th>
               <th>Average Macro F1</th>
               <th>Average Micro F1</th>
-              <th>Action</th>
+              <th>{{ $t("run.action") }}</th>
             </tr>
           </thead>
 
-          <tbody v-for="run in runs" :key="run.identifier">
+          <tbody v-for="run in filteredRuns" :key="run.identifier">
             <tr
               class="hover cursor-pointer"
               :class="run.justCreated ? 'just-created' : ''"
@@ -60,7 +95,7 @@
                 {{ value !== null ? value.toFixed(2) : "-" }}
               </td>
               <td>
-                <OrbisButton @click="() => deleteRun(run)" size="sm">
+                <OrbisButton :on-click="() => deleteRun(run)" size="sm">
                   <OhVueIcon name="md-deleteforever" class="menu-icon" />
                 </OrbisButton>
               </td>
@@ -79,6 +114,7 @@ import {
   HiClipboardList,
   MdDeleteforever,
   MdKeyboardarrowdown,
+  FaFilter,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
@@ -89,7 +125,13 @@ import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 import OrbisButton from "~/components/orbis/orbisButton.vue";
 import { Run } from "~/lib/model/run";
 
-addIcons(MdKeyboardarrowdown, BiPlayFill, HiClipboardList, MdDeleteforever);
+addIcons(
+  MdKeyboardarrowdown,
+  BiPlayFill,
+  HiClipboardList,
+  MdDeleteforever,
+  FaFilter,
+);
 
 const router = useRouter();
 const { openModal } = useModal();
@@ -98,7 +140,7 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { runs } = storeToRefs(runStore);
+const { runs, goldStandards } = storeToRefs(runStore);
 
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   if (interRaterAgreement) {
@@ -114,6 +156,32 @@ const deleteRun = (run: Run) => {
 
 runs.value.forEach((run) => {
   run.justCreated = false;
+});
+
+/*
+ * Filters
+ */
+const filterGoldStandard = ref<Run | null>(null);
+const filteredRuns = computed(() => {
+  if (filterGoldStandard.value) {
+    return runs.value.filter(
+      (run) =>
+        run.currentGoldStandard?.identifier ===
+        filterGoldStandard.value?.identifier,
+    );
+  } else {
+    return runs.value;
+  }
+});
+const clearFilters = () => {
+  filterGoldStandard.value = null;
+};
+const numActiveFilters = computed(() => {
+  let count = 0;
+  if (filterGoldStandard.value) {
+    count++;
+  }
+  return count;
 });
 </script>
 

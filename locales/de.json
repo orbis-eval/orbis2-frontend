@@ -62,6 +62,7 @@
     }
   },
   "run": {
+    "action": "Aktion",
     "viewGoldStandardTitle": "Gold Standard {name}",
     "viewTitle": "Run {name}",
     "runs": "Runs",
@@ -98,5 +99,9 @@
   "selectGoldStandard": "Gold Standard auswählen",
   "goldStandard": {
     "update": "Gold Standard aktualisieren"
-  }
+  },
+  "filters": "Filter",
+  "noFilter": "Kein Filter",
+  "clearAllFilters": "Alle Filter löschen",
+  "activeFilterSuffix": "Aktiv"
 }
