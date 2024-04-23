@@ -8,7 +8,7 @@
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral"
       >
         <h1 class="mb-3 text-3xl">
-          {{ $t("run.viewTitle", { name: selectedRun.name }) }}
+          {{ $t("run.viewTitle", { name: selectedRun.cleanedName }) }}
         </h1>
 
         <h2 class="mb-5 text-2xl">{{ $t("documents") }}</h2>

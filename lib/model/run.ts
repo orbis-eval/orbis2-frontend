@@ -1,3 +1,5 @@
+import moment from "moment";
+
 import { Corpus } from "~/lib/model/corpus";
 import { Annotation } from "~/lib/model/annotation";
 import { IRun } from "~/lib/model/irun";
@@ -24,7 +26,17 @@ export class Run implements IRun {
     this.identifier = run.identifier;
     this.interRaterAgreement = run.interRaterAgreement;
     this.justCreated = run.justCreated || false;
-    this.currentGoldStandard = run.currentGoldStandard;
+    if (run.currentGoldStandard) {
+      this.currentGoldStandard = new Run(run.currentGoldStandard);
+    }
+  }
+
+  get cleanedName() {
+    return this.name.split("_").slice(0, -1).join("_");
+  }
+
+  get formattedCreatedAt() {
+    return moment(this.createdAt).format("YYYY-MM-DD HH:mm:ss");
   }
 
   toJSON() {

@@ -30,7 +30,7 @@
               "
             >
               <div class="badge badge-warning">
-                {{ selectedRun.currentGoldStandard?.name }}
+                GS Version: {{ selectedRun.currentGoldStandard?.formattedCreatedAt }}
               </div>
             </div>
             <select
@@ -55,7 +55,7 @@
                   goldStandard.identifier === selectedGoldStandard.identifier
                 "
               >
-                {{ goldStandard.name }}
+                {{ goldStandard.cleanedName }}
               </option>
             </select>
             <div
@@ -93,7 +93,7 @@
                 :value="run.identifier"
                 :selected="run.identifier === selectedRun.identifier"
               >
-                {{ run.name }}
+                {{ run.cleanedName }}
               </option>
             </select>
           </div>

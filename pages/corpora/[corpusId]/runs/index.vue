@@ -80,11 +80,11 @@
               <th>
                 <nuxt-link
                   :to="`/corpora/${corpus.identifier}/runs/${run.identifier}`"
-                  >{{ run.name }}
+                  >{{ run.cleanedName }}
                 </nuxt-link>
               </th>
               <td>
-                <div>{{ run.currentGoldStandard?.name }}</div>
+                <div>{{ run.currentGoldStandard?.formattedCreatedAt }}</div>
               </td>
               <td
                 v-for="(value, index) in getInterRaterAgreement(
