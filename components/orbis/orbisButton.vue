@@ -3,7 +3,7 @@
     :disabled="disabled || isLoading || isFormLoading"
     :class="classesAsString"
     :type="isFormButton ? 'submit' : 'button'"
-    @click="clickEvent"
+    @click.stop.prevent="clickEvent"
   >
     <span
       v-if="isLoading || isFormLoading"
