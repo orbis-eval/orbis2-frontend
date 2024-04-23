@@ -49,26 +49,7 @@
                 </nuxt-link>
               </th>
               <td>
-                <div
-                  v-if="
-                    run.currentGoldStandard &&
-                    run.currentGoldStandard.identifier ==
-                      selectedGoldStandard.identifier
-                  "
-                  class="badge badge-warning"
-                >
-                  {{ run.currentGoldStandard.name }}
-                </div>
-                <div
-                  v-if="
-                    run.currentGoldStandard &&
-                    run.currentGoldStandard.identifier !=
-                      selectedGoldStandard.identifier
-                  "
-                >
-                  {{ run.currentGoldStandard.name }}
-                </div>
-                <div v-if="!run.currentGoldStandard">-</div>
+                <div>{{ run.currentGoldStandard.name }}</div>
               </td>
               <td
                 v-for="(value, index) in getInterRaterAgreement(
