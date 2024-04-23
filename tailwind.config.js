@@ -16,7 +16,15 @@ module.exports = {
           error: "#f87272",
         },
       },
-      "light",
+      {
+        light: {
+          // eslint-disable-next-line @typescript-eslint/no-var-requires
+          ...require("daisyui/src/theming/themes")["light"],
+          "base-100": "#e5e6e6",
+          "base-200": "#dbdcdc",
+          "base-300": "#bbbebe",
+        },
+      },
     ],
   },
   darkMode: "class",
