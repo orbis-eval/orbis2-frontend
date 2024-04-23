@@ -49,7 +49,7 @@
                 </nuxt-link>
               </th>
               <td>
-                <div>{{ run.currentGoldStandard.name }}</div>
+                <div>{{ run.currentGoldStandard?.name }}</div>
               </td>
               <td
                 v-for="(value, index) in getInterRaterAgreement(
@@ -98,7 +98,7 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { runs, selectedGoldStandard } = storeToRefs(runStore);
+const { runs } = storeToRefs(runStore);
 
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   if (interRaterAgreement) {
