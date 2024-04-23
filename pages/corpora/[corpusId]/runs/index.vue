@@ -96,7 +96,7 @@
               </td>
               <td>
                 <OrbisButton :on-click="() => deleteRun(run)" size="sm">
-                  <OhVueIcon name="md-deleteforever" class="menu-icon" />
+                  <OhVueIcon name="md-deleteforever-outlined" class="menu-icon" />
                 </OrbisButton>
               </td>
             </tr>
@@ -112,7 +112,7 @@ import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
   BiPlayFill,
   HiClipboardList,
-  MdDeleteforever,
+  MdDeleteforeverOutlined,
   MdKeyboardarrowdown,
   FaFilter,
 } from "oh-vue-icons/icons";
@@ -129,7 +129,7 @@ addIcons(
   MdKeyboardarrowdown,
   BiPlayFill,
   HiClipboardList,
-  MdDeleteforever,
+  MdDeleteforeverOutlined,
   FaFilter,
 );
 
