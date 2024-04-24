@@ -4,7 +4,9 @@
       <LeftMenu />
     </template>
     <div class="flex h-full flex-col">
-      <div class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral">
+      <div
+        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral"
+      >
         <div class="mb-5 flex items-center gap-5 text-black dark:text-white">
           <h1 class="text-3xl">Runs</h1>
         </div>
@@ -55,7 +57,6 @@
         <table aria-label="List of runs in corpus" class="table table-sm">
           <thead class="text-left text-black dark:text-white">
             <tr class="text-lg">
-              <th class="px-1">#</th>
               <th>Name</th>
               <th>Gold Standard Version</th>
               <th>Kappa Macro</th>
@@ -113,10 +114,10 @@
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
   BiPlayFill,
+  FaFilter,
   HiClipboardList,
   MdDeleteforeverOutlined,
   MdKeyboardarrowdown,
-  FaFilter,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
