@@ -12,7 +12,7 @@
         <div class="divider"></div>
         <table
           aria-label="List of documents in corpus"
-          class="table text-white"
+          class="table text-black dark:text-white"
         >
           <thead class="text-left">
             <tr class="text-lg text-white">
