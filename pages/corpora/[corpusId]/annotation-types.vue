@@ -16,7 +16,7 @@
           <div
             :key="annotationType.identifier"
             v-for="annotationType in annotationTypes"
-            class="badge badge-primary"
+            class="badge badge-primary text-black"
           >
             {{ annotationType.name }}
           </div>
