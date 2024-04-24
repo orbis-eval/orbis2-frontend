@@ -10,8 +10,8 @@
         </div>
         <div class="mb-5 flex items-center gap-5">
           <OrbisButton
-            class="bg-gray-300 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
             :on-click="() => openModal(ModalCreateRun)"
+            class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
           >
             {{ $t("run.addRun") }}
           </OrbisButton>
