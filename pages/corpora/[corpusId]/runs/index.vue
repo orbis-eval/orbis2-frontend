@@ -4,7 +4,7 @@
       <LeftMenu />
     </template>
     <div class="flex h-full flex-col">
-      <div class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-200 p-6 dark:bg-neutral">
+      <div class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral">
         <div class="mb-5 flex items-center gap-5 text-black dark:text-white">
           <h1 class="text-3xl">Runs</h1>
         </div>

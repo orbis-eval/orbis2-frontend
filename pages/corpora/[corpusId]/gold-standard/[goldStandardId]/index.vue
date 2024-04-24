@@ -22,11 +22,8 @@
           {{ $t("documents") }}
         </h2>
         <div class="divider"></div>
-        <table
-          aria-label="List of documents in corpus"
-          class="table table-sm text-black dark:text-white"
-        >
-          <thead class="text-left">
+        <table aria-label="List of documents in corpus" class="table table-sm">
+          <thead class="text-left text-black dark:text-white">
             <tr class="text-lg">
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>

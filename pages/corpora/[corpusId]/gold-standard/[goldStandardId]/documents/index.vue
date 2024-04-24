@@ -8,14 +8,13 @@
       <div
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral"
       >
-        <h1 class="mb-3 text-3xl text-white">{{ $t("allDocuments") }}</h1>
+        <h1 class="mb-3 text-3xl text-black dark:text-white">
+          {{ $t("allDocuments") }}
+        </h1>
         <div class="divider"></div>
-        <table
-          aria-label="List of documents in corpus"
-          class="table text-black dark:text-white"
-        >
-          <thead class="text-left">
-            <tr class="text-lg text-white">
+        <table aria-label="List of documents in corpus" class="table">
+          <thead class="text-left text-black dark:text-white">
+            <tr class="text-lg text-black dark:text-white">
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>
