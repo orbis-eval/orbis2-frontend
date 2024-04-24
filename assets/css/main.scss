@@ -4,6 +4,7 @@
 body {
   cursor: default;
   user-select: none;
+  @apply bg-gray-100 dark:bg-base-100;
 }
 
 /**
@@ -82,7 +83,7 @@ body {
  */
 
 .content-card {
-  @apply card bg-base-200 dark:bg-base-300 shadow-xl;
+  @apply card bg-base-300 dark:bg-base-300 shadow-xl;
 }
 
 .content-card-title {
