@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative flex h-full flex-col items-center justify-start border-r-2 border-gray-600 bg-base-300 dark:bg-neutral"
+    class="relative flex h-full flex-col items-center justify-start border-r-2 border-gray-600 bg-base-200 dark:bg-neutral"
   >
     <ul class="absolut menu inset-y-0 left-0 p-0 pt-5">
       <MenuItem :url="`/`" :text="$t('corpus.corpora')" :validator="true">
