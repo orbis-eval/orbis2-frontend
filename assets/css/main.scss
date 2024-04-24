@@ -83,7 +83,7 @@ body {
  */
 
 .content-card {
-  @apply card bg-base-300 dark:bg-base-300 shadow-xl;
+  @apply card bg-base-300 shadow-xl dark:bg-base-300;
 }
 
 .content-card-title {
