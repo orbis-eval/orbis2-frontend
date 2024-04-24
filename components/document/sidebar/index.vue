@@ -1,6 +1,6 @@
 <template>
   <div id="document-sidebar" class="flex h-full flex-col">
-    <div class="flex h-full w-full flex-col pt-4">
+    <div class="flex h-full w-full flex-col bg-base-200 pt-4 dark:bg-gray-800">
       <DocumentSidebarSelectionInfo></DocumentSidebarSelectionInfo>
 
       <!--<DocumentSidebarCommands></DocumentSidebarCommands>-->
