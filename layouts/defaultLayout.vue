@@ -1,6 +1,8 @@
 <template>
-  <div class="flex h-screen flex-col overflow-hidden bg-base-100">
-    <header class="sticky top-0 z-10 col-span-full bg-base-200 text-gray-200">
+  <div class="flex h-screen flex-col overflow-hidden">
+    <header
+      class="sticky top-0 z-10 col-span-full bg-base-300 dark:bg-base-200"
+    >
       <div class="px-4 py-2">
         <div class="flex">
           <div class="flex w-3/12 flex-row items-center">
@@ -12,9 +14,9 @@
               />
             </NuxtLink>
             <div class="ml-4 text-lg">
-              <NuxtLink :to="homeLink" class="whitespace-nowrap">{{
-                title
-              }}</NuxtLink>
+              <NuxtLink :to="homeLink" class="whitespace-nowrap"
+                >{{ title }}
+              </NuxtLink>
             </div>
           </div>
           <div class="flex w-6/12 justify-center">
@@ -92,15 +94,33 @@
               </option>
             </select>
           </div>
-          <div class="flex w-2/12"></div>
-          <div class="flex w-1/12">
-            <select
-              v-model="$i18n.locale"
-              class="select select-ghost w-full max-w-xs"
-            >
-              <option value="en">English</option>
-              <option value="de">Deutsch</option>
-            </select>
+          <div class="flex w-3/12 justify-end gap-4">
+            <div class="flex">
+              <label class="swap swap-rotate">
+                <input type="checkbox" />
+                <OhVueIcon
+                  class="h-5 w-5 fill-current"
+                  v-if="$colorMode.preference === themes[1]"
+                  @click="$colorMode.preference = themes[0]"
+                  name="bi-moon-fill"
+                />
+                <OhVueIcon
+                  class="h-5 w-5 fill-current"
+                  v-else
+                  @click="$colorMode.preference = themes[1]"
+                  name="bi-sun-fill"
+                />
+              </label>
+            </div>
+            <div class="flex">
+              <select
+                v-model="$i18n.locale"
+                class="select select-ghost w-full max-w-xs"
+              >
+                <option value="en">English</option>
+                <option value="de">Deutsch</option>
+              </select>
+            </div>
           </div>
         </div>
       </div>
@@ -127,10 +147,16 @@
 </template>
 
 <script setup lang="ts">
+import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { storeToRefs } from "pinia";
+import { BiMoonFill, BiSunFill } from "oh-vue-icons/icons";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
+
+addIcons(BiMoonFill, BiSunFill);
+
+const themes = ["dark", "light"];
 
 const route = useRoute();
 

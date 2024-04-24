@@ -1,26 +1,26 @@
 <template>
   <div class="flex-1 overflow-auto p-4">
     <div class="mb-2 text-lg font-bold">{{ $t("annotations") }}</div>
-    <div v-if="isRun" role="tablist" class="tabs-boxed tabs">
+    <div v-if="isRun" role="tablist" class="-boxed-tabs tabs">
       <a
-        @click="activeAnnotationTab = 'all'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'all' ? 'tab-active' : ''"
+        @click="activeAnnotationTab = 'all'"
         >All ({{ nestedSetRootNode?.allAnnotationNodes()?.length || 0 }})</a
       >
       <a
-        @click="activeAnnotationTab = 'tp'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'tp' ? 'tab-active' : ''"
+        @click="activeAnnotationTab = 'tp'"
         >TP ({{ currentDocument.scoring.tp.length || 0 }})</a
       >
       <a
-        @click="activeAnnotationTab = 'fp'"
         role="tab"
         class="tab"
         :class="activeAnnotationTab == 'fp' ? 'tab-active' : ''"
+        @click="activeAnnotationTab = 'fp'"
         >FP ({{ currentDocument.scoring.fp.length || 0 }})</a
       >
     </div>
@@ -33,12 +33,7 @@
         @click="annotationStore.setSelectedAnnotation(nestedSetNode)"
       >
         <div
-          :class="
-            nestedSetNode.identifier === selectedAnnotation?.identifier
-              ? 'bg-gray-500'
-              : 'bg-gray-700'
-          "
-          class="flex cursor-pointer items-center rounded p-2 hover:bg-gray-500"
+          class="flex cursor-default items-center rounded p-2 hover:bg-gray-400 dark:hover:bg-gray-700"
           @mouseleave="
             emit('setHighlightNestedSetNode', [selectedAnnotation?.identifier])
           "

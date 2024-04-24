@@ -3,7 +3,7 @@
     <OrbisButton
       :disabled="isUndoDisabled"
       :on-click="undoAnnotation"
-      class="mr-4"
+      class="mr-4 bg-base-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-800"
     >
       <OhVueIcon name="la-undo-alt-solid" />
     </OrbisButton>

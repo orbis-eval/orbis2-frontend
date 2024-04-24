@@ -1,12 +1,12 @@
 <template>
   <div
-    class="relative flex h-full flex-col items-center justify-start border-r-2 border-gray-600 bg-neutral"
+    class="relative flex h-full flex-col items-center justify-start border-r-2 border-gray-600 bg-base-200 dark:bg-neutral"
   >
-    <ul class="absolut menu inset-y-0 left-0 bg-neutral p-0 pt-5">
+    <ul class="absolut menu inset-y-0 left-0 p-0 pt-5">
       <MenuItem :url="`/`" :text="$t('corpus.corpora')" :validator="true">
         <OhVueIcon name="hi-database" class="menu-icon" />
       </MenuItem>
-      <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
+      <ul class="absolut menu inset-y-0 left-0 p-0">
         <MenuSubItem
           :url="`/corpora/${corpus.identifier}/annotation-types/`"
           :text="$t('annotationTypes')"
@@ -20,7 +20,7 @@
       >
         <OhVueIcon name="bi-journal-bookmark-fill" class="menu-icon" />
       </MenuItem>
-      <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
+      <ul class="absolut menu inset-y-0 left-0 p-0">
         <MenuSubItem
           :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/`"
           :text="$t('documents')"
@@ -41,7 +41,7 @@
       >
         <OhVueIcon name="bi-journal-text" class="menu-icon" />
       </MenuItem>
-      <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
+      <ul class="absolut menu inset-y-0 left-0 p-0">
         <MenuSubItem
           :url="`/corpora/${corpus.identifier}/runs`"
           :text="$t('listOfRuns')"

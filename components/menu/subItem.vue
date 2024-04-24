@@ -3,11 +3,9 @@
     <NuxtLink
       :to="url"
       class="rounded-none py-1 pl-12"
-      active-class="bg-gray-500"
+      active-class="bg-gray-600 text-white"
     >
-      <span :class="['text-xs', 'whitespace-nowrap', 'text-white']">{{
-        text
-      }}</span>
+      <span class="whitespace-nowrap text-xs"> {{ text }}</span>
     </NuxtLink>
   </li>
 </template>

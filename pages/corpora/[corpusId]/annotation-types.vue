@@ -5,9 +5,9 @@
     </template>
     <div class="flex h-full flex-col">
       <div
-        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
+        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 p-6 dark:bg-neutral"
       >
-        <h1 class="mb-3 text-3xl text-white">
+        <h1 class="mb-3 text-3xl text-black dark:text-white">
           {{ $t("annotationTypes") }}
         </h1>
 

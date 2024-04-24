@@ -1,8 +1,12 @@
 <template>
   <li :class="validator ? '' : 'disabled-link'">
-    <NuxtLink :to="url" class="rounded-none" active-class="bg-gray-500">
+    <NuxtLink
+      :to="url"
+      class="rounded-none"
+      active-class="bg-gray-700 text-white"
+    >
       <slot></slot>
-      <span :class="['whitespace-nowrap', 'text-white']">{{ text }}</span>
+      <span class="whitespace-nowrap">{{ text }}</span>
     </NuxtLink>
   </li>
 </template>

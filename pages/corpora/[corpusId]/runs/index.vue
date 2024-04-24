@@ -5,13 +5,16 @@
     </template>
     <div class="flex h-full flex-col">
       <div
-        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-neutral p-6"
+        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral"
       >
-        <div class="mb-5 flex items-center gap-5">
-          <h1 class="text-3xl text-white">Runs</h1>
+        <div class="mb-5 flex items-center gap-5 text-black dark:text-white">
+          <h1 class="text-3xl">Runs</h1>
         </div>
         <div class="mb-5 flex items-center gap-5">
-          <OrbisButton :on-click="() => openModal(ModalCreateRun)">
+          <OrbisButton
+            :on-click="() => openModal(ModalCreateRun)"
+            class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+          >
             {{ $t("run.addRun") }}
           </OrbisButton>
           <div class="dropdown">
@@ -51,12 +54,9 @@
           </div>
         </div>
         <div class="divider"></div>
-        <table
-          aria-label="List of runs in corpus"
-          class="table table-sm text-white"
-        >
-          <thead class="text-left">
-            <tr class="text-lg text-white">
+        <table aria-label="List of runs in corpus" class="table table-sm">
+          <thead class="text-left text-black dark:text-white">
+            <tr class="text-lg">
               <th>Name</th>
               <th>Gold Standard Version</th>
               <th>Kappa Macro</th>
@@ -114,10 +114,10 @@
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
   BiPlayFill,
+  FaFilter,
   HiClipboardList,
   MdDeleteforeverOutlined,
   MdKeyboardarrowdown,
-  FaFilter,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";

@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="runs"
-    class="mb-10 mt-20 flex items-center gap-4 rounded-xl border-2 border-gray-600 bg-neutral p-2"
+    class="mb-10 mt-20 flex items-center gap-4 rounded-xl border-2 border-gray-600 bg-neutral-100 p-2"
   >
     <details id="run_dropdown" class="dropdown">
       <summary

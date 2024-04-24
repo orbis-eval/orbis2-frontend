@@ -1,23 +1,25 @@
 <template>
   <div :class="{ annotationTypeModalHidden: !props.isVisible }">
     <div
-      class="absolute rounded-md border-2 border-gray-600 bg-gray-300"
+      class="absolute rounded-md border-2 border-gray-300 bg-gray-400 dark:border-gray-600 dark:bg-gray-700"
       :style="{ left: leftPosition + 'px', top: topPosition + 'px' }"
     >
       <div class="text-center text-2xl font-bold">
         "{{ shortenText(props.selectionSurfaceForm) }}"
       </div>
       <input
+        class="bg-gray-500 px-2 py-2 dark:bg-gray-800 dark:text-white"
         ref="filterInputField"
         v-model="filterValue"
         type="text"
-        placeholder="annotation types..."
+        placeholder="Search for annotation types..."
       />
       <ul
         class="py-2 text-sm text-gray-700 dark:text-gray-200"
         aria-labelledby="dropdownDefaultButton"
       >
         <li
+          class="text-black dark:text-white"
           v-for="annotationType in filteredAnnotationTypes"
           :key="annotationType.identifier"
           @click="annotationClicked(annotationType)"

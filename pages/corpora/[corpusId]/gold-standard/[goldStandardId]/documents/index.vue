@@ -3,28 +3,18 @@
     <template #leftMenu>
       <LeftMenu />
     </template>
-    <div class="flex h-full flex-col">
+    <LoadingSpinner v-if="loading" class="mt-20" />
+    <div v-else class="flex h-full flex-col">
       <div
         class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral"
       >
-        <h1 class="mb-3 text-3xl">
-          {{
-            $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name })
-          }}
-          <OrbisButton
-            class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-            :on-click="() => openModal(ModalUpdateGoldStandard)"
-            >Update Gold Standard
-          </OrbisButton>
+        <h1 class="mb-3 text-3xl text-black dark:text-white">
+          {{ $t("allDocuments") }}
         </h1>
-
-        <h2 class="mb-5 text-2xl text-black dark:text-white">
-          {{ $t("documents") }}
-        </h2>
         <div class="divider"></div>
-        <table aria-label="List of documents in corpus" class="table table-sm">
+        <table aria-label="List of documents in corpus" class="table">
           <thead class="text-left text-black dark:text-white">
-            <tr class="text-lg">
+            <tr class="text-lg text-black dark:text-white">
               <th>{{ $t("numberAbbreviation") }}</th>
               <th>{{ $t("id") }}</th>
               <th>{{ $t("content") }}</th>
@@ -36,10 +26,10 @@
             :key="document.identifier"
           >
             <tr
-              class="hover cursor-pointer text-black dark:text-white"
+              class="hover cursor-pointer"
               @click="
                 router.push(
-                  `/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/documents/${document.identifier}`,
+                  `/corpora/${corpus.identifier}/documents/${document.identifier}`,
                 )
               "
             >
@@ -54,15 +44,13 @@
           </tbody>
         </table>
 
-        <div class="flex justify-center">
-          <OrbisPagination
-            v-if="totalPages"
-            :current-page="currentPage"
-            :total-pages="totalPages"
-            class="my-3 text-center text-black"
-            @pageChanged="pageChanged"
-          />
-        </div>
+        <OrbisPagination
+          v-if="totalPages"
+          :current-page="currentPage"
+          :total-pages="totalPages"
+          class="text-center"
+          @pageChanged="pageChanged"
+        />
       </div>
     </div>
   </NuxtLayout>
@@ -72,32 +60,33 @@
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
+import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
-import ModalUpdateGoldStandard from "~/components/modal/updateGoldStandard.vue";
+import { useDocumentStore } from "~/stores/documentStore";
 
 addIcons(MdKeyboardarrowdown);
 
 const router = useRouter();
-const { openModal } = useModal();
 
 const corpusStore = useCorpusStore();
-const documentStore = useDocumentStore();
-
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-
 const { selectedGoldStandard } = storeToRefs(runStore);
 
-const pageSize = ref(5);
+const documentStore = useDocumentStore();
+const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 
-const { documents, currentPage, totalPages } = storeToRefs(documentStore);
+const pageSize = ref(10);
+const loading = ref(true);
+
+const { setTitle } = useTitle();
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
   if (selectedGoldStandard.value.identifier) {
+    loading.value = true;
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
     try {
@@ -108,6 +97,8 @@ async function pageChanged(nextPage: number) {
       );
     } catch (error) {
       console.error(error);
+    } finally {
+      loading.value = false;
     }
   } else {
     console.warn("Id of selected run was not set in pageChanged.");
@@ -130,7 +121,14 @@ async function loadDocuments() {
 }
 
 onMounted(async () => {
-  await countDocuments();
-  await loadDocuments();
+  loading.value = true;
+  try {
+    setTitle(corpus.value.name);
+    await countDocuments();
+    await loadDocuments();
+    // @Todo: Error message for user
+  } finally {
+    loading.value = false;
+  }
 });
 </script>

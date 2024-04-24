@@ -1,6 +1,11 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
-  modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt", "@nuxtjs/i18n"],
+  modules: [
+    "@nuxtjs/tailwindcss",
+    "@pinia/nuxt",
+    "@nuxtjs/i18n",
+    "@nuxtjs/color-mode",
+  ],
   plugins: ["~/plugins/vue.progress.bar.ts"],
   build: {
     transpile: ["oh-vue-icons"],
@@ -21,7 +26,7 @@ export default defineNuxtConfig({
         class: "h-full",
       },
       htmlAttrs: {
-        class: "h-full bg-gray-100",
+        class: "h-full",
       },
       link: [
         {
@@ -49,5 +54,10 @@ export default defineNuxtConfig({
   ssr: false,
   devServer: {
     host: "0.0.0.0",
+  },
+  colorMode: {
+    preference: "dark",
+    dataValue: "theme",
+    classSuffix: "",
   },
 });

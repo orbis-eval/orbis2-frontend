@@ -5,7 +5,7 @@
     class="orbis-modal modal"
     @cancel.prevent="onCancel"
   >
-    <div class="modal-box border-2 border-gray-600 bg-neutral">
+    <div class="modal-box border-2 border-gray-600">
       <template v-for="modal in modals" :key="modal.getId()">
         <component
           :is="modalComponent(modal)"
