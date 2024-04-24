@@ -12,7 +12,7 @@
             $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name })
           }}
           <OrbisButton
-            class="bg-gray-300 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
+            class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
             :on-click="() => openModal(ModalUpdateGoldStandard)"
             >Update Gold Standard
           </OrbisButton>
