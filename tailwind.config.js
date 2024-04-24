@@ -10,6 +10,8 @@ module.exports = {
           accent: "#37cdbe",
           neutral: "#111827",
           "base-100": "#374151",
+          "base-200": "#333b47",
+          "base-300": "#22272f",
           info: "#3abff8",
           success: "#36d399",
           warning: "#fbbd23",
@@ -19,10 +21,10 @@ module.exports = {
       {
         light: {
           // eslint-disable-next-line @typescript-eslint/no-var-requires
-          ...require("daisyui/src/theming/themes")["light"],
-          "base-100": "#e5e6e6",
-          "base-200": "#dbdcdc",
-          "base-300": "#bbbebe",
+          ...require("daisyui/src/theming/themes").light,
+          "base-100": "#edeff2",
+          "base-200": "#dfe2e6",
+          "base-300": "#d1d5db",
         },
       },
     ],
