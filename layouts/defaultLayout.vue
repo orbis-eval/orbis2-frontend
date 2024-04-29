@@ -29,8 +29,9 @@
                 (route.name as string).includes('corpora-corpusId-runs-runId')
               "
             >
-              <div class="badge badge-warning">
-                GS Version: {{ selectedRun.currentGoldStandard?.formattedCreatedAt }}
+              <div class="badge badge-warning h-auto">
+                Gold Standard:
+                {{ selectedRun.currentGoldStandard?.formattedCreatedAt }}
               </div>
             </div>
             <select

@@ -9,7 +9,9 @@
       >
         <h1 class="mb-3 text-3xl">
           {{
-            $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.formattedCreatedAt })
+            $t("run.viewGoldStandardTitle", {
+              name: selectedGoldStandard.formattedCreatedAt,
+            })
           }}
           <OrbisButton
             class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"

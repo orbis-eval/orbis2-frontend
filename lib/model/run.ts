@@ -32,7 +32,11 @@ export class Run implements IRun {
   }
 
   get cleanedName() {
-    return this.name.split("_").slice(0, -1).join("_");
+    let localCleanedName = this.name.split("_").slice(0, -1).join("_");
+    if (localCleanedName.length < 1) {
+      localCleanedName = this.name;
+    }
+    return localCleanedName;
   }
 
   get formattedCreatedAt() {
