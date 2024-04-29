@@ -6,58 +6,65 @@
       <MenuItem :url="`/`" :text="$t('corpus.corpora')" :validator="true">
         <OhVueIcon name="hi-database" class="menu-icon" />
       </MenuItem>
-      <ul class="absolut menu inset-y-0 left-0 p-0">
-        <MenuSubItem
-          :url="`/corpora/${corpus.identifier}/annotation-types/`"
-          :text="$t('annotationTypes')"
+      <div v-if="showMenuSubItems">
+        <ul class="absolut menu inset-y-0 left-0 p-0">
+          <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/annotation-types/`"
+            :text="$t('annotationTypes')"
+            :validator="'corpusId' in route.params"
+          />
+        </ul>
+        <MenuItem
+          :url="`/corpora/${route.params.corpusId}/gold-standard/${selectedGoldStandard.identifier}/`"
+          text="Gold Standard"
           :validator="'corpusId' in route.params"
-        />
-      </ul>
-      <MenuItem
-        :url="`/corpora/${route.params.corpusId}/gold-standard/${selectedGoldStandard.identifier}/`"
-        text="Gold Standard"
-        :validator="'corpusId' in route.params"
-      >
-        <OhVueIcon name="bi-journal-bookmark-fill" class="menu-icon" />
-      </MenuItem>
-      <ul class="absolut menu inset-y-0 left-0 p-0">
-        <MenuSubItem
-          :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/`"
-          :text="$t('documents')"
-          :validator="'goldStandardId' in route.params"
-        />
-        <MenuSubItem
-          :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/documents/${route.params.documentId}/`"
-          :text="$t('document.document')"
-          :validator="
-            'goldStandardId' in route.params && 'documentId' in route.params
-          "
-        />
-      </ul>
-      <MenuItem
-        :url="`/corpora/${route.params.corpusId}/runs`"
-        text="Runs"
-        :validator="'corpusId' in route.params"
-      >
-        <OhVueIcon name="bi-journal-text" class="menu-icon" />
-      </MenuItem>
-      <ul class="absolut menu inset-y-0 left-0 p-0">
-        <MenuSubItem
-          :url="`/corpora/${corpus.identifier}/runs`"
-          :text="$t('listOfRuns')"
+        >
+          <OhVueIcon name="bi-journal-bookmark-fill" class="menu-icon" />
+        </MenuItem>
+        <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
+          <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/gold-standard`"
+            :text="$t('overview')"
+            :validator="'corpusId' in route.params"
+          />
+          <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/`"
+            :text="$t('documents')"
+            :validator="'goldStandardId' in route.params"
+          />
+          <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/gold-standard/${selectedGoldStandard.identifier}/documents/${route.params.documentId}/`"
+            :text="$t('document.document')"
+            :validator="
+              'goldStandardId' in route.params && 'documentId' in route.params
+            "
+          />
+        </ul>
+        <MenuItem
+          :url="`/corpora/${route.params.corpusId}/runs`"
+          text="Runs"
           :validator="'corpusId' in route.params"
-        />
-        <MenuSubItem
-          :url="`/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/`"
-          :text="$t('documents')"
-          :validator="'runId' in route.params"
-        />
-        <MenuSubItem
-          :url="`/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/documents/${route.params.documentId}/`"
-          :text="$t('document.document')"
-          :validator="'runId' in route.params && 'documentId' in route.params"
-        />
-      </ul>
+        >
+          <OhVueIcon name="bi-journal-text" class="menu-icon" />
+        </MenuItem>
+        <ul class="absolut bg-white-500 menu inset-y-0 left-0 p-0">
+          <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/runs`"
+            :text="$t('overview')"
+            :validator="'corpusId' in route.params"
+          />
+          <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/`"
+            :text="$t('documents')"
+            :validator="'runId' in route.params"
+          />
+          <MenuSubItem
+            :url="`/corpora/${corpus.identifier}/runs/${selectedRun.identifier}/documents/${route.params.documentId}/`"
+            :text="$t('document.document')"
+            :validator="'runId' in route.params && 'documentId' in route.params"
+          />
+        </ul>
+      </div>
     </ul>
   </div>
 </template>
@@ -97,4 +104,8 @@ const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
 const { selectedGoldStandard, selectedRun } = storeToRefs(runStore);
+
+const showMenuSubItems = computed(() => {
+  return route.params.corpusId;
+});
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div v-if="nestedSetRootNode && props.run && props.run.corpus">
-      <div ref="relativeDiv" class="p-6">
+      <div ref="relativeDiv" class="px-4">
         <!-- context modal gui for selecting the type -->
         <AnnotationModal
           ref="annotationTypeModal"
