@@ -15,7 +15,7 @@
           />
         </ul>
         <MenuItem
-          :url="`/corpora/${route.params.corpusId}/gold-standard/${selectedGoldStandard.identifier}/`"
+          :url="`/corpora/${route.params.corpusId}/gold-standard`"
           text="Gold Standard"
           :validator="'corpusId' in route.params"
         >
