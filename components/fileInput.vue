@@ -10,7 +10,7 @@
           <div class="text-gray-600">
             <div
               v-if="!selectedFile.name"
-              class="flex h-full items-center bg-gray-100 p-4 dark:bg-white"
+              class="flex h-full items-center p-4 dark:bg-neutral"
             >
               <p class="w-full text-center">
                 {{ $t("fileInput.dropFile") }}
