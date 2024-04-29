@@ -42,7 +42,7 @@
                   :key="goldStandard.identifier"
                   :value="goldStandard"
                 >
-                  {{ goldStandard.name }}
+                  {{ goldStandard.formattedCreatedAt }}
                 </option>
               </select>
 
