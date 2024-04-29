@@ -2,7 +2,7 @@
   <NuxtLayout name="default-layout">
     <div>
       <div
-        class="mb-4 flex flex-1 rounded-xl border-2 border-gray-600 bg-base-300 p-5 dark:bg-neutral p-5"
+        class="mb-4 flex flex-1 rounded-xl border-2 border-gray-600 bg-base-300 p-5 p-5 dark:bg-neutral"
       >
         <table class="table">
           <tr>

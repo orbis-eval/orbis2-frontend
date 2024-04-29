@@ -1,7 +1,9 @@
 <template>
   <NuxtLayout name="default-layout">
     <div>
-      <div class="mb-4 flex-1 rounded-xl border-2 border-gray-600 bg-base-300 dark:bg-neutral">
+      <div
+        class="mb-4 flex-1 rounded-xl border-2 border-gray-600 bg-base-300 dark:bg-neutral"
+      >
         <DocumentNavHeader />
         <DocumentAnnotation
           :run="selectedGoldStandard"

@@ -39,7 +39,7 @@
           nestedSetNode.annotationType.colorId,
         ),
     }"
-    :class="`border-b-4 border-solid text mb-1 mr-1 tracking-wider ${
+    :class="`text mb-1 mr-1 border-b-4 border-solid tracking-wider ${
       highlightedNestedSetNodeId.includes(Number(nestedSetNode.identifier))
         ? 'rounded-t bg-base-100 dark:bg-gray-700'
         : ''
