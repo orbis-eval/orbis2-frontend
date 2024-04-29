@@ -5,11 +5,13 @@
     </template>
     <div class="flex h-full flex-col">
       <div
-        class="mb-4 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral"
+        class="mb-4 flex-1 rounded-xl border-2 border-gray-600 bg-base-300 p-6 dark:bg-neutral"
       >
         <h1 class="mb-3 text-3xl">
           {{
-            $t("run.viewGoldStandardTitle", { name: selectedGoldStandard.name })
+            $t("run.viewGoldStandardTitle", {
+              name: selectedGoldStandard.formattedCreatedAt,
+            })
           }}
           <OrbisButton
             class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"

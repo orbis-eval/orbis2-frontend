@@ -1,8 +1,5 @@
 <template>
-  <div
-    v-if="currentDocument"
-    class="w-100 flex items-center px-4 pb-4 pt-5 text-lg"
-  >
+  <div v-if="currentDocument" class="w-100 flex items-center px-4 pt-5">
     <div class="flex w-1/4 justify-start">
       <OrbisButton
         :disabled="nrOfDocuments <= 1"

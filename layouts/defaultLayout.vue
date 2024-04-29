@@ -19,15 +19,19 @@
               </NuxtLink>
             </div>
           </div>
-          <div class="flex w-6/12 justify-center">
+          <div
+            v-if="showComparisonComponent"
+            class="flex w-6/12 justify-center"
+          >
             <div
               class="flex items-center"
               v-if="
                 (route.name as string).includes('corpora-corpusId-runs-runId')
               "
             >
-              <div class="badge badge-warning">
-                {{ selectedRun.currentGoldStandard?.name }}
+              <div class="badge badge-warning h-auto">
+                Gold Standard:
+                {{ selectedRun.currentGoldStandard?.formattedCreatedAt }}
               </div>
             </div>
             <select
@@ -52,7 +56,7 @@
                   goldStandard.identifier === selectedGoldStandard.identifier
                 "
               >
-                {{ goldStandard.name }}
+                {{ goldStandard.cleanedName }}
               </option>
             </select>
             <div
@@ -90,11 +94,13 @@
                 :value="run.identifier"
                 :selected="run.identifier === selectedRun.identifier"
               >
-                {{ run.name }}
+                {{ run.cleanedName }}
               </option>
             </select>
           </div>
-          <div class="flex w-3/12 justify-end gap-4">
+          <div v-else class="flex w-6/12 justify-center"></div>
+          <div class="flex w-1/12"></div>
+          <div class="flex w-2/12 justify-end gap-4">
             <div class="flex">
               <label class="swap swap-rotate">
                 <input type="checkbox" />
@@ -182,6 +188,10 @@ const isGoldStandardSelectDisabled = computed(() => {
 
 const isRunSelectDisabled = computed(() => {
   return !corpus.value.identifier;
+});
+
+const showComparisonComponent = computed(() => {
+  return (route.name as string).includes("corpora-corpusId-runs-runId");
 });
 
 const changeGoldStandard = async (event: Event) => {
