@@ -28,7 +28,7 @@
         </table>
       </div>
       <div
-        class="mx-10 mb-10 flex-1 overflow-x-auto rounded-xl border-2 border-gray-600 bg-base-300 dark:bg-neutral"
+        class="mb-4 flex-1 rounded-xl border-2 border-gray-600 bg-base-300 dark:bg-neutral"
       >
         <DocumentNavHeader />
         <DocumentAnnotation
