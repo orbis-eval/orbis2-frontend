@@ -19,15 +19,18 @@ vi.mock("~/lib/services/orbisApiService", () => {
         );
       },
       updateGoldStandard: async (
-          corpus: Corpus,
-          chosenFile: File,
+        corpus: Corpus,
+        chosenFile: File,
       ): Promise<GoldStandard | Error> => {
         const newGoldStandard = updateGoldStandard(
-            1,
-            "GoldStandard 1",
-            "some desc",
+          1,
+          "GoldStandard 1",
+          "some desc",
         );
-        return await Parser.parse(GoldStandard, Promise.resolve(newGoldStandard));
+        return await Parser.parse(
+          GoldStandard,
+          Promise.resolve(newGoldStandard),
+        );
       },
     })),
   };
