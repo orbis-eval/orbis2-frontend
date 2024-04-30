@@ -9,7 +9,7 @@
       >
         <h1 class="mb-3 text-3xl">
           {{
-            $t("run.viewGoldStandardTitle", {
+            $t("goldStandard.viewTitle", {
               name: selectedGoldStandard.formattedCreatedAt,
             })
           }}
@@ -71,7 +71,7 @@ import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
-import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 addIcons(MdKeyboardarrowdown);
 
@@ -82,11 +82,11 @@ const documentStore = useDocumentStore();
 
 const { corpus } = storeToRefs(corpusStore);
 
-const runStore = useRunStore();
+const goldStandardStore = useGoldStandardStore();
 
-const { selectedGoldStandard } = storeToRefs(runStore);
+const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 
-const pageSize = ref(5);
+const pageSize = ref(10);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 

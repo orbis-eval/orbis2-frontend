@@ -84,6 +84,7 @@ import {
 } from "oh-vue-icons/icons";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 addIcons(
   HiUser,
@@ -103,7 +104,10 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { selectedGoldStandard, selectedRun } = storeToRefs(runStore);
+const { selectedRun } = storeToRefs(runStore);
+
+const goldStandardStore = useGoldStandardStore();
+const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 
 const showMenuSubItems = computed(() => {
   return route.params.corpusId;

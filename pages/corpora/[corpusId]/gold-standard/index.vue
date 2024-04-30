@@ -26,6 +26,8 @@
           <thead class="text-left text-black dark:text-white">
             <tr class="text-lg">
               <th>Gold Standard Version</th>
+              <td>{{ $t("goldStandard.numberOfRuns") }}</td>
+              <td>{{ $t("goldStandard.numberOfDocuments") }}</td>
             </tr>
           </thead>
 
@@ -44,6 +46,8 @@
                   >{{ gs.formattedCreatedAt }}
                 </nuxt-link>
               </th>
+              <td>{{ gs.numberOfRuns }}</td>
+              <td>{{ gs.numberOfDocuments }}</td>
             </tr>
           </tbody>
         </table>
@@ -53,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { addIcons, OhVueIcon } from "oh-vue-icons";
+import { addIcons } from "oh-vue-icons";
 import {
   BiPlayFill,
   FaFilter,
@@ -63,7 +67,7 @@ import {
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 import OrbisButton from "~/components/orbis/orbisButton.vue";
 import ModalUpdateGoldStandard from "~/components/modal/updateGoldStandard.vue";
@@ -82,6 +86,6 @@ const { openModal } = useModal();
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
-const runStore = useRunStore();
-const { goldStandards } = storeToRefs(runStore);
+const goldStandardStore = useGoldStandardStore();
+const { goldStandards } = storeToRefs(goldStandardStore);
 </script>

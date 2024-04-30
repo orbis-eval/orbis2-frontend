@@ -1,9 +1,11 @@
 import { useCorpusStore } from "~/stores/corpusStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { useRunStore } from "~/stores/runStore";
 import { useTitle } from "~/composables/title";
 
 export default defineNuxtRouteMiddleware(async (to) => {
   const corpusStore = useCorpusStore();
+  const goldStandardStore = useGoldStandardStore();
   const runStore = useRunStore();
   const { setTitle } = useTitle();
   const corpusId = Number.parseInt(to.params.corpusId?.toString());
@@ -14,9 +16,10 @@ export default defineNuxtRouteMiddleware(async (to) => {
       // set the title
       setTitle(corpusStore.corpus.name);
       // load gold standards and select default gold standard
-      await runStore.loadGoldStandards(corpusId);
-      if (runStore.goldStandards.length > 0) {
-        runStore.selectedGoldStandard = runStore.goldStandards[0];
+      await goldStandardStore.loadGoldStandards(corpusId);
+      if (goldStandardStore.goldStandards.length > 0) {
+        goldStandardStore.selectedGoldStandard =
+          goldStandardStore.goldStandards[0];
       } else {
         // raise error
         Error("No gold standards found for corpus");

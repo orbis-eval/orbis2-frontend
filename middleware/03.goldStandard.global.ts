@@ -1,9 +1,9 @@
-import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useAnnotationStore } from "~/stores/annotationStore";
 
 export default defineNuxtRouteMiddleware(async (to) => {
-  const runStore = useRunStore();
+  const goldStandardStore = useGoldStandardStore();
   const documentStore = useDocumentStore();
   const annotationStore = useAnnotationStore();
   const goldStandardId = Number.parseInt(to.params.goldStandardId?.toString());
@@ -11,14 +11,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
   // fetch the gold standard if it's not already loaded
   if (
     goldStandardId &&
-    goldStandardId !== runStore.selectedGoldStandard.identifier
+    goldStandardId !== goldStandardStore.selectedGoldStandard.identifier
   ) {
     documentStore.reset();
     annotationStore.reset();
-    const goldStandard = await runStore.getGoldStandardById(goldStandardId);
+    const goldStandard = goldStandardStore.getGoldStandardById(goldStandardId);
     if (!goldStandard) {
       throw new Error("Gold standard not found");
     }
-    runStore.changeSelectedGoldStandard(goldStandard);
+    await goldStandardStore.changeSelectedGoldStandard(goldStandard);
   }
 });

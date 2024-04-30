@@ -23,11 +23,11 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { useAnnotationStore } from "~/stores/annotationStore";
-import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { onMounted } from "#imports";
 
-const runStore = useRunStore();
-const { selectedGoldStandard } = storeToRefs(runStore);
+const goldStandardStore = useGoldStandardStore();
+const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 const annotationStore = useAnnotationStore();
 
 const highlightedNestedSetNodeId = ref([] as number[]);

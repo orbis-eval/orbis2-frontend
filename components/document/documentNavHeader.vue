@@ -38,6 +38,7 @@ import { storeToRefs } from "pinia";
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 const route = useRoute();
 
@@ -47,8 +48,12 @@ addIcons(MdNavigatenextTwotone, MdNavigatebeforeTwotone);
 
 const documentStore = useDocumentStore();
 const { currentDocument, nrOfDocuments } = storeToRefs(documentStore);
+
 const runStore = useRunStore();
-const { selectedRun, selectedGoldStandard } = storeToRefs(runStore);
+const { selectedRun } = storeToRefs(runStore);
+
+const goldStandardStore = useGoldStandardStore();
+const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 
 async function nextDocument() {
   emit("loadingStarted");
