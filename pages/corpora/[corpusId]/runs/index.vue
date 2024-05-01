@@ -122,6 +122,7 @@ import {
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 import ModalCreateRun from "~/components/modal/createRun.vue";
 import ModalDeleteRun from "~/components/modal/deleteRun.vue";
@@ -143,7 +144,10 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { runs, goldStandards } = storeToRefs(runStore);
+const { runs } = storeToRefs(runStore);
+
+const goldStandardStore = useGoldStandardStore();
+const { goldStandards } = storeToRefs(goldStandardStore);
 
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   if (interRaterAgreement) {

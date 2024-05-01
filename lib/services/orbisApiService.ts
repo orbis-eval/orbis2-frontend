@@ -5,6 +5,7 @@ import { Corpus } from "~/lib/model/corpus";
 import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Run } from "~/lib/model/run";
+import { GoldStandard } from "~/lib/model/goldstandard";
 import { ColorPalette } from "~/lib/model/colorpalette";
 
 export class OrbisApiService {
@@ -69,9 +70,9 @@ export class OrbisApiService {
     );
   }
 
-  async getGoldStandards(corpusId: number): Promise<Run[]> {
+  async getGoldStandards(corpusId: number): Promise<GoldStandard[]> {
     return await Parser.parseList(
-      Run,
+      GoldStandard,
       this.apiGet(`getGoldStandards?corpus_id=${corpusId}`),
     );
   }
@@ -159,7 +160,10 @@ export class OrbisApiService {
     );
   }
 
-  async updateGoldStandard(corpus: Corpus, chosenFile: File): Promise<Run> {
+  async updateGoldStandard(
+    corpus: Corpus,
+    chosenFile: File,
+  ): Promise<GoldStandard> {
     const body = { corpus } as any;
     if (chosenFile.name) {
       body.file = {};
@@ -182,7 +186,10 @@ export class OrbisApiService {
         // Add other file details as needed
       };
     }
-    return await Parser.parse(Run, this.apiPost(`updateGoldStandard`, body));
+    return await Parser.parse(
+      GoldStandard,
+      this.apiPost(`updateGoldStandard`, body),
+    );
   }
 
   async deleteRun(run: Run): Promise<boolean> {
