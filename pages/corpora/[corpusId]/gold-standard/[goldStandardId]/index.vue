@@ -9,15 +9,10 @@
       >
         <h1 class="mb-3 text-3xl">
           {{
-            $t("run.viewGoldStandardTitle", {
+            $t("goldStandard.viewTitle", {
               name: selectedGoldStandard.formattedCreatedAt,
             })
           }}
-          <OrbisButton
-            class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
-            :on-click="() => openModal(ModalUpdateGoldStandard)"
-            >Update Gold Standard
-          </OrbisButton>
         </h1>
 
         <h2 class="mb-5 text-2xl text-black dark:text-white">
@@ -76,24 +71,22 @@ import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
-import { useRunStore } from "~/stores/runStore";
-import ModalUpdateGoldStandard from "~/components/modal/updateGoldStandard.vue";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 addIcons(MdKeyboardarrowdown);
 
 const router = useRouter();
-const { openModal } = useModal();
 
 const corpusStore = useCorpusStore();
 const documentStore = useDocumentStore();
 
 const { corpus } = storeToRefs(corpusStore);
 
-const runStore = useRunStore();
+const goldStandardStore = useGoldStandardStore();
 
-const { selectedGoldStandard } = storeToRefs(runStore);
+const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 
-const pageSize = ref(5);
+const pageSize = ref(10);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 

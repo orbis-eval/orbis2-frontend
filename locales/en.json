@@ -64,7 +64,6 @@
   },
   "run": {
     "action": "Action",
-    "viewGoldStandardTitle": "Gold Standard {name}",
     "viewTitle": "Run {name}",
     "runs": "Runs",
     "createRun": "Create Run",
@@ -99,7 +98,10 @@
   },
   "selectGoldStandard": "Select Gold Standard",
   "goldStandard": {
-    "update": "Update Gold Standard"
+    "viewTitle": "Gold Standard {name}",
+    "update": "Update Gold Standard",
+    "numberOfRuns": "Number of Runs",
+    "numberOfDocuments": "Number of Documents"
   },
   "filters": "Filters",
   "noFilter": "No filter",

@@ -62,7 +62,7 @@ import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
-import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { useDocumentStore } from "~/stores/documentStore";
 
 addIcons(MdKeyboardarrowdown);
@@ -72,8 +72,8 @@ const router = useRouter();
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
-const runStore = useRunStore();
-const { selectedGoldStandard } = storeToRefs(runStore);
+const goldStandardStore = useGoldStandardStore();
+const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 
 const documentStore = useDocumentStore();
 const { currentPage, documents, totalPages } = storeToRefs(documentStore);

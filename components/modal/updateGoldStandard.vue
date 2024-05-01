@@ -22,12 +22,12 @@
 import { Form } from "vee-validate";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
-import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { useCorpusStore } from "~/stores/corpusStore";
 
 const { t } = useI18n();
 const { closeModal } = useModal();
-const runStore = useRunStore();
+const goldStandardStore = useGoldStandardStore();
 const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
@@ -46,7 +46,7 @@ const setRunFileError = (error: any) => {
 
 const updateGoldStandard = async () => {
   try {
-    await runStore.updateGoldStandard(corpus.value, chosenFile.value);
+    await goldStandardStore.updateGoldStandard(corpus.value, chosenFile.value);
 
     closeModal();
   } catch (error) {

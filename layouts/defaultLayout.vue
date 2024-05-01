@@ -159,6 +159,7 @@ import { BiMoonFill, BiSunFill } from "oh-vue-icons/icons";
 import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 addIcons(BiMoonFill, BiSunFill);
 
@@ -170,8 +171,10 @@ const corpusStore = useCorpusStore();
 const { corpus } = storeToRefs(corpusStore);
 
 const runStore = useRunStore();
-const { selectedGoldStandard, selectedRun, runs, goldStandards } =
-  storeToRefs(runStore);
+const { selectedRun, runs } = storeToRefs(runStore);
+
+const goldStandardStore = useGoldStandardStore();
+const { selectedGoldStandard, goldStandards } = storeToRefs(goldStandardStore);
 
 const { title } = useTitle();
 
@@ -196,9 +199,11 @@ const showComparisonComponent = computed(() => {
 
 const changeGoldStandard = async (event: Event) => {
   const target = event.target as HTMLSelectElement;
-  const goldStandard = runStore.getGoldStandardById(Number(target.value));
+  const goldStandard = goldStandardStore.getGoldStandardById(
+    Number(target.value),
+  );
   if (goldStandard) {
-    await runStore.changeSelectedGoldStandard(goldStandard);
+    await goldStandardStore.changeSelectedGoldStandard(goldStandard);
   } else {
     // error
     Error("No gold standard selected");
