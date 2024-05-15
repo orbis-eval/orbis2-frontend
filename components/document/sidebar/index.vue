@@ -7,7 +7,7 @@
 
       <OrbisButton
         v-if="isRun"
-        class="m-2"
+        class="btn m-2 bg-base-100 dark:bg-gray-700"
         :on-click="() => openDocumentInGoldStandard()"
         >{{ $t("document.sidebar.openInGoldStandard") }}
       </OrbisButton>
