@@ -38,6 +38,8 @@ const corpusStore = useCorpusStore();
 
 const { corpus, annotationTypes } = storeToRefs(corpusStore);
 
+useTitle("Annotation Types", `${corpus.value.name} | Annotation Types`);
+
 onMounted(async () => {
   await corpusStore.loadAnnotationTypes(corpus.value.identifier);
 });

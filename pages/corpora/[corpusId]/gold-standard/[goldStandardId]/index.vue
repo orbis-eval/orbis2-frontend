@@ -72,6 +72,7 @@ import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useGoldStandardStore } from "~/stores/goldStandardStore";
+import { useTitle } from "~/composables/title";
 
 addIcons(MdKeyboardarrowdown);
 
@@ -89,6 +90,11 @@ const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 const pageSize = ref(10);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
+
+useTitle(
+  `${selectedGoldStandard.value.name}`,
+  `${corpus.value.name} | ${selectedGoldStandard.value.name} | Documents`,
+);
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {

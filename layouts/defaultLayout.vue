@@ -156,7 +156,6 @@
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { storeToRefs } from "pinia";
 import { BiMoonFill, BiSunFill } from "oh-vue-icons/icons";
-import { useTitle } from "~/composables/title";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 import { useGoldStandardStore } from "~/stores/goldStandardStore";
@@ -176,7 +175,7 @@ const { selectedRun, runs } = storeToRefs(runStore);
 const goldStandardStore = useGoldStandardStore();
 const { selectedGoldStandard, goldStandards } = storeToRefs(goldStandardStore);
 
-const { title } = useTitle();
+const { appTitle: title } = useTitle();
 
 const homeLink = computed(() => {
   if (corpus.value.identifier) {
