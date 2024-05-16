@@ -44,6 +44,7 @@
     "@pinia/nuxt": "^0.4.6",
     "@vee-validate/zod": "^4.11.8",
     "daisyui": "^3.2.1",
+    "lodash-es": "^4.17.21",
     "moment": "^2.30.1",
     "nuxt": "^3.7.0",
     "oh-vue-icons": "^1.0.0-rc3",
