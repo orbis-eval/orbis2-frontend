@@ -17,6 +17,7 @@
             type="text"
             class="rounded-lg border-2 border-gray-600 p-2"
             placeholder="Search for documents"
+            v-model="searchTerm"
           />
         </div>
 
@@ -35,7 +36,7 @@
           </thead>
 
           <tbody
-            v-for="(document, index) in documents"
+            v-for="(document, index) in filteredDocuments"
             :key="document.identifier"
           >
             <tr
@@ -83,6 +84,7 @@
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
+import { debounce } from "lodash-es";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";
@@ -105,8 +107,15 @@ const runStore = useRunStore();
 const { selectedRun } = storeToRefs(runStore);
 
 const pageSize = ref(5);
+const searchTerm = ref("");
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
+
+const filteredDocuments = computed(() => {
+  return documents.value.filter((doc) =>
+    doc.content.toLowerCase().includes(searchTerm.value.toLowerCase()),
+  );
+});
 
 useTitle(
   selectedRun.value.cleanedName,
@@ -146,6 +155,13 @@ async function countDocuments() {
 async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
+
+watch(
+  searchTerm,
+  debounce(() => {
+    loadDocuments();
+  }, 2000),
+); // Adjust debounce time to 2000 or 3000 ms as per your preference
 
 onMounted(async () => {
   await countDocuments();
