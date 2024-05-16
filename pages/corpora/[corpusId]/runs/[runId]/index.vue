@@ -11,7 +11,15 @@
           {{ $t("run.viewTitle", { name: selectedRun.cleanedName }) }}
         </h1>
 
-        <h2 class="mb-5 text-2xl">{{ $t("documents") }}</h2>
+        <div class="flex items-center">
+          <h2 class="mr-4 text-2xl">{{ $t("documents") }}</h2>
+          <input
+            type="text"
+            class="rounded-lg border-2 border-gray-600 p-2"
+            placeholder="Search for documents"
+          />
+        </div>
+
         <div class="divider"></div>
         <table aria-label="List of documents in corpus" class="table table-sm">
           <thead class="text-left text-black dark:text-white">
