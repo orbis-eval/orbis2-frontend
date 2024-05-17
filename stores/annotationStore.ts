@@ -20,11 +20,13 @@ export const useAnnotationStore = defineStore("annotation", () => {
 
   const isUndoDisabled = ref(true);
   const isRedoDisabled = ref(true);
+  const isGoldStandardAnnotationsShown = ref(false);
 
   function reset() {
     annotationHistory.reset();
     isUndoDisabled.value = true;
     isRedoDisabled.value = true;
+    isGoldStandardAnnotationsShown.value = false;
   }
 
   function mapAnnotations(
@@ -200,5 +202,6 @@ export const useAnnotationStore = defineStore("annotation", () => {
     undoAnnotation,
     redoAnnotation,
     resetAnnotationStack: reset,
+    isGoldStandardAnnotationsShown,
   };
 });

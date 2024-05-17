@@ -5,13 +5,6 @@
 
       <!--<DocumentSidebarCommands></DocumentSidebarCommands>-->
 
-      <OrbisButton
-        v-if="isRun"
-        class="btn m-2 bg-base-100 dark:bg-gray-700"
-        :on-click="() => openDocumentInGoldStandard()"
-        >{{ $t("document.sidebar.openInGoldStandard") }}
-      </OrbisButton>
-
       <DocumentSidebarAnnotations
         @set-highlight-nested-set-node="
           (nodeIDs) => emit('setHighlightNestedSetNode', nodeIDs)
@@ -38,23 +31,9 @@ const { currentDocument } = storeToRefs(documentStore);
 const annotationStore = useAnnotationStore();
 const { selectedAnnotation } = storeToRefs(annotationStore);
 
-const router = useRouter();
-
 const isRun = computed(() => {
   return currentDocument.value.runId === selectedRun.value.identifier;
 });
-
-const openDocumentInGoldStandard = () => {
-  const routeData = router.resolve({
-    name: "corpora-corpusId-gold-standard-goldStandardId-documents-documentId",
-    params: {
-      corpusId: selectedRun.value.currentGoldStandard?.corpus.identifier,
-      goldStandardId: selectedRun.value.currentGoldStandard?.identifier,
-      documentId: currentDocument.value.identifier,
-    },
-  });
-  window.open(routeData.href, "_blank");
-};
 
 watch(selectedAnnotation, (newSelectedAnnotation) => {
   if (newSelectedAnnotation) {

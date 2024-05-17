@@ -57,7 +57,7 @@
         "textSection": "Text Position",
         "noSelectionInfo": "Keine Annotation wurde ausgewählt"
       },
-      "openInGoldStandard": "Dokument Im Gold Standard öffnen",
+      "showGoldStandardAnnotations": "Zeige Gold Standard Annotationen",
       "annotationsTitle": "Annotations"
     }
   },

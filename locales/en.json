@@ -58,7 +58,7 @@
         "textSection": "Text section",
         "noSelectionInfo": "No Annotation is selected"
       },
-      "openInGoldStandard": "Open Document in Gold Standard",
+      "showGoldStandardAnnotations": "Show Gold Standard Annotations",
       "annotationsTitle": "Annotations"
     }
   },

@@ -53,6 +53,8 @@ body {
 
 .annotation {
   @apply inline-block  border-b-2 px-1;
+  position: relative;
+  border-left-width: 15px;
 }
 
 .line {
