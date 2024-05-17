@@ -16,8 +16,9 @@
           <input
             type="text"
             class="rounded-lg border-2 border-gray-600 p-2"
-            placeholder="Search for documents"
             v-model="searchTerm"
+            placeholder="Search for documents"
+            @input="handleSearch"
           />
         </div>
 
@@ -156,12 +157,18 @@ async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
 
-watch(
-  searchTerm,
-  debounce(() => {
-    loadDocuments();
-  }, 2000),
-); // Adjust debounce time to 2000 or 3000 ms as per your preference
+const handleSearch = debounce(async () => {
+  if (selectedRun.value.identifier) {
+    if (searchTerm.value.trim().length >= 3) {
+    }
+    await documentStore.loadDocuments(
+      selectedRun.value.identifier,
+      pageSize.value,
+      0,
+      searchTerm.value,
+    );
+  }
+}, 300);
 
 onMounted(async () => {
   await countDocuments();
