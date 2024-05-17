@@ -159,9 +159,8 @@ async function loadDocuments() {
 }
 
 const handleSearch = debounce(async () => {
-  if (selectedRun.value.identifier) {
-    if (searchTerm.value.trim().length >= 3) {
-    }
+  if (selectedRun.value.identifier && searchTerm.value.trim().length >= 3) {
+    currentPage.value = 1; // Reset to first page when new search is performed
     await documentStore.loadDocuments(
       selectedRun.value.identifier,
       pageSize.value,
