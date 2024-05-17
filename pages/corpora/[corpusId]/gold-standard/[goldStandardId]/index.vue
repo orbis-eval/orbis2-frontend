@@ -92,8 +92,8 @@ const pageSize = ref(10);
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 
 useTitle(
-  `${selectedGoldStandard.value.name}`,
-  `${corpus.value.name} | ${selectedGoldStandard.value.name} | Documents`,
+  `Gold Standard ${selectedGoldStandard.value.formattedCreatedAt}`,
+  `${corpus.value.name} | Gold Standard ${selectedGoldStandard.value.formattedCreatedAt} | Documents`,
 );
 
 // called when another page is selected

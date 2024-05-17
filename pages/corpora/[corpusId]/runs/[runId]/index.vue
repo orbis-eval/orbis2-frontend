@@ -101,8 +101,8 @@ const pageSize = ref(5);
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 
 useTitle(
-  selectedRun.value.name,
-  `${corpus.value.name} | ${selectedRun.value.name} | Documents`,
+  selectedRun.value.cleanedName,
+  `${corpus.value.name} | ${selectedRun.value.cleanedName} | Documents`,
 );
 
 // called when another page is selected

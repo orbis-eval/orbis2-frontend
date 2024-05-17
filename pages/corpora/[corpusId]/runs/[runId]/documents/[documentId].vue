@@ -72,7 +72,7 @@ function setHighlightNestedSetNode(ids: number[]) {
 
 useTitle(
   `Document: ${currentDocument.value.identifier}`,
-  `${corpus.value.name} | ${selectedRun.value.name} | ${currentDocument.value.identifier}`,
+  `${corpus.value.name} | ${selectedRun.value.cleanedName} | ${currentDocument.value.identifier}`,
 );
 
 onMounted(() => {

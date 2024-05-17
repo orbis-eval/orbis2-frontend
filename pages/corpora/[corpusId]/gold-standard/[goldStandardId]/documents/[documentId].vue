@@ -42,7 +42,7 @@ const highlightedNestedSetNodeId = ref([] as number[]);
 
 useTitle(
   `Document: ${currentDocument.value.identifier} `,
-  `${corpus.value.name} | ${selectedGoldStandard.value.name} | ${currentDocument.value.identifier}`,
+  `${corpus.value.name} | Gold Standard ${selectedGoldStandard.value.formattedCreatedAt} | ${currentDocument.value.identifier}`,
 );
 
 function setHighlightNestedSetNode(ids: number[]) {
