@@ -32,12 +32,14 @@ export const useDocumentStore = defineStore("document", () => {
     runId: number,
     pageSize: number,
     skip: number = 0,
+    search: string = "",
   ) {
     try {
       documents.value = await orbisApiService.getDocuments(
         runId,
         pageSize,
         skip,
+        search, // Include the search term in the API request
       );
     } catch (error) {
       throw new Error("An error occurred while fetching documents.", {

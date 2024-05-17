@@ -30,11 +30,12 @@ export class OrbisApiService {
     runId: number,
     pageSize: number,
     skip: number = 0,
+    search: string = "",
   ): Promise<Document[]> {
     return await Parser.parseList(
       Document,
       this.apiGet(
-        `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`,
+        `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}&search=${search}`,
       ),
     );
   }
