@@ -39,7 +39,7 @@ export const useDocumentStore = defineStore("document", () => {
         runId,
         pageSize,
         skip,
-        search, // Include the search term in the API request
+        search,
       );
     } catch (error) {
       throw new Error("An error occurred while fetching documents.", {
