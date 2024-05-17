@@ -159,14 +159,26 @@ async function loadDocuments() {
 }
 
 const handleSearch = debounce(async () => {
-  if (selectedRun.value.identifier && searchTerm.value.trim().length >= 3) {
+  if (selectedRun.value.identifier) {
     currentPage.value = 1; // Reset to first page when new search is performed
-    await documentStore.loadDocuments(
-      selectedRun.value.identifier,
-      pageSize.value,
-      0,
-      searchTerm.value,
-    );
+    if (searchTerm.value.trim().length >= 3) {
+      await documentStore.loadDocuments(
+        selectedRun.value.identifier,
+        pageSize.value,
+        0,
+        searchTerm.value,
+      );
+      // update page count
+      // TODO: update nr of documents based on search
+      await countDocuments();
+    } else {
+      await documentStore.loadDocuments(
+        selectedRun.value.identifier,
+        pageSize.value,
+        0,
+        "",
+      );
+    }
   }
 }, 300);
 
