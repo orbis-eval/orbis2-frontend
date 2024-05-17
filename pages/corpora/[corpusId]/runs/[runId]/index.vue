@@ -133,6 +133,7 @@ async function pageChanged(nextPage: number) {
         selectedRun.value.identifier,
         pageSize.value,
         startIndex,
+        searchTerm.value,
       );
     } catch (error) {
       onError(t("document.error.documentNotLoading"));
