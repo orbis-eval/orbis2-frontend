@@ -100,6 +100,11 @@ const pageSize = ref(5);
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 
+useTitle(
+  selectedRun.value.cleanedName,
+  `${corpus.value.name} | ${selectedRun.value.cleanedName} | Documents`,
+);
+
 // called when another page is selected
 async function pageChanged(nextPage: number) {
   if (selectedRun.value.identifier) {

@@ -1,19 +1,35 @@
-const title = ref("Orbis NG");
+const appTitle = ref("Orbis NG");
+const seoTitle = ref("Orbis");
 
-export const useTitle = (paramTitle?: string) => {
-  const setTitle = (newTitle: string) => {
-    if (newTitle.length > 0) {
-      title.value = newTitle;
+export const useTitle = (paramTitle?: string, metaTitle?: string) => {
+  const setAppTitle = (newAppTitle: string) => {
+    if (newAppTitle && newAppTitle.length > 0) {
+      appTitle.value = newAppTitle;
+    }
+  };
+
+  const setSeoTitle = (newSeoTitle: string) => {
+    if (newSeoTitle && newSeoTitle.length > 0) {
+      seoTitle.value = newSeoTitle;
       useSeoMeta({
-        title: newTitle,
-        ogTitle: newTitle,
+        title: seoTitle.value,
+        ogTitle: seoTitle.value,
       });
     }
   };
 
   if (paramTitle) {
-    setTitle(paramTitle);
+    setAppTitle(paramTitle);
   }
 
-  return { setTitle, title };
+  if (metaTitle) {
+    setSeoTitle(metaTitle);
+  }
+
+  return {
+    setAppTitle,
+    appTitle,
+    setSeoTitle,
+    seoTitle,
+  };
 };

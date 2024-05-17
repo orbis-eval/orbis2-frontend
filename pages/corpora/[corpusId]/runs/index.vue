@@ -149,6 +149,8 @@ const { runs } = storeToRefs(runStore);
 const goldStandardStore = useGoldStandardStore();
 const { goldStandards } = storeToRefs(goldStandardStore);
 
+useTitle("Runs", `${corpus.value.name} | Runs`);
+
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
   if (interRaterAgreement) {
     return interRaterAgreement.slice(0, 4);

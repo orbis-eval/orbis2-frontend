@@ -88,4 +88,6 @@ const { corpus } = storeToRefs(corpusStore);
 
 const goldStandardStore = useGoldStandardStore();
 const { goldStandards } = storeToRefs(goldStandardStore);
+
+useTitle("Gold Standards", `${corpus.value.name} | Gold Standards`);
 </script>

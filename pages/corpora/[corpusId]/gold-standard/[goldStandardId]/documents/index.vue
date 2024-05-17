@@ -81,7 +81,10 @@ const { currentPage, documents, totalPages } = storeToRefs(documentStore);
 const pageSize = ref(10);
 const loading = ref(true);
 
-const { setTitle } = useTitle();
+const { setAppTitle: setTitle } = useTitle(
+  `${selectedGoldStandard.value.name} Documents`,
+  `${corpus.value.name} | ${selectedGoldStandard.value.name}`,
+);
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {

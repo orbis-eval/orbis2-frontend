@@ -7,14 +7,14 @@ export default defineNuxtRouteMiddleware(async (to) => {
   const corpusStore = useCorpusStore();
   const goldStandardStore = useGoldStandardStore();
   const runStore = useRunStore();
-  const { setTitle } = useTitle();
+  const { setAppTitle } = useTitle();
   const corpusId = Number.parseInt(to.params.corpusId?.toString());
 
   // fetch the corpus if it's not already loaded
   if (corpusId && corpusId !== corpusStore.corpus.identifier) {
     await corpusStore.loadCorpus(corpusId).then(async () => {
       // set the title
-      setTitle(corpusStore.corpus.name);
+      setAppTitle(corpusStore.corpus.name);
       // load gold standards and select default gold standard
       await goldStandardStore.loadGoldStandards(corpusId);
       if (goldStandardStore.goldStandards.length > 0) {

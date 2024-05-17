@@ -57,6 +57,8 @@ import modalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 import { Corpus } from "~/lib/model/corpus";
 import { useMessageToastService } from "~/lib/services/messageToastService";
 
+useTitle("", "Corpora");
+
 addIcons(MdDeleteforeverOutlined, HiPlus);
 
 const { t } = useI18n();

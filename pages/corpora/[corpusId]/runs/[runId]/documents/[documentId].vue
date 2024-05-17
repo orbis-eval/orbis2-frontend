@@ -52,10 +52,14 @@ import { useAnnotationStore } from "~/stores/annotationStore";
 import { useRunStore } from "~/stores/runStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { onMounted } from "#imports";
+import { useCorpusStore } from "~/stores/corpusStore";
 
 const runStore = useRunStore();
 const { selectedRun } = storeToRefs(runStore);
 const annotationStore = useAnnotationStore();
+
+const corpusStore = useCorpusStore();
+const { corpus } = storeToRefs(corpusStore);
 
 const documentStore = useDocumentStore();
 const { currentDocument } = storeToRefs(documentStore);
@@ -65,6 +69,11 @@ const highlightedNestedSetNodeId = ref([] as number[]);
 function setHighlightNestedSetNode(ids: number[]) {
   highlightedNestedSetNodeId.value = ids;
 }
+
+useTitle(
+  `Document: ${currentDocument.value.identifier}`,
+  `${corpus.value.name} | ${selectedRun.value.cleanedName} | ${currentDocument.value.identifier}`,
+);
 
 onMounted(() => {
   if (annotationStore.selectedAnnotation) {
