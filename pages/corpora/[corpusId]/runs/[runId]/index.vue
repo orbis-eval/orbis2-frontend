@@ -37,7 +37,7 @@
           </thead>
 
           <tbody
-            v-for="(document, index) in filteredDocuments"
+            v-for="(document, index) in documents"
             :key="document.identifier"
           >
             <tr
