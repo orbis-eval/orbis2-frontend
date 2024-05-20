@@ -1,8 +1,9 @@
 import { IScoring } from "~/lib/model/iscoring";
 import { Annotation } from "~/lib/model/annotation";
+import { AnnotationMatch } from "~/lib/model/annotationMatch";
 
 export class Scoring implements IScoring {
-  tp: Annotation[];
+  tp: AnnotationMatch[];
   fp: Annotation[];
   fn: Annotation[];
 

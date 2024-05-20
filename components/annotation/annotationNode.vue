@@ -45,6 +45,7 @@
         : ''
     } ${nestedSetNode.identifier ? 'annotation' : ''}`"
   >
+    <div class="node-prefix-run-type">{{ getNodePrefix(nestedSetNode) }}</div>
     <span v-if="nestedSetNode.children.length === 0" @mouseup="onMouseUp">
       {{ nestedSetNode.surfaceForms[0] }}
     </span>
@@ -72,9 +73,11 @@
 </template>
 
 <script setup lang="ts">
+import { storeToRefs } from "pinia";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { NestedSet } from "~/lib/model/nestedset/nestedSet";
 import { ColorPalette } from "~/lib/model/colorpalette";
+import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
 const props = defineProps<{
   nestedSetNode: NestedSetNode;
@@ -83,6 +86,9 @@ const props = defineProps<{
 }>();
 
 const emit = defineEmits(["updateAnnotations", "deleteAnnotation"]);
+
+const goldStandardStore = useGoldStandardStore();
+const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 
 function deleteAnnotation(nestedSetNode: NestedSetNode) {
   emit("deleteAnnotation", nestedSetNode);
@@ -125,4 +131,21 @@ function onMouseUp() {
 const updateAnnotations = (selection: any) => {
   emit("updateAnnotations", selection);
 };
+
+const getNodePrefix = (node: NestedSetNode) => {
+  if (node.runId === selectedGoldStandard.value.identifier) {
+    return "G";
+  } else {
+    return "R";
+  }
+};
 </script>
+
+<style scoped>
+.node-prefix-run-type {
+  font-weight: bold;
+  color: #000;
+  position: absolute;
+  left: -13px;
+}
+</style>
