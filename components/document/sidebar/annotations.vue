@@ -38,7 +38,7 @@
     </div>
     <div v-if="nestedSetRootNode" class="space-y-2">
       <div
-        v-for="nestedSetNode in displayedNodes"
+        v-for="nestedSetNode in nestedSetRootNode.allAnnotationNodes()"
         :key="nestedSetNode.identifier + '_' + nestedSetNode.runId"
       >
         <div
@@ -92,6 +92,8 @@ import { useDocumentStore } from "~/stores/documentStore";
 import { useAnnotationStore } from "~/stores/annotationStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
+import { Annotation } from "~/lib/model/annotation";
+import { AnnotationMatch } from "~/lib/model/annotationMatch";
 
 addIcons(MdDeleteforeverOutlined);
 
@@ -104,6 +106,7 @@ const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 const documentStore = useDocumentStore();
 const { currentDocument } = storeToRefs(documentStore);
 const annotationStore = useAnnotationStore();
+const { filteredAnnotations, mappedAnnotations } = storeToRefs(annotationStore);
 const {
   nestedSetRootNode,
   selectedAnnotation,
@@ -118,9 +121,13 @@ const isRun = computed(() => {
   return currentDocument.value.runId === selectedRun.value.identifier;
 });
 
-const allAnnotationsCount = computed(
-  () => nestedSetRootNode.value?.allAnnotationNodes().length || 0,
-);
+const allAnnotationsCount = computed(() => {
+  return (
+    (currentDocument.value.scoring.tp.length || 0) +
+    (currentDocument.value.scoring.fp.length || 0) +
+    (currentDocument.value.scoring.fn.length || 0)
+  );
+});
 const tpAnnotationsCount = computed(
   () => currentDocument.value.scoring.tp.length || 0,
 );
@@ -128,33 +135,34 @@ const fpAnnotationsCount = computed(
   () => currentDocument.value.scoring.fp.length || 0,
 );
 
-const filterAnnotationNodes = (nodes: NestedSetNode[], metricType: string) => {
-  return nodes.filter((node) => {
-    if (metricType === "tp") {
-      return currentDocument.value.scoring.tp.some(
-        (tp: any) => tp.identifier === node.identifier,
-      );
-    } else if (metricType === "fp") {
-      return currentDocument.value.scoring.fp.some(
-        (fp: any) => fp.identifier === node.identifier,
-      );
-    } else if (metricType === "fn") {
-      return currentDocument.value.scoring.fn.some(
-        (fn: any) => fn.identifier === node.identifier,
-      );
-    }
-    return false;
-  });
-};
-
-const displayedNodes = computed(() => {
+const filterNodes = () => {
   let nodes = nestedSetRootNode.value?.allAnnotationNodes() || [];
 
-  if (isRun.value) {
-    if (activeAnnotationTab.value === "tp") {
-      nodes = filterAnnotationNodes(nodes, "tp");
-    } else if (activeAnnotationTab.value === "fp") {
-      nodes = filterAnnotationNodes(nodes, "fp");
+  if (isRun.value && ["tp", "fp"].includes(activeAnnotationTab.value)) {
+    const metricType = activeAnnotationTab.value as "tp" | "fp";
+    const metricMap: {
+      [key in "tp" | "fp" | "fn"]: Annotation[] | AnnotationMatch[];
+    } = {
+      tp: currentDocument.value.scoring.tp,
+      fp: currentDocument.value.scoring.fp,
+      fn: currentDocument.value.scoring.fn,
+    };
+    const metric = metricMap[metricType] || [];
+    if (metricType === "fp") {
+      nodes = nodes.filter((node) =>
+        (metric as Annotation[]).some(
+          (item: Annotation) => item.identifier === node.identifier,
+        ),
+      );
+    } else if (metricType === "tp") {
+      nodes = nodes.filter((node) =>
+        (metric as AnnotationMatch[]).some((item: AnnotationMatch) => {
+          return (
+            item.true.identifier === node.identifier ||
+            item.pred.identifier === node.identifier
+          );
+        }),
+      );
     }
   }
 
@@ -165,7 +173,28 @@ const displayedNodes = computed(() => {
   }
 
   return nodes;
-});
+};
+
+const updateFilteredAnnotations = () => {
+  filteredAnnotations.value = mappedAnnotations.value;
+  annotationStore.buildNodeTree();
+  const toFilterNodes = filterNodes();
+  filteredAnnotations.value = mappedAnnotations.value.filter((annotation) =>
+    toFilterNodes.some(
+      (node) =>
+        node.identifier === annotation.identifier &&
+        node.runId === annotation.runId,
+    ),
+  );
+  annotationStore.buildNodeTree();
+};
+
+// Watch activeAnnotationTab and isGoldStandardAnnotationsShown
+updateFilteredAnnotations();
+watch(
+  [activeAnnotationTab, isGoldStandardAnnotationsShown],
+  updateFilteredAnnotations,
+);
 
 const getNodePrefix = (node: NestedSetNode) => {
   const annotationTypePrefix = `[${node.annotationType.name}]`;

@@ -18,6 +18,10 @@ export const useAnnotationStore = defineStore("annotation", () => {
   const selectedAnnotation = ref({} as NestedSetNode | null);
   const annotationHistory = new AnnotationCommandHistory();
 
+  const mappedAnnotations = ref([] as Annotation[]);
+  const filteredAnnotations = ref([] as Annotation[]);
+  const documentContent = ref("");
+
   const isUndoDisabled = ref(true);
   const isRedoDisabled = ref(true);
   const isGoldStandardAnnotationsShown = ref(false);
@@ -92,9 +96,30 @@ export const useAnnotationStore = defineStore("annotation", () => {
     }
   }
 
+  function buildNodeTree() {
+    const annotations = filteredAnnotations.value.map(
+      (annotation) => new NestedSetNode(annotation),
+    );
+
+    let runId = -1;
+    if (mappedAnnotations.value.length > 0) {
+      runId = mappedAnnotations.value[0].runId;
+    }
+
+    nestedSetRootNode.value = NestedSet.toTree(
+      annotations,
+      documentContent.value,
+      runId,
+      1,
+      new Date(),
+    );
+    annotationHistory.reset();
+    initSelectedAnnotation();
+  }
+
   async function loadAnnotations(
     documentId: number,
-    documentContent: string,
+    _documentContent: string,
     runId: number,
     annotationTypes: AnnotationType[],
   ) {
@@ -103,28 +128,14 @@ export const useAnnotationStore = defineStore("annotation", () => {
         runId,
         documentId,
       );
-      const mappedAnnotations = mapAnnotations(
+      mappedAnnotations.value = mapAnnotations(
         annotationsFromDb,
         annotationTypes,
       );
+      filteredAnnotations.value = mappedAnnotations.value;
+      documentContent.value = _documentContent;
 
-      if (mappedAnnotations) {
-        const annotations = mappedAnnotations.map(
-          (annotation) => new NestedSetNode(annotation),
-        );
-
-        nestedSetRootNode.value = NestedSet.toTree(
-          annotations,
-          documentContent,
-          runId,
-          1,
-          new Date(),
-        );
-        annotationHistory.reset();
-        initSelectedAnnotation();
-      } else {
-        console.error("Annotations could not be loaded");
-      }
+      buildNodeTree();
     } catch (error) {
       throw new Error("An error occurred while loading annotations", {
         cause: error,
@@ -203,5 +214,8 @@ export const useAnnotationStore = defineStore("annotation", () => {
     redoAnnotation,
     resetAnnotationStack: reset,
     isGoldStandardAnnotationsShown,
+    buildNodeTree,
+    filteredAnnotations,
+    mappedAnnotations,
   };
 });
