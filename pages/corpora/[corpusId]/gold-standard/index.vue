@@ -15,6 +15,7 @@
             :on-click="() => openModal(ModalUpdateGoldStandard)"
             class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
           >
+            <OhVueIcon name="fa-upload" class="menu-icon" />
             {{ $t("goldStandard.update") }}
           </OrbisButton>
         </div>
@@ -57,13 +58,14 @@
 </template>
 
 <script setup lang="ts">
-import { addIcons } from "oh-vue-icons";
+import { addIcons, OhVueIcon } from "oh-vue-icons";
 import {
   BiPlayFill,
   FaFilter,
   HiClipboardList,
   MdDeleteforeverOutlined,
   MdKeyboardarrowdown,
+  FaUpload,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
@@ -78,6 +80,7 @@ addIcons(
   HiClipboardList,
   MdDeleteforeverOutlined,
   FaFilter,
+  FaUpload,
 );
 
 const router = useRouter();

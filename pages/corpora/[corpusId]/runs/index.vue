@@ -15,6 +15,7 @@
             :on-click="() => openModal(ModalCreateRun)"
             class="bg-base-200 text-black hover:bg-gray-200 dark:bg-gray-700 dark:text-white dark:hover:bg-gray-600"
           >
+            <OhVueIcon name="fa-plus" class="menu-icon" />
             {{ $t("run.addRun") }}
           </OrbisButton>
           <div class="dropdown">
@@ -118,6 +119,7 @@ import {
   HiClipboardList,
   MdDeleteforeverOutlined,
   MdKeyboardarrowdown,
+  FaPlus,
 } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
 import { useCorpusStore } from "~/stores/corpusStore";
@@ -135,6 +137,7 @@ addIcons(
   HiClipboardList,
   MdDeleteforeverOutlined,
   FaFilter,
+  FaPlus,
 );
 
 const router = useRouter();

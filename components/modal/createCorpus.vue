@@ -24,10 +24,14 @@
         {{ corpusFileError }}
       </p>
       <div class="mt-5 flex gap-4">
-        <OrbisButton :is-form-button="true"
-          >{{ $t("button.create") }}
+        <OrbisButton :is-form-button="true">
+          <OhVueIcon name="fa-upload" class="menu-icon" />
+          {{ $t("button.create") }}
         </OrbisButton>
-        <OrbisButton :on-click="cancel">{{ $t("button.cancel") }}</OrbisButton>
+        <OrbisButton :on-click="cancel">
+          <OhVueIcon name="fa-times" class="menu-icon" />
+          {{ $t("button.cancel") }}
+        </OrbisButton>
       </div>
     </Form>
   </div>
@@ -38,8 +42,12 @@ import { ErrorMessage, Field, Form } from "vee-validate";
 import { useI18n } from "vue-i18n";
 import { toTypedSchema } from "@vee-validate/zod";
 import * as zod from "zod";
+import { OhVueIcon, addIcons } from "oh-vue-icons";
+import { FaUpload, FaTimes } from "oh-vue-icons/icons";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useMessageToastService } from "~/lib/services/messageToastService";
+
+addIcons(FaUpload, FaTimes);
 
 const { t } = useI18n();
 
