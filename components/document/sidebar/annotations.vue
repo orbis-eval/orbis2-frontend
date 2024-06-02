@@ -55,15 +55,22 @@
         >
           <div class="flex flex-grow">
             <div
-              :style="{
-                background:
-                  '#' +
-                  currentColorPalette.getHexadecimalColorValue(
-                    nestedSetNode.annotationType.colorId || 1,
-                  ),
-              }"
-              class="mr-2 h-4 w-4 shrink-0"
-            ></div>
+              class="tooltip tooltip-right"
+              :data-tip="getColorLabelTooltip(nestedSetNode)"
+            >
+              <div
+                :style="{
+                  background:
+                    '#' +
+                    currentColorPalette.getHexadecimalColorValue(
+                      nestedSetNode.annotationType.colorId || 1,
+                    ),
+                }"
+                class="color-label mr-2 h-4 w-4 shrink-0"
+              >
+                {{ getNodePrefix(nestedSetNode) }}
+              </div>
+            </div>
             <div
               :class="{
                 'font-bold':
@@ -71,7 +78,6 @@
               }"
               class="text-sm"
             >
-              {{ getNodePrefix(nestedSetNode) }}
               {{ nestedSetNode.surfaceForms[0] }}
             </div>
             <div class="flex-grow"></div>
@@ -197,9 +203,26 @@ watch(
 );
 
 const getNodePrefix = (node: NestedSetNode) => {
-  const annotationTypePrefix = `[${node.annotationType.name}]`;
   const runTypePrefix =
-    node.runId === selectedGoldStandard.value.identifier ? "[G]" : "[R]";
-  return `${annotationTypePrefix} ${runTypePrefix}`;
+    node.runId === selectedGoldStandard.value.identifier ? "G" : "R";
+  return `${runTypePrefix}`;
+};
+
+const getColorLabelTooltip = (node: NestedSetNode) => {
+  if (node.runId === selectedGoldStandard.value.identifier) {
+    return "Gold Standard";
+  } else {
+    return "Run";
+  }
 };
 </script>
+
+<style scoped>
+.color-label {
+  color: black;
+  font-weight: bold;
+  font-size: 0.7rem;
+  display: flex;
+  justify-content: center;
+}
+</style>
