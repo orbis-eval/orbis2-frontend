@@ -37,9 +37,10 @@
           @change="inputChanged"
         />
       </div>
-      <div class="basis-2/5">
-        <OrbisButton :on-click="openFileInput"
-          >{{ $t("button.chooseFile") }}
+      <div class="flex basis-2/5">
+        <OrbisButton :on-click="openFileInput">
+          <OhVueIcon name="fa-file" class="menu-icon" />
+          {{ $t("button.chooseFile") }}
         </OrbisButton>
       </div>
     </div>
@@ -48,11 +49,11 @@
 
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
-import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
+import { MdDeleteforeverOutlined, FaFile } from "oh-vue-icons/icons";
 
 const emit = defineEmits(["fileChange"]);
 
-addIcons(MdDeleteforeverOutlined);
+addIcons(MdDeleteforeverOutlined, FaFile);
 
 const fileInput = ref({} as HTMLInputElement);
 const selectedFile = ref({} as File);

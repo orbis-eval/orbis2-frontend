@@ -1,7 +1,7 @@
 <template>
   <div class="flex-1 overflow-auto p-4">
     <div class="mb-2 text-lg font-bold">{{ $t("annotations") }}</div>
-    <div class="form-control">
+    <div v-if="isRun" class="form-control">
       <label class="label cursor-pointer">
         <span class="label-text">{{
           $t("document.sidebar.showGoldStandardAnnotations")
@@ -52,6 +52,7 @@
               nestedSetNode.identifier,
             ])
           "
+          @click="selectedAnnotation = nestedSetNode"
         >
           <div class="flex flex-grow">
             <div
@@ -126,6 +127,10 @@ const activeAnnotationTab = ref("all");
 const isRun = computed(() => {
   return currentDocument.value.runId === selectedRun.value.identifier;
 });
+
+if (!isRun.value) {
+  isGoldStandardAnnotationsShown.value = true;
+}
 
 const allAnnotationsCount = computed(() => {
   return (
