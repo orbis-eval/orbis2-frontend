@@ -7,6 +7,7 @@ import { AnnotationType } from "~/lib/model/annotationType";
 import { Run } from "~/lib/model/run";
 import { GoldStandard } from "~/lib/model/goldstandard";
 import { ColorPalette } from "~/lib/model/colorpalette";
+import { DocumentResponse } from "~/lib/model/documentResponse";
 
 export class OrbisApiService {
   private readonly orbisApiBase: string;
@@ -31,13 +32,11 @@ export class OrbisApiService {
     pageSize: number,
     skip: number = 0,
     search: string = "",
-  ): Promise<Document[]> {
-    return await Parser.parseList(
-      Document,
-      this.apiGet(
-        `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}&search=${search}`,
-      ),
+  ): Promise<DocumentResponse> {
+    const response = await this.apiGet(
+      `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}&search=${search}`,
     );
+    return new DocumentResponse(response);
   }
 
   async getNumberOfDocuments(
