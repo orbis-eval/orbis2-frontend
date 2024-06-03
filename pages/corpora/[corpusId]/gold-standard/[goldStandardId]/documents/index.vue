@@ -108,17 +108,6 @@ async function pageChanged(nextPage: number) {
   }
 }
 
-async function countDocuments() {
-  if (selectedGoldStandard.value.identifier) {
-    await documentStore.countDocuments(selectedGoldStandard.value.identifier);
-    documentStore.totalPages = Math.ceil(
-      documentStore.nrOfDocuments / pageSize.value,
-    );
-  } else {
-    console.warn("Id of selected run was not set in countDocuments.");
-  }
-}
-
 async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
@@ -127,7 +116,6 @@ onMounted(async () => {
   loading.value = true;
   try {
     setTitle(corpus.value.name);
-    await countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
   } finally {
