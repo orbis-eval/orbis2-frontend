@@ -112,12 +112,6 @@ const searchTerm = ref("");
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 
-const filteredDocuments = computed(() => {
-  return documents.value.filter((doc) =>
-    doc.content.toLowerCase().includes(searchTerm.value.toLowerCase()),
-  );
-});
-
 useTitle(
   selectedRun.value.cleanedName,
   `${corpus.value.name} | ${selectedRun.value.cleanedName} | Documents`,
