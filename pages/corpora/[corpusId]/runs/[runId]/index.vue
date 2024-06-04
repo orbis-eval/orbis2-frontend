@@ -137,9 +137,8 @@ async function pageChanged(nextPage: number) {
   }
 }
 
-async function countDocuments() {
+function countDocuments() {
   if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(selectedRun.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -163,8 +162,7 @@ const handleSearch = debounce(async () => {
         searchTerm.value,
       );
       // update page count
-      // TODO: update nr of documents based on search
-      await countDocuments();
+      countDocuments();
     } else {
       await documentStore.loadDocuments(
         selectedRun.value.identifier,
