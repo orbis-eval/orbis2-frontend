@@ -15,7 +15,7 @@
           <h2 class="mr-4 text-2xl">{{ $t("documents") }}</h2>
           <input
             type="text"
-            class="rounded-lg border-2 border-gray-600 p-2"
+            class="rounded-lg border-2 border-gray-600 p-2 text-black"
             v-model="searchTerm"
             :placeholder="$t('searchDocuments')"
             @input="handleSearch"

@@ -19,7 +19,7 @@
           <h2 class="mr-4 text-2xl">{{ $t("documents") }}</h2>
           <input
             type="text"
-            class="rounded-lg border-2 border-gray-600 p-2"
+            class="rounded-lg border-2 border-gray-600 p-2 text-black"
             v-model="searchTerm"
             :placeholder="$t('searchDocuments')"
             @input="handleSearch"
@@ -105,30 +105,6 @@ useTitle(
   `Gold Standard ${selectedGoldStandard.value.formattedCreatedAt}`,
   `${corpus.value.name} | Gold Standard ${selectedGoldStandard.value.formattedCreatedAt} | Documents`,
 );
-
-const handleSearch = debounce(async () => {
-  if (selectedGoldStandard.value.identifier) {
-    currentPage.value = 1; // Reset to first page when new search is performed
-    if (searchTerm.value.trim().length >= 3) {
-      await documentStore.loadDocuments(
-        selectedGoldStandard.value.identifier,
-        pageSize.value,
-        0,
-        searchTerm.value,
-      );
-      // update page count
-      countDocuments();
-    } else {
-      await documentStore.loadDocuments(
-        selectedGoldStandard.value.identifier,
-        pageSize.value,
-        0,
-        "",
-      );
-      countDocuments();
-    }
-  }
-}, 300);
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
