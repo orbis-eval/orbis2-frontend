@@ -17,7 +17,7 @@
             type="text"
             class="rounded-lg border-2 border-gray-600 p-2"
             v-model="searchTerm"
-            placeholder="Search for documents"
+            :placeholder="$t('searchDocuments')"
             @input="handleSearch"
           />
         </div>
