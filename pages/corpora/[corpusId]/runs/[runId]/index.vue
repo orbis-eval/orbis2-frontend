@@ -56,10 +56,10 @@
               </td>
               <td class="pr-5">{{ document.content.substring(0, 50) }}...</td>
               <td
-                v-for="(value, index) in getInterRaterAgreement(
+                v-for="(value, idx) in getInterRaterAgreement(
                   document.interRaterAgreement,
                 )"
-                :key="index"
+                :key="idx"
               >
                 {{ value !== null ? value.toFixed(2) : "-" }}
               </td>
