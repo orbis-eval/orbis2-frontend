@@ -1,6 +1,6 @@
 import { Document } from "~/lib/model/document";
 
-export class DocumentResponse {
+export class DocumentsResponse {
   documents: Document[];
   totalCount: number;
 
