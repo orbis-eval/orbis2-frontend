@@ -51,7 +51,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, toRef, defineEmits, computed, watch } from "vue";
+import { computed, defineEmits, defineProps, toRef, watch } from "vue";
 
 const props = defineProps<{
   currentPage: number;
@@ -65,16 +65,20 @@ const isFirstPage = computed(() => props.currentPage === 1);
 
 const threePages = computed(() => {
   const pages = [];
-  for (let i = props.currentPage - 1; i <= props.currentPage + 1; i++) {
-    if (i > 0 && i <= props.totalPages) {
-      pages.push(i);
-    }
+  const startPage = Math.max(1, props.currentPage - 1);
+  const endPage = Math.min(props.totalPages, props.currentPage + 1);
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
   }
-  if (pages.length < 3) {
-    if (pages[0] === 1) {
-      pages.push(pages[1] + 1);
-    } else {
+
+  while (pages.length < 3) {
+    if (pages[0] > 1) {
       pages.unshift(pages[0] - 1);
+    } else if (pages[pages.length - 1] < props.totalPages) {
+      pages.push(pages[pages.length - 1] + 1);
+    } else {
+      break;
     }
   }
   return pages;
