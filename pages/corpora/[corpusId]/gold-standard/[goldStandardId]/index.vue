@@ -77,11 +77,11 @@
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
+import { debounce } from "lodash-es";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { useTitle } from "~/composables/title";
-import { debounce } from "lodash-es";
 
 addIcons(MdKeyboardarrowdown);
 
