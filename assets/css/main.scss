@@ -91,3 +91,13 @@ body {
 .content-card-title {
   @apply border-b border-gray-700 px-3 py-4 font-medium;
 }
+
+:root {
+  --progress-bar-color: rgb(100, 149, 237);
+  --progress-bar-failed-color: red;
+}
+
+.dark {
+  --progress-bar-color: rgb(173, 216, 230);
+  --progress-bar-failed-color: red;
+}
