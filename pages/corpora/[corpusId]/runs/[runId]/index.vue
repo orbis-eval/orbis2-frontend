@@ -170,13 +170,14 @@ const handleSearch = debounce(async () => {
         0,
         "",
       );
+      countDocuments();
     }
   }
 }, 300);
 
 onMounted(async () => {
-  await countDocuments();
   await loadDocuments();
+  countDocuments();
 });
 
 const getInterRaterAgreement = (interRaterAgreement: number[] | undefined) => {
