@@ -163,6 +163,30 @@ async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
 
+const handleSearch = debounce(async () => {
+  if (selectedGoldStandard.value.identifier) {
+    currentPage.value = 1; // Reset to first page when new search is performed
+    if (searchTerm.value.trim().length >= 3) {
+      await documentStore.loadDocuments(
+        selectedGoldStandard.value.identifier,
+        pageSize.value,
+        0,
+        searchTerm.value,
+      );
+      // update page count
+      countDocuments();
+    } else {
+      await documentStore.loadDocuments(
+        selectedGoldStandard.value.identifier,
+        pageSize.value,
+        0,
+        "",
+      );
+      countDocuments();
+    }
+  }
+}, 300);
+
 onMounted(async () => {
   await loadDocuments();
   countDocuments();
