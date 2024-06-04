@@ -112,6 +112,8 @@ const searchTerm = ref("");
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 
+const { $progress } = useNuxtApp();
+
 useTitle(
   selectedRun.value.cleanedName,
   `${corpus.value.name} | ${selectedRun.value.cleanedName} | Documents`,
@@ -119,6 +121,8 @@ useTitle(
 
 // called when another page is selected
 async function pageChanged(nextPage: number) {
+  $progress.start();
+
   if (selectedRun.value.identifier) {
     documentStore.currentPage = nextPage;
     const startIndex = (currentPage.value - 1) * pageSize.value;
@@ -129,6 +133,7 @@ async function pageChanged(nextPage: number) {
         startIndex,
         searchTerm.value,
       );
+      $progress.finish();
     } catch (error) {
       onError(t("document.error.documentNotLoading"));
     }
