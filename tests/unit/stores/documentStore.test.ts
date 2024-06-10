@@ -2,8 +2,8 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { createPinia, setActivePinia } from "pinia";
 import { Document } from "~/lib/model/document";
 import { useDocumentStore } from "~/stores/documentStore";
-import { Parser } from "~/lib/parser";
 import { Metadata } from "~/lib/model/metadata";
+import { DocumentsResponse } from "~/lib/model/documentsResponse";
 
 // Helper function to create a Document object
 const createDocument = (
@@ -52,8 +52,12 @@ function findDocumentById(
 vi.mock("~/lib/services/orbisApiService", () => {
   return {
     OrbisApiService: vi.fn().mockImplementation(() => ({
-      getDocuments: (): Promise<Document[] | Error> => {
-        return Parser.parseList(Document, Promise.resolve(documents));
+      getDocuments: (): Promise<DocumentsResponse> => {
+        const response = {
+          documents: documents.map((doc) => new Document(doc)),
+          totalCount: documents.length,
+        };
+        return Promise.resolve(new DocumentsResponse(response));
       },
       countDocuments: (): number => {
         return documents.length;
