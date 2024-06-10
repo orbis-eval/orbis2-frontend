@@ -1,10 +1,17 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { TypedInternalResponse } from "nitropack";
 import { OrbisApiService } from "~/lib/services/orbisApiService";
 import { Annotation } from "~/lib/model/annotation";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { Parser } from "~/lib/parser";
+import { DocumentsResponse } from "~/lib/model/documentsResponse";
+
+class DocumentResponseMock extends DocumentsResponse {
+  constructor(data: any) {
+    super(data);
+  }
+}
 
 class OrbisApiServiceMock extends OrbisApiService {
   mockedApiCallResponse;
@@ -18,6 +25,20 @@ class OrbisApiServiceMock extends OrbisApiService {
     return new Promise((resolve) => {
       resolve(this.mockedApiCallResponse);
     });
+  }
+
+  async getDocuments(
+    runId: number,
+    pageSize: number,
+    skip: number = 0,
+    search: string = "",
+  ): Promise<DocumentsResponse> {
+    // Mock response structure to match DocumentsResponse
+    const response = {
+      documents: [new Document()],
+      totalCount: 1,
+    };
+    return new DocumentsResponse(response);
   }
 
   createAnnotation(_annotation: Annotation): Promise<Annotation> {
@@ -93,23 +114,35 @@ describe("OrbisApiService.getDocument()", () => {
           identifier: 5678,
         },
       ]);
-      const parsedDocuments = await orbisApiServiceMock.getDocuments(1, 10, 0);
-      expect(Array.isArray(parsedDocuments)).toBeTruthy();
-      if (Array.isArray(parsedDocuments)) {
-        expect(parsedDocuments.length).toEqual(2);
-        expect(parsedDocuments[0].content).toEqual("1234");
-        expect(parsedDocuments[0].runId).toEqual(1234);
-        expect(parsedDocuments[0].identifier).toEqual(1234);
-        expect(parsedDocuments[1].content).toEqual("5678");
-        expect(parsedDocuments[1].runId).toEqual(5678);
-        expect(parsedDocuments[1].identifier).toEqual(5678);
-        expect(parsedDocuments[1].metadata.length).toEqual(2);
-        expect(parsedDocuments[1].metadata[0].identifier).toEqual(1);
-        expect(parsedDocuments[1].metadata[0].key).toEqual("key1");
-        expect(parsedDocuments[1].metadata[0].value).toEqual("value1");
-        expect(parsedDocuments[1].metadata[1].identifier).toEqual(2);
-        expect(parsedDocuments[1].metadata[1].key).toEqual("key2");
-        expect(parsedDocuments[1].metadata[1].value).toEqual("value2");
+      const documentsResponse = await orbisApiServiceMock.getDocuments(
+        1,
+        10,
+        0,
+      );
+      expect(Array.isArray(documentsResponse.documents)).toBeTruthy();
+      if (Array.isArray(documentsResponse)) {
+        expect(documentsResponse.documents.length).toEqual(2);
+        expect(documentsResponse.documents[0].content).toEqual("1234");
+        expect(documentsResponse.documents[0].runId).toEqual(1234);
+        expect(documentsResponse.documents[0].identifier).toEqual(1234);
+        expect(documentsResponse.documents[1].content).toEqual("5678");
+        expect(documentsResponse.documents[1].runId).toEqual(5678);
+        expect(documentsResponse.documents[1].identifier).toEqual(5678);
+        expect(documentsResponse.documents[1].metadata.length).toEqual(2);
+        expect(documentsResponse.documents[1].metadata[0].identifier).toEqual(
+          1,
+        );
+        expect(documentsResponse.documents[1].metadata[0].key).toEqual("key1");
+        expect(documentsResponse.documents[1].metadata[0].value).toEqual(
+          "value1",
+        );
+        expect(documentsResponse.documents[1].metadata[1].identifier).toEqual(
+          2,
+        );
+        expect(documentsResponse.documents[1].metadata[1].key).toEqual("key2");
+        expect(documentsResponse.documents[1].metadata[1].value).toEqual(
+          "value2",
+        );
       }
     });
   });
