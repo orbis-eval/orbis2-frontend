@@ -108,9 +108,8 @@ async function pageChanged(nextPage: number) {
   }
 }
 
-async function countDocuments() {
+function countDocuments() {
   if (selectedGoldStandard.value.identifier) {
-    await documentStore.countDocuments(selectedGoldStandard.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -127,7 +126,7 @@ onMounted(async () => {
   loading.value = true;
   try {
     setTitle(corpus.value.name);
-    await countDocuments();
+    countDocuments();
     await loadDocuments();
     // @Todo: Error message for user
   } finally {

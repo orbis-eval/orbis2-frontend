@@ -32,13 +32,17 @@ export const useDocumentStore = defineStore("document", () => {
     runId: number,
     pageSize: number,
     skip: number = 0,
+    search: string = "",
   ) {
     try {
-      documents.value = await orbisApiService.getDocuments(
+      const response = await orbisApiService.getDocuments(
         runId,
         pageSize,
         skip,
+        search,
       );
+      documents.value = response.documents;
+      nrOfDocuments.value = Number(response.totalCount);
     } catch (error) {
       throw new Error("An error occurred while fetching documents.", {
         cause: error,

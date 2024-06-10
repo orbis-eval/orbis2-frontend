@@ -105,24 +105,12 @@ async function pageChanged(nextPage: number) {
   }
 }
 
-async function countDocuments() {
-  if (selectedRun.value.identifier) {
-    await documentStore.countDocuments(selectedRun.value.identifier);
-    documentStore.totalPages = Math.ceil(
-      documentStore.nrOfDocuments / pageSize.value,
-    );
-  } else {
-    console.warn("Id of selected run was not set in countDocuments.");
-  }
-}
-
 async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
 
 onMounted(async () => {
   try {
-    await countDocuments();
     await loadDocuments();
   } catch (error) {
     onError(t("document.error.documentNotLoading"));

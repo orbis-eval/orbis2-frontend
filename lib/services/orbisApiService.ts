@@ -7,6 +7,7 @@ import { AnnotationType } from "~/lib/model/annotationType";
 import { Run } from "~/lib/model/run";
 import { GoldStandard } from "~/lib/model/goldstandard";
 import { ColorPalette } from "~/lib/model/colorpalette";
+import { DocumentsResponse } from "~/lib/model/documentsResponse";
 
 export class OrbisApiService {
   private readonly orbisApiBase: string;
@@ -30,30 +31,12 @@ export class OrbisApiService {
     runId: number,
     pageSize: number,
     skip: number = 0,
-  ): Promise<Document[]> {
-    return await Parser.parseList(
-      Document,
-      this.apiGet(
-        `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}`,
-      ),
+    search: string = "",
+  ): Promise<DocumentsResponse> {
+    const response = await this.apiGet(
+      `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}&search=${search}`,
     );
-  }
-
-  async getNumberOfDocuments(
-    corpusId: number, // TODO: change to runId and countDocuments api call, delete the getNofDocuments api call
-    pageSize: number | undefined = undefined,
-    skip: number = 0,
-  ): Promise<Number> {
-    let pageSizeParam = "";
-    if (pageSize) {
-      pageSizeParam = `&page_size=${pageSize}`;
-    }
-    return await Parser.parse(
-      Number,
-      this.apiGet(
-        `getNofDocuments?corpus_id=${corpusId}${pageSizeParam}&skip=${skip}`,
-      ),
-    );
+    return new DocumentsResponse(response);
   }
 
   async getDocument(runId: number, documentId: number): Promise<Document> {

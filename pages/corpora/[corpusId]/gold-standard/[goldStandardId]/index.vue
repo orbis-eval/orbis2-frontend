@@ -15,9 +15,17 @@
           }}
         </h1>
 
-        <h2 class="mb-5 text-2xl text-black dark:text-white">
-          {{ $t("documents") }}
-        </h2>
+        <div class="flex items-center">
+          <h2 class="mr-4 text-2xl">{{ $t("documents") }}</h2>
+          <input
+            type="text"
+            class="rounded-lg border-2 border-gray-600 p-2 text-black"
+            v-model="searchTerm"
+            :placeholder="$t('searchDocuments')"
+            @input="handleSearch"
+          />
+        </div>
+
         <div class="divider"></div>
         <table aria-label="List of documents in corpus" class="table table-sm">
           <thead class="text-left text-black dark:text-white">
@@ -69,6 +77,7 @@
 import { addIcons } from "oh-vue-icons";
 import { MdKeyboardarrowdown } from "oh-vue-icons/icons";
 import { storeToRefs } from "pinia";
+import { debounce } from "lodash-es";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useGoldStandardStore } from "~/stores/goldStandardStore";
@@ -88,6 +97,7 @@ const goldStandardStore = useGoldStandardStore();
 const { selectedGoldStandard } = storeToRefs(goldStandardStore);
 
 const pageSize = ref(10);
+const searchTerm = ref("");
 
 const { documents, currentPage, totalPages } = storeToRefs(documentStore);
 
@@ -115,9 +125,8 @@ async function pageChanged(nextPage: number) {
   }
 }
 
-async function countDocuments() {
+function countDocuments() {
   if (selectedGoldStandard.value.identifier) {
-    await documentStore.countDocuments(selectedGoldStandard.value.identifier);
     documentStore.totalPages = Math.ceil(
       documentStore.nrOfDocuments / pageSize.value,
     );
@@ -130,8 +139,32 @@ async function loadDocuments() {
   await pageChanged(currentPage.value);
 }
 
+const handleSearch = debounce(async () => {
+  if (selectedGoldStandard.value.identifier) {
+    currentPage.value = 1; // Reset to first page when new search is performed
+    if (searchTerm.value.trim().length >= 3) {
+      await documentStore.loadDocuments(
+        selectedGoldStandard.value.identifier,
+        pageSize.value,
+        0,
+        searchTerm.value,
+      );
+      // update page count
+      countDocuments();
+    } else {
+      await documentStore.loadDocuments(
+        selectedGoldStandard.value.identifier,
+        pageSize.value,
+        0,
+        "",
+      );
+      countDocuments();
+    }
+  }
+}, 300);
+
 onMounted(async () => {
-  await countDocuments();
   await loadDocuments();
+  countDocuments();
 });
 </script>
