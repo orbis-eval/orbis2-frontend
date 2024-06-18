@@ -16,8 +16,8 @@ auto-imports.d.ts
 components.d.ts
 
 # VuePress default temp directory
-.vuepress/.temp
+documentation/docs/.vuepress/.temp
 # VuePress default cache directory
-.vuepress/.cache
+documentation/docs/.vuepress/.cache
 # VuePress default build output directory
-.vuepress/dist
+documentation/docs/.vuepress/dist
