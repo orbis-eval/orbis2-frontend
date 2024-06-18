@@ -217,8 +217,12 @@ export class OrbisApiService {
   async apiGet(query: string): Promise<TypedInternalResponse<string>> {
     const { $progress } = useNuxtApp();
     $progress.start();
+    const headers = {
+      userSettings: localStorage.getItem("userSettings") || "",
+    };
     const response = await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "GET",
+      headers,
     });
     $progress.finish();
     return response;
@@ -230,8 +234,12 @@ export class OrbisApiService {
   ): Promise<TypedInternalResponse<string>> {
     const { $progress } = useNuxtApp();
     $progress.start();
+    const headers = {
+      userSettings: localStorage.getItem("userSettings") || "",
+    };
     const response = await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "POST",
+      headers,
       body,
     });
     $progress.finish();
@@ -244,8 +252,12 @@ export class OrbisApiService {
   ): Promise<TypedInternalResponse<string>> {
     const { $progress } = useNuxtApp();
     $progress.start();
+    const headers = {
+      userSettings: localStorage.getItem("userSettings") || "",
+    };
     const response = await $fetch(`${this.orbisApiBase}/${query}`, {
       method: "DELETE",
+      headers,
       body,
     });
     $progress.finish();

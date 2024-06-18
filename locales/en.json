@@ -70,6 +70,7 @@
     "createRun": "Create Run",
     "addRun": "Add Run",
     "compareRuns": "Compare Runs",
+    "selectRun": "Select Run",
     "deleteRun": "Delete Run",
     "success": {
       "runDeleted": "Run deleted successfully",
@@ -107,5 +108,16 @@
   "filters": "Filters",
   "noFilter": "No filter",
   "clearAllFilters": "Clear all filters",
-  "activeFilterSuffix": "Active"
+  "activeFilterSuffix": "Active",
+  "settings": {
+    "title": "Settings",
+    "setting": "Setting",
+    "action": "Action",
+    "language": "Language",
+    "theme": "Theme",
+    "languages": {
+      "en": "English",
+      "de": "German"
+    }
+  }
 }

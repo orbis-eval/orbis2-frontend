@@ -86,7 +86,7 @@
                 disabled
                 :selected="!selectedRun || !selectedRun.identifier"
               >
-                Select Run
+                {{ $t("run.selectRun") }}
               </option>
               <option
                 v-for="run in runs"
@@ -101,32 +101,9 @@
           <div v-else class="flex w-6/12 justify-center"></div>
           <div class="flex w-1/12"></div>
           <div class="flex w-2/12 justify-end gap-4">
-            <div class="flex">
-              <label class="swap swap-rotate">
-                <input type="checkbox" />
-                <OhVueIcon
-                  class="h-5 w-5 fill-current"
-                  v-if="$colorMode.preference === themes[1]"
-                  @click="$colorMode.preference = themes[0]"
-                  name="bi-moon-fill"
-                />
-                <OhVueIcon
-                  class="h-5 w-5 fill-current"
-                  v-else
-                  @click="$colorMode.preference = themes[1]"
-                  name="bi-sun-fill"
-                />
-              </label>
-            </div>
-            <div class="flex">
-              <select
-                v-model="$i18n.locale"
-                class="select select-ghost w-full max-w-xs"
-              >
-                <option value="en">English</option>
-                <option value="de">Deutsch</option>
-              </select>
-            </div>
+            <button class="btn btn-ghost" @click="openModal(modalUserSettings)">
+              <OhVueIcon name="fa-cog" class="menu-icon" />
+            </button>
           </div>
         </div>
       </div>
@@ -155,14 +132,17 @@
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { storeToRefs } from "pinia";
-import { BiMoonFill, BiSunFill } from "oh-vue-icons/icons";
+import { BiMoonFill, BiSunFill, FaCog } from "oh-vue-icons/icons";
 import { useCorpusStore } from "~/stores/corpusStore";
 import { useRunStore } from "~/stores/runStore";
 import { useGoldStandardStore } from "~/stores/goldStandardStore";
 
-addIcons(BiMoonFill, BiSunFill);
+import modalUserSettings from "~/components/modal/userSettings.vue";
+import { useUserSettingsStore } from "~/stores/userSettingsStore";
 
-const themes = ["dark", "light"];
+addIcons(BiMoonFill, BiSunFill, FaCog);
+
+const { openModal } = useModal();
 
 const route = useRoute();
 
@@ -174,6 +154,23 @@ const { selectedRun, runs } = storeToRefs(runStore);
 
 const goldStandardStore = useGoldStandardStore();
 const { selectedGoldStandard, goldStandards } = storeToRefs(goldStandardStore);
+
+/**
+ * Start: User settings
+ */
+const userSettingsStore = useUserSettingsStore();
+const { userSettings } = storeToRefs(userSettingsStore);
+userSettingsStore.load();
+
+const colorMode = useColorMode();
+colorMode.preference = userSettings.value.theme;
+
+const i18n = useI18n();
+i18n.setLocale(userSettings.value.locale);
+
+/**
+ * End: User settings
+ */
 
 const { appTitle: title } = useTitle();
 

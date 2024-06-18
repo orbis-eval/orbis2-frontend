@@ -4,6 +4,7 @@ import ModalDeleteCorpus from "~/components/modal/deleteCorpus.vue";
 import ModalListRuns from "~/components/modal/listRuns.vue";
 import ModalDeleteRun from "~/components/modal/deleteRun.vue";
 import ModalUpdateGoldStandard from "~/components/modal/updateGoldStandard.vue";
+import ModalUserSettings from "~/components/modal/userSettings.vue";
 
 import { Modal } from "~/lib/modal/modal";
 import { ModalManager } from "~/lib/modal/modalManager";
@@ -16,6 +17,7 @@ const modalManagerInstance = reactive(
     new Modal("listRuns", ModalListRuns),
     new Modal("deleteRun", ModalDeleteRun),
     new Modal("updateGoldStandard", ModalUpdateGoldStandard),
+    new Modal("userSettings", ModalUserSettings),
   ]),
 );
 
