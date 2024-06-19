@@ -17,8 +17,7 @@ export default defineUserConfig({
   },
 
   theme: defaultTheme({
-    // TODO: use real logo
-    logo: "assets/img/Orbis-Logo-Transparent.png",
+    logo: "/images/Orbis-Logo-Transparent.png",
     locales: {
       "/": {
         navbar: [

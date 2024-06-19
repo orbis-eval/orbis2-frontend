@@ -1,14 +1,15 @@
 ---
 home: true
 title: Home
-heroImage: https://vuejs.press/images/hero.png
+heroImage: "/images/Orbis-Logo-Transparent.png"
+
 actions:
   - text: Get Started
-    link: /getting-started.html
+    link: /get-started.html
     type: primary
 
   - text: Introduction
-    link: https://vuejs.press/guide/introduction.html
+    link: /introduction.html
     type: secondary
 
 features:
@@ -25,7 +26,7 @@ features:
   - title: Bundlers
     details: Default bundler is Vite, while Webpack is also supported. Choose the one you like!
 
-footer: MIT Licensed | Copyright © 2018-present VuePress Community
+footer: Orbis NG | University of Applied Sciences of the Grisons
 ---
 
 This is the content of home page. Check [Home Page Docs][default-theme-home] for more details.
