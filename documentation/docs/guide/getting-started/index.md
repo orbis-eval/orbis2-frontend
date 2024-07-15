@@ -1,7 +1,7 @@
 # Getting Started
 
 ## What is Orbis2?
-**Orbis2** is a tool for NLP annotation evaluation. It is designed to evaluate the quality of annotations in NLP tasks. Orbis2 is a web-based tool that provides a user-friendly interface to evaluate the quality of annotations. It supports multiple evaluation types and metrics. Orbis2 is designed for various audiences, including researchers, developers, and data scientists. It supports LabelStudio JSON files, Doccano JSONL files, and general JSON files. Orbis2 is developed by the University of Applied Sciences of the Grisons.
+**Orbis2** is a tool for NLP annotation evaluation. It is designed to evaluate the quality of annotations in NLP tasks. It is a web-based tool that provides a user-friendly interface to evaluate the quality of annotations. It supports multiple evaluation types and metrics and is designed for various audiences, including researchers, developers, and data scientists. Currently, current files are supported: LabelStudio JSON files, Doccano JSONL files, and general JSON files. Orbis2 is developed by the University of Applied Sciences of the Grisons.
 
 ![Orbis2](orbis-screenshot.png)
 
