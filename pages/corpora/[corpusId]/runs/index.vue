@@ -28,7 +28,7 @@
             </div>
             <div
               tabindex="0"
-              class="min-w-10 menu dropdown-content z-[1] mt-2 rounded-lg bg-base-100 p-2 shadow"
+              class="menu dropdown-content z-[1] mt-2 min-w-10 rounded-lg bg-base-100 p-2 shadow"
             >
               <b>Gold Standard Version</b>
               <div class="divider my-0"></div>
