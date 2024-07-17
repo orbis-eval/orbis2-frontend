@@ -14,3 +14,10 @@ dist
 .vscode/
 auto-imports.d.ts
 components.d.ts
+
+# VuePress default temp directory
+documentation/docs/.vuepress/.temp
+# VuePress default cache directory
+documentation/docs/.vuepress/.cache
+# VuePress default build output directory
+documentation/docs/.vuepress/dist

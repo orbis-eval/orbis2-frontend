@@ -1,3 +1,4 @@
 .eslintrc.js
 vitest.config.ts
 **/*.test.ts
+documentation/*
