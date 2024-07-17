@@ -21,13 +21,13 @@ class OrbisApiServiceMock extends OrbisApiService {
     this.mockedApiCallResponse = mockedApiCallResponse;
   }
 
-  apiGet(): Promise<TypedInternalResponse<string>> {
+  override apiGet(): Promise<TypedInternalResponse<string>> {
     return new Promise((resolve) => {
       resolve(this.mockedApiCallResponse);
     });
   }
 
-  async getDocuments(
+  override async getDocuments(
     runId: number,
     pageSize: number,
     skip: number = 0,
@@ -41,7 +41,7 @@ class OrbisApiServiceMock extends OrbisApiService {
     return new DocumentsResponse(response);
   }
 
-  createAnnotation(_annotation: Annotation): Promise<Annotation> {
+  override createAnnotation(_annotation: Annotation): Promise<Annotation> {
     return Parser.parse(
       Annotation,
       new Promise((resolve) => {

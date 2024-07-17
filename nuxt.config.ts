@@ -44,11 +44,12 @@ export default defineNuxtConfig({
       orbisBaseUrl: "http://localhost:63012",
     },
   },
-  pinia: {
-    autoImports: [
-      // automatically imports `defineStore`
-      "defineStore", // import { defineStore } from 'pinia'
-      "storeToRefs", // import { storeToRefs } from 'pinia'
+  imports: {
+    presets: [
+      {
+        from: "pinia",
+        imports: ["defineStore", "storeToRefs"],
+      },
     ],
   },
   ssr: false,
