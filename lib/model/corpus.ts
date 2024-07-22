@@ -5,14 +5,14 @@ import { JSONTransformer } from "~/lib/utils/jsonTransformer";
 export class Corpus implements ICorpus {
   name: string;
   supportedAnnotationTypes: AnnotationType[];
-  identifier?: number;
+  identifier: number;
 
   constructor(corpus: ICorpus) {
     this.name = corpus.name;
     this.supportedAnnotationTypes = corpus.supportedAnnotationTypes.map(
       (supportedAnnotationType) => new AnnotationType(supportedAnnotationType),
     );
-    this.identifier = corpus.identifier;
+    this.identifier = corpus.identifier || -1;
   }
 
   toJSON() {

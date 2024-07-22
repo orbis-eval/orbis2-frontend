@@ -95,6 +95,7 @@ async function pageChanged(nextPage: number) {
     try {
       await documentStore.loadDocuments(
         selectedGoldStandard.value.identifier,
+        corpus.value.identifier,
         pageSize.value,
         startIndex,
       );

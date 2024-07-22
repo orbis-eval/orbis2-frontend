@@ -114,6 +114,7 @@ async function pageChanged(nextPage: number) {
     try {
       await documentStore.loadDocuments(
         selectedGoldStandard.value.identifier,
+        corpus.value.identifier,
         pageSize.value,
         startIndex,
       );
@@ -145,6 +146,7 @@ const handleSearch = debounce(async () => {
     if (searchTerm.value.trim().length >= 3) {
       await documentStore.loadDocuments(
         selectedGoldStandard.value.identifier,
+        corpus.value.identifier,
         pageSize.value,
         0,
         searchTerm.value,
@@ -154,6 +156,7 @@ const handleSearch = debounce(async () => {
     } else {
       await documentStore.loadDocuments(
         selectedGoldStandard.value.identifier,
+        corpus.value.identifier,
         pageSize.value,
         0,
         "",

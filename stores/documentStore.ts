@@ -30,6 +30,7 @@ export const useDocumentStore = defineStore("document", () => {
 
   async function loadDocuments(
     runId: number,
+    corpusId: number,
     pageSize: number,
     skip: number = 0,
     search: string = "",
@@ -37,6 +38,7 @@ export const useDocumentStore = defineStore("document", () => {
     try {
       const response = await orbisApiService.getDocuments(
         runId,
+        corpusId,
         pageSize,
         skip,
         search,

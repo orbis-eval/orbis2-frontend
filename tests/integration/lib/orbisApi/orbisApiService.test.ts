@@ -29,6 +29,7 @@ class OrbisApiServiceMock extends OrbisApiService {
 
   override async getDocuments(
     runId: number,
+    corpusId: number,
     pageSize: number,
     skip: number = 0,
     search: string = "",

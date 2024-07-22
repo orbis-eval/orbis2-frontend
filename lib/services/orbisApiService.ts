@@ -29,12 +29,13 @@ export class OrbisApiService {
 
   async getDocuments(
     runId: number,
+    corpusId: number,
     pageSize: number,
     skip: number = 0,
     search: string = "",
   ): Promise<DocumentsResponse> {
     const response = await this.apiGet(
-      `getDocuments?run_id=${runId}&page_size=${pageSize}&skip=${skip}&search=${search}`,
+      `getDocuments?run_id=${runId}&corpus_id=${corpusId}&page_size=${pageSize}&skip=${skip}&search=${search}`,
     );
     return new DocumentsResponse(response);
   }

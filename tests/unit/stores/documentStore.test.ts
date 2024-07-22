@@ -103,10 +103,11 @@ describe("Document Store", () => {
   it("loadDocuments should fetch and update documents", async () => {
     const documentStore = useDocumentStore();
     const runId = 1;
+    const corpusId = 2;
     const pageSize = 5;
     const skip = 0;
 
-    await documentStore.loadDocuments(runId, pageSize, skip);
+    await documentStore.loadDocuments(runId, corpusId, pageSize, skip);
 
     expect(documentStore.documents).toEqual(documents);
   });

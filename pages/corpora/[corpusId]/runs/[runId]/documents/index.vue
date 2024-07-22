@@ -94,6 +94,7 @@ async function pageChanged(nextPage: number) {
     try {
       await documentStore.loadDocuments(
         selectedRun.value.identifier,
+        selectedRun.value.corpus.identifier,
         pageSize.value,
         startIndex,
       );
