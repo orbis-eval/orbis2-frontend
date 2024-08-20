@@ -1,22 +1,23 @@
-# Orbis Annotator / Orbis 2 Frontend
+# Orbis Eval / Orbis 2 Frontend
 
-Orbis Annotator provides a user-friendly, easy to install, web-based software that supports users in efficiently annotating language data. It supports standard and collaborative workflows, reuse of language resources through corpus versioning, and provides built-in tools for assessing corpus quality.
+The Orbis Eval front end provides an easy-to-use web interface to compare the outputs of a Named Entity Recognition 
+(NER) and Named Entity Linking (NEL) models with a Gold Standard. 
 
-- [Install and use Orbis Annotator](#install-and-use-orbis-annotator)
-  - [Importing corpora](#import-existing-corpora-into-orbis-annotator)
+- [Install and use Orbis Eval](#install-and-use-orbis-eval)
+  - [Importing corpora](#import-existing-corpora-into-orbis-eval)
   - [Exporting corpora and annotations](#exporting-annotations)
   - [Backup all Orbis data](#backup-all-orbis-data)
   - [Evaluations](#evaluations)
-- Developer information on the [Orbis Annotator Frontend](#orbis-annotator-frontend)
-- Developer information on the [Orbis Annotator Backend](https://github.com/orbis-eval/orbis2-backend)
+- Developer information on the [Orbis Eval Frontend](#orbis-eval-frontend)
+- Developer information on the [Orbis Eval Backend](https://github.com/orbis-eval/orbis2-backend)
 
-The Orbis 2 Frontend project hosts the Orbis vuejs application, that can be deployed together with the [Orbis 2 backend].
+The Orbis 2 Frontend project hosts the Orbis Eval vuejs application, that must be deployed together with the [Orbis 2 
+backend].
 
-The section below describes how you can use Orbis2 for creating and correcting annotated datasets, and for performing evaluations on them.
+## Install and use Orbis Eval
 
-## Install and use Orbis Annotator
-
-The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/container/package/orbis2-frontend) bundles all software necessary to run Orbis Annotator.
+The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/container/package/orbis2-frontend) bundles 
+all software necessary to run Orbis Eval.
 
 ### Inject `.env` file
 
@@ -37,17 +38,17 @@ docker run --net host --name orbis2-frontend -p 8090:8090 \
 
 The Postgresql database password (required for database backups) will be automatically generated during the container's first startup and printed to the console. All databases and data is stored in the `orbis-data` volume. If you prefer to save the data in a local directory, replace `orbis-data` with its full path (e.g., `/home/albert/orbis-data`).
 
-Once startup has completed you can access Orbis Annotator under the URL http://localhost:8090/.
+Once startup has completed you can access Orbis Eval under the URL http://localhost:8090/.
 
 ![Orbis2 Frontend](orbis-screenshot.png)
 
-### Import existing corpora into Orbis Annotator
+### Import existing corpora into Orbis Eval
 
-You can use the Orbis importer tool for importing corpora into Orbis annotator.
+You can use the Orbis importer tool for importing corpora into Orbis Eval.
 
 #### Importing a local corpus
 
-Orbis currently supports importing NIF turtle files and the CareerCoach JSON format. Its import command always takes two arguments
+Orbis currently supports importing NIF turtle files. Its import command always takes two arguments
 
 1. the name of the corpus to import and
 2. the run name (i.e., the internal name of the imported _Annotated Corpus_) which is used for distinguishing different versions of the annotations provided for a particular corpus (e.g., gold standard annotations, annotations provided by a human or a machine learning algorithm).
@@ -76,7 +77,7 @@ Please refer to the [Orbis2 Backend Documentation](https://github.com/orbis-eval
 
 ### Exporting annotations
 
-Orbis Annotator currently supports exporting annotations to the CareerCoach 2022 and the NIF turtle format.
+Orbis Eval currently supports exporting annotations to the NIF turtle format.
 
 The example below exports the annotated corpus (i.e., run) `N3-RSS500-version1` to the file `N3-RSS500-version1.ttl` using the NIF format.
 
@@ -109,7 +110,7 @@ docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --metrics er_pI
 
 #### Comparing a run to a gold standard
 
-Orbis Annotator supports the following metrics
+Orbis Eval supports the following metrics
 
 - 'content_extraction_f1' (Content Extraction: Precision, Recall and F1)
 - 'content_classification_f1' (Content Classification: Precision, Recall and F1)
@@ -138,7 +139,7 @@ You can create a backup of the Orbis Postgres database by running the following 
 docker exec -i -e PGPASSWORD=[password] orbis2-frontend /bin/bash -c "pg_dump --username postgres orbis" > backup.sql
 ```
 
-## Orbis Annotator Frontend
+## Orbis Eval Frontend
 
 The following information is intended for developers who want to run the Orbis 2 frontend component on their development platforms.
 
