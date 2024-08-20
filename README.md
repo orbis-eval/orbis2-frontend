@@ -105,7 +105,7 @@ docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --metrics er_pI
 ```
 
 | Metric                                                       | kappa_micro | kappa_macro | average_macro_f1 | average_micro_f1 |
-| ------------------------------------------------------------ | ----------- | ----------- | ---------------- | ---------------- |
+|--------------------------------------------------------------|-------------|-------------|------------------|------------------|
 | Entity Recognition: Inter Rater Agreement; perfect matching. | 0.54        | 0.53        | 0.68             | 0.65             |
 
 #### Comparing a run to a gold standard
