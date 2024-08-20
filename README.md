@@ -1,7 +1,7 @@
 # Orbis Eval / Orbis 2 Frontend
 
-The Orbis Eval front end provides an easy-to-use web interface to compare the outputs of a Named Entity Recognition 
-(NER) and Named Entity Linking (NEL) models with a Gold Standard. 
+The Orbis Eval front end provides an easy-to-use web interface to compare the outputs of a Named Entity Recognition
+(NER) and Named Entity Linking (NEL) models with a Gold Standard.
 
 - [Install and use Orbis Eval](#install-and-use-orbis-eval)
   - [Importing corpora](#import-existing-corpora-into-orbis-eval)
@@ -11,12 +11,12 @@ The Orbis Eval front end provides an easy-to-use web interface to compare the ou
 - Developer information on the [Orbis Eval Frontend](#orbis-eval-frontend)
 - Developer information on the [Orbis Eval Backend](https://github.com/orbis-eval/orbis2-backend)
 
-The Orbis 2 Frontend project hosts the Orbis Eval vuejs application, that must be deployed together with the [Orbis 2 
+The Orbis 2 Frontend project hosts the Orbis Eval vuejs application, that must be deployed together with the [Orbis 2
 backend].
 
 ## Install and use Orbis Eval
 
-The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/container/package/orbis2-frontend) bundles 
+The [Orbis2 Docker Container](https://github.com/orgs/orbis-eval/packages/container/package/orbis2-frontend) bundles
 all software necessary to run Orbis Eval.
 
 ### Inject `.env` file
@@ -105,7 +105,7 @@ docker exec orbis2-frontend /orbis-backend/scripts/orbis-eval.py --metrics er_pI
 ```
 
 | Metric                                                       | kappa_micro | kappa_macro | average_macro_f1 | average_micro_f1 |
-|--------------------------------------------------------------|-------------|-------------|------------------|------------------|
+| ------------------------------------------------------------ | ----------- | ----------- | ---------------- | ---------------- |
 | Entity Recognition: Inter Rater Agreement; perfect matching. | 0.54        | 0.53        | 0.68             | 0.65             |
 
 #### Comparing a run to a gold standard
