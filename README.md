@@ -1,7 +1,7 @@
 # Orbis Eval / Orbis 2 Frontend
 
-The Orbis Eval front end provides an easy-to-use web interface to compare the outputs of a Named Entity Recognition
-(NER) and Named Entity Linking (NEL) models with a Gold Standard.
+The Orbis Eval frontend provides an easy-to-use web interface to compare the outputs of a Named Entity Recognition
+(NER) and Named Entity Linking (NEL) model with a Gold Standard.
 
 - [Install and use Orbis Eval](#install-and-use-orbis-eval)
   - [Importing corpora](#import-existing-corpora-into-orbis-eval)
