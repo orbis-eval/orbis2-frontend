@@ -15,7 +15,6 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
 import { useAnnotationStore } from "~/stores/annotationStore";
 
 const emit = defineEmits(["setHighlightNestedSetNode"]);

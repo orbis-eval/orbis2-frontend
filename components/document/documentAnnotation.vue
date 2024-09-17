@@ -49,7 +49,6 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
 import { AnnotationType } from "~/lib/model/annotationType";
 import { Annotator } from "~/lib/model/annotator";
 import { useAnnotationStore } from "~/stores/annotationStore";

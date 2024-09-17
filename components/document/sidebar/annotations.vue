@@ -92,7 +92,6 @@
 <script lang="ts" setup>
 import { addIcons } from "oh-vue-icons";
 import { MdDeleteforeverOutlined } from "oh-vue-icons/icons";
-import { storeToRefs } from "pinia";
 import { useRunStore } from "~/stores/runStore";
 import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { useDocumentStore } from "~/stores/documentStore";

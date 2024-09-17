@@ -20,7 +20,6 @@
 
 <script lang="ts" setup>
 import { Form } from "vee-validate";
-import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { useGoldStandardStore } from "~/stores/goldStandardStore";
 import { useCorpusStore } from "~/stores/corpusStore";

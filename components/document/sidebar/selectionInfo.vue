@@ -41,7 +41,6 @@
 </template>
 
 <script lang="ts" setup>
-import { storeToRefs } from "pinia";
 import { useAnnotationStore } from "~/stores/annotationStore";
 import { useColorPalettesStore } from "~/stores/colorPalettesStore";
 

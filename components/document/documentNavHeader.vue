@@ -34,7 +34,6 @@ import {
   MdNavigatebeforeTwotone,
   MdNavigatenextTwotone,
 } from "oh-vue-icons/icons";
-import { storeToRefs } from "pinia";
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { useDocumentStore } from "~/stores/documentStore";
 import { useRunStore } from "~/stores/runStore";

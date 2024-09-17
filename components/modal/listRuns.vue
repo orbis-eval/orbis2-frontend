@@ -48,7 +48,6 @@
 
 <script lang="ts" setup>
 import { addIcons, OhVueIcon } from "oh-vue-icons";
-import { storeToRefs } from "pinia";
 import { CoPencil, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import ModalCreateRun from "~/components/modal/createRun.vue";
 import ModalDeleteRun from "~/components/modal/deleteRun.vue";

@@ -73,7 +73,6 @@
 </template>
 
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { NestedSetNode } from "~/lib/model/nestedset/nestedSetNode";
 import { NestedSet } from "~/lib/model/nestedset/nestedSet";
 import { ColorPalette } from "~/lib/model/colorpalette";

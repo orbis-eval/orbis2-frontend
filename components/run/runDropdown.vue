@@ -33,7 +33,6 @@
 
 <script setup lang="ts">
 import { addIcons, OhVueIcon } from "oh-vue-icons";
-import { storeToRefs } from "pinia";
 import { CoPencil, MdDeleteforeverOutlined } from "oh-vue-icons/icons";
 import { useRunStore } from "~/stores/runStore";
 import { Run } from "~/lib/model/run";

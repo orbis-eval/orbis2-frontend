@@ -16,7 +16,6 @@
 <script lang="ts" setup>
 import { addIcons, OhVueIcon } from "oh-vue-icons";
 import { LaRedoAltSolid, LaUndoAltSolid } from "oh-vue-icons/icons";
-import { storeToRefs } from "pinia";
 import { useAnnotationStore } from "~/stores/annotationStore";
 
 addIcons(LaUndoAltSolid, LaRedoAltSolid);
